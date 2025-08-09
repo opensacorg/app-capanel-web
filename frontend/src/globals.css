@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap");
+@import "tailwindcss";
+
+body {
+	font-family:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+		"Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.serif {
+	font-family: -apple-system, BlinkMacSystemFont, "Source Serif 4", serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+code {
+	font-family:
+		source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@theme {
+	--font-source-serif-4: "Source Serif 4", serif;
+	--color-primary-50: #ebf5fe;
+	--color-primary-100: #e1effd;
+	--color-primary-200: #c3defb;
+	--color-primary-300: #a4cbfc;
+	--color-primary-400: #76abf7;
+	--color-primary-500: #3e87f4;
+	--color-primary-600: #196aed;
+	--color-primary-700: #175bd7;
+	--color-primary-800: #1d469c;
+	--color-primary-900: #233a74;
+
+	--color-cool1-500: #013148;
+	--color-cool2-500: #1923e0;
+	--color-cool3-500: #1962e0;
+	--color-cool4-500: #19e0e0;
+	--color-cool5-500: #4f19e0;
+
+	--color-element-primary: #436a27;
+	--color-element-primary-tint: #568832;
+	--color-element-text-primary: #303133;
+	--color-element-text-regular: #606266;
+	--color-element-cool1: #013148;
+	--color-element-selected: #fd0013;
+	--color-element-hover-bg: #ecf0e9;
+}
+
+.button-primary {
+	/* Flexbox */
+	flex-shrink: 1;
+
+	/* Sizing and Spacing */
+	padding: 8px 16px; /* py-2 (8px), px-4 (16px) */
+
+	/* Appearance */
+	background-color: var(--element-primary);
+	color: #fff; /* text-white */
+	border-radius: 6px; /* rounded-md */
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+	cursor: pointer;
+
+	/* State styles */
+	/* This requires a separate selector for hover and focus states */
+}
+
+.button-primary:hover {
+	background-color: var(--element-primary-tint);
+}
+
+.button-primary:focus-visible {
+	outline: 2px solid var(--cool2-500);
+	outline-offset: 2px;
+}
+
+.button-primary:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
