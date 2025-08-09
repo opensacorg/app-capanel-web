@@ -33,7 +33,7 @@ function getItemsQueryOptions({ page }: { page: number }) {
 		queryFn: () =>
 			ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
 		queryKey: ["items", { page }],
-	}
+	};
 }
 
 export const Route = createFileRoute("/_auth/items")({
@@ -53,7 +53,7 @@ function ItemsTable() {
 	const setPage = (page: number) =>
 		navigate({
 			search: (prev: { [key: string]: string }) => ({ ...prev, page }),
-		})
+		});
 
 	const items = data?.data.slice(0, PER_PAGE) ?? [];
 	const count = data?.count ?? 0;
@@ -77,7 +77,7 @@ function ItemsTable() {
 					</VStack>
 				</EmptyState.Content>
 			</EmptyState.Root>
-		)
+		);
 	}
 
 	return (
@@ -128,7 +128,7 @@ function ItemsTable() {
 				</PaginationRoot>
 			</Flex>
 		</>
-	)
+	);
 }
 
 function Items() {
@@ -140,5 +140,5 @@ function Items() {
 			<AddItem />
 			<ItemsTable />
 		</Container>
-	)
+	);
 }

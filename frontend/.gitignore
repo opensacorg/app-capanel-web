@@ -28,3 +28,8 @@ openapi.json
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+count.txt
+.env
+.nitro
+.tanstack

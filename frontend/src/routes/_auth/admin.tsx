@@ -25,7 +25,7 @@ function getUsersQueryOptions({ page }: { page: number }) {
 		queryFn: () =>
 			UsersService.readUsers({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
 		queryKey: ["users", { page }],
-	}
+	};
 }
 
 export const Route = createFileRoute("/_auth/admin")({
@@ -47,7 +47,7 @@ function UsersTable() {
 	const setPage = (page: number) =>
 		navigate({
 			search: (prev: { [key: string]: string }) => ({ ...prev, page }),
-		})
+		});
 
 	const users = data?.data.slice(0, PER_PAGE) ?? [];
 	const count = data?.count ?? 0;
@@ -110,7 +110,7 @@ function UsersTable() {
 				</PaginationRoot>
 			</Flex>
 		</>
-	)
+	);
 }
 
 function Admin() {
@@ -123,5 +123,5 @@ function Admin() {
 			<AddUser />
 			<UsersTable />
 		</Container>
-	)
+	);
 }

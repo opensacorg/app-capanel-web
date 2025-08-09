@@ -19,5 +19,5 @@ function Dashboard() {
 				<Text>Welcome back, nice to see you again!</Text>
 			</Box>
 		</Container>
-	)
+	);
 }

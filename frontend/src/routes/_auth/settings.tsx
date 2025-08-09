@@ -49,5 +49,5 @@ function UserSettings() {
 				))}
 			</Tabs.Root>
 		</Container>
-	)
+	);
 }
