@@ -9,12 +9,12 @@ export const Route = createFileRoute("/_home/")({
 function HomePage() {
 	return (
 		<main className="flex flex-col serif text-element-text-regular">
-			<div className=" flex container mx-auto px-6">
+			<div className=" flex container mx-auto px-6 flex-col xl:flex-row">
 				<div className="flex-1">
 					<header>
 						<div className="pt-16 pb-12">
 							<h1 className="font-bold text-3xl pb-2">
-								Welcome to Dashboard 5
+								Welcome to California Accountability Panel
 							</h1>
 							<p>
 								Compare school performance standards based on the{" "}
@@ -48,8 +48,8 @@ function HomePage() {
 										Blocks never saves it online.
 									</li>
 									<li>
-										Dashboard 5 saves progress locally. What you sync stays on
-										your device.
+										California Accountability Panel saves progress locally. What you
+										sync stays on your device.
 									</li>
 								</ul>
 							</div>

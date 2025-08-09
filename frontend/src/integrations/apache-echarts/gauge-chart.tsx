@@ -84,12 +84,15 @@ const EchartsGaugeChart = ({
 						offsetCenter: [0, "-35%"],
 						valueAnimation: true,
 						formatter: (value: number) => {
+							// return Math.round(value * 100) + '';
 							if (value < 0.21) {
 								return "Red";
 							} else if (value < 0.41) {
 								return "Orange";
 							} else if (value < 0.61) {
 								return "Yellow";
+							} else if (value < 0.71) {
+								return "Green (mid)";
 							} else if (value < 0.81) {
 								return "Green";
 							} else if (value < 1) {
