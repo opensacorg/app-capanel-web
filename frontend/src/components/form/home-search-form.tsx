@@ -2,6 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import { ComboBox } from "../ui/input/ComboBox";
 
 // Mock API call for async validation
+/*
 const _checkDistrictExists = async (
 	name: string,
 ): Promise<string | undefined> => {
@@ -12,7 +13,7 @@ const _checkDistrictExists = async (
 	}
 	return undefined;
 };
-
+*/
 // A custom hook to encapsulate the form logic
 export function useSearchHomepageForm(opts?: {
 	onSubmit?: (data: { schoolOrDistrict: string; location: string }) => void;

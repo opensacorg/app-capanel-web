@@ -21,6 +21,9 @@ fileConfig(config.config_file_name)
 from app.models import SQLModel  # noqa
 from app.core.config import settings # noqa
 
+# Import all table models to ensure they are registered with SQLModel.metadata
+from app.models import User, Item, CensusData  # noqa
+
 target_metadata = SQLModel.metadata
 
 # other values from the config, defined by the needs of env.py,
