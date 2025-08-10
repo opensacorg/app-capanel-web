@@ -13,8 +13,8 @@ const Appearance = () => {
 			</Heading>
 
 			<RadioGroup
-				onValueChange={(e) => setTheme(e.value)}
-				value={theme}
+				onValueChange={(details) => details.value && setTheme(details.value)}
+				value={theme || "system"}
 				colorPalette="teal"
 			>
 				<Stack>
