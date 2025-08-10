@@ -91,7 +91,7 @@ export default function SearchHomepageForm() {
 			>
 				{([canSubmit, isSubmitting]) => (
 					<button
-						className="flex-shrink rounded-md hover:bg-element-primary-tint bg-element-primary px-4 py-2 text-white shadow-sm cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cool2-500 disabled:opacity-50"
+						className="button-primary"
 						type="submit"
 						disabled={!canSubmit}
 					>

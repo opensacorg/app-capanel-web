@@ -3,11 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import useAuth from "../../hooks/useAuth";
 
-export const Route = createFileRoute("/_auth/dashboard")({
-	component: Dashboard,
+export const Route = createFileRoute("/_auth/user")({
+	component: User,
 });
 
-function Dashboard() {
+function User() {
 	const { user: currentUser } = useAuth();
 
 	return (

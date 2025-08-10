@@ -1,9 +1,4 @@
-import {
-	createFileRoute,
-	Link,
-	Outlet,
-	redirect,
-} from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 // import { useAuth } from "../components/hooks/use-auth";
 
 export const Route = createFileRoute("/_home/_demo")({

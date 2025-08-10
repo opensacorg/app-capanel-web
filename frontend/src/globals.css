@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap");
+
+@import "../styled-system/styles.css";
 @import "tailwindcss";
 
 body {
@@ -49,34 +51,21 @@ code {
 	--color-element-hover-bg: #ecf0e9;
 }
 
-.button-primary {
-	/* Flexbox */
-	flex-shrink: 1;
-
-	/* Sizing and Spacing */
-	padding: 8px 16px; /* py-2 (8px), px-4 (16px) */
-
-	/* Appearance */
-	background-color: var(--element-primary);
-	color: #fff; /* text-white */
-	border-radius: 6px; /* rounded-md */
-	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-	cursor: pointer;
-
-	/* State styles */
-	/* This requires a separate selector for hover and focus states */
-}
-
-.button-primary:hover {
-	background-color: var(--element-primary-tint);
-}
-
-.button-primary:focus-visible {
-	outline: 2px solid var(--cool2-500);
-	outline-offset: 2px;
-}
-
-.button-primary:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
+@layer components {
+	.button-primary {
+		@apply flex-shrink
+           rounded-md
+           bg-red-500
+           hover:bg-element-primary-tint
+           px-4
+           py-2
+           text-white
+           shadow-sm
+           cursor-pointer
+           focus-visible:outline
+           focus-visible:outline-2
+           focus-visible:outline-offset-2
+           focus-visible:outline-red-500
+           disabled:opacity-50;
+	}
 }

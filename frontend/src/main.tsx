@@ -10,6 +10,7 @@ import ReactDOM from "react-dom/client";
 import { ApiError, OpenAPI } from "./client";
 import { routeTree } from "./routeTree.gen";
 import "./globals.css";
+import { CustomProvider } from "./components/ui/provider.tsx";
 import reportWebVitals from "./reportWebVitals.ts";
 
 OpenAPI.BASE = import.meta.env.VITE_API_URL;
@@ -41,9 +42,11 @@ declare module "@tanstack/react-router" {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
-		</QueryClientProvider>
+		<CustomProvider>
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider router={router} />
+			</QueryClientProvider>
+		</CustomProvider>
 	</StrictMode>,
 );
 

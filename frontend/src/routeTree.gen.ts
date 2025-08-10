@@ -17,11 +17,12 @@ import { Route as HomeRouteImport } from './routes/_home'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as HomeDocsRouteImport } from './routes/_home/docs'
+import { Route as HomeDashboardRouteImport } from './routes/_home/dashboard'
 import { Route as HomeApiSyncRouteImport } from './routes/_home/api-sync'
 import { Route as HomeDemoRouteImport } from './routes/_home/_demo'
+import { Route as AuthUserRouteImport } from './routes/_auth/user'
 import { Route as AuthSettingsRouteImport } from './routes/_auth/settings'
 import { Route as AuthItemsRouteImport } from './routes/_auth/items'
-import { Route as AuthDashboardRouteImport } from './routes/_auth/dashboard'
 import { Route as AuthAdminRouteImport } from './routes/_auth/admin'
 import { Route as HomeDemoDemoTanstackQueryRouteImport } from './routes/_home/_demo/demo.tanstack-query'
 import { Route as HomeDemoDemoTableRouteImport } from './routes/_home/_demo/demo.table'
@@ -66,6 +67,11 @@ const HomeDocsRoute = HomeDocsRouteImport.update({
   path: '/docs',
   getParentRoute: () => HomeRoute,
 } as any)
+const HomeDashboardRoute = HomeDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeApiSyncRoute = HomeApiSyncRouteImport.update({
   id: '/api-sync',
   path: '/api-sync',
@@ -75,6 +81,11 @@ const HomeDemoRoute = HomeDemoRouteImport.update({
   id: '/_demo',
   getParentRoute: () => HomeRoute,
 } as any)
+const AuthUserRoute = AuthUserRouteImport.update({
+  id: '/user',
+  path: '/user',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthSettingsRoute = AuthSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -83,11 +94,6 @@ const AuthSettingsRoute = AuthSettingsRouteImport.update({
 const AuthItemsRoute = AuthItemsRouteImport.update({
   id: '/items',
   path: '/items',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthDashboardRoute = AuthDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthAdminRoute = AuthAdminRouteImport.update({
@@ -123,10 +129,11 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof AuthAdminRoute
-  '/dashboard': typeof AuthDashboardRoute
   '/items': typeof AuthItemsRoute
   '/settings': typeof AuthSettingsRoute
+  '/user': typeof AuthUserRoute
   '/api-sync': typeof HomeApiSyncRoute
+  '/dashboard': typeof HomeDashboardRoute
   '/docs': typeof HomeDocsRoute
   '/': typeof HomeIndexRoute
   '/demo/table': typeof HomeDemoDemoTableRoute
@@ -140,10 +147,11 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof AuthAdminRoute
-  '/dashboard': typeof AuthDashboardRoute
   '/items': typeof AuthItemsRoute
   '/settings': typeof AuthSettingsRoute
+  '/user': typeof AuthUserRoute
   '/api-sync': typeof HomeApiSyncRoute
+  '/dashboard': typeof HomeDashboardRoute
   '/docs': typeof HomeDocsRoute
   '/': typeof HomeIndexRoute
   '/demo/table': typeof HomeDemoDemoTableRoute
@@ -160,11 +168,12 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_auth/admin': typeof AuthAdminRoute
-  '/_auth/dashboard': typeof AuthDashboardRoute
   '/_auth/items': typeof AuthItemsRoute
   '/_auth/settings': typeof AuthSettingsRoute
+  '/_auth/user': typeof AuthUserRoute
   '/_home/_demo': typeof HomeDemoRouteWithChildren
   '/_home/api-sync': typeof HomeApiSyncRoute
+  '/_home/dashboard': typeof HomeDashboardRoute
   '/_home/docs': typeof HomeDocsRoute
   '/_home/': typeof HomeIndexRoute
   '/_home/_demo/demo/table': typeof HomeDemoDemoTableRoute
@@ -180,10 +189,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/admin'
-    | '/dashboard'
     | '/items'
     | '/settings'
+    | '/user'
     | '/api-sync'
+    | '/dashboard'
     | '/docs'
     | '/'
     | '/demo/table'
@@ -197,10 +207,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/admin'
-    | '/dashboard'
     | '/items'
     | '/settings'
+    | '/user'
     | '/api-sync'
+    | '/dashboard'
     | '/docs'
     | '/'
     | '/demo/table'
@@ -216,11 +227,12 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/_auth/admin'
-    | '/_auth/dashboard'
     | '/_auth/items'
     | '/_auth/settings'
+    | '/_auth/user'
     | '/_home/_demo'
     | '/_home/api-sync'
+    | '/_home/dashboard'
     | '/_home/docs'
     | '/_home/'
     | '/_home/_demo/demo/table'
@@ -296,6 +308,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeDocsRouteImport
       parentRoute: typeof HomeRoute
     }
+    '/_home/dashboard': {
+      id: '/_home/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof HomeDashboardRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/_home/api-sync': {
       id: '/_home/api-sync'
       path: '/api-sync'
@@ -310,6 +329,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeDemoRouteImport
       parentRoute: typeof HomeRoute
     }
+    '/_auth/user': {
+      id: '/_auth/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof AuthUserRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/settings': {
       id: '/_auth/settings'
       path: '/settings'
@@ -322,13 +348,6 @@ declare module '@tanstack/react-router' {
       path: '/items'
       fullPath: '/items'
       preLoaderRoute: typeof AuthItemsRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/dashboard': {
-      id: '/_auth/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthDashboardRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/admin': {
@@ -371,16 +390,16 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthAdminRoute: typeof AuthAdminRoute
-  AuthDashboardRoute: typeof AuthDashboardRoute
   AuthItemsRoute: typeof AuthItemsRoute
   AuthSettingsRoute: typeof AuthSettingsRoute
+  AuthUserRoute: typeof AuthUserRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAdminRoute: AuthAdminRoute,
-  AuthDashboardRoute: AuthDashboardRoute,
   AuthItemsRoute: AuthItemsRoute,
   AuthSettingsRoute: AuthSettingsRoute,
+  AuthUserRoute: AuthUserRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -406,6 +425,7 @@ const HomeDemoRouteWithChildren = HomeDemoRoute._addFileChildren(
 interface HomeRouteChildren {
   HomeDemoRoute: typeof HomeDemoRouteWithChildren
   HomeApiSyncRoute: typeof HomeApiSyncRoute
+  HomeDashboardRoute: typeof HomeDashboardRoute
   HomeDocsRoute: typeof HomeDocsRoute
   HomeIndexRoute: typeof HomeIndexRoute
 }
@@ -413,6 +433,7 @@ interface HomeRouteChildren {
 const HomeRouteChildren: HomeRouteChildren = {
   HomeDemoRoute: HomeDemoRouteWithChildren,
   HomeApiSyncRoute: HomeApiSyncRoute,
+  HomeDashboardRoute: HomeDashboardRoute,
   HomeDocsRoute: HomeDocsRoute,
   HomeIndexRoute: HomeIndexRoute,
 }

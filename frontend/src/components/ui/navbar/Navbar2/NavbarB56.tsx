@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import DistrictSelector from "../Navbar3/DistrictSelector.tsx";
 import "./NavbarB56.css";
+import UserAvatar from "./UserAvatar.tsx";
 
 export default function NavbarB56() {
 	return (
@@ -52,6 +52,9 @@ export default function NavbarB56() {
 						}}
 					>
 						Documentation
+					</Link>
+					<Link to="/user">
+						<UserAvatar />
 					</Link>
 				</div>
 			</nav>

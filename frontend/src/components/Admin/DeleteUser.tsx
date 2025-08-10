@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { FiTrash2 } from "react-icons/fi";
 
 import { UsersService } from "../../client";
+import useCustomToast from "../../hooks/useCustomToast";
 import {
 	DialogActionTrigger,
 	DialogBody,
@@ -15,7 +16,6 @@ import {
 	DialogRoot,
 	DialogTrigger,
 } from "../ui/dialog";
-import useCustomToast from "../../hooks/useCustomToast";
 
 const DeleteUser = ({ id }: { id: string }) => {
 	const [isOpen, setIsOpen] = useState(false);

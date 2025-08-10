@@ -48,8 +48,8 @@ function HomePage() {
 										Blocks never saves it online.
 									</li>
 									<li>
-										California Accountability Panel saves progress locally. What you
-										sync stays on your device.
+										California Accountability Panel saves progress locally. What
+										you sync stays on your device.
 									</li>
 								</ul>
 							</div>
@@ -68,35 +68,12 @@ function HomePage() {
 							Performance standards are represented by one of five colors.
 						</h2>
 						<GaugeChart />
-						<Link to="/docs" className="p-4">
+						<Link to="/docs" className="button-primary">
 							Learn more
 						</Link>
 					</section>
 				</div>
 			</div>
-			<section className="bg-[#282c34] text-white">
-				<div className=" flex container mx-auto px-6">
-					<h2 className="text-[calc(10px+2vmin)]">
-						Indicators from Red, orange, yellow, green, to Blue.
-					</h2>
-					<a
-						className="text-[#61dafb] hover:underline"
-						href="https://reactjs.org"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Learn React
-					</a>
-					<a
-						className="text-[#61dafb] hover:underline"
-						href="https://tanstack.com"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Learn TanStack
-					</a>
-				</div>
-			</section>
 		</main>
 	);
 }
