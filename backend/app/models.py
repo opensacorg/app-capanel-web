@@ -147,7 +147,7 @@ class CensusData(SQLModel, table=True):
     gr_12: int = Field(default=0)
 
     @classmethod
-    def get_total_students(
+    def get_total_students_in_school(
         cls, session, school_code: str, reporting_category: str
     ) -> dict:
         """
@@ -169,7 +169,7 @@ class CensusData(SQLModel, table=True):
             return {"total-students": None}
 
     @classmethod
-    def get_total_students_by_grade(
+    def get_total_students_in_school_by_grade(
         cls, session, school_code: str, reporting_category: str
     ) -> dict:
         """
@@ -206,3 +206,121 @@ class CensusData(SQLModel, table=True):
             ]
         }
 
+    @classmethod
+    def get_total_students_in_district(
+        cls, session, district_code: str, reporting_category: str
+    ) -> dict:
+        """
+        Return a dictionary with key 'total-students' that is either row.total_enr or None.
+        0 is a valid value.
+        If no row is found, return {'total-students': None}.
+        """
+        row = (
+            session.query(cls)
+            .filter(
+                cls.district_code == district_code,
+                cls.reporting_category == reporting_category,
+            )
+            .first()
+        )
+        if row:
+            return {"total-students": row.total_enr}
+        else:
+            return {"total-students": None}
+
+    @classmethod
+    def get_total_students_in_district_by_grade(
+        cls, session, district_code: str, reporting_category: str
+    ) -> dict:
+        """
+        Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this district.
+        If no row is found, return {'total_students_by_grade': []}.
+        """
+        found_row = (
+            session.query(cls)
+            .filter(
+                cls.district_code == district_code,
+                cls.reporting_category == reporting_category,
+            )
+            .first()
+        )
+        if not found_row:
+            return {"total_students_by_grade": []}
+
+        return {
+            "total_students_by_grade": [
+                found_row.gr_tk,
+                found_row.gr_kn,
+                found_row.gr_1,
+                found_row.gr_2,
+                found_row.gr_3,
+                found_row.gr_4,
+                found_row.gr_5,
+                found_row.gr_6,
+                found_row.gr_7,
+                found_row.gr_8,
+                found_row.gr_9,
+                found_row.gr_10,
+                found_row.gr_11,
+                found_row.gr_12,
+            ]
+        }
+    @classmethod
+    def get_total_students_in_county(
+        cls, session, county_code: str, reporting_category: str
+    ) -> dict:
+        """
+        Return a dictionary with key 'total-students' that is either row.total_enr or None.
+        0 is a valid value.
+        If no row is found, return {'total-students': None}.
+        """
+        row = (
+            session.query(cls)
+            .filter(
+                cls.county_code == county_code,
+                cls.reporting_category == reporting_category,
+            )
+            .first()
+        )
+        if row:
+            return {"total-students": row.total_enr}
+        else:
+            return {"total-students": None}
+    
+    @classmethod
+    def get_total_students_in_county_by_grade(
+        cls, session, county_code: str, reporting_category: str
+    ) -> dict:
+        """
+        Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this county.
+        If no row is found, return {'total_students_by_grade': []}.
+        """
+        found_row = (
+            session.query(cls)
+            .filter(
+                cls.county_code == county_code,
+                cls.reporting_category == reporting_category,
+            )
+            .first()
+        )
+        if not found_row:
+            return {"total_students_by_grade": []}
+
+        return {
+            "total_students_by_grade": [
+                found_row.gr_tk,
+                found_row.gr_kn,
+                found_row.gr_1,
+                found_row.gr_2,
+                found_row.gr_3,
+                found_row.gr_4,
+                found_row.gr_5,
+                found_row.gr_6,
+                found_row.gr_7,
+                found_row.gr_8,
+                found_row.gr_9,
+                found_row.gr_10,
+                found_row.gr_11,
+                found_row.gr_12,
+            ]
+        }
