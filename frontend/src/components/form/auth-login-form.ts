@@ -10,10 +10,10 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 export function useLoginForm(opts: {
 	onSubmit: (data: LoginFormValues) => Promise<void> | void;
 }) {
-	return useForm<LoginFormValues>({
+	return useForm({
 		defaultValues: {
 			user: "",
-		},
+		} as LoginFormValues,
 		onSubmit: async ({ value }) => {
 			await opts.onSubmit(value);
 		},
