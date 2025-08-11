@@ -113,13 +113,8 @@ class NewPassword(SQLModel):
     new_password: str = Field(min_length=8, max_length=40)
 
 
-
-
-
-# Simple CensusData model following the same pattern as User
-class CensusData(SQLModel, table=True):
-
-    schl_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+# Shared properties for CensusData
+class CensusDataBase(SQLModel):
     academic_year: int = Field(index=True)
     aggregation_level: str = Field(index=True)
     county_code: str = Field(index=True)
@@ -145,6 +140,11 @@ class CensusData(SQLModel, table=True):
     gr_10: int = Field(default=0)
     gr_11: int = Field(default=0)
     gr_12: int = Field(default=0)
+
+
+# Simple CensusData model following the same pattern as User
+class CensusData(CensusDataBase, table=True):
+    census_data_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
     @classmethod
     def get_total_students_in_school(
@@ -265,6 +265,7 @@ class CensusData(SQLModel, table=True):
                 found_row.gr_12,
             ]
         }
+
     @classmethod
     def get_total_students_in_county(
         cls, session, county_code: str, reporting_category: str
@@ -286,7 +287,7 @@ class CensusData(SQLModel, table=True):
             return {"total-students": row.total_enr}
         else:
             return {"total-students": None}
-    
+
     @classmethod
     def get_total_students_in_county_by_grade(
         cls, session, county_code: str, reporting_category: str
@@ -324,3 +325,23 @@ class CensusData(SQLModel, table=True):
                 found_row.gr_12,
             ]
         }
+
+
+# Properties to receive on item creation
+class CensusCreate(CensusDataBase):
+    pass
+
+
+# Properties to receive on item update
+class CensusUpdate(CensusDataBase):
+    pass
+
+
+# Properties to return via API, id is always required
+class CensusDataPublic(CensusDataBase):
+    census_data_id: uuid.UUID
+
+
+class CensusDataPublicList(SQLModel):
+    data: list[CensusDataPublic]
+    count: int
