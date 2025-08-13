@@ -53,7 +53,7 @@ export default function SearchHomepageForm() {
 				e.stopPropagation();
 				form.handleSubmit();
 			}}
-			className="flex items-end gap-4 pb-40"
+			className="flex items-center gap-4 pb-40"
 		>
 			<form.Field
 				name="schoolOrDistrict"
