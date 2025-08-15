@@ -24,6 +24,7 @@
     "@tanstack/react-query-devtools": "^5.85.0",
     "@tanstack/react-router": "^1.131.7",
     "@tanstack/react-router-devtools": "^1.131.5",
+    "@tanstack/react-store": "^0.7.3",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.11.0",
     "echarts": "^6.0.0",
