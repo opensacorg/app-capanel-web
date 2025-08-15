@@ -450,3 +450,17 @@ class SchoolPublic(SchoolBase):
 class SchoolsPublic(SQLModel):
     data: list[SchoolPublic]
     count: int
+
+
+# Properties for a refined school view
+class SchoolSummary(SQLModel):
+    id: uuid.UUID
+    school: str | None = None
+    city: str | None = None
+    county: str | None = None
+    cds_code: str | None = None
+
+
+class SchoolsSummary(SQLModel):
+    data: list[SchoolSummary]
+    count: int
