@@ -1,8 +1,8 @@
 """Add new school table
 
-Revision ID: 47f9668602ed
+Revision ID: d3deb8989ec8
 Revises: 8a38665e13e6
-Create Date: 2025-08-15 11:30:48.029069
+Create Date: 2025-08-15 14:28:31.864299
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import sqlmodel.sql.sqltypes
 
 
 # revision identifiers, used by Alembic.
-revision = '47f9668602ed'
+revision = 'd3deb8989ec8'
 down_revision = '8a38665e13e6'
 branch_labels = None
 depends_on = None
@@ -66,7 +66,7 @@ def upgrade():
     sa.Column('adm_lname', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=True),
     sa.Column('last_up_date', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=True),
     sa.Column('multilingual', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Uuid(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('cds_code')
     )

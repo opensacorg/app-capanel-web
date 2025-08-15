@@ -432,7 +432,8 @@ class School(SchoolBase, table=True):
     Inherits all fields from `SchoolBase` and adds the primary key.
     """
 
-    id: int | None = Field(default=None, primary_key=True)
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    # id: int | None = Field(default=None, primary_key=True)
 
 
 # A Pydantic model for creating new school entries. It uses the base model but
