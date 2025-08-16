@@ -3,6 +3,10 @@
     "biomejs.biome",
     "bradlc.vscode-tailwindcss",
     "ms-python.debugpy",
-    "ms-python.python"
+    "ms-python.python",
+    "njpwerner.autodocstring",
+    "mechatroner.rainbow-csv",
+    "redhat.vscode-yaml",
+    "ms-python.isort"
   ]
 }
