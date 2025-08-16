@@ -144,7 +144,7 @@ class CensusDataBase(SQLModel):
 
 # Simple CensusData model following the same pattern as User
 class CensusData(CensusDataBase, table=True):
-    census_data_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    census_data_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True) #need to add timestamp
 
     @classmethod
     def get_total_students_in_school(
