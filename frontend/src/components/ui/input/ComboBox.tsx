@@ -25,11 +25,13 @@ export function ComboBox({
 	options,
 	placeholder,
 	label,
+	onInputChange,
 }: {
 	field: any;
 	options: string[];
 	placeholder: string;
 	label: string;
+	onInputChange?: (value: string) => void;
 }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [filteredOptions, setFilteredOptions] = useState(options);
@@ -54,6 +56,9 @@ export function ComboBox({
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		field.handleChange(value);
+		if (onInputChange) {
+			onInputChange(value);
+		}
 		if (value.length > SEARCH_MIN_LENGTH) {
 			setIsOpen(true);
 			setFilteredOptions(
