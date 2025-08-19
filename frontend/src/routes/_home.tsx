@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import NavbarB56 from "../components/ui/navbar/Navbar2/NavbarB56.tsx";
+import NavbarD52 from "../components/ui/navbar/Navbar1/NavbarD52.tsx";
 
 export const Route = createFileRoute("/_home")({
 	component: HomeLayout,
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_home")({
 function HomeLayout() {
 	return (
 		<div className="min-h-screen">
-			<NavbarB56 />
+			<NavbarD52 />
 			<Outlet />
 		</div>
 	);

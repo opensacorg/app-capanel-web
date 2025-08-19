@@ -1,6 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import SearchHomepageForm from "../../components/form/home-search-form";
-import GaugeChart from "../../integrations/apache-echarts/gauge-chart";
+import { Avatar, Button, Card, For, Stack } from "@chakra-ui/react";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_home/")({
 	component: HomePage,
@@ -8,71 +7,59 @@ export const Route = createFileRoute("/_home/")({
 
 function HomePage() {
 	return (
-		<main className="flex flex-col serif text-element-text-regular">
-			<div className=" flex container mx-auto px-6 flex-col xl:flex-row">
-				<div className="flex-1">
-					<header>
-						<div className="pt-16 pb-12">
-							<h1 className="font-bold text-3xl pb-2">
-								Welcome to California Accountability Panel
-							</h1>
-							<p>
-								Compare school performance standards based on the{" "}
-								<a
-									className="underline"
-									href="https://www.caschooldashboard.org/"
-								>
-									California Data Dashboard
-								</a>
-								.
-							</p>
-							<div className="flex pt-2 gap-4 ps-2 items-center">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									strokeWidth={1.5}
-									stroke="currentColor"
-									className="size-6"
-								>
-									<title>Information list icon</title>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"
-									/>
-								</svg>
-								<ul className="list-disc list-inside">
-									<li>
-										All your data stays private in your browser - Learning
-										Blocks never saves it online.
-									</li>
-									<li>
-										California Accountability Panel saves progress locally. What
-										you sync stays on your device.
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div className="">
-							<h2 className="font-bold text-xl pb-4">
-								Search for a school to find information.
-							</h2>
-							<SearchHomepageForm />
-						</div>
-					</header>
+		<main className="text-element-text-primary w-full flex flex-col items-center pt-16">
+			<div className="flex max-w-6xl px-6 lg:px-0">
+				<div className="flex-1 xl:flex-5/12 flex flex-col justify-center items-center text-center gap-4">
+					<h1 className="text-5xl font-urbanist text-echart-text-primary font-bold">
+						Student information dashboard panel.
+					</h1>
+					<p className="text-lg  text-element-text-regular font-urbanist font-medium">
+						Get an overview of school standards with our open-source dashboard
+						panel.
+					</p>
+					<button className="button-primary mt-6">
+						Search for a school or district
+					</button>
+					<button className="button-primary">View state-wide</button>
 				</div>
-				<div className="flex-1">
-					<section className="pt-16 text-center flex flex-col items-center">
-						<h2 className="text-2xl font-bold max-w-xl ">
-							Performance standards are represented by one of five colors.
-						</h2>
-						<GaugeChart />
-						<Link to="/docs" className="button-primary">
-							Learn more
-						</Link>
-					</section>
+				<div className="flex-1 xl:flex-7/12 ps-8">
+					<img src="/d.png" height={440} width={440} />
 				</div>
+			</div>
+			<h2 className="mt-24 text-center text-3xl font-bold text-element-text-regular font-urbanist">
+				About the data
+			</h2>
+			<p className="mt-8 text-center max-w-lg font-urbanist text-lg">
+				The data is sourced from reports published by the California Department
+				of Education https://www.cde.ca.gov/ds/.
+			</p>
+			<h2 className="mt-24 text-center text-3xl font-bold text-element-text-regular font-urbanist">
+				Features
+			</h2>
+			<div className="flex mt-8">
+				<Stack gap="4" direction="row" wrap="wrap">
+					<For each={["subtle", "outline", "elevated"]}>
+						{(variant) => (
+							<Card.Root width="320px" variant={variant} key={variant}>
+								<Card.Body gap="2">
+									<Avatar.Root size="lg" shape="rounded">
+										<Avatar.Image src="https://picsum.photos/200/300" />
+										<Avatar.Fallback name="Nue Camp" />
+									</Avatar.Root>
+									<Card.Title mb="2">Nue Camp</Card.Title>
+									<Card.Description>
+										This is the card body. Lorem ipsum dolor sit amet,
+										consectetur adipiscing elit.
+									</Card.Description>
+								</Card.Body>
+								<Card.Footer justifyContent="flex-end">
+									<Button variant="outline">Learn more</Button>
+									<Button>Try it out</Button>
+								</Card.Footer>
+							</Card.Root>
+						)}
+					</For>
+				</Stack>
 			</div>
 		</main>
 	);

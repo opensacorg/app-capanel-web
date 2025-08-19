@@ -119,7 +119,7 @@ export function ComboBox({
 				/>
 				{isOpen && (
 					<div className="absolute z-10 mt-1 w-full rounded-sm border border-gray-200 bg-white shadow-lg">
-						<ul className="max-h-60 overflow-auto rounded-sm  text-base  focus:outline-none sm:text-sm tracking-wide">
+						<ul className="max-h-60 overflow-auto rounded-sm text-base focus:outline-none sm:text-sm tracking-wide">
 							{filteredOptions.map((option) => (
 								<li
 									key={option}
