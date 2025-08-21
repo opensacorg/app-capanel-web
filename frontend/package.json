@@ -42,7 +42,7 @@
     "@biomejs/biome": "^2.1.4",
     "@chakra-ui/panda-preset": "^3.24.2",
     "@hey-api/openapi-ts": "^0.80.8",
-    "@pandacss/dev": "^1.0.1",
+    "@pandacss/dev": "^1.1.0",
     "@playwright/test": "^1.54.2",
     "@tanstack/router-devtools": "^1.131.7",
     "@tanstack/router-plugin": "^1.131.7",
