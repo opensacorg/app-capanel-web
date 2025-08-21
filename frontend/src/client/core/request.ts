@@ -37,7 +37,7 @@ export const base64 = (str: string): string => {
 	try {
 		return btoa(str);
 	} catch (_err) {
-		// @ts-ignore
+		// @ts-expect-error
 		return Buffer.from(str).toString("base64");
 	}
 };
@@ -132,13 +132,13 @@ export const getHeaders = async <T>(
 	options: ApiRequestOptions<T>,
 ): Promise<Record<string, string>> => {
 	const [token, username, password, additionalHeaders] = await Promise.all([
-		// @ts-ignore
+		// @ts-expect-error
 		resolve(options, config.TOKEN),
-		// @ts-ignore
+		// @ts-expect-error
 		resolve(options, config.USERNAME),
-		// @ts-ignore
+		// @ts-expect-error
 		resolve(options, config.PASSWORD),
-		// @ts-ignore
+		// @ts-expect-error
 		resolve(options, config.HEADERS),
 	]);
 

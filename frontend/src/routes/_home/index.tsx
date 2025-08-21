@@ -20,10 +20,17 @@ function HomePage() {
 					<button className="button-primary mt-6" type="button">
 						Search for a school or district
 					</button>
-					<button className="button-primary" type="button">View state-wide</button>
+					<button className="button-primary" type="button">
+						View state-wide
+					</button>
 				</div>
 				<div className="flex-1 xl:flex-7/12 ps-8">
-					<img src="/pic/d.png" alt="Collage of three dashboard features." height={440} width={440} />
+					<img
+						src="/pic/d.png"
+						alt="Collage of three dashboard features."
+						height={440}
+						width={440}
+					/>
 				</div>
 			</div>
 			<h2 className="mt-24 text-center text-3xl font-bold text-element-text-regular font-urbanist">

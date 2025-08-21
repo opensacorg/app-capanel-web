@@ -1,10 +1,10 @@
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from sqlmodel import func, select
 
 from app.api.deps import SessionDep
-from app.models import School, SchoolsPublic, SchoolSummary, SchoolsSummary
+from app.models import School, SchoolsPublic, SchoolsSummary
 
 router = APIRouter()
 
@@ -61,4 +61,3 @@ def read_schools_summary(
     count = len(schools)
 
     return SchoolsSummary(data=schools, count=count)
-

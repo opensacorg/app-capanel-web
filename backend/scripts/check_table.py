@@ -13,8 +13,9 @@ How to use:
 3. The script will print whether the 'censusdata' table exists and list all tables in the database.
 """
 
-from app.core.config import settings
 from sqlmodel import create_engine, text
+
+from app.core.config import settings
 
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
@@ -37,7 +38,7 @@ with engine.connect() as conn:
     ).fetchall()
     print("All tables in the database:")
     if not all_tables:
-        print("  - No tables found.")   
+        print("  - No tables found.")
     else:
         print("  - Tables found:")
     for (table_name,) in all_tables:

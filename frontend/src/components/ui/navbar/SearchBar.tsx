@@ -20,7 +20,7 @@ export default function SearchBar({ className }: { className?: string }) {
 	const form = useForm({
 		defaultValues: { search: "" },
 		onSubmit: ({ value }) => {
-			redirect({to: '/dashboard', search: {q: value.search}})
+			redirect({ to: "/dashboard", search: { q: value.search } });
 		},
 	});
 

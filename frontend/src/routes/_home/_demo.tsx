@@ -3,7 +3,7 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_home/_demo")({
 	// beforeLoad: ({ context, location }) => {
-	// 	// @ts-ignore
+	// 	// @ts-expect-error
 	// 	if (!context.auth.isAuthenticated) {
 	// 		throw redirect({
 	// 			to: "/login",

@@ -1,10 +1,11 @@
 import csv
 from pathlib import Path
+
 from sqlmodel import Session, create_engine, select
 
 from app import crud
 from app.core.config import settings
-from app.models import User, UserCreate, School
+from app.models import School, User, UserCreate
 
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
@@ -43,7 +44,7 @@ def init_db(session: Session) -> None:
 
         schools_to_create = []
         try:
-            with open(file_path, mode="r", encoding="utf-8") as tsv_file:
+            with open(file_path, encoding="utf-8") as tsv_file:
                 reader = csv.DictReader(tsv_file, delimiter="\t")
 
                 for row in reader:
