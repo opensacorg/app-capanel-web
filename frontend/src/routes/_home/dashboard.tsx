@@ -53,7 +53,7 @@ function RouteComponent() {
                   <Tabs.Trigger value="active">Active</Tabs.Trigger>
                   <Tabs.Trigger value="new">New</Tabs.Trigger>
                 </Tabs.List>
-                
+
                 <Tabs.Content value="total">
                   <VStack align="stretch" gap={2}>
                     <Text fontSize="sm" color="fg.muted" fontWeight="medium">
@@ -70,7 +70,7 @@ function RouteComponent() {
                     </HStack>
                   </VStack>
                 </Tabs.Content>
-                
+
                 <Tabs.Content value="active">
                   <VStack align="stretch" gap={2}>
                     <Text fontSize="sm" color="fg.muted" fontWeight="medium">
@@ -87,7 +87,7 @@ function RouteComponent() {
                     </HStack>
                   </VStack>
                 </Tabs.Content>
-                
+
                 <Tabs.Content value="new">
                   <VStack align="stretch" gap={2}>
                     <Text fontSize="lg" color="fg.muted" fontWeight="medium">
