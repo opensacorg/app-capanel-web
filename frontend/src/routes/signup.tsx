@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { FiLock, FiUser } from "react-icons/fi";
-import Logo from "/assets/images/fastapi-logo.svg";
+import Logo from "/assets/logo/logo_text.svg";
 import type { UserRegister } from "../client";
 import { Button } from "../components/ui/button";
 import { Field } from "../components/ui/field";

@@ -1,13 +1,13 @@
 /* SearchBar component styles */
 .searchbar-root {
 	position: relative;
-	min-width: 220px;
-	max-width: 400px;
+	min-width: 200px;
+	max-width: 200px;
 }
 
 @media screen and (min-width: 1200px) {
 	.searchbar-root {
-		min-width: 350px;
+		min-width: 280px;
 	}
 }
 

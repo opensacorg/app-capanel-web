@@ -1,7 +1,7 @@
 import { Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
 
-import Logo from "/assets/images/fastapi-logo.svg";
+import Logo from "/assets/logo/logo_text.svg";
 import UserMenu from "./UserMenu";
 
 function Navbar() {

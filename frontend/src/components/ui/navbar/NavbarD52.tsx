@@ -16,7 +16,7 @@ export default function NavbarD52() {
 						className="pr-4 h-full rounded  gap-[13px]  text-[#0A2D3C] text-3xl flex items-center leading-none font-urbanist"
 						to="/"
 					>
-						<img src="/logo.png" alt="Logo" className="h-14" />
+						<img src="/assets/logo/logo.svg" alt="Logo" className="h-14" />
 						<span className="">
 							<span className="font-bold">California Accountability</span> Panel
 						</span>
