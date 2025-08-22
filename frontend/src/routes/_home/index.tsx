@@ -1,4 +1,11 @@
-import { Avatar, Button, Card, For, Stack } from "@chakra-ui/react";
+import {
+	Avatar,
+	Button,
+	ButtonGroup,
+	Card,
+	For,
+	Stack,
+} from "@chakra-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_home/")({
@@ -17,12 +24,10 @@ function HomePage() {
 						Get an overview of school standards with our open-source dashboard
 						panel.
 					</p>
-					<button className="button-primary mt-6" type="button">
+					<Button className="tracking-wider" mt={4}>
 						Search for a school or district
-					</button>
-					<button className="button-primary" type="button">
-						View state-wide
-					</button>
+					</Button>
+					<Button className="tracking-wider">View state-wide</Button>
 				</div>
 				<div className="flex-1 xl:flex-7/12 ps-8">
 					<img
