@@ -49,6 +49,7 @@ export * from './progress-circle';
 export * from './radio-card';
 export * from './radio-group';
 export * from './rating-group';
+export * from './scroll-area';
 export * from './segment-group';
 export * from './select';
 export * from './combobox';

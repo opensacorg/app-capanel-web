@@ -20,7 +20,7 @@ export const system = createSystem(defaultConfig, {
 		tokens: {
 			colors: {
 				ui: {
-					main: { value: "#f52b5c" },
+					main: { value: "#009688" },
 				},
 			},
 		},

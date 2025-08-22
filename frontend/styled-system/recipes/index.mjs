@@ -48,6 +48,7 @@ export * from './progress-circle.mjs';
 export * from './radio-card.mjs';
 export * from './radio-group.mjs';
 export * from './rating-group.mjs';
+export * from './scroll-area.mjs';
 export * from './segment-group.mjs';
 export * from './select.mjs';
 export * from './combobox.mjs';
