@@ -1,37 +1,81 @@
+import { createFileRoute } from '@tanstack/react-router';
 import {
-	Badge,
 	Box,
-	Button,
 	Container,
 	Grid,
 	Heading,
-	HStack,
-	Icon,
-	Tabs,
 	Text,
+	Badge,
+	Button,
+	Icon,
+	HStack,
 	VStack,
-} from "@chakra-ui/react";
-import { createFileRoute } from "@tanstack/react-router";
+	Tabs,
+	Spinner,
+} from '@chakra-ui/react';
+import { Card, CardHeader, CardBody, CardFooter } from '../../components/ui/card';
 import {
-	FiActivity,
-	FiArrowDown,
-	FiArrowUp,
-	FiDollarSign,
-	FiSettings,
-	FiShoppingCart,
-	FiTrendingUp,
 	FiUser,
-} from "react-icons/fi";
-import {
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-} from "../../components/ui/card";
+	FiDollarSign,
+	FiTrendingUp,
+	FiShoppingCart,
+	FiActivity,
+	FiSettings,
+	FiArrowUp,
+	FiArrowDown,
+} from 'react-icons/fi';
+import { useTotalEnrollment } from '../../hooks/useCensusData';
 
-export const Route = createFileRoute("/_home/dashboard")({
+// Component to display total enrollment with loading and error states
+function TotalEnrollmentDisplay() {
+	const { totalEnr, isLoading, isError, hasData } = useTotalEnrollment();
+
+	if (isLoading) {
+		return (
+			<Box display="flex" justifyContent="center" alignItems="center" height="40px">
+				<Spinner size="md" color="blue.500" />
+			</Box>
+		);
+	}
+
+	if (isError) {
+		return (
+			<Box 
+				color="red.600" 
+				fontSize="sm" 
+				bg="red.50" 
+				border="1px solid" 
+				borderColor="red.200" 
+				borderRadius="md" 
+				p={2}
+				textAlign="center"
+			>
+				Failed to load data
+			</Box>
+		);
+	}
+
+	if (!hasData) {
+		return (
+			<Text fontSize="2xl" fontWeight="bold">
+				N/A
+			</Text>
+		);
+	}
+
+	// Format the number with commas for thousands
+	const formattedTotalEnr = totalEnr?.toLocaleString() || '0';
+
+	return (
+		<Text fontSize="2xl" fontWeight="bold">
+			{formattedTotalEnr}
+		</Text>
+	);
+}
+
+export const Route = createFileRoute('/_home/dashboard')({
 	component: RouteComponent,
-});
+})
 
 function RouteComponent() {
 	return (
@@ -48,15 +92,9 @@ function RouteComponent() {
 				</Box>
 
 				{/* Stats Cards */}
-				<Grid
-					templateColumns={{
-						base: "1fr",
-						md: "repeat(2, 1fr)",
-						lg: "repeat(4, 1fr)",
-					}}
-					gap={6}
-				>
+				<Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={6}>
 					<Card variant="elevated">
+
 						<CardBody>
 							<Tabs.Root defaultValue="total" variant="subtle" size="lg">
 								<Tabs.List mb={3}>
@@ -67,13 +105,11 @@ function RouteComponent() {
 
 								<Tabs.Content value="total">
 									<VStack align="stretch" gap={2}>
-										<Text fontSize="sm" color="fg.muted" fontWeight="medium">
-											Total Users
-										</Text>
-										<Text fontSize="2xl" fontWeight="bold">
-											2,543
-										</Text>
-										<HStack>
+									<Text fontSize="sm" color="fg.muted" fontWeight="medium">
+										Total Users
+									</Text>
+									<TotalEnrollmentDisplay />
+									<HStack>
 											<Icon as={FiArrowUp} color="green.500" boxSize={3} />
 											<Text fontSize="sm" color="green.500">
 												+12.5% from last month
@@ -193,7 +229,7 @@ function RouteComponent() {
 				</Grid>
 
 				{/* Main Content Cards */}
-				<Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={6}>
+				<Grid templateColumns={{ base: '1fr', lg: '2fr 1fr' }} gap={6}>
 					{/* Activity Card */}
 					<Card variant="outline">
 						<CardHeader>
@@ -266,15 +302,27 @@ function RouteComponent() {
 						</CardHeader>
 						<CardBody>
 							<VStack gap={3}>
-								<Button width="full" colorScheme="blue" variant="solid">
+								<Button
+									width="full"
+									colorScheme="blue"
+									variant="solid"
+								>
 									<Icon as={FiUser} mr={2} />
 									Add New User
 								</Button>
-								<Button width="full" colorScheme="green" variant="outline">
+								<Button
+									width="full"
+									colorScheme="green"
+									variant="outline"
+								>
 									<Icon as={FiActivity} mr={2} />
 									View Analytics
 								</Button>
-								<Button width="full" colorScheme="gray" variant="outline">
+								<Button
+									width="full"
+									colorScheme="gray"
+									variant="outline"
+								>
 									<Icon as={FiSettings} mr={2} />
 									Settings
 								</Button>
@@ -284,7 +332,7 @@ function RouteComponent() {
 				</Grid>
 
 				{/* Additional Example Cards */}
-				<Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
+				<Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
 					<Card variant="outline">
 						<CardHeader>
 							<Heading size="sm">System Status</Heading>
