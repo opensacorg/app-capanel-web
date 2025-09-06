@@ -2,7 +2,12 @@
 
 ## Overview
 
-Successfully implemented the integration of `total_enr` data from `/api/v1/censusdata` endpoint into the dashboard's "Total Users" tab as requested at line 64 of `dashboard.tsx`.
+Successfully implemented comprehensive census data integration including:
+1. **Total enrollment display** in dashboard "Total Users" tab
+2. **Interactive census data search card** with tabbed interface
+3. **Consistent error handling** across all components
+4. **Loading states** with skeleton UI components
+5. **Type-safe TypeScript implementation** with proper interfaces
 
 ## What Was Implemented
 
@@ -23,10 +28,28 @@ Successfully implemented the integration of `total_enr` data from `/api/v1/censu
 
 ### 3. Dashboard Component Updates (`src/routes/_home/dashboard.tsx`)
 - **TotalEnrollmentDisplay** component replacing line 64 comment
-- **Loading state** with Chakra UI Spinner
-- **Error state** with styled error message
+- **CensusDataSearchCard** - New interactive card with tabs for searching specific census data
+- **Loading state** with Chakra UI Spinner and Skeleton components
+- **Error state** with consistent styled error messages across both cards
 - **Success state** with formatted number display (includes thousands separators)
 - **Type-safe** implementation with proper null/undefined handling
+
+### 4. Census Data Search Card (`CensusDataSearchCard` component)
+- **Interactive Tabs**: Three-tab interface ("Found ID", "Default", "Last Searched")
+- **Dynamic Data Loading**: Loads census data by ID using `useCensusDataById` hook
+- **Sample Data Button**: Allows testing with predefined sample ID
+- **State Management**: React useState for managing search ID
+- **Responsive Design**: Works seamlessly in dashboard grid layout
+- **Consistent Styling**: Matches existing dashboard card patterns
+
+#### Tab Features:
+- **"Found ID" Tab**: 
+  - Displays loaded census data (school name, enrollment, charter status, academic year)
+  - "Load Sample Data" button when no data is selected
+  - Loading skeleton during API calls
+  - Error handling with styled error messages
+- **"Default" Tab**: Shows placeholder content when no data is selected
+- **"Last Searched" Tab**: Shows status of the last search operation
 
 ## Features
 
@@ -81,22 +104,26 @@ npm run dev
 ### 2. Navigate to Dashboard
 - Go to `http://localhost:5173` (or your dev server URL)
 - Navigate to the Dashboard page
-- Click on the "Total" tab in the first card
+- Test both implementations:
+  - **First Card**: Click on the "Total" tab to see total enrollment data
+  - **Second Card**: Interact with the census data search card tabs
 
 ### 3. Expected Behaviors
 
-#### When API is Working:
-- Shows loading spinner briefly
-- Displays formatted total enrollment number
-- Maintains existing trend indicators (+12.5% from last month)
+#### **First Card (Total Users with Total Enrollment)**:
+- **When API is Working**: Shows loading spinner briefly, displays formatted total enrollment number, maintains existing trend indicators (+12.5% from last month)
+- **When API is Down/Error**: Shows loading spinner briefly, displays red error box with "Failed to load data", preserves card layout and styling
+- **When API Returns No Data**: Shows "N/A" in place of the number
 
-#### When API is Down/Error:
-- Shows loading spinner briefly
-- Displays red error box with "Failed to load data"
-- Preserves card layout and styling
-
-#### When API Returns No Data:
-- Shows "N/A" in place of the number
+#### **Second Card (Census Data Search Card)**:
+- **"Found ID" Tab**:
+  - Initially shows placeholder content with "Load Sample Data" button
+  - When button clicked: Shows loading skeleton, then displays census data (school name, enrollment, charter/public status, academic year)
+  - On API error: Shows consistent red error box with "Failed to load census data"
+  - School icon (FiHome) and properly formatted enrollment numbers
+  - Color-coded charter status badges (purple for charter, gray for public)
+- **"Default" Tab**: Shows static placeholder content with "No data selected" message
+- **"Last Searched" Tab**: Shows checkmark (✓) when data was loaded, dash (-) when no searches performed
 
 ### 4. Browser DevTools Testing
 - **Network Tab**: Check for API calls to `/api/v1/censusdata`

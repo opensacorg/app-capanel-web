@@ -12,6 +12,8 @@ import {
 	VStack,
 	Tabs,
 	Spinner,
+	Skeleton,
+	Alert,
 } from '@chakra-ui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '../../components/ui/card';
 import {
@@ -23,8 +25,12 @@ import {
 	FiSettings,
 	FiArrowUp,
 	FiArrowDown,
+	FiHome,
+	FiUsers,
+	FiMapPin,
 } from 'react-icons/fi';
-import { useTotalEnrollment } from '../../hooks/useCensusData';
+import { useTotalEnrollment, useCensusDataById } from '../../hooks/useCensusData';
+import { useState } from 'react';
 
 // Component to display total enrollment with loading and error states
 function TotalEnrollmentDisplay() {
@@ -70,6 +76,165 @@ function TotalEnrollmentDisplay() {
 		<Text fontSize="2xl" fontWeight="bold">
 			{formattedTotalEnr}
 		</Text>
+	);
+}
+
+// Census Data Search Card Component with tabs
+function CensusDataSearchCard() {
+	// State to manage which census data ID to search for
+	const [searchId, setSearchId] = useState<string | null>(null);
+	
+	// Sample ID for demonstration - in a real app, this would come from user input or URL params
+	const sampleId = "123e4567-e89b-12d3-a456-426614174000";
+	
+	// Fetch census data by ID when searchId is set
+	const { data: censusData, isLoading, isError, error } = useCensusDataById(searchId);
+
+	// Component to display census data content
+	function CensusDataContent({ censusData, isLoading, isError, error }) {
+		if (isLoading) {
+			return (
+				<VStack align="stretch" gap={2}>
+					<Text fontSize="sm" color="fg.muted" fontWeight="medium">
+						Census Data
+					</Text>
+					<Skeleton height="32px" width="120px" />
+					<Skeleton height="16px" width="100px" />
+				</VStack>
+			);
+		}
+
+		if (isError) {
+			return (
+				<VStack align="stretch" gap={2}>
+					<Text fontSize="sm" color="fg.muted" fontWeight="medium">
+						Census Data
+					</Text>
+					<Box 
+						color="red.600" 
+						fontSize="sm" 
+						bg="red.50" 
+						border="1px solid" 
+						borderColor="red.200" 
+						borderRadius="md" 
+						p={2}
+						textAlign="center"
+					>
+						Failed to load census data
+					</Box>
+				</VStack>
+			);
+		}
+
+		if (!censusData?.data) {
+			return (
+				<VStack align="stretch" gap={2}>
+					<Text fontSize="sm" color="fg.muted" fontWeight="medium">
+						Census Data
+					</Text>
+					<Text fontSize="lg" color="fg.muted">
+						No data found
+					</Text>
+				</VStack>
+			);
+		}
+
+		const data = censusData.data;
+
+		return (
+			<VStack align="stretch" gap={2}>
+				<HStack justify="space-between">
+					<VStack align="start" spacing={0}>
+						<Text fontSize="xs" color="fg.muted">
+							{data.school_name || "Unknown School"}
+						</Text>
+						<Text fontSize="sm" color="fg.muted" fontWeight="medium">
+							Total Enrollment
+						</Text>
+					</VStack>
+					<Icon as={FiHome} color="blue.500" boxSize={4} />
+				</HStack>
+				<Text fontSize="2xl" fontWeight="bold" color="blue.500">
+					{data.total_enr?.toLocaleString() || "0"}
+				</Text>
+				<HStack>
+					<Badge 
+						colorScheme={data.charter === 'Y' ? 'purple' : 'gray'}
+						size="xs"
+					>
+						{data.charter === 'Y' ? 'Charter' : 'Public'}
+					</Badge>
+					<Text fontSize="xs" color="fg.muted">
+						AY {data.academic_year}
+					</Text>
+				</HStack>
+			</VStack>
+		);
+	}
+
+	return (
+		<Tabs.Root defaultValue="found-id" variant="subtle" size="lg">
+			<Tabs.List mb={3}>
+				<Tabs.Trigger value="found-id">Found ID</Tabs.Trigger>
+				<Tabs.Trigger value="default">Default</Tabs.Trigger>
+				<Tabs.Trigger value="last-searched">Last Searched</Tabs.Trigger>
+			</Tabs.List>
+
+			<Tabs.Content value="found-id">
+				<VStack gap={3}>
+					<CensusDataContent 
+						censusData={censusData} 
+						isLoading={isLoading} 
+						isError={isError} 
+						error={error} 
+					/>
+					{!searchId && (
+						<Button 
+							size="xs" 
+							colorScheme="blue" 
+							variant="outline"
+							onClick={() => setSearchId(sampleId)}
+						>
+							Load Sample Data
+						</Button>
+					)}
+				</VStack>
+			</Tabs.Content>
+
+			<Tabs.Content value="default">
+				<VStack align="stretch" gap={2}>
+					<Text fontSize="sm" color="fg.muted" fontWeight="medium">
+						Default View
+					</Text>
+					<Text fontSize="2xl" fontWeight="bold">
+						-
+					</Text>
+					<HStack>
+						<Icon as={FiUsers} color="gray.500" boxSize={3} />
+						<Text fontSize="sm" color="fg.muted">
+							No data selected
+						</Text>
+					</HStack>
+				</VStack>
+			</Tabs.Content>
+
+			<Tabs.Content value="last-searched">
+				<VStack align="stretch" gap={2}>
+					<Text fontSize="sm" color="fg.muted" fontWeight="medium">
+						Last Searched
+					</Text>
+					<Text fontSize="2xl" fontWeight="bold">
+						{searchId ? "✓" : "-"}
+					</Text>
+					<HStack>
+						<Icon as={FiActivity} color="blue.500" boxSize={3} />
+						<Text fontSize="sm" color="fg.muted">
+							{searchId ? "Data loaded" : "No recent searches"}
+						</Text>
+					</HStack>
+				</VStack>
+			</Tabs.Content>
+		</Tabs.Root>
 	);
 }
 
@@ -157,25 +322,7 @@ function RouteComponent() {
 
 					<Card variant="elevated">
 						<CardBody>
-							<HStack justify="space-between">
-								<Box>
-									<Text fontSize="sm" color="fg.muted" fontWeight="medium">
-										Revenue
-									</Text>
-									<Text fontSize="2xl" fontWeight="bold">
-										$45,231
-									</Text>
-									<HStack>
-										<Icon as={FiArrowUp} color="green.500" boxSize={3} />
-										<Text fontSize="sm" color="green.500">
-											+8.2%
-										</Text>
-									</HStack>
-								</Box>
-								<Box p={3} bg="green.50" borderRadius="lg">
-									<Icon as={FiDollarSign} boxSize={6} color="green.500" />
-								</Box>
-							</HStack>
+							<CensusDataSearchCard />
 						</CardBody>
 					</Card>
 
