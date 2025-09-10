@@ -38,7 +38,7 @@
     "@biomejs/biome": "^2.2.0",
     "@chakra-ui/panda-preset": "^3.25.0",
     "@faker-js/faker": "^9.9.0",
-    "@hey-api/openapi-ts": "^0.80.18",
+    "@hey-api/openapi-ts": "^0.83.0",
     "@pandacss/dev": "^1.1.0",
     "@playwright/test": "^1.55.0",
     "@tailwindcss/vite": "^4.1.12",
