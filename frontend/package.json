@@ -35,7 +35,7 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.0",
+    "@biomejs/biome": "^2.2.4",
     "@chakra-ui/panda-preset": "^3.25.0",
     "@faker-js/faker": "^9.9.0",
     "@hey-api/openapi-ts": "^0.80.18",
