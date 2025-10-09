@@ -15,6 +15,7 @@ import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/_home'
 import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as Dashboard2IndexRouteImport } from './routes/dashboard2/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as HomeDocsRouteImport } from './routes/_home/docs'
@@ -55,6 +56,11 @@ const HomeRoute = HomeRouteImport.update({
 } as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Dashboard2IndexRoute = Dashboard2IndexRouteImport.update({
+  id: '/dashboard2/',
+  path: '/dashboard2/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/docs': typeof HomeDocsRoute
   '/': typeof HomeIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard2': typeof Dashboard2IndexRoute
   '/demo/table': typeof HomeDemoDemoTableRoute
   '/demo/tanstack-query': typeof HomeDemoDemoTanstackQueryRoute
   '/demo/form/address': typeof HomeDemoDemoFormAddressRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/docs': typeof HomeDocsRoute
   '/': typeof HomeIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard2': typeof Dashboard2IndexRoute
   '/demo/table': typeof HomeDemoDemoTableRoute
   '/demo/tanstack-query': typeof HomeDemoDemoTanstackQueryRoute
   '/demo/form/address': typeof HomeDemoDemoFormAddressRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/_home/docs': typeof HomeDocsRoute
   '/_home/': typeof HomeIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard2/': typeof Dashboard2IndexRoute
   '/_home/_demo/demo/table': typeof HomeDemoDemoTableRoute
   '/_home/_demo/demo/tanstack-query': typeof HomeDemoDemoTanstackQueryRoute
   '/_home/_demo/demo/form/address': typeof HomeDemoDemoFormAddressRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/'
     | '/dashboard'
+    | '/dashboard2'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/form/address'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/'
     | '/dashboard'
+    | '/dashboard2'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/form/address'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/_home/docs'
     | '/_home/'
     | '/dashboard/'
+    | '/dashboard2/'
     | '/_home/_demo/demo/table'
     | '/_home/_demo/demo/tanstack-query'
     | '/_home/_demo/demo/form/address'
@@ -249,6 +261,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  Dashboard2IndexRoute: typeof Dashboard2IndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -293,6 +306,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard2/': {
+      id: '/dashboard2/'
+      path: '/dashboard2'
+      fullPath: '/dashboard2'
+      preLoaderRoute: typeof Dashboard2IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  Dashboard2IndexRoute: Dashboard2IndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

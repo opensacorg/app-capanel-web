@@ -1,7 +1,6 @@
 # Chakra UI Cards Documentation
 
-This documentation covers the implementation and usage of the custom Card component built with Chakra UI v3, along with
-comprehensive dashboard examples.
+This documentation covers the implementation and usage of the custom Card component built with Chakra UI v3, along with comprehensive dashboard examples.
 
 ## Table of Contents
 
@@ -16,8 +15,7 @@ comprehensive dashboard examples.
 
 ## Overview
 
-The Card component is a flexible, reusable UI component built on top of Chakra UI's Box component. It provides a clean
-container for grouping related content and actions with consistent styling and responsive behavior.
+The Card component is a flexible, reusable UI component built on top of Chakra UI's Box component. It provides a clean container for grouping related content and actions with consistent styling and responsive behavior.
 
 ### Key Features
 
@@ -38,10 +36,10 @@ interface CardProps extends BoxProps {
 }
 ```
 
-| Prop       | Type                                  | Default     | Description                           |
-|------------|---------------------------------------|-------------|---------------------------------------|
-| `variant`  | `"outline" \| "filled" \| "elevated"` | `"outline"` | Visual style variant                  |
-| `...props` | `BoxProps`                            | -           | All Chakra UI Box props are supported |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"outline" \| "filled" \| "elevated"` | `"outline"` | Visual style variant |
+| `...props` | `BoxProps` | - | All Chakra UI Box props are supported |
 
 ### Subcomponents
 
@@ -69,7 +67,7 @@ src/
 │       └── card.tsx          # Card component implementation
 └── routes/
     └── _home/
-        └── index.tsx     # Dashboard with card examples
+        └── dashboard.tsx     # Dashboard with card examples
 ```
 
 ## Variants
@@ -83,7 +81,6 @@ src/
 ```
 
 **Styling:**
-
 - Border: 1px solid border.default
 - Background: bg.panel
 - Best for: General content, forms, lists
@@ -97,7 +94,6 @@ src/
 ```
 
 **Styling:**
-
 - Background: bg.muted
 - No border
 - Best for: Secondary content, sidebars, widgets
@@ -111,7 +107,6 @@ src/
 ```
 
 **Styling:**
-
 - Background: bg.panel
 - Box shadow: lg
 - Best for: Primary content, statistics, important information
@@ -229,8 +224,7 @@ function ActivityCard() {
 
 ### Tabbed User Metrics Card
 
-The tabbed metrics card provides an interactive way to display multiple related metrics in a compact space. This card
-uses Chakra UI v3's Tabs component to organize user statistics.
+The tabbed metrics card provides an interactive way to display multiple related metrics in a compact space. This card uses Chakra UI v3's Tabs component to organize user statistics.
 
 ```tsx
 function TabbedUserMetricsCard() {
@@ -302,7 +296,6 @@ function TabbedUserMetricsCard() {
 ```
 
 **Key Features:**
-
 - Interactive tabs with Chakra UI v3 Tabs component
 - Subtle tab variant with large size for better readability
 - Three distinct metrics: Total, Active (30d), and New (7d) users
@@ -312,7 +305,7 @@ function TabbedUserMetricsCard() {
 
 ## Dashboard Implementation
 
-The dashboard (`src/routes/_home/index.tsx`) showcases various card patterns:
+The dashboard (`src/routes/_home/dashboard.tsx`) showcases various card patterns:
 
 ### 1. Statistics Grid
 
@@ -343,7 +336,6 @@ Four metric cards displaying KPIs with interactive and static elements:
 ```
 
 **Features:**
-
 - Responsive grid layout (1 column on mobile, 2 on tablet, 4 on desktop)
 - **First card**: Interactive tabbed user metrics with Total/Active/New users
 - **Other cards**: Static metrics for Revenue ($45,231), Orders (1,234), and Growth Rate (15.3%)
@@ -388,7 +380,6 @@ Two-column layout with activity feed and quick actions:
 ```
 
 **Activity Feed Features:**
-
 - Real-time activity display with "Live" badge
 - Icon-based activity types (user, payment, order)
 - Timestamps and descriptions
@@ -396,7 +387,6 @@ Two-column layout with activity feed and quick actions:
 - Outline variant for clean, organized appearance
 
 **Quick Actions Features:**
-
 - Vertical button stack for common actions
 - Full-width buttons with icons
 - Color-coded by priority (blue, green, gray)
@@ -406,7 +396,6 @@ Two-column layout with activity feed and quick actions:
 ### 4. Tabbed User Metrics Card
 
 Interactive card with tabs showing different user analytics:
-
 - Total users with growth metrics
 - Active users (30-day period)
 - New users (7-day period)
@@ -468,21 +457,18 @@ Three-column grid layout showcasing operational metrics:
 ```
 
 **System Status Card Features:**
-
 - Service health monitoring (API, Database, Cache)
 - Color-coded status badges (green for operational, yellow for warnings)
 - Outline variant for minimal emphasis
 - Small heading size for compact display
 
 **Performance Card Features:**
-
 - Response time metrics (234ms)
 - Trend indicators with improvement data
 - Elevated variant for visual prominence
 - Centered text layout for metric focus
 
 **Storage Usage Card Features:**
-
 - Used vs. available storage display (45.2 GB / 54.8 GB)
 - Visual progress bar showing 45.2% usage
 - Clean data presentation with aligned values
@@ -686,12 +672,10 @@ When updating the Card component:
 ## Examples Repository
 
 For more examples, check:
-
-- Dashboard implementation: `src/routes/_home/index.tsx`
+- Dashboard implementation: `src/routes/_home/dashboard.tsx`
 - Component source: `src/components/ui/card.tsx`
 - Additional patterns in the component library
 
 ---
 
-**Note:** This implementation uses Chakra UI v3. For different versions, some tokens and APIs may vary. Always refer to
-the official Chakra UI documentation for the most current information.
+**Note:** This implementation uses Chakra UI v3. For different versions, some tokens and APIs may vary. Always refer to the official Chakra UI documentation for the most current information.
