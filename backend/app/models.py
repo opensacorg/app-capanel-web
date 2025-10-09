@@ -150,7 +150,7 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_school(
-        cls, session, school_code: str, reporting_category: str
+            cls, session, school_code: str, reporting_category: str
     ) -> dict:
         """
         Return a dictionary with key 'total-students' that is either row.total_enr or None.
@@ -172,7 +172,7 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_school_by_grade(
-        cls, session, school_code: str, reporting_category: str
+            cls, session, school_code: str, reporting_category: str
     ) -> dict:
         """
         Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this row.
@@ -210,7 +210,7 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_district(
-        cls, session, district_code: str, reporting_category: str
+            cls, session, district_code: str, reporting_category: str
     ) -> dict:
         """
         Return a dictionary with key 'total-students' that is either row.total_enr or None.
@@ -232,7 +232,7 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_district_by_grade(
-        cls, session, district_code: str, reporting_category: str
+            cls, session, district_code: str, reporting_category: str
     ) -> dict:
         """
         Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this district.
@@ -270,7 +270,7 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_county(
-        cls, session, county_code: str, reporting_category: str
+            cls, session, county_code: str, reporting_category: str
     ) -> dict:
         """
         Return a dictionary with key 'total-students' that is either row.total_enr or None.
@@ -292,7 +292,7 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_county_by_grade(
-        cls, session, county_code: str, reporting_category: str
+            cls, session, county_code: str, reporting_category: str
     ) -> dict:
         """
         Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this county.

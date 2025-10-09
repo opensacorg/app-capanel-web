@@ -1,4 +1,3 @@
-import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -19,12 +18,13 @@ fileConfig(config.config_file_name)
 # target_metadata = None
 
 from app.models import SQLModel  # noqa
-from app.core.config import settings # noqa
+from app.core.config import settings  # noqa
 
 # Import all table models to ensure they are registered with SQLModel.metadata
 from app.models import User, Item, CensusData, School  # noqa
 
 target_metadata = SQLModel.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

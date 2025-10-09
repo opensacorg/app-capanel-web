@@ -5,10 +5,9 @@ Revises: 74673f8651ca
 Create Date: 2025-08-10 09:27:46.345244
 
 """
-from alembic import op
 import sqlalchemy as sa
 import sqlmodel.sql.sqltypes
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = 'abbe6b667292'
@@ -26,9 +25,11 @@ def upgrade():
     op.add_column('censusdata', sa.Column('district_code', sqlmodel.sql.sqltypes.AutoString(), nullable=False))
     op.add_column('censusdata', sa.Column('school_code', sqlmodel.sql.sqltypes.AutoString(), nullable=False))
     op.add_column('censusdata', sa.Column('county_name', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False))
-    op.add_column('censusdata', sa.Column('district_name', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False))
+    op.add_column('censusdata',
+                  sa.Column('district_name', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False))
     op.add_column('censusdata', sa.Column('charter', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False))
-    op.add_column('censusdata', sa.Column('reporting_category', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False))
+    op.add_column('censusdata',
+                  sa.Column('reporting_category', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False))
     op.add_column('censusdata', sa.Column('total_enr', sa.Integer(), nullable=False))
     op.add_column('censusdata', sa.Column('gr_tk', sa.Integer(), nullable=False))
     op.add_column('censusdata', sa.Column('gr_kn', sa.Integer(), nullable=False))
