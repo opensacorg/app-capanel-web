@@ -1,16 +1,16 @@
-import { Flex } from "@chakra-ui/react";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { Flex } from '@chakra-ui/react';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
-import Navbar from "../components/Common/Navbar";
-import Sidebar from "../components/Common/Sidebar";
-import { isLoggedIn } from "../hooks/useAuth";
+import Navbar from '../components/Common/Navbar';
+import Sidebar from '../components/Common/Sidebar';
+import { isLoggedIn } from '../hooks/useAuth';
 
-export const Route = createFileRoute("/_auth")({
+export const Route = createFileRoute('/_auth')({
 	component: Layout,
 	beforeLoad: async () => {
 		if (!isLoggedIn()) {
 			throw redirect({
-				to: "/login",
+				to: '/login',
 			});
 		}
 	},
@@ -18,11 +18,11 @@ export const Route = createFileRoute("/_auth")({
 
 function Layout() {
 	return (
-		<Flex direction="column" h="100vh">
+		<Flex direction='column' h='100vh'>
 			<Navbar />
-			<Flex flex="1" overflow="hidden">
+			<Flex flex='1' overflow='hidden'>
 				<Sidebar />
-				<Flex flex="1" direction="column" p={4} overflowY="auto">
+				<Flex flex='1' direction='column' p={4} overflowY='auto'>
 					<Outlet />
 				</Flex>
 			</Flex>

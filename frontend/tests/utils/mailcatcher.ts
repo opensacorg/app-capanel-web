@@ -1,4 +1,4 @@
-import type { APIRequestContext } from "@playwright/test"
+import type { APIRequestContext } from '@playwright/test'
 
 type Email = {
   id: number
@@ -9,7 +9,10 @@ type Email = {
 async function findEmail({
   request,
   filter,
-}: { request: APIRequestContext; filter?: (email: Email) => boolean }) {
+}: {
+  request: APIRequestContext
+  filter?: (email: Email) => boolean
+}) {
   const response = await request.get(`${process.env.MAILCATCHER_HOST}/messages`)
 
   let emails = await response.json()
@@ -38,14 +41,14 @@ export function findLastEmail({
 }) {
   const timeoutPromise = new Promise<never>((_, reject) =>
     setTimeout(
-      () => reject(new Error("Timeout while trying to get latest email")),
-      timeout,
-    ),
+      () => reject(new Error('Timeout while trying to get latest email')),
+      timeout
+    )
   )
 
   const checkEmails = async () => {
     while (true) {
-      const emailData = await findEmail({request, filter})
+      const emailData = await findEmail({ request, filter })
 
       if (emailData) {
         return emailData

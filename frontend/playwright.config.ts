@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 import 'dotenv/config'
 
 /**
@@ -32,7 +32,7 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {name: 'setup', testMatch: /.*\.setup\.ts/},
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
 
     {
       name: 'chromium',
@@ -88,4 +88,4 @@ export default defineConfig({
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
   },
-});
+})

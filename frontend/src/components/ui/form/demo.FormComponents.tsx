@@ -1,5 +1,5 @@
-import { useStore } from "@tanstack/react-form";
-import { useFieldContext } from "./demo/demo.form-context";
+import { useStore } from '@tanstack/react-form';
+import { useFieldContext } from './demo/demo.form-context';
 
 function ErrorMessages({
 	errors,
@@ -10,10 +10,10 @@ function ErrorMessages({
 		<>
 			{errors.map((error) => (
 				<div
-					key={typeof error === "string" ? error : error.message}
-					className="text-red-500 mt-1 font-bold"
+					key={typeof error === 'string' ? error : error.message}
+					className='text-red-500 mt-1 font-bold'
 				>
-					{typeof error === "string" ? error : error.message}
+					{typeof error === 'string' ? error : error.message}
 				</div>
 			))}
 		</>
@@ -32,14 +32,14 @@ export function TextField({
 
 	return (
 		<div>
-			<label htmlFor={label} className="block font-bold mb-1 text-xl">
+			<label htmlFor={label} className='block font-bold mb-1 text-xl'>
 				{label}
 				<input
 					value={field.state.value}
 					placeholder={placeholder}
 					onBlur={field.handleBlur}
 					onChange={(e) => field.handleChange(e.target.value)}
-					className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+					className='w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500'
 				/>
 			</label>
 			{field.state.meta.isTouched && <ErrorMessages errors={errors} />}
@@ -59,14 +59,14 @@ export function TextArea({
 
 	return (
 		<div>
-			<label htmlFor={label} className="block font-bold mb-1 text-xl">
+			<label htmlFor={label} className='block font-bold mb-1 text-xl'>
 				{label}
 				<textarea
 					value={field.state.value}
 					onBlur={field.handleBlur}
 					rows={rows}
 					onChange={(e) => field.handleChange(e.target.value)}
-					className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+					className='w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500'
 				/>
 			</label>
 			{field.state.meta.isTouched && <ErrorMessages errors={errors} />}
@@ -87,16 +87,16 @@ export function Select({
 
 	return (
 		<div>
-			<label htmlFor={label} className="block font-bold mb-1 text-xl">
+			<label htmlFor={label} className='block font-bold mb-1 text-xl'>
 				{label}
 			</label>
 			<select
-				title="Name field"
+				title='Name field'
 				name={field.name}
 				value={field.state.value}
 				onBlur={field.handleBlur}
 				onChange={(e) => field.handleChange(e.target.value)}
-				className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+				className='w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500'
 			>
 				{values.map((value) => (
 					<option key={value.value} value={value.value}>

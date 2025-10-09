@@ -6,16 +6,16 @@ import {
 	Input,
 	Text,
 	VStack,
-} from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Controller, type SubmitHandler, useForm } from "react-hook-form";
-import { FaPlus } from "react-icons/fa";
-import { type UserCreate, UsersService } from "../../client";
-import type { ApiError } from "../../client/core/ApiError";
-import useCustomToast from "../../hooks/useCustomToast";
-import { emailPattern, handleError } from "../../utils";
-import { Checkbox } from "../ui/checkbox";
+} from '@chakra-ui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
+import { FaPlus } from 'react-icons/fa';
+import { type UserCreate, UsersService } from '../../client';
+import type { ApiError } from '../../client/core/ApiError';
+import useCustomToast from '../../hooks/useCustomToast';
+import { emailPattern, handleError } from '../../utils';
+import { Checkbox } from '../ui/checkbox';
 import {
 	DialogBody,
 	DialogCloseTrigger,
@@ -24,8 +24,8 @@ import {
 	DialogHeader,
 	DialogRoot,
 	DialogTrigger,
-} from "../ui/dialog";
-import { Field } from "../ui/field";
+} from '../ui/dialog';
+import { Field } from '../ui/field';
 
 interface UserCreateForm extends UserCreate {
 	confirm_password: string;
@@ -43,13 +43,13 @@ const AddUser = () => {
 		getValues,
 		formState: { errors, isValid, isSubmitting },
 	} = useForm<UserCreateForm>({
-		mode: "onBlur",
-		criteriaMode: "all",
+		mode: 'onBlur',
+		criteriaMode: 'all',
 		defaultValues: {
-			email: "",
-			full_name: "",
-			password: "",
-			confirm_password: "",
+			email: '',
+			full_name: '',
+			password: '',
+			confirm_password: '',
 			is_superuser: false,
 			is_active: false,
 		},
@@ -59,7 +59,7 @@ const AddUser = () => {
 		mutationFn: (data: UserCreate) =>
 			UsersService.createUser({ requestBody: data }),
 		onSuccess: () => {
-			showSuccessToast("User created successfully.");
+			showSuccessToast('User created successfully.');
 			reset();
 			setIsOpen(false);
 		},
@@ -67,7 +67,7 @@ const AddUser = () => {
 			handleError(err);
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ["users"] });
+			queryClient.invalidateQueries({ queryKey: ['users'] });
 		},
 	});
 
@@ -77,14 +77,14 @@ const AddUser = () => {
 
 	return (
 		<DialogRoot
-			size={{ base: "xs", md: "md" }}
-			placement="center"
+			size={{ base: 'xs', md: 'md' }}
+			placement='center'
 			open={isOpen}
 			onOpenChange={({ open }) => setIsOpen(open)}
 		>
 			<DialogTrigger asChild>
-				<Button value="add-user" my={4}>
-					<FaPlus fontSize="16px" />
+				<Button value='add-user' my={4}>
+					<FaPlus fontSize='16px' />
 					Add User
 				</Button>
 			</DialogTrigger>
@@ -102,29 +102,29 @@ const AddUser = () => {
 								required
 								invalid={!!errors.email}
 								errorText={errors.email?.message}
-								label="Email"
+								label='Email'
 							>
 								<Input
-									id="email"
-									{...register("email", {
-										required: "Email is required",
+									id='email'
+									{...register('email', {
+										required: 'Email is required',
 										pattern: emailPattern,
 									})}
-									placeholder="Email"
-									type="email"
+									placeholder='Email'
+									type='email'
 								/>
 							</Field>
 
 							<Field
 								invalid={!!errors.full_name}
 								errorText={errors.full_name?.message}
-								label="Full Name"
+								label='Full Name'
 							>
 								<Input
-									id="name"
-									{...register("full_name")}
-									placeholder="Full name"
-									type="text"
+									id='name'
+									{...register('full_name')}
+									placeholder='Full name'
+									type='text'
 								/>
 							</Field>
 
@@ -132,19 +132,19 @@ const AddUser = () => {
 								required
 								invalid={!!errors.password}
 								errorText={errors.password?.message}
-								label="Set Password"
+								label='Set Password'
 							>
 								<Input
-									id="password"
-									{...register("password", {
-										required: "Password is required",
+									id='password'
+									{...register('password', {
+										required: 'Password is required',
 										minLength: {
 											value: 8,
-											message: "Password must be at least 8 characters",
+											message: 'Password must be at least 8 characters',
 										},
 									})}
-									placeholder="Password"
-									type="password"
+									placeholder='Password'
+									type='password'
 								/>
 							</Field>
 
@@ -152,28 +152,28 @@ const AddUser = () => {
 								required
 								invalid={!!errors.confirm_password}
 								errorText={errors.confirm_password?.message}
-								label="Confirm Password"
+								label='Confirm Password'
 							>
 								<Input
-									id="confirm_password"
-									{...register("confirm_password", {
-										required: "Please confirm your password",
+									id='confirm_password'
+									{...register('confirm_password', {
+										required: 'Please confirm your password',
 										validate: (value) =>
 											value === getValues().password ||
-											"The passwords do not match",
+											'The passwords do not match',
 									})}
-									placeholder="Password"
-									type="password"
+									placeholder='Password'
+									type='password'
 								/>
 							</Field>
 						</VStack>
 
-						<Flex mt={4} direction="column" gap={4}>
+						<Flex mt={4} direction='column' gap={4}>
 							<Controller
 								control={control}
-								name="is_superuser"
+								name='is_superuser'
 								render={({ field }) => (
-									<Field disabled={field.disabled} colorPalette="teal">
+									<Field disabled={field.disabled} colorPalette='teal'>
 										<Checkbox
 											checked={field.value}
 											onCheckedChange={({ checked }) => field.onChange(checked)}
@@ -185,9 +185,9 @@ const AddUser = () => {
 							/>
 							<Controller
 								control={control}
-								name="is_active"
+								name='is_active'
 								render={({ field }) => (
-									<Field disabled={field.disabled} colorPalette="teal">
+									<Field disabled={field.disabled} colorPalette='teal'>
 										<Checkbox
 											checked={field.value}
 											onCheckedChange={({ checked }) => field.onChange(checked)}
@@ -203,16 +203,16 @@ const AddUser = () => {
 					<DialogFooter gap={2}>
 						<DialogActionTrigger asChild>
 							<Button
-								variant="subtle"
-								colorPalette="gray"
+								variant='subtle'
+								colorPalette='gray'
 								disabled={isSubmitting}
 							>
 								Cancel
 							</Button>
 						</DialogActionTrigger>
 						<Button
-							variant="solid"
-							type="submit"
+							variant='solid'
+							type='submit'
 							disabled={!isValid}
 							loading={isSubmitting}
 						>

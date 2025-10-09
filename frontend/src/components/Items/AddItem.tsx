@@ -5,16 +5,16 @@ import {
 	Input,
 	Text,
 	VStack,
-} from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import { FaPlus } from "react-icons/fa";
+} from '@chakra-ui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { FaPlus } from 'react-icons/fa';
 
-import { type ItemCreate, ItemsService } from "../../client";
-import type { ApiError } from "../../client/core/ApiError";
-import useCustomToast from "../../hooks/useCustomToast";
-import { handleError } from "../../utils";
+import { type ItemCreate, ItemsService } from '../../client';
+import type { ApiError } from '../../client/core/ApiError';
+import useCustomToast from '../../hooks/useCustomToast';
+import { handleError } from '../../utils';
 import {
 	DialogBody,
 	DialogCloseTrigger,
@@ -23,24 +23,26 @@ import {
 	DialogHeader,
 	DialogRoot,
 	DialogTrigger,
-} from "../ui/dialog";
-import { Field } from "../ui/field";
+} from '../ui/dialog';
+import { Field } from '../ui/field';
 
 const AddItem = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const queryClient = useQueryClient();
 	const { showSuccessToast } = useCustomToast();
+  const titleId = useId();
+  const descriptionId = useId();
 	const {
 		register,
 		handleSubmit,
 		reset,
 		formState: { errors, isValid, isSubmitting },
 	} = useForm<ItemCreate>({
-		mode: "onBlur",
-		criteriaMode: "all",
+		mode: 'onBlur',
+		criteriaMode: 'all',
 		defaultValues: {
-			title: "",
-			description: "",
+			title: '',
+			description: '',
 		},
 	});
 
@@ -48,7 +50,7 @@ const AddItem = () => {
 		mutationFn: (data: ItemCreate) =>
 			ItemsService.createItem({ requestBody: data }),
 		onSuccess: () => {
-			showSuccessToast("Item created successfully.");
+			showSuccessToast('Item created successfully.');
 			reset();
 			setIsOpen(false);
 		},
@@ -56,7 +58,7 @@ const AddItem = () => {
 			handleError(err);
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ["items"] });
+			queryClient.invalidateQueries({ queryKey: ['items'] });
 		},
 	});
 
@@ -66,14 +68,14 @@ const AddItem = () => {
 
 	return (
 		<DialogRoot
-			size={{ base: "xs", md: "md" }}
-			placement="center"
+			size={{ base: 'xs', md: 'md' }}
+			placement='center'
 			open={isOpen}
 			onOpenChange={({ open }) => setIsOpen(open)}
 		>
 			<DialogTrigger asChild>
-				<Button value="add-item" my={4}>
-					<FaPlus fontSize="16px" />
+				<Button value='add-item' my={4}>
+					<FaPlus fontSize='16px' />
 					Add Item
 				</Button>
 			</DialogTrigger>
@@ -89,28 +91,28 @@ const AddItem = () => {
 								required
 								invalid={!!errors.title}
 								errorText={errors.title?.message}
-								label="Title"
+								label='Title'
 							>
 								<Input
-									id="title"
-									{...register("title", {
-										required: "Title is required.",
+									id={titleId}
+									{...register('title', {
+										required: 'Title is required.',
 									})}
-									placeholder="Title"
-									type="text"
+									placeholder='Title'
+									type='text'
 								/>
 							</Field>
 
 							<Field
 								invalid={!!errors.description}
 								errorText={errors.description?.message}
-								label="Description"
+								label='Description'
 							>
 								<Input
-									id="description"
-									{...register("description")}
-									placeholder="Description"
-									type="text"
+									id={descriptionId}
+									{...register('description')}
+									placeholder='Description'
+									type='text'
 								/>
 							</Field>
 						</VStack>
@@ -119,16 +121,16 @@ const AddItem = () => {
 					<DialogFooter gap={2}>
 						<DialogActionTrigger asChild>
 							<Button
-								variant="subtle"
-								colorPalette="gray"
+								variant='subtle'
+								colorPalette='gray'
 								disabled={isSubmitting}
 							>
 								Cancel
 							</Button>
 						</DialogActionTrigger>
 						<Button
-							variant="solid"
-							type="submit"
+							variant='solid'
+							type='submit'
 							disabled={!isValid}
 							loading={isSubmitting}
 						>

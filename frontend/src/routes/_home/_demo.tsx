@@ -1,7 +1,7 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 // import { useAuth } from "../components/hooks/use-auth";
 
-export const Route = createFileRoute("/_home/_demo")({
+export const Route = createFileRoute('/_home/_demo')({
 	// beforeLoad: ({ context, location }) => {
 	// 	// @ts-expect-error
 	// 	if (!context.auth.isAuthenticated) {
@@ -22,7 +22,7 @@ function DemoLayout() {
 		<>
 			<div>
 				{/* <p>Welcome, {auth.user}!</p> */}
-				<Link to="/logout">Logout</Link>
+				<Link to='/logout'>Logout</Link>
 			</div>
 			<hr />
 			<Outlet />

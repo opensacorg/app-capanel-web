@@ -32,14 +32,14 @@ The Card component is a flexible, reusable UI component built on top of Chakra U
 
 ```typescript
 interface CardProps extends BoxProps {
-  variant?: "outline" | "filled" | "elevated";
+  variant?: 'outline' | 'filled' | 'elevated'
 }
 ```
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `"outline" \| "filled" \| "elevated"` | `"outline"` | Visual style variant |
-| `...props` | `BoxProps` | - | All Chakra UI Box props are supported |
+| Prop       | Type                                  | Default     | Description                           |
+| ---------- | ------------------------------------- | ----------- | ------------------------------------- |
+| `variant`  | `"outline" \| "filled" \| "elevated"` | `"outline"` | Visual style variant                  |
+| `...props` | `BoxProps`                            | -           | All Chakra UI Box props are supported |
 
 ### Subcomponents
 
@@ -81,6 +81,7 @@ src/
 ```
 
 **Styling:**
+
 - Border: 1px solid border.default
 - Background: bg.panel
 - Best for: General content, forms, lists
@@ -94,6 +95,7 @@ src/
 ```
 
 **Styling:**
+
 - Background: bg.muted
 - No border
 - Best for: Secondary content, sidebars, widgets
@@ -107,6 +109,7 @@ src/
 ```
 
 **Styling:**
+
 - Background: bg.panel
 - Box shadow: lg
 - Best for: Primary content, statistics, important information
@@ -116,7 +119,7 @@ src/
 ### Basic Card
 
 ```tsx
-import { Card, CardBody } from '../components/ui/card';
+import { Card, CardBody } from '../components/ui/card'
 
 function BasicExample() {
   return (
@@ -125,14 +128,14 @@ function BasicExample() {
         <Text>Simple card with default styling</Text>
       </CardBody>
     </Card>
-  );
+  )
 }
 ```
 
 ### Complete Card Structure
 
 ```tsx
-import { Card, CardHeader, CardBody, CardFooter } from '../components/ui/card';
+import { Card, CardHeader, CardBody, CardFooter } from '../components/ui/card'
 
 function CompleteExample() {
   return (
@@ -148,7 +151,7 @@ function CompleteExample() {
         <Button variant="ghost">Secondary</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }
 ```
 
@@ -168,8 +171,8 @@ function StatsCard({ title, value, change, icon, color }) {
               {value}
             </Text>
             <HStack>
-              <StatArrow type={change > 0 ? "increase" : "decrease"} />
-              <Text fontSize="sm" color={change > 0 ? "green.500" : "red.500"}>
+              <StatArrow type={change > 0 ? 'increase' : 'decrease'} />
+              <Text fontSize="sm" color={change > 0 ? 'green.500' : 'red.500'}>
                 {Math.abs(change)}%
               </Text>
             </HStack>
@@ -180,7 +183,7 @@ function StatsCard({ title, value, change, icon, color }) {
         </HStack>
       </CardBody>
     </Card>
-  );
+  )
 }
 ```
 
@@ -193,7 +196,9 @@ function ActivityCard() {
       <CardHeader>
         <HStack justify="space-between">
           <Heading size="md">Recent Activity</Heading>
-          <Badge colorScheme="blue" variant="subtle">Live</Badge>
+          <Badge colorScheme="blue" variant="subtle">
+            Live
+          </Badge>
         </HStack>
       </CardHeader>
       <CardBody>
@@ -205,9 +210,13 @@ function ActivityCard() {
               </Box>
               <Box flex={1}>
                 <Text fontWeight="medium">{activity.title}</Text>
-                <Text fontSize="sm" color="fg.muted">{activity.description}</Text>
+                <Text fontSize="sm" color="fg.muted">
+                  {activity.description}
+                </Text>
               </Box>
-              <Text fontSize="xs" color="fg.muted">{activity.time}</Text>
+              <Text fontSize="xs" color="fg.muted">
+                {activity.time}
+              </Text>
             </HStack>
           ))}
         </VStack>
@@ -218,7 +227,7 @@ function ActivityCard() {
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }
 ```
 
@@ -237,7 +246,7 @@ function TabbedUserMetricsCard() {
             <Tabs.Trigger value="active">Active</Tabs.Trigger>
             <Tabs.Trigger value="new">New</Tabs.Trigger>
           </Tabs.List>
-          
+
           <Tabs.Content value="total">
             <VStack align="stretch" gap={2}>
               <Text fontSize="sm" color="fg.muted" fontWeight="medium">
@@ -254,7 +263,7 @@ function TabbedUserMetricsCard() {
               </HStack>
             </VStack>
           </Tabs.Content>
-          
+
           <Tabs.Content value="active">
             <VStack align="stretch" gap={2}>
               <Text fontSize="sm" color="fg.muted" fontWeight="medium">
@@ -271,7 +280,7 @@ function TabbedUserMetricsCard() {
               </HStack>
             </VStack>
           </Tabs.Content>
-          
+
           <Tabs.Content value="new">
             <VStack align="stretch" gap={2}>
               <Text fontSize="lg" color="fg.muted" fontWeight="medium">
@@ -291,11 +300,12 @@ function TabbedUserMetricsCard() {
         </Tabs.Root>
       </CardBody>
     </Card>
-  );
+  )
 }
 ```
 
 **Key Features:**
+
 - Interactive tabs with Chakra UI v3 Tabs component
 - Subtle tab variant with large size for better readability
 - Three distinct metrics: Total, Active (30d), and New (7d) users
@@ -312,7 +322,10 @@ The dashboard (`src/routes/_home/dashboard.tsx`) showcases various card patterns
 Four metric cards displaying KPIs with interactive and static elements:
 
 ```tsx
-<Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={6}>
+<Grid
+  templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }}
+  gap={6}
+>
   {/* Tabbed User Metrics Card */}
   <Card variant="elevated">
     <CardBody>
@@ -321,21 +334,20 @@ Four metric cards displaying KPIs with interactive and static elements:
       </Tabs.Root>
     </CardBody>
   </Card>
-  
+
   {/* Revenue Card */}
   <Card variant="elevated">
     <CardBody>
-      <HStack justify="space-between">
-        {/* Revenue metrics */}
-      </HStack>
+      <HStack justify="space-between">{/* Revenue metrics */}</HStack>
     </CardBody>
   </Card>
-  
+
   {/* Orders and Growth Rate Cards */}
 </Grid>
 ```
 
 **Features:**
+
 - Responsive grid layout (1 column on mobile, 2 on tablet, 4 on desktop)
 - **First card**: Interactive tabbed user metrics with Total/Active/New users
 - **Other cards**: Static metrics for Revenue ($45,231), Orders (1,234), and Growth Rate (15.3%)
@@ -354,32 +366,31 @@ Two-column layout with activity feed and quick actions:
     <CardHeader>
       <HStack justify="space-between">
         <Heading size="md">Recent Activity</Heading>
-        <Badge colorScheme="blue" variant="subtle">Live</Badge>
+        <Badge colorScheme="blue" variant="subtle">
+          Live
+        </Badge>
       </HStack>
     </CardHeader>
-    <CardBody>
-      {/* Activity items */}
-    </CardBody>
+    <CardBody>{/* Activity items */}</CardBody>
     <CardFooter>
       <Button variant="ghost" size="sm" width="full">
         View all activity
       </Button>
     </CardFooter>
   </Card>
-  
+
   {/* Quick Actions Card */}
   <Card variant="filled">
     <CardHeader>
       <Heading size="md">Quick Actions</Heading>
     </CardHeader>
-    <CardBody>
-      {/* Action buttons */}
-    </CardBody>
+    <CardBody>{/* Action buttons */}</CardBody>
   </Card>
 </Grid>
 ```
 
 **Activity Feed Features:**
+
 - Real-time activity display with "Live" badge
 - Icon-based activity types (user, payment, order)
 - Timestamps and descriptions
@@ -387,6 +398,7 @@ Two-column layout with activity feed and quick actions:
 - Outline variant for clean, organized appearance
 
 **Quick Actions Features:**
+
 - Vertical button stack for common actions
 - Full-width buttons with icons
 - Color-coded by priority (blue, green, gray)
@@ -396,6 +408,7 @@ Two-column layout with activity feed and quick actions:
 ### 4. Tabbed User Metrics Card
 
 Interactive card with tabs showing different user analytics:
+
 - Total users with growth metrics
 - Active users (30-day period)
 - New users (7-day period)
@@ -416,13 +429,15 @@ Three-column grid layout showcasing operational metrics:
       <VStack gap={3} align="stretch">
         <HStack justify="space-between">
           <Text fontSize="sm">API Status</Text>
-          <Badge colorScheme="green" size="sm">Operational</Badge>
+          <Badge colorScheme="green" size="sm">
+            Operational
+          </Badge>
         </HStack>
         {/* More status items */}
       </VStack>
     </CardBody>
   </Card>
-  
+
   {/* Performance Card */}
   <Card variant="elevated">
     <CardHeader>
@@ -431,13 +446,17 @@ Three-column grid layout showcasing operational metrics:
     <CardBody>
       <VStack gap={3}>
         <Box textAlign="center">
-          <Text fontSize="lg" fontWeight="bold">234ms</Text>
-          <Text fontSize="xs" color="fg.muted">Response Time</Text>
+          <Text fontSize="lg" fontWeight="bold">
+            234ms
+          </Text>
+          <Text fontSize="xs" color="fg.muted">
+            Response Time
+          </Text>
         </Box>
       </VStack>
     </CardBody>
   </Card>
-  
+
   {/* Storage Usage Card */}
   <Card variant="outline">
     <CardHeader>
@@ -447,7 +466,9 @@ Three-column grid layout showcasing operational metrics:
       <VStack gap={2}>
         <HStack justify="space-between" width="full">
           <Text fontSize="sm">Used</Text>
-          <Text fontSize="sm" fontWeight="medium">45.2 GB</Text>
+          <Text fontSize="sm" fontWeight="medium">
+            45.2 GB
+          </Text>
         </HStack>
         {/* Progress bar */}
       </VStack>
@@ -457,18 +478,21 @@ Three-column grid layout showcasing operational metrics:
 ```
 
 **System Status Card Features:**
+
 - Service health monitoring (API, Database, Cache)
 - Color-coded status badges (green for operational, yellow for warnings)
 - Outline variant for minimal emphasis
 - Small heading size for compact display
 
 **Performance Card Features:**
+
 - Response time metrics (234ms)
 - Trend indicators with improvement data
 - Elevated variant for visual prominence
 - Centered text layout for metric focus
 
 **Storage Usage Card Features:**
+
 - Used vs. available storage display (45.2 GB / 54.8 GB)
 - Visual progress bar showing 45.2% usage
 - Clean data presentation with aligned values
@@ -539,7 +563,7 @@ For large lists of cards, consider virtualization:
 
 ```tsx
 // For many cards, use React Window or similar
-import { FixedSizeGrid as Grid } from 'react-window';
+import { FixedSizeGrid as Grid } from 'react-window'
 ```
 
 ## Advanced Patterns
@@ -558,7 +582,7 @@ function LoadingCard() {
         </VStack>
       </CardBody>
     </Card>
-  );
+  )
 }
 ```
 
@@ -568,17 +592,15 @@ function LoadingCard() {
 function InteractiveCard({ onClick, isSelected }) {
   return (
     <Card
-      variant={isSelected ? "elevated" : "outline"}
+      variant={isSelected ? 'elevated' : 'outline'}
       cursor="pointer"
       onClick={onClick}
-      _hover={{ transform: "translateY(-2px)", shadow: "lg" }}
+      _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
       transition="all 0.2s"
     >
-      <CardBody>
-        {/* Card content */}
-      </CardBody>
+      <CardBody>{/* Card content */}</CardBody>
     </Card>
-  );
+  )
 }
 ```
 
@@ -600,11 +622,9 @@ function CardWithMenu() {
           </Menu>
         </HStack>
       </CardHeader>
-      <CardBody>
-        {/* Content */}
-      </CardBody>
+      <CardBody>{/* Content */}</CardBody>
     </Card>
-  );
+  )
 }
 ```
 
@@ -613,20 +633,20 @@ function CardWithMenu() {
 ### Common Issues
 
 1. **Cards not responsive**
-    - Ensure parent container has proper responsive props
-    - Check that Grid templateColumns uses responsive values
+   - Ensure parent container has proper responsive props
+   - Check that Grid templateColumns uses responsive values
 
 2. **Inconsistent spacing**
-    - Use Chakra UI spacing tokens consistently
-    - Avoid mixing px values with tokens
+   - Use Chakra UI spacing tokens consistently
+   - Avoid mixing px values with tokens
 
 3. **Color not updating with theme**
-    - Use semantic color tokens (fg.muted, bg.panel)
-    - Avoid hardcoded color values
+   - Use semantic color tokens (fg.muted, bg.panel)
+   - Avoid hardcoded color values
 
 4. **TypeScript errors**
-    - Ensure proper imports from @chakra-ui/react
-    - Check that custom props extend BoxProps correctly
+   - Ensure proper imports from @chakra-ui/react
+   - Check that custom props extend BoxProps correctly
 
 ### Performance Considerations
 
@@ -672,6 +692,7 @@ When updating the Card component:
 ## Examples Repository
 
 For more examples, check:
+
 - Dashboard implementation: `src/routes/_home/dashboard.tsx`
 - Component source: `src/components/ui/card.tsx`
 - Additional patterns in the component library

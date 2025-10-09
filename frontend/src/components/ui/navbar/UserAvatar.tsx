@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup } from "@chakra-ui/react";
+import { Avatar, AvatarGroup } from '@chakra-ui/react';
 
 export default function UserAvatar() {
 	return (

@@ -49,7 +49,7 @@ Comprehensive guide covering:
 ## Quick Start
 
 ```tsx
-import { Card, CardHeader, CardBody, CardFooter } from '../components/ui/card';
+import { Card, CardHeader, CardBody, CardFooter } from '../components/ui/card'
 
 function ExampleCard() {
   return (
@@ -64,7 +64,7 @@ function ExampleCard() {
         <Button colorScheme="blue">Action</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }
 ```
 
