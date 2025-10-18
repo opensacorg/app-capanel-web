@@ -5,3 +5,5 @@ node_modules/
 /playwright/.cache/
 .idea/
 nohup.out
+.env
+
