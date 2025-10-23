@@ -41,7 +41,7 @@
     "@hey-api/openapi-ts": "^0.80.18",
     "@pandacss/dev": "^1.1.0",
     "@playwright/test": "^1.55.0",
-    "@tailwindcss/vite": "^4.1.12",
+    "@tailwindcss/vite": "^4.1.16",
     "@tanstack/react-query-devtools": "^5.85.5",
     "@tanstack/react-router-devtools": "^1.131.27",
     "@tanstack/router-plugin": "^1.131.27",
