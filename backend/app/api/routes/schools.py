@@ -11,10 +11,10 @@ router = APIRouter()
 
 @router.get("/", response_model=SchoolsPublic)
 def read_schools(
-        session: SessionDep,
-        q: str | None = None,
-        skip: int = 0,
-        limit: int = 10,
+    session: SessionDep,
+    q: str | None = None,
+    skip: int = 0,
+    limit: int = 10,
 ) -> Any:
     """
     Retrieve schools.
@@ -38,10 +38,10 @@ def read_schools(
 
 @router.get("/summary", response_model=SchoolsSummary)
 def read_schools_summary(
-        session: SessionDep,
-        q: str | None = None,
-        skip: int = 0,
-        limit: int = 10,
+    session: SessionDep,
+    q: str | None = None,
+    skip: int = 0,
+    limit: int = 10,
 ) -> Any:
     """
     Retrieve schools with a summarized view.

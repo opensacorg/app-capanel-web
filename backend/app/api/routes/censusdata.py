@@ -12,7 +12,7 @@ router = APIRouter(prefix="/censusdata", tags=["censusdata"])
 
 @router.get("/", response_model=list[CensusData])
 def count_of_census_data(
-        session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
+    session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve census data.
@@ -46,7 +46,7 @@ def read_census_data(session: SessionDep, current_user: CurrentUser, id: str) ->
 
 @router.post("/", response_model=CensusData)
 def create_census_data(
-        *, session: SessionDep, current_user: CurrentUser, census_data_in: CensusData
+    *, session: SessionDep, current_user: CurrentUser, census_data_in: CensusData
 ) -> Any:
     """
     Create new census data.
@@ -64,11 +64,11 @@ def create_census_data(
 
 @router.put("/{id}", response_model=CensusData)
 def update_census_data(
-        *,
-        session: SessionDep,
-        current_user: CurrentUser,
-        id: str,
-        census_data_in: CensusData,
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    id: str,
+    census_data_in: CensusData,
 ) -> Any:
     """
     Update census data by ID.
@@ -90,7 +90,7 @@ def update_census_data(
 
 @router.delete("/{id}", response_model=CensusData)
 def delete_census_data(
-        *, session: SessionDep, current_user: CurrentUser, id: uuid.UUID
+    *, session: SessionDep, current_user: CurrentUser, id: uuid.UUID
 ) -> Any:
     """
     Delete census data by ID.
