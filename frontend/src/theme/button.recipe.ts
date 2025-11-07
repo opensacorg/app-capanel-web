@@ -1,21 +1,21 @@
-import { defineRecipe } from "@chakra-ui/react";
+import { defineRecipe } from '@chakra-ui/react'
 
 export const buttonRecipe = defineRecipe({
 	base: {
-		fontWeight: "bold",
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		colorPalette: "teal",
+		fontWeight: 'bold',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		colorPalette: 'teal',
 	},
 	variants: {
 		variant: {
 			ghost: {
-				bg: "transparent",
+				bg: 'transparent',
 				_hover: {
-					bg: "gray.100",
+					bg: 'gray.100',
 				},
 			},
 		},
 	},
-});
+})

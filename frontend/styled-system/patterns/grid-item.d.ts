@@ -1,12 +1,9 @@
 /* eslint-disable */
-import type { SystemStyleObject, ConditionalValue } from '../types/index';
-import type { Properties } from '../types/csstype';
-import type { SystemProperties } from '../types/style-props';
-import type { DistributiveOmit } from '../types/system-types';
-import type { Tokens } from '../tokens/index';
+import type { ConditionalValue, SystemStyleObject } from '../types/index'
+import type { DistributiveOmit } from '../types/system-types'
 
 export interface GridItemProperties {
-   colSpan?: ConditionalValue<number>
+	colSpan?: ConditionalValue<number>
 	rowSpan?: ConditionalValue<number>
 	colStart?: ConditionalValue<number>
 	rowStart?: ConditionalValue<number>
@@ -14,12 +11,14 @@ export interface GridItemProperties {
 	rowEnd?: ConditionalValue<number>
 }
 
-interface GridItemStyles extends GridItemProperties, DistributiveOmit<SystemStyleObject, keyof GridItemProperties > {}
+interface GridItemStyles
+	extends GridItemProperties,
+		DistributiveOmit<SystemStyleObject, keyof GridItemProperties> {}
 
 interface GridItemPatternFn {
-  (styles?: GridItemStyles): string
-  raw: (styles?: GridItemStyles) => SystemStyleObject
+	raw: (styles?: GridItemStyles) => SystemStyleObject
+
+	(styles?: GridItemStyles): string
 }
 
-
-export declare const gridItem: GridItemPatternFn;
+export declare const gridItem: GridItemPatternFn

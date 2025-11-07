@@ -1,42 +1,61 @@
 /* eslint-disable */
-import type { ConditionalValue } from '../types/index';
-import type { DistributiveOmit, Pretty } from '../types/system-types';
+import type { ConditionalValue } from '../types/index'
+import type { DistributiveOmit, Pretty } from '../types/system-types'
 
 interface SliderVariant {
-  /**
- * @default "md"
- */
-size: "sm" | "md" | "lg"
-/**
- * @default "outline"
- */
-variant: "outline" | "solid"
-/**
- * @default "horizontal"
- */
-orientation: "vertical" | "horizontal"
+	/**
+	 * @default "md"
+	 */
+	size: 'sm' | 'md' | 'lg'
+	/**
+	 * @default "outline"
+	 */
+	variant: 'outline' | 'solid'
+	/**
+	 * @default "horizontal"
+	 */
+	orientation: 'vertical' | 'horizontal'
 }
 
 type SliderVariantMap = {
-  [key in keyof SliderVariant]: Array<SliderVariant[key]>
+	[key in keyof SliderVariant]: Array<SliderVariant[key]>
 }
 
-type SliderSlot = "root" | "label" | "thumb" | "valueText" | "track" | "range" | "control" | "markerGroup" | "marker" | "draggingIndicator" | "markerIndicator"
+type SliderSlot =
+	| 'root'
+	| 'label'
+	| 'thumb'
+	| 'valueText'
+	| 'track'
+	| 'range'
+	| 'control'
+	| 'markerGroup'
+	| 'marker'
+	| 'draggingIndicator'
+	| 'markerIndicator'
 
 export type SliderVariantProps = {
-  [key in keyof SliderVariant]?: ConditionalValue<SliderVariant[key]> | undefined
+	[key in keyof SliderVariant]?:
+		| ConditionalValue<SliderVariant[key]>
+		| undefined
 }
 
 export interface SliderRecipe {
-  __slot: SliderSlot
-  __type: SliderVariantProps
-  (props?: SliderVariantProps): Pretty<Record<SliderSlot, string>>
-  raw: (props?: SliderVariantProps) => SliderVariantProps
-  variantMap: SliderVariantMap
-  variantKeys: Array<keyof SliderVariant>
-  splitVariantProps<Props extends SliderVariantProps>(props: Props): [SliderVariantProps, Pretty<DistributiveOmit<Props, keyof SliderVariantProps>>]
-  getVariantProps: (props?: SliderVariantProps) => SliderVariantProps
-}
+	__slot: SliderSlot
+	__type: SliderVariantProps
+	raw: (props?: SliderVariantProps) => SliderVariantProps
+	variantMap: SliderVariantMap
+	variantKeys: Array<keyof SliderVariant>
+	getVariantProps: (props?: SliderVariantProps) => SliderVariantProps
 
+	(props?: SliderVariantProps): Pretty<Record<SliderSlot, string>>
+
+	splitVariantProps<Props extends SliderVariantProps>(
+		props: Props,
+	): [
+		SliderVariantProps,
+		Pretty<DistributiveOmit<Props, keyof SliderVariantProps>>,
+	]
+}
 
 export declare const slider: SliderRecipe

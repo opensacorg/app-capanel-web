@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Box, type BoxProps } from "@chakra-ui/react";
-import { forwardRef } from "react";
+import { Box, type BoxProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 /**
  * Card component props extending Chakra UI BoxProps
@@ -19,7 +19,7 @@ export interface CardProps extends BoxProps {
 	 *
 	 * @default "outline"
 	 */
-	variant?: "outline" | "filled" | "elevated";
+	variant?: 'outline' | 'filled' | 'elevated';
 }
 
 /**
@@ -44,25 +44,25 @@ export interface CardProps extends BoxProps {
  * @param props - All Chakra UI Box props are supported
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-	({ variant = "outline", ...props }, ref) => {
+	({ variant = 'outline', ...props }, ref) => {
 		const baseStyles = {
-			borderRadius: "lg",
-			overflow: "hidden",
-			position: "relative" as const,
+			borderRadius: 'lg',
+			overflow: 'hidden',
+			position: 'relative' as const,
 		};
 
 		const variantStyles = {
 			outline: {
-				border: "1px solid",
-				borderColor: "border.default",
-				bg: "bg.panel",
+				border: '1px solid',
+				borderColor: 'border.default',
+				bg: 'bg.panel',
 			},
 			filled: {
-				bg: "bg.muted",
+				bg: 'bg.muted',
 			},
 			elevated: {
-				bg: "bg.panel",
-				boxShadow: "lg",
+				bg: 'bg.panel',
+				boxShadow: 'lg',
 			},
 		};
 
@@ -72,7 +72,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 	},
 );
 
-Card.displayName = "Card";
+Card.displayName = 'Card';
 
 /**
  * CardHeader component - Container for card title, subtitle, and header actions
@@ -97,13 +97,13 @@ export const CardHeader = forwardRef<HTMLDivElement, BoxProps>((props, ref) => (
 		ref={ref}
 		px={6}
 		py={4}
-		borderBottomWidth="1px"
-		borderColor="border.default"
+		borderBottomWidth='1px'
+		borderColor='border.default'
 		{...props}
 	/>
 ));
 
-CardHeader.displayName = "CardHeader";
+CardHeader.displayName = 'CardHeader';
 
 /**
  * CardBody component - Main content area of the card
@@ -126,7 +126,7 @@ export const CardBody = forwardRef<HTMLDivElement, BoxProps>((props, ref) => (
 	<Box ref={ref} px={6} py={4} {...props} />
 ));
 
-CardBody.displayName = "CardBody";
+CardBody.displayName = 'CardBody';
 
 /**
  * CardFooter component - Container for actions and secondary content
@@ -152,10 +152,10 @@ export const CardFooter = forwardRef<HTMLDivElement, BoxProps>((props, ref) => (
 		ref={ref}
 		px={6}
 		py={4}
-		borderTopWidth="1px"
-		borderColor="border.default"
+		borderTopWidth='1px'
+		borderColor='border.default'
 		{...props}
 	/>
 ));
 
-CardFooter.displayName = "CardFooter";
+CardFooter.displayName = 'CardFooter';

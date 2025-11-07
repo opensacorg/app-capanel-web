@@ -1,20 +1,17 @@
 /* eslint-disable */
-import type { SystemStyleObject, ConditionalValue } from '../types/index';
-import type { Properties } from '../types/csstype';
-import type { SystemProperties } from '../types/style-props';
-import type { DistributiveOmit } from '../types/system-types';
-import type { Tokens } from '../tokens/index';
+import type { SystemStyleObject } from '../types/index'
+import type { DistributiveOmit } from '../types/system-types'
 
-export interface BoxProperties {
-   
-}
+export type BoxProperties = {}
 
-interface BoxStyles extends BoxProperties, DistributiveOmit<SystemStyleObject, keyof BoxProperties > {}
+interface BoxStyles
+	extends BoxProperties,
+		DistributiveOmit<SystemStyleObject, keyof BoxProperties> {}
 
 interface BoxPatternFn {
-  (styles?: BoxStyles): string
-  raw: (styles?: BoxStyles) => SystemStyleObject
+	raw: (styles?: BoxStyles) => SystemStyleObject
+
+	(styles?: BoxStyles): string
 }
 
-
-export declare const box: BoxPatternFn;
+export declare const box: BoxPatternFn

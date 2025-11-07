@@ -1,8 +1,8 @@
-import { useForm } from "@tanstack/react-form";
-import { z } from "zod";
+import { useForm } from '@tanstack/react-form';
+import { z } from 'zod';
 
 export const loginSchema = z.object({
-	user: z.string().min(1, "Username is required"),
+	user: z.string().min(1, 'Username is required'),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
@@ -12,7 +12,7 @@ export function useLoginForm(opts: {
 }) {
 	return useForm({
 		defaultValues: {
-			user: "",
+			user: '',
 		} as LoginFormValues,
 		onSubmit: async ({ value }) => {
 			await opts.onSubmit(value);

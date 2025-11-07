@@ -1,26 +1,26 @@
-import { useForm } from "@tanstack/react-form";
-import * as React from "react";
-import "./SearchBar.css";
-import { redirect } from "@tanstack/react-router";
+import { useForm } from '@tanstack/react-form';
+import * as React from 'react';
+import './SearchBar.css';
+import { redirect } from '@tanstack/react-router';
 
 const previewResults = [
 	{
-		category: "Recent",
+		category: 'Recent',
 		items: [
-			{ id: 1, label: "A" },
-			{ id: 2, label: "Bob" },
+			{ id: 1, label: 'A' },
+			{ id: 2, label: 'Bob' },
 		],
 	},
 ];
 
 export default function SearchBar({ className }: { className?: string }) {
 	const [showDropdown, setShowDropdown] = React.useState(false);
-	const [query, setQuery] = React.useState("");
+	const [query, setQuery] = React.useState('');
 
 	const form = useForm({
-		defaultValues: { search: "" },
+		defaultValues: { search: '' },
 		onSubmit: ({ value }) => {
-			redirect({ to: "/dashboard", search: { q: value.search } });
+			redirect({ to: '/dashboard', search: { q: value.search } });
 		},
 	});
 
@@ -41,14 +41,14 @@ export default function SearchBar({ className }: { className?: string }) {
 		<div className={`searchbar-root ${className}`}>
 			<form
 				onSubmit={form.handleSubmit}
-				autoComplete="off"
-				className="searchbar-form"
+				autoComplete='off'
+				className='searchbar-form'
 			>
 				<input
-					name="search"
+					name='search'
 					value={form.state.values.search}
 					onChange={(e) => {
-						form.setFieldValue("search", e.target.value);
+						form.setFieldValue('search', e.target.value);
 						setQuery(e.target.value);
 						setShowDropdown(true);
 					}}
@@ -56,23 +56,23 @@ export default function SearchBar({ className }: { className?: string }) {
 						setShowDropdown(true);
 					}}
 					onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
-					placeholder="Search..."
-					className="searchbar-input"
+					placeholder='Search...'
+					className='searchbar-input'
 				/>
 			</form>
 			{showDropdown && filteredResults.length > 0 && (
-				<div className="searchbar-dropdown">
+				<div className='searchbar-dropdown'>
 					{filteredResults.map((cat) => (
-						<div key={cat.category} className="searchbar-category-block">
-							<div className="searchbar-category-heading">{cat.category}</div>
+						<div key={cat.category} className='searchbar-category-block'>
+							<div className='searchbar-category-heading'>{cat.category}</div>
 							{cat.items.map((item) => (
 								<button
 									key={item.id}
-									type="button"
-									className="searchbar-result-item"
+									type='button'
+									className='searchbar-result-item'
 									onMouseDown={(e) => e.preventDefault()}
 									onClick={() => {
-										form.setFieldValue("search", item.label);
+										form.setFieldValue('search', item.label);
 										setShowDropdown(false);
 										form.handleSubmit();
 									}}
