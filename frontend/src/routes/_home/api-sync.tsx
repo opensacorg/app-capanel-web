@@ -1,10 +1,10 @@
-import { Card } from '@chakra-ui/react';
-import { createFileRoute, Link } from '@tanstack/react-router';
-import SearchHomepageForm from '../../components/ui/form/home-search-form';
+import { Card } from '@chakra-ui/react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import SearchHomepageForm from '../../components/ui/form/home-search-form'
 
 export const Route = createFileRoute('/_home/api-sync')({
 	component: RouteComponent,
-});
+})
 
 function RouteComponent() {
 	return (
@@ -42,5 +42,5 @@ function RouteComponent() {
 				</section>
 			</div>
 		</div>
-	);
+	)
 }

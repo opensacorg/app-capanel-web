@@ -1,20 +1,7 @@
 'use client';
 
-import type {
-	ButtonProps,
-	GroupProps,
-	InputProps,
-	StackProps,
-} from '@chakra-ui/react';
-import {
-	Box,
-	HStack,
-	IconButton,
-	Input,
-	mergeRefs,
-	Stack,
-	useControllableState,
-} from '@chakra-ui/react';
+import type { ButtonProps, GroupProps, InputProps, StackProps, } from '@chakra-ui/react';
+import { Box, HStack, IconButton, Input, mergeRefs, Stack, useControllableState, } from '@chakra-ui/react';
 import { forwardRef, useRef } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { Field } from './field';
@@ -43,7 +30,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
 			defaultVisible,
 			visible: visibleProp,
 			onVisibleChange,
-			visibilityIcon = { on: <FiEye />, off: <FiEyeOff /> },
+			visibilityIcon = { on: <FiEye/>, off: <FiEyeOff/> },
 			startElement,
 			type,
 			errors,

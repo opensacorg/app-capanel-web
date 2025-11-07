@@ -1,48 +1,46 @@
-import { createFileRoute } from '@tanstack/react-router';
 import {
+	Badge,
 	Box,
+	Button,
 	Container,
 	Grid,
 	Heading,
-	Text,
-	Badge,
-	Button,
-	Icon,
 	HStack,
-	VStack,
-	Tabs,
-	Spinner,
+	Icon,
 	Skeleton,
-	Alert,
-} from '@chakra-ui/react';
+	Spinner,
+	Tabs,
+	Text,
+	VStack,
+} from '@chakra-ui/react'
+import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
+import {
+	FiActivity,
+	FiArrowDown,
+	FiArrowUp,
+	FiDollarSign,
+	FiHome,
+	FiSettings,
+	FiShoppingCart,
+	FiTrendingUp,
+	FiUser,
+	FiUsers,
+} from 'react-icons/fi'
 import {
 	Card,
-	CardHeader,
 	CardBody,
 	CardFooter,
-} from '../../components/ui/card';
+	CardHeader,
+} from '../../components/ui/card'
 import {
-	FiUser,
-	FiDollarSign,
-	FiTrendingUp,
-	FiShoppingCart,
-	FiActivity,
-	FiSettings,
-	FiArrowUp,
-	FiArrowDown,
-	FiHome,
-	FiUsers,
-	FiMapPin,
-} from 'react-icons/fi';
-import {
-	useTotalEnrollment,
 	useCensusDataById,
-} from '../../hooks/useCensusData';
-import { useState } from 'react';
+	useTotalEnrollment,
+} from '../../hooks/useCensusData'
 
 // Component to display total enrollment with loading and error states
 function TotalEnrollmentDisplay() {
-	const { totalEnr, isLoading, isError, hasData } = useTotalEnrollment();
+	const { totalEnr, isLoading, isError, hasData } = useTotalEnrollment()
 
 	if (isLoading) {
 		return (
@@ -54,7 +52,7 @@ function TotalEnrollmentDisplay() {
 			>
 				<Spinner size='md' color='blue.500' />
 			</Box>
-		);
+		)
 	}
 
 	if (isError) {
@@ -71,7 +69,7 @@ function TotalEnrollmentDisplay() {
 			>
 				Failed to load data
 			</Box>
-		);
+		)
 	}
 
 	if (!hasData) {
@@ -79,26 +77,26 @@ function TotalEnrollmentDisplay() {
 			<Text fontSize='2xl' fontWeight='bold'>
 				N/A
 			</Text>
-		);
+		)
 	}
 
 	// Format the number with commas for thousands
-	const formattedTotalEnr = totalEnr?.toLocaleString() || '0';
+	const formattedTotalEnr = totalEnr?.toLocaleString() || '0'
 
 	return (
 		<Text fontSize='2xl' fontWeight='bold'>
 			{formattedTotalEnr}
 		</Text>
-	);
+	)
 }
 
 // Census Data Search Card Component with tabs
 function CensusDataSearchCard() {
 	// State to manage which census data ID to search for
-	const [searchId, setSearchId] = useState<string | null>(null);
+	const [searchId, setSearchId] = useState<string | null>(null)
 
 	// Sample ID for demonstration - in a real app, this would come from user input or URL params
-	const sampleId = '123e4567-e89b-12d3-a456-426614174000';
+	const sampleId = '123e4567-e89b-12d3-a456-426614174000'
 
 	// Fetch census data by ID when searchId is set
 	const {
@@ -106,7 +104,7 @@ function CensusDataSearchCard() {
 		isLoading,
 		isError,
 		error,
-	} = useCensusDataById(searchId);
+	} = useCensusDataById(searchId)
 
 	// Component to display census data content
 	function CensusDataContent({ censusData, isLoading, isError, error }) {
@@ -119,7 +117,7 @@ function CensusDataSearchCard() {
 					<Skeleton height='32px' width='120px' />
 					<Skeleton height='16px' width='100px' />
 				</VStack>
-			);
+			)
 		}
 
 		if (isError) {
@@ -141,7 +139,7 @@ function CensusDataSearchCard() {
 						Failed to load census data
 					</Box>
 				</VStack>
-			);
+			)
 		}
 
 		if (!censusData?.data) {
@@ -154,10 +152,10 @@ function CensusDataSearchCard() {
 						No data found
 					</Text>
 				</VStack>
-			);
+			)
 		}
 
-		const data = censusData.data;
+		const data = censusData.data
 
 		return (
 			<VStack align='stretch' gap={2}>
@@ -187,7 +185,7 @@ function CensusDataSearchCard() {
 					</Text>
 				</HStack>
 			</VStack>
-		);
+		)
 	}
 
 	return (
@@ -253,12 +251,12 @@ function CensusDataSearchCard() {
 				</VStack>
 			</Tabs.Content>
 		</Tabs.Root>
-	);
+	)
 }
 
 export const Route = createFileRoute('/dashboard2/')({
 	component: Dashboard2Page,
-});
+})
 
 function Dashboard2Page() {
 	return (
@@ -576,5 +574,5 @@ function Dashboard2Page() {
 				</Grid>
 			</VStack>
 		</Container>
-	);
+	)
 }

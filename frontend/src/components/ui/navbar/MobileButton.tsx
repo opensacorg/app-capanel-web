@@ -16,7 +16,7 @@ export default function MobileButton(className: { className?: string }) {
 			>
 				<Menu.Trigger asChild>
 					<Button variant='outline' size='sm'>
-						<FaBars className='h-5 w-5' />
+						<FaBars className='h-5 w-5'/>
 					</Button>
 				</Menu.Trigger>
 				<Portal>

@@ -17,7 +17,7 @@ export default function SettingsButton({ className }: { className?: string }) {
 			>
 				<Menu.Trigger asChild>
 					<Button variant='outline' size='sm'>
-						<FaGear className='h-5 w-5' />
+						<FaGear className='h-5 w-5'/>
 					</Button>
 				</Menu.Trigger>
 				<Portal>

@@ -5,16 +5,16 @@ import {
 	Input,
 	Text,
 	VStack,
-} from '@chakra-ui/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
-import { type SubmitHandler, useForm } from 'react-hook-form';
-import { FaPlus } from 'react-icons/fa';
+} from '@chakra-ui/react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+import { FaPlus } from 'react-icons/fa'
 
-import { type ItemCreate, ItemsService } from '../../client';
-import type { ApiError } from '../../client/core/ApiError';
-import useCustomToast from '../../hooks/useCustomToast';
-import { handleError } from '../../utils';
+import { type ItemCreate, ItemsService } from '../../client'
+import type { ApiError } from '../../client/core/ApiError'
+import useCustomToast from '../../hooks/useCustomToast'
+import { handleError } from '../../utils'
 import {
 	DialogBody,
 	DialogCloseTrigger,
@@ -23,15 +23,15 @@ import {
 	DialogHeader,
 	DialogRoot,
 	DialogTrigger,
-} from '../ui/dialog';
-import { Field } from '../ui/field';
+} from '../ui/dialog'
+import { Field } from '../ui/field'
 
 const AddItem = () => {
-	const [isOpen, setIsOpen] = useState(false);
-	const queryClient = useQueryClient();
-	const { showSuccessToast } = useCustomToast();
-  const titleId = useId();
-  const descriptionId = useId();
+	const [isOpen, setIsOpen] = useState(false)
+	const queryClient = useQueryClient()
+	const { showSuccessToast } = useCustomToast()
+	const titleId = useId()
+	const descriptionId = useId()
 	const {
 		register,
 		handleSubmit,
@@ -44,27 +44,27 @@ const AddItem = () => {
 			title: '',
 			description: '',
 		},
-	});
+	})
 
 	const mutation = useMutation({
 		mutationFn: (data: ItemCreate) =>
 			ItemsService.createItem({ requestBody: data }),
 		onSuccess: () => {
-			showSuccessToast('Item created successfully.');
-			reset();
-			setIsOpen(false);
+			showSuccessToast('Item created successfully.')
+			reset()
+			setIsOpen(false)
 		},
 		onError: (err: ApiError) => {
-			handleError(err);
+			handleError(err)
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['items'] });
+			queryClient.invalidateQueries({ queryKey: ['items'] })
 		},
-	});
+	})
 
 	const onSubmit: SubmitHandler<ItemCreate> = (data) => {
-		mutation.mutate(data);
-	};
+		mutation.mutate(data)
+	}
 
 	return (
 		<DialogRoot
@@ -141,7 +141,7 @@ const AddItem = () => {
 				<DialogCloseTrigger />
 			</DialogContent>
 		</DialogRoot>
-	);
-};
+	)
+}
 
-export default AddItem;
+export default AddItem

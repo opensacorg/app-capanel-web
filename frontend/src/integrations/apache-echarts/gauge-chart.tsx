@@ -1,5 +1,5 @@
-import * as echarts from 'echarts';
-import { useEffect, useRef } from 'react';
+import * as echarts from 'echarts'
+import { useEffect, useRef } from 'react'
 
 // Define the component and accept optional props for customization
 const EchartsGaugeChart = ({
@@ -7,11 +7,11 @@ const EchartsGaugeChart = ({
 	name = 'Grade Rating',
 	title = 'Grade Rating',
 }) => {
-	const chartRef = useRef(null);
+	const chartRef = useRef(null)
 
 	useEffect(() => {
 		// Initialize the chart instance on the referenced div
-		const myChart = echarts.init(chartRef.current);
+		const myChart = echarts.init(chartRef.current)
 
 		const option = {
 			series: [
@@ -65,12 +65,12 @@ const EchartsGaugeChart = ({
 						distance: -60,
 						rotate: 'tangential',
 						formatter: (value: number) => {
-							if (value === 0.9) return 'Blue';
-							if (value === 0.7) return 'Green';
-							if (value === 0.5) return 'Yellow';
-							if (value === 0.3) return 'Orange';
-							if (value === 0.1) return 'Red';
-							return '';
+							if (value === 0.9) return 'Blue'
+							if (value === 0.7) return 'Green'
+							if (value === 0.5) return 'Yellow'
+							if (value === 0.3) return 'Orange'
+							if (value === 0.1) return 'Red'
+							return ''
 						},
 					},
 					title: {
@@ -86,20 +86,24 @@ const EchartsGaugeChart = ({
 						formatter: (value: number) => {
 							// return Math.round(value * 100) + '';
 							if (value < 0.21) {
-								return 'Red';
-							} else if (value < 0.41) {
-								return 'Orange';
-							} else if (value < 0.61) {
-								return 'Yellow';
-							} else if (value < 0.71) {
-								return 'Green (mid)';
-							} else if (value < 0.81) {
-								return 'Green';
-							} else if (value < 1) {
-								return 'Blue';
-							} else {
-								return '';
+								return 'Red'
 							}
+							if (value < 0.41) {
+								return 'Orange'
+							}
+							if (value < 0.61) {
+								return 'Yellow'
+							}
+							if (value < 0.71) {
+								return 'Green (mid)'
+							}
+							if (value < 0.81) {
+								return 'Green'
+							}
+							if (value < 1) {
+								return 'Blue'
+							}
+							return ''
 						},
 						color: 'inherit',
 					},
@@ -113,22 +117,22 @@ const EchartsGaugeChart = ({
 					],
 				},
 			],
-		};
+		}
 
 		// Set the option and resize listener
-		myChart.setOption(option);
+		myChart.setOption(option)
 
-		const handleResize = () => myChart.resize();
-		window.addEventListener('resize', handleResize);
+		const handleResize = () => myChart.resize()
+		window.addEventListener('resize', handleResize)
 
 		// Clean up the chart instance and event listener when the component unmounts
 		return () => {
-			myChart.dispose();
-			window.removeEventListener('resize', handleResize);
-		};
-	}, [value, name, title]); // Re-run the effect if these props change
+			myChart.dispose()
+			window.removeEventListener('resize', handleResize)
+		}
+	}, [value, name, title]) // Re-run the effect if these props change
 
-	return <div ref={chartRef} style={{ width: '100%', height: '400px' }} />;
-};
+	return <div ref={chartRef} style={{ width: '100%', height: '400px' }} />
+}
 
-export default EchartsGaugeChart;
+export default EchartsGaugeChart

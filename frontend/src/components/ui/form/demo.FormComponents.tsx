@@ -2,8 +2,8 @@ import { useStore } from '@tanstack/react-form';
 import { useFieldContext } from './demo/demo.form-context';
 
 function ErrorMessages({
-	errors,
-}: {
+						   errors,
+					   }: {
 	errors: Array<string | { message: string }>;
 }) {
 	return (
@@ -21,9 +21,9 @@ function ErrorMessages({
 }
 
 export function TextField({
-	label,
-	placeholder,
-}: {
+							  label,
+							  placeholder,
+						  }: {
 	label: string;
 	placeholder?: string;
 }) {
@@ -42,15 +42,15 @@ export function TextField({
 					className='w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500'
 				/>
 			</label>
-			{field.state.meta.isTouched && <ErrorMessages errors={errors} />}
+			{field.state.meta.isTouched && <ErrorMessages errors={errors}/>}
 		</div>
 	);
 }
 
 export function TextArea({
-	label,
-	rows = 3,
-}: {
+							 label,
+							 rows = 3,
+						 }: {
 	label: string;
 	rows?: number;
 }) {
@@ -69,15 +69,15 @@ export function TextArea({
 					className='w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500'
 				/>
 			</label>
-			{field.state.meta.isTouched && <ErrorMessages errors={errors} />}
+			{field.state.meta.isTouched && <ErrorMessages errors={errors}/>}
 		</div>
 	);
 }
 
 export function Select({
-	label,
-	values,
-}: {
+						   label,
+						   values,
+					   }: {
 	label: string;
 	values: Array<{ label: string; value: string }>;
 	placeholder?: string;
@@ -104,7 +104,7 @@ export function Select({
 					</option>
 				))}
 			</select>
-			{field.state.meta.isTouched && <ErrorMessages errors={errors} />}
+			{field.state.meta.isTouched && <ErrorMessages errors={errors}/>}
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 // import { useAuth } from "../components/hooks/use-auth";
 
 export const Route = createFileRoute('/_home/_demo')({
@@ -14,7 +14,7 @@ export const Route = createFileRoute('/_home/_demo')({
 	// 	}
 	// },
 	component: DemoLayout,
-});
+})
 
 function DemoLayout() {
 	// const auth = useAuth();
@@ -27,5 +27,5 @@ function DemoLayout() {
 			<hr />
 			<Outlet />
 		</>
-	);
+	)
 }

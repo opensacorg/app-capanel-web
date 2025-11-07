@@ -1,24 +1,26 @@
 /* eslint-disable */
-import type { SystemStyleObject, ConditionalValue } from '../types/index';
-import type { Properties } from '../types/csstype';
-import type { SystemProperties } from '../types/style-props';
-import type { DistributiveOmit } from '../types/system-types';
-import type { Tokens } from '../tokens/index';
+import type { ConditionalValue, SystemStyleObject } from '../types/index'
+import type { Properties } from '../types/csstype'
+import type { SystemProperties } from '../types/style-props'
+import type { DistributiveOmit } from '../types/system-types'
+import type { Tokens } from '../tokens/index'
 
 export interface GridProperties {
-   gap?: SystemProperties["gap"]
-	columnGap?: SystemProperties["gap"]
-	rowGap?: SystemProperties["gap"]
+	gap?: SystemProperties['gap']
+	columnGap?: SystemProperties['gap']
+	rowGap?: SystemProperties['gap']
 	columns?: ConditionalValue<number>
-	minChildWidth?: ConditionalValue<Tokens["sizes"] | Properties["width"]>
+	minChildWidth?: ConditionalValue<Tokens['sizes'] | Properties['width']>
 }
 
-interface GridStyles extends GridProperties, DistributiveOmit<SystemStyleObject, keyof GridProperties > {}
+interface GridStyles
+	extends GridProperties,
+		DistributiveOmit<SystemStyleObject, keyof GridProperties> {}
 
 interface GridPatternFn {
-  (styles?: GridStyles): string
-  raw: (styles?: GridStyles) => SystemStyleObject
+	raw: (styles?: GridStyles) => SystemStyleObject
+
+	(styles?: GridStyles): string
 }
 
-
-export declare const grid: GridPatternFn;
+export declare const grid: GridPatternFn

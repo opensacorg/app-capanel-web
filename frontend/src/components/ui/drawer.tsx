@@ -36,7 +36,7 @@ export const DrawerCloseTrigger = React.forwardRef<
 			{...props}
 			asChild
 		>
-			<CloseButton size='sm' ref={ref} />
+			<CloseButton size='sm' ref={ref}/>
 		</ChakraDrawer.CloseTrigger>
 	);
 });

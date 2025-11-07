@@ -1,9 +1,9 @@
-import { Avatar, Button, Card, For, Stack } from '@chakra-ui/react';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { Avatar, Button, Card, For, Stack } from '@chakra-ui/react'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_home/')({
 	component: HomePage,
-});
+})
 
 function HomePage() {
 	return (
@@ -69,5 +69,5 @@ function HomePage() {
 				</Stack>
 			</div>
 		</main>
-	);
+	)
 }

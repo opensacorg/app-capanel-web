@@ -9,7 +9,7 @@ import {
 	Icon,
 	Text,
 	VStack,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
 import {
 	FiActivity,
 	FiArrowDown,
@@ -18,15 +18,15 @@ import {
 	FiSettings,
 	FiShoppingCart,
 	FiUser,
-} from 'react-icons/fi';
-import { Card, CardBody, CardFooter, CardHeader } from '../ui/card';
-import DashboardCardD655 from './card/DashboardCardD655';
+} from 'react-icons/fi'
+import { Card, CardBody, CardFooter, CardHeader } from '../ui/card'
+import DashboardCardD655 from './card/DashboardCardD655'
 
 interface DashboardD09Data {
-	organization?: string;
+	organization?: string
 	data?: {
-		data: any;
-	};
+		data: any
+	}
 }
 
 export default function DashboardD09({ data }: { data: DashboardD09Data }) {
@@ -279,5 +279,5 @@ export default function DashboardD09({ data }: { data: DashboardD09Data }) {
 				</Grid>
 			</VStack>
 		</Container>
-	);
+	)
 }

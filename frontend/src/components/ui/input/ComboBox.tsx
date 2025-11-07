@@ -2,8 +2,8 @@ import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 function FieldInfo({
-	field,
-}: {
+					   field,
+				   }: {
 	field: {
 		state: { meta: { touchedErrors: string[]; isValidating: boolean } };
 	};
@@ -21,12 +21,12 @@ function FieldInfo({
 }
 
 export function ComboBox({
-	field,
-	options,
-	placeholder,
-	label,
-	onInputChange,
-}: {
+							 field,
+							 options,
+							 placeholder,
+							 label,
+							 onInputChange,
+						 }: {
 	field: any;
 	options: string[];
 	placeholder: string;
@@ -134,7 +134,7 @@ export function ComboBox({
 				)}
 			</div>
 			<div className='mt-1 h-5 text-xs'>
-				<FieldInfo field={field} />
+				<FieldInfo field={field}/>
 			</div>
 		</div>
 	);

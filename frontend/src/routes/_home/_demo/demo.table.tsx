@@ -1,15 +1,15 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: Laziness */
 /** biome-ignore-all lint/style/noNonNullAssertion: Laziness */
-import type { RankingInfo } from '@tanstack/match-sorter-utils';
-import { compareItems, rankItem } from '@tanstack/match-sorter-utils';
-import { createFileRoute } from '@tanstack/react-router';
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
+import { compareItems, rankItem } from '@tanstack/match-sorter-utils'
+import { createFileRoute } from '@tanstack/react-router'
 import type {
 	Column,
 	ColumnDef,
 	ColumnFiltersState,
 	FilterFn,
 	SortingFn,
-} from '@tanstack/react-table';
+} from '@tanstack/react-table'
 import {
 	flexRender,
 	getCoreRowModel,
@@ -18,64 +18,68 @@ import {
 	getSortedRowModel,
 	sortingFns,
 	useReactTable,
-} from '@tanstack/react-table';
-import React from 'react';
-import type { Person } from '../../../../__tests__/data/demo-table-data';
-import { makeData } from '../../../../__tests__/data/demo-table-data';
+} from '@tanstack/react-table'
+import {
+	type InputHTMLAttributes,
+	useEffect,
+	useMemo,
+	useReducer,
+	useState,
+} from 'react'
+import {
+	makeData,
+	type Person,
+} from '../../../../tests/data/demo-table-data.ts'
 
 export const Route = createFileRoute('/_home/_demo/demo/table')({
 	component: TableDemo,
-});
+})
 
 declare module '@tanstack/react-table' {
 	interface FilterFns {
-		fuzzy: FilterFn<unknown>;
+		fuzzy: FilterFn<unknown>
 	}
 
 	interface FilterMeta {
-		itemRank: RankingInfo;
+		itemRank: RankingInfo
 	}
 }
 
 // Define a custom fuzzy filter function that will apply ranking info to rows (using match-sorter utils)
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 	// Rank the item
-	const itemRank = rankItem(row.getValue(columnId), value);
+	const itemRank = rankItem(row.getValue(columnId), value)
 
 	// Store the itemRank info
 	addMeta({
 		itemRank,
-	});
+	})
 
 	// Return if the item should be filtered in/out
-	return itemRank.passed;
-};
+	return itemRank.passed
+}
 
 // Define a custom fuzzy sort function that will sort by rank if the row has ranking information
 const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
-	let dir = 0;
+	let dir = 0
 
-	// Only sort by rank if the column has ranking information
-	if (rowA.columnFiltersMeta[columnId]) {
-		dir = compareItems(
-			rowA.columnFiltersMeta[columnId]?.itemRank!,
-			rowB.columnFiltersMeta[columnId]?.itemRank!,
-		);
+	const rankA = rowA.columnFiltersMeta[columnId]?.itemRank
+	const rankB = rowB.columnFiltersMeta[columnId]?.itemRank
+
+	if (rankA != null && rankB != null) {
+		dir = compareItems(rankA, rankB)
 	}
 
-	// Provide an alphanumeric fallback for when the item ranks are equal
-	return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
-};
+	return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
+}
 
 function TableDemo() {
-	const rerender = React.useReducer(() => ({}), {})[1];
+	const rerender = useReducer(() => ({}), {})[1]
 
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[],
-	);
-	const [globalFilter, setGlobalFilter] = React.useState('');
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+	const [globalFilter, setGlobalFilter] = useState('')
 
-	const columns = React.useMemo<ColumnDef<Person, any>[]>(
+	const columns = useMemo<ColumnDef<Person, any>[]>(
 		() => [
 			{
 				accessorKey: 'id',
@@ -104,10 +108,10 @@ function TableDemo() {
 			},
 		],
 		[],
-	);
+	)
 
-	const [data, setData] = React.useState<Person[]>(() => makeData(5_000));
-	const refreshData = () => setData((_old) => makeData(50_000)); //stress test
+	const [data, setData] = useState<Person[]>(() => makeData(5_000))
+	const refreshData = () => setData((_old) => makeData(50_000)) //stress test
 
 	const table = useReactTable({
 		data,
@@ -129,16 +133,16 @@ function TableDemo() {
 		debugTable: true,
 		debugHeaders: true,
 		debugColumns: false,
-	});
+	})
 
 	//apply the fuzzy sort if the fullName column is being filtered
-	React.useEffect(() => {
+	useEffect(() => {
 		if (table.getState().columnFilters[0]?.id === 'fullName') {
 			if (table.getState().sorting[0]?.id !== 'fullName') {
-				table.setSorting([{ id: 'fullName', desc: false }]);
+				table.setSorting([{ id: 'fullName', desc: false }])
 			}
 		}
-	}, [table.getState, table.setSorting]);
+	}, [table.getState, table.setSorting])
 
 	return (
 		<div className='min-h-screen p-6 bg-white dark:bg-gray-900'>
@@ -190,7 +194,7 @@ function TableDemo() {
 												</>
 											)}
 										</th>
-									);
+									)
 								})}
 							</tr>
 						))}
@@ -210,10 +214,10 @@ function TableDemo() {
 													cell.getContext(),
 												)}
 											</td>
-										);
+										)
 									})}
 								</tr>
-							);
+							)
 						})}
 					</tbody>
 				</table>
@@ -266,8 +270,8 @@ function TableDemo() {
 						type='number'
 						defaultValue={table.getState().pagination.pageIndex + 1}
 						onChange={(e) => {
-							const page = e.target.value ? Number(e.target.value) - 1 : 0;
-							table.setPageIndex(page);
+							const page = e.target.value ? Number(e.target.value) - 1 : 0
+							table.setPageIndex(page)
 						}}
 						className='w-16 px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none'
 					/>
@@ -276,7 +280,7 @@ function TableDemo() {
 					title='Table pagination by 10.'
 					value={table.getState().pagination.pageSize}
 					onChange={(e) => {
-						table.setPageSize(Number(e.target.value));
+						table.setPageSize(Number(e.target.value))
 					}}
 					className='px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none'
 				>
@@ -317,11 +321,11 @@ function TableDemo() {
 				)}
 			</pre>
 		</div>
-	);
+	)
 }
 
 function Filter({ column }: { column: Column<any, unknown> }) {
-	const columnFilterValue = column.getFilterValue();
+	const columnFilterValue = column.getFilterValue()
 
 	return (
 		<DebouncedInput
@@ -331,7 +335,7 @@ function Filter({ column }: { column: Column<any, unknown> }) {
 			placeholder={`Search...`}
 			className='w-full px-2 py-1 bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none'
 		/>
-	);
+	)
 }
 
 // A typical debounced input react component
@@ -341,23 +345,23 @@ function DebouncedInput({
 	debounce = 500,
 	...props
 }: {
-	value: string | number;
-	onChange: (value: string | number) => void;
-	debounce?: number;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
-	const [value, setValue] = React.useState(initialValue);
+	value: string | number
+	onChange: (value: string | number) => void
+	debounce?: number
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+	const [value, setValue] = useState(initialValue)
 
-	React.useEffect(() => {
-		setValue(initialValue);
-	}, [initialValue]);
+	useEffect(() => {
+		setValue(initialValue)
+	}, [initialValue])
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const timeout = setTimeout(() => {
-			onChange(value);
-		}, debounce);
+			onChange(value)
+		}, debounce)
 
-		return () => clearTimeout(timeout);
-	}, [value, onChange, debounce]);
+		return () => clearTimeout(timeout)
+	}, [value, onChange, debounce])
 
 	return (
 		<input
@@ -365,5 +369,5 @@ function DebouncedInput({
 			value={value}
 			onChange={(e) => setValue(e.target.value)}
 		/>
-	);
+	)
 }

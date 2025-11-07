@@ -1,10 +1,10 @@
-import { Container, Heading, Stack } from '@chakra-ui/react';
-import { useTheme } from 'next-themes';
+import { Container, Heading, Stack } from '@chakra-ui/react'
+import { useTheme } from 'next-themes'
 
-import { Radio, RadioGroup } from '../ui/radio';
+import { Radio, RadioGroup } from '../ui/radio'
 
 const Appearance = () => {
-	const { theme, setTheme } = useTheme();
+	const { theme, setTheme } = useTheme()
 
 	return (
 		<Container maxW='full'>
@@ -24,6 +24,6 @@ const Appearance = () => {
 				</Stack>
 			</RadioGroup>
 		</Container>
-	);
-};
-export default Appearance;
+	)
+}
+export default Appearance

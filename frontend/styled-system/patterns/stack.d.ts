@@ -1,23 +1,23 @@
 /* eslint-disable */
-import type { SystemStyleObject, ConditionalValue } from '../types/index';
-import type { Properties } from '../types/csstype';
-import type { SystemProperties } from '../types/style-props';
-import type { DistributiveOmit } from '../types/system-types';
-import type { Tokens } from '../tokens/index';
+import type { SystemStyleObject } from '../types/index'
+import type { SystemProperties } from '../types/style-props'
+import type { DistributiveOmit } from '../types/system-types'
 
 export interface StackProperties {
-   align?: SystemProperties["alignItems"]
-	justify?: SystemProperties["justifyContent"]
-	direction?: SystemProperties["flexDirection"]
-	gap?: SystemProperties["gap"]
+	align?: SystemProperties['alignItems']
+	justify?: SystemProperties['justifyContent']
+	direction?: SystemProperties['flexDirection']
+	gap?: SystemProperties['gap']
 }
 
-interface StackStyles extends StackProperties, DistributiveOmit<SystemStyleObject, keyof StackProperties > {}
+interface StackStyles
+	extends StackProperties,
+		DistributiveOmit<SystemStyleObject, keyof StackProperties> {}
 
 interface StackPatternFn {
-  (styles?: StackStyles): string
-  raw: (styles?: StackStyles) => SystemStyleObject
+	raw: (styles?: StackStyles) => SystemStyleObject
+
+	(styles?: StackStyles): string
 }
 
-
-export declare const stack: StackPatternFn;
+export declare const stack: StackPatternFn

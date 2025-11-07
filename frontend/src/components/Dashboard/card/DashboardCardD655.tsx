@@ -1,6 +1,6 @@
-import { Box, HStack, Icon, Text } from '@chakra-ui/react';
-import { FiArrowUp, FiDollarSign } from 'react-icons/fi';
-import { Card, CardBody } from '../../ui/card';
+import { Box, HStack, Icon, Text } from '@chakra-ui/react'
+import { FiArrowUp, FiDollarSign } from 'react-icons/fi'
+import { Card, CardBody } from '../../ui/card'
 
 export default function DashboardCardD655() {
 	return (
@@ -27,5 +27,5 @@ export default function DashboardCardD655() {
 				</HStack>
 			</CardBody>
 		</Card>
-	);
+	)
 }

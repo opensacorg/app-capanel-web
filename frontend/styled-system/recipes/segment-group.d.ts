@@ -1,34 +1,50 @@
 /* eslint-disable */
-import type { ConditionalValue } from '../types/index';
-import type { DistributiveOmit, Pretty } from '../types/system-types';
+import type { ConditionalValue } from '../types/index'
+import type { DistributiveOmit, Pretty } from '../types/system-types'
 
 interface SegmentGroupVariant {
-  /**
- * @default "md"
- */
-size: "xs" | "sm" | "md" | "lg"
+	/**
+	 * @default "md"
+	 */
+	size: 'xs' | 'sm' | 'md' | 'lg'
 }
 
 type SegmentGroupVariantMap = {
-  [key in keyof SegmentGroupVariant]: Array<SegmentGroupVariant[key]>
+	[key in keyof SegmentGroupVariant]: Array<SegmentGroupVariant[key]>
 }
 
-type SegmentGroupSlot = "root" | "label" | "item" | "itemText" | "itemControl" | "indicator"
+type SegmentGroupSlot =
+	| 'root'
+	| 'label'
+	| 'item'
+	| 'itemText'
+	| 'itemControl'
+	| 'indicator'
 
 export type SegmentGroupVariantProps = {
-  [key in keyof SegmentGroupVariant]?: ConditionalValue<SegmentGroupVariant[key]> | undefined
+	[key in keyof SegmentGroupVariant]?:
+		| ConditionalValue<SegmentGroupVariant[key]>
+		| undefined
 }
 
 export interface SegmentGroupRecipe {
-  __slot: SegmentGroupSlot
-  __type: SegmentGroupVariantProps
-  (props?: SegmentGroupVariantProps): Pretty<Record<SegmentGroupSlot, string>>
-  raw: (props?: SegmentGroupVariantProps) => SegmentGroupVariantProps
-  variantMap: SegmentGroupVariantMap
-  variantKeys: Array<keyof SegmentGroupVariant>
-  splitVariantProps<Props extends SegmentGroupVariantProps>(props: Props): [SegmentGroupVariantProps, Pretty<DistributiveOmit<Props, keyof SegmentGroupVariantProps>>]
-  getVariantProps: (props?: SegmentGroupVariantProps) => SegmentGroupVariantProps
-}
+	__slot: SegmentGroupSlot
+	__type: SegmentGroupVariantProps
+	raw: (props?: SegmentGroupVariantProps) => SegmentGroupVariantProps
+	variantMap: SegmentGroupVariantMap
+	variantKeys: Array<keyof SegmentGroupVariant>
+	getVariantProps: (
+		props?: SegmentGroupVariantProps,
+	) => SegmentGroupVariantProps
 
+	(props?: SegmentGroupVariantProps): Pretty<Record<SegmentGroupSlot, string>>
+
+	splitVariantProps<Props extends SegmentGroupVariantProps>(
+		props: Props,
+	): [
+		SegmentGroupVariantProps,
+		Pretty<DistributiveOmit<Props, keyof SegmentGroupVariantProps>>,
+	]
+}
 
 export declare const segmentGroup: SegmentGroupRecipe

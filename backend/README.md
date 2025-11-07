@@ -37,7 +37,7 @@ Modify or add SQLModel models for data and SQL tables in `./backend/app/models.p
 There are already configurations in place to run the backend through the VS Code debugger, so that you can use
 breakpoints, pause and explore variables, etc.
 
-The setup is also already configured so you can run the tests through the VS Code Python tests tab.
+The setup is already configured, so you can run the tests through the VS Code Python tests tab.
 
 ## Docker Compose Override
 
@@ -122,7 +122,7 @@ If you use GitHub Actions the tests will run automatically.
 
 ### Test running stack
 
-If your stack is already up and you just want to run the tests, you can use:
+If your stack is already up, and you just want to run the tests, you can use:
 
 ```bash
 docker compose exec backend bash scripts/tests-start.sh

@@ -12,7 +12,7 @@ export function CustomProvider(props: PropsWithChildren) {
 			<ColorModeProvider defaultTheme='light'>
 				{props.children}
 			</ColorModeProvider>
-			<Toaster />
+			<Toaster/>
 		</ChakraProvider>
 	);
 }

@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useAppForm } from '../../../components/ui/form/demo/demo.form.ts';
+import { createFileRoute } from '@tanstack/react-router'
+import { useAppForm } from '../../../components/ui/form/demo/demo.form.ts'
 
 export const Route = createFileRoute('/_home/_demo/demo/form/address')({
 	component: AddressForm,
-});
+})
 
 function AddressForm() {
 	const form = useAppForm({
@@ -24,20 +24,20 @@ function AddressForm() {
 				const errors = {
 					fields: {},
 				} as {
-					fields: Record<string, string>;
-				};
-				if (value.fullName.trim().length === 0) {
-					errors.fields.fullName = 'Full name is required';
+					fields: Record<string, string>
 				}
-				return errors;
+				if (value.fullName.trim().length === 0) {
+					errors.fields.fullName = 'Full name is required'
+				}
+				return errors
 			},
 		},
 		onSubmit: ({ value }) => {
-			console.log(value);
+			console.log(value)
 			// Show success message
-			alert('Form submitted successfully!');
+			alert('Form submitted successfully!')
 		},
-	});
+	})
 
 	return (
 		<div
@@ -50,9 +50,9 @@ function AddressForm() {
 			<div className='w-full max-w-2xl p-8 rounded-xl backdrop-blur-md bg-black/50 shadow-xl border-8 border-black/10'>
 				<form
 					onSubmit={(e) => {
-						e.preventDefault();
-						e.stopPropagation();
-						form.handleSubmit();
+						e.preventDefault()
+						e.stopPropagation()
+						form.handleSubmit()
 					}}
 					className='space-y-6'
 				>
@@ -65,12 +65,12 @@ function AddressForm() {
 						validators={{
 							onBlur: ({ value }) => {
 								if (!value || value.trim().length === 0) {
-									return 'Email is required';
+									return 'Email is required'
 								}
 								if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-									return 'Invalid email address';
+									return 'Invalid email address'
 								}
-								return undefined;
+								return undefined
 							},
 						}}
 					>
@@ -82,9 +82,9 @@ function AddressForm() {
 						validators={{
 							onBlur: ({ value }) => {
 								if (!value || value.trim().length === 0) {
-									return 'Street address is required';
+									return 'Street address is required'
 								}
-								return undefined;
+								return undefined
 							},
 						}}
 					>
@@ -97,9 +97,9 @@ function AddressForm() {
 							validators={{
 								onBlur: ({ value }) => {
 									if (!value || value.trim().length === 0) {
-										return 'City is required';
+										return 'City is required'
 									}
-									return undefined;
+									return undefined
 								},
 							}}
 						>
@@ -110,9 +110,9 @@ function AddressForm() {
 							validators={{
 								onBlur: ({ value }) => {
 									if (!value || value.trim().length === 0) {
-										return 'State is required';
+										return 'State is required'
 									}
-									return undefined;
+									return undefined
 								},
 							}}
 						>
@@ -123,12 +123,12 @@ function AddressForm() {
 							validators={{
 								onBlur: ({ value }) => {
 									if (!value || value.trim().length === 0) {
-										return 'Zip code is required';
+										return 'Zip code is required'
 									}
 									if (!/^\d{5}(-\d{4})?$/.test(value)) {
-										return 'Invalid zip code format';
+										return 'Invalid zip code format'
 									}
-									return undefined;
+									return undefined
 								},
 							}}
 						>
@@ -141,9 +141,9 @@ function AddressForm() {
 						validators={{
 							onBlur: ({ value }) => {
 								if (!value || value.trim().length === 0) {
-									return 'Country is required';
+									return 'Country is required'
 								}
-								return undefined;
+								return undefined
 							},
 						}}
 					>
@@ -169,16 +169,16 @@ function AddressForm() {
 						validators={{
 							onBlur: ({ value }) => {
 								if (!value || value.trim().length === 0) {
-									return 'Phone number is required';
+									return 'Phone number is required'
 								}
 								if (
 									!/^(\+\d{1,3})?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(
 										value,
 									)
 								) {
-									return 'Invalid phone number format';
+									return 'Invalid phone number format'
 								}
-								return undefined;
+								return undefined
 							},
 						}}
 					>
@@ -195,5 +195,5 @@ function AddressForm() {
 				</form>
 			</div>
 		</div>
-	);
+	)
 }

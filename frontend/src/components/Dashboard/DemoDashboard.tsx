@@ -10,7 +10,7 @@ import {
 	Tabs,
 	Text,
 	VStack,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
 import {
 	FiActivity,
 	FiArrowDown,
@@ -20,8 +20,8 @@ import {
 	FiShoppingCart,
 	FiTrendingUp,
 	FiUser,
-} from 'react-icons/fi';
-import { Card, CardBody, CardFooter, CardHeader } from '../ui/card';
+} from 'react-icons/fi'
+import { Card, CardBody, CardFooter, CardHeader } from '../ui/card'
 
 export default function DemoDashboard() {
 	return (
@@ -359,5 +359,5 @@ export default function DemoDashboard() {
 				</Grid>
 			</VStack>
 		</Container>
-	);
+	)
 }

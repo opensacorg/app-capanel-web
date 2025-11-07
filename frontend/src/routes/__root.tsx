@@ -1,6 +1,6 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
-import React, { Suspense } from 'react';
-import NotFound from '../components/Common/NotFound';
+import { createRootRoute, Outlet } from '@tanstack/react-router'
+import React, { Suspense } from 'react'
+import NotFound from '../components/Common/NotFound'
 
 const loadDevtools = () =>
 	Promise.all([
@@ -14,11 +14,11 @@ const loadDevtools = () =>
 					<reactQueryDevtools.ReactQueryDevtools />
 				</>
 			),
-		};
-	});
+		}
+	})
 
 const TanStackDevtools =
-	process.env.NODE_ENV === 'production' ? () => null : React.lazy(loadDevtools);
+	process.env.NODE_ENV === 'production' ? () => null : React.lazy(loadDevtools)
 
 export const Route = createRootRoute({
 	component: () => (
@@ -30,4 +30,4 @@ export const Route = createRootRoute({
 		</>
 	),
 	notFoundComponent: () => <NotFound />,
-});
+})

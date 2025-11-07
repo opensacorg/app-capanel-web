@@ -1,13 +1,13 @@
 /* eslint-disable */
-import type {  CompositionStyleObject  } from './system-types';
+import type { CompositionStyleObject } from './system-types'
 
 interface Token<T> {
-  value: T
-  description?: string
+	value: T
+	description?: string
 }
 
 interface Recursive<T> {
-  [key: string]: Recursive<T> | T
+	[key: string]: Recursive<T> | T
 }
 
 /* -----------------------------------------------------------------------------
@@ -15,61 +15,61 @@ interface Recursive<T> {
  * -----------------------------------------------------------------------------*/
 
 type TextStyleProperty =
-  | 'font'
-  | 'fontFamily'
-  | 'fontFeatureSettings'
-  | 'fontKerning'
-  | 'fontLanguageOverride'
-  | 'fontOpticalSizing'
-  | 'fontPalette'
-  | 'fontSize'
-  | 'fontSizeAdjust'
-  | 'fontStretch'
-  | 'fontStyle'
-  | 'fontSynthesis'
-  | 'fontVariant'
-  | 'fontVariantAlternates'
-  | 'fontVariantCaps'
-  | 'fontVariantLigatures'
-  | 'fontVariantNumeric'
-  | 'fontVariantPosition'
-  | 'fontVariationSettings'
-  | 'fontWeight'
-  | 'hypens'
-  | 'hyphenateCharacter'
-  | 'hyphenateLimitChars'
-  | 'letterSpacing'
-  | 'lineBreak'
-  | 'lineHeight'
-  | 'quotes'
-  | 'overflowWrap'
-  | 'textCombineUpright'
-  | 'textDecoration'
-  | 'textDecorationColor'
-  | 'textDecorationLine'
-  | 'textDecorationSkipInk'
-  | 'textDecorationStyle'
-  | 'textDecorationThickness'
-  | 'textEmphasis'
-  | 'textEmphasisColor'
-  | 'textEmphasisPosition'
-  | 'textEmphasisStyle'
-  | 'textIndent'
-  | 'textJustify'
-  | 'textOrientation'
-  | 'textOverflow'
-  | 'textRendering'
-  | 'textShadow'
-  | 'textTransform'
-  | 'textUnderlineOffset'
-  | 'textUnderlinePosition'
-  | 'textWrap'
-  | 'textWrapMode'
-  | 'textWrapStyle'
-  | 'verticalAlign'
-  | 'whiteSpace'
-  | 'wordBreak'
-  | 'wordSpacing'
+	| 'font'
+	| 'fontFamily'
+	| 'fontFeatureSettings'
+	| 'fontKerning'
+	| 'fontLanguageOverride'
+	| 'fontOpticalSizing'
+	| 'fontPalette'
+	| 'fontSize'
+	| 'fontSizeAdjust'
+	| 'fontStretch'
+	| 'fontStyle'
+	| 'fontSynthesis'
+	| 'fontVariant'
+	| 'fontVariantAlternates'
+	| 'fontVariantCaps'
+	| 'fontVariantLigatures'
+	| 'fontVariantNumeric'
+	| 'fontVariantPosition'
+	| 'fontVariationSettings'
+	| 'fontWeight'
+	| 'hypens'
+	| 'hyphenateCharacter'
+	| 'hyphenateLimitChars'
+	| 'letterSpacing'
+	| 'lineBreak'
+	| 'lineHeight'
+	| 'quotes'
+	| 'overflowWrap'
+	| 'textCombineUpright'
+	| 'textDecoration'
+	| 'textDecorationColor'
+	| 'textDecorationLine'
+	| 'textDecorationSkipInk'
+	| 'textDecorationStyle'
+	| 'textDecorationThickness'
+	| 'textEmphasis'
+	| 'textEmphasisColor'
+	| 'textEmphasisPosition'
+	| 'textEmphasisStyle'
+	| 'textIndent'
+	| 'textJustify'
+	| 'textOrientation'
+	| 'textOverflow'
+	| 'textRendering'
+	| 'textShadow'
+	| 'textTransform'
+	| 'textUnderlineOffset'
+	| 'textUnderlinePosition'
+	| 'textWrap'
+	| 'textWrapMode'
+	| 'textWrapStyle'
+	| 'verticalAlign'
+	| 'whiteSpace'
+	| 'wordBreak'
+	| 'wordSpacing'
 
 export type TextStyle = CompositionStyleObject<TextStyleProperty>
 
@@ -80,53 +80,53 @@ export type TextStyles = Recursive<Token<TextStyle>>
  * -----------------------------------------------------------------------------*/
 
 type Placement =
-  | 'Top'
-  | 'Right'
-  | 'Bottom'
-  | 'Left'
-  | 'Inline'
-  | 'Block'
-  | 'InlineStart'
-  | 'InlineEnd'
-  | 'BlockStart'
-  | 'BlockEnd'
+	| 'Top'
+	| 'Right'
+	| 'Bottom'
+	| 'Left'
+	| 'Inline'
+	| 'Block'
+	| 'InlineStart'
+	| 'InlineEnd'
+	| 'BlockStart'
+	| 'BlockEnd'
 
 type Radius =
-  | `Top${'Right' | 'Left'}`
-  | `Bottom${'Right' | 'Left'}`
-  | `Start${'Start' | 'End'}`
-  | `End${'Start' | 'End'}`
+	| `Top${'Right' | 'Left'}`
+	| `Bottom${'Right' | 'Left'}`
+	| `Start${'Start' | 'End'}`
+	| `End${'Start' | 'End'}`
 
 type LayerStyleProperty =
-  | 'background'
-  | 'backgroundColor'
-  | 'backgroundImage'
-  | 'borderRadius'
-  | 'border'
-  | 'borderWidth'
-  | 'borderColor'
-  | 'borderStyle'
-  | 'boxShadow'
-  | 'filter'
-  | 'backdropFilter'
-  | 'transform'
-  | 'color'
-  | 'opacity'
-  | 'backgroundBlendMode'
-  | 'backgroundAttachment'
-  | 'backgroundClip'
-  | 'backgroundOrigin'
-  | 'backgroundPosition'
-  | 'backgroundRepeat'
-  | 'backgroundSize'
-  | `border${Placement}`
-  | `border${Placement}Width`
-  | 'borderRadius'
-  | `border${Radius}Radius`
-  | `border${Placement}Color`
-  | `border${Placement}Style`
-  | 'padding'
-  | `padding${Placement}`
+	| 'background'
+	| 'backgroundColor'
+	| 'backgroundImage'
+	| 'borderRadius'
+	| 'border'
+	| 'borderWidth'
+	| 'borderColor'
+	| 'borderStyle'
+	| 'boxShadow'
+	| 'filter'
+	| 'backdropFilter'
+	| 'transform'
+	| 'color'
+	| 'opacity'
+	| 'backgroundBlendMode'
+	| 'backgroundAttachment'
+	| 'backgroundClip'
+	| 'backgroundOrigin'
+	| 'backgroundPosition'
+	| 'backgroundRepeat'
+	| 'backgroundSize'
+	| `border${Placement}`
+	| `border${Placement}Width`
+	| 'borderRadius'
+	| `border${Radius}Radius`
+	| `border${Placement}Color`
+	| `border${Placement}Style`
+	| 'padding'
+	| `padding${Placement}`
 
 export type LayerStyle = CompositionStyleObject<LayerStyleProperty>
 
@@ -137,28 +137,28 @@ export type LayerStyles = Recursive<Token<LayerStyle>>
  * -----------------------------------------------------------------------------*/
 
 type AnimationStyleProperty =
-  | 'animation'
-  | 'animationComposition'
-  | 'animationDelay'
-  | 'animationDirection'
-  | 'animationDuration'
-  | 'animationFillMode'
-  | 'animationIterationCount'
-  | 'animationName'
-  | 'animationPlayState'
-  | 'animationTimingFunction'
-  | 'animationRange'
-  | 'animationRangeStart'
-  | 'animationRangeEnd'
-  | 'animationTimeline'
-  | 'transformOrigin'
+	| 'animation'
+	| 'animationComposition'
+	| 'animationDelay'
+	| 'animationDirection'
+	| 'animationDuration'
+	| 'animationFillMode'
+	| 'animationIterationCount'
+	| 'animationName'
+	| 'animationPlayState'
+	| 'animationTimingFunction'
+	| 'animationRange'
+	| 'animationRangeStart'
+	| 'animationRangeEnd'
+	| 'animationTimeline'
+	| 'transformOrigin'
 
 export type AnimationStyle = CompositionStyleObject<AnimationStyleProperty>
 
 export type AnimationStyles = Recursive<Token<AnimationStyle>>
 
 export interface CompositionStyles {
-  textStyles: TextStyles
-  layerStyles: LayerStyles
-  animationStyles: AnimationStyles
+	textStyles: TextStyles
+	layerStyles: LayerStyles
+	animationStyles: AnimationStyles
 }

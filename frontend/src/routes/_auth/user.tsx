@@ -1,14 +1,14 @@
-import { Box, Container, Text } from '@chakra-ui/react';
-import { createFileRoute } from '@tanstack/react-router';
+import { Box, Container, Text } from '@chakra-ui/react'
+import { createFileRoute } from '@tanstack/react-router'
 
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../hooks/useAuth'
 
 export const Route = createFileRoute('/_auth/user')({
 	component: User,
-});
+})
 
 function User() {
-	const { user: currentUser } = useAuth();
+	const { user: currentUser } = useAuth()
 
 	return (
 		<Container maxW='full'>
@@ -19,5 +19,5 @@ function User() {
 				<Text>Welcome back, nice to see you again!</Text>
 			</Box>
 		</Container>
-	);
+	)
 }
