@@ -36,8 +36,8 @@ type TreeViewSlot =
 
 export type TreeViewVariantProps = {
 	[key in keyof TreeViewVariant]?:
-		| ConditionalValue<TreeViewVariant[key]>
-		| undefined
+	| ConditionalValue<TreeViewVariant[key]>
+	| undefined
 }
 
 export interface TreeViewRecipe {

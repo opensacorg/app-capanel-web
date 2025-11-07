@@ -3,7 +3,7 @@ function cx() {
 		i = 0,
 		arg
 
-	for (; i < arguments.length; ) {
+	for (; i < arguments.length;) {
 		if ((arg = arguments[i++]) && typeof arg === 'string') {
 			str && (str += ' ')
 			str += arg
@@ -12,4 +12,4 @@ function cx() {
 	return str
 }
 
-export { cx }
+export {cx}

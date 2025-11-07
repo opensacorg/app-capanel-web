@@ -17,8 +17,8 @@ type EmptyStateSlot = 'root' | 'content' | 'indicator' | 'title' | 'description'
 
 export type EmptyStateVariantProps = {
 	[key in keyof EmptyStateVariant]?:
-		| ConditionalValue<EmptyStateVariant[key]>
-		| undefined
+	| ConditionalValue<EmptyStateVariant[key]>
+	| undefined
 }
 
 export interface EmptyStateRecipe {

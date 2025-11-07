@@ -37,8 +37,8 @@ type SelectSlot =
 
 export type SelectVariantProps = {
 	[key in keyof SelectVariant]?:
-		| ConditionalValue<SelectVariant[key]>
-		| undefined
+	| ConditionalValue<SelectVariant[key]>
+	| undefined
 }
 
 export interface SelectRecipe {

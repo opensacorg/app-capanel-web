@@ -1,10 +1,6 @@
 /* eslint-disable */
 import type { RecipeRule } from './static-css'
-import type {
-	DistributiveOmit,
-	Pretty,
-	SystemStyleObject,
-} from './system-types'
+import type { DistributiveOmit, Pretty, SystemStyleObject, } from './system-types'
 
 type StringToBoolean<T> = T extends 'true' | 'false' ? boolean : T
 
@@ -14,8 +10,8 @@ export type RecipeSelection<T extends RecipeVariantRecord> =
 	keyof any extends keyof T
 		? {}
 		: {
-				[K in keyof T]?: StringToBoolean<keyof T[K]> | undefined
-			}
+			[K in keyof T]?: StringToBoolean<keyof T[K]> | undefined
+		}
 
 export type RecipeVariantFn<T extends RecipeVariantRecord> = (
 	props?: RecipeSelection<T>,
@@ -26,8 +22,7 @@ export type RecipeVariantFn<T extends RecipeVariantRecord> = (
  * Intended to be used with a JSX component, prefer `RecipeVariant` for a more strict type.
  */
 export type RecipeVariantProps<
-	T extends
-		| RecipeVariantFn<RecipeVariantRecord>
+	T extends | RecipeVariantFn<RecipeVariantRecord>
 		| SlotRecipeVariantFn<string, SlotRecipeVariantRecord<string>>,
 > = Pretty<Parameters<T>[0]>
 
@@ -35,8 +30,7 @@ export type RecipeVariantProps<
  * Extract the variants from a `cva` function.
  */
 export type RecipeVariant<
-	T extends
-		| RecipeVariantFn<RecipeVariantRecord>
+	T extends | RecipeVariantFn<RecipeVariantRecord>
 		| SlotRecipeVariantFn<string, SlotRecipeVariantRecord<string>>,
 > = Exclude<Pretty<Required<RecipeVariantProps<T>>>, undefined>
 
@@ -126,7 +120,8 @@ interface RecipeConfigMeta {
 export interface RecipeConfig<
 	T extends RecipeVariantRecord = RecipeVariantRecord,
 > extends RecipeDefinition<T>,
-		RecipeConfigMeta {}
+	RecipeConfigMeta {
+}
 
 /* -----------------------------------------------------------------------------
  * Recipe / Slot

@@ -29,8 +29,8 @@ type TimelineSlot =
 
 export type TimelineVariantProps = {
 	[key in keyof TimelineVariant]?:
-		| ConditionalValue<TimelineVariant[key]>
-		| undefined
+	| ConditionalValue<TimelineVariant[key]>
+	| undefined
 }
 
 export interface TimelineRecipe {

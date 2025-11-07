@@ -1,9 +1,9 @@
-import { css } from '../css/index.mjs'
-import { getPatternStyles, patternFns } from '../helpers.mjs'
+import {css} from '../css/index.mjs'
+import {getPatternStyles, patternFns} from '../helpers.mjs'
 
 const gridItemConfig = {
-	transform(props, { map }) {
-		const { colSpan, rowSpan, colStart, rowStart, colEnd, rowEnd, ...rest } =
+	transform(props, {map}) {
+		const {colSpan, rowSpan, colStart, rowStart, colEnd, rowEnd, ...rest} =
 			props
 		const spanFn = (v) => (v === 'auto' ? v : `span ${v}`)
 		return {

@@ -214,7 +214,8 @@ export type CssProperty = keyof PropertiesFallback
 export interface CssProperties
 	extends PropertiesFallback<String | Number>,
 		CssVarProperties,
-		ModernCssProperties {}
+		ModernCssProperties {
+}
 
 export interface CssKeyframes {
 	[name: string]: {

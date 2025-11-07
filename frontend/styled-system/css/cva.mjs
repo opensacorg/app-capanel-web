@@ -1,5 +1,5 @@
-import { compact, memo, mergeProps, splitProps, uniq } from '../helpers.mjs'
-import { css, mergeCss } from './css.mjs'
+import {compact, memo, mergeProps, splitProps, uniq} from '../helpers.mjs'
+import {css, mergeCss} from './css.mjs'
 
 const defaults = (conf) => ({
 	base: {},
@@ -10,7 +10,7 @@ const defaults = (conf) => ({
 })
 
 export function cva(config) {
-	const { base, variants, defaultVariants, compoundVariants } = defaults(config)
+	const {base, variants, defaultVariants, compoundVariants} = defaults(config)
 	const getVariantProps = (variants) => ({
 		...defaultVariants,
 		...compact(variants),
@@ -18,7 +18,7 @@ export function cva(config) {
 
 	function resolve(props = {}) {
 		const computedVariants = getVariantProps(props)
-		let variantCss = { ...base }
+		let variantCss = {...base}
 		for (const [key, value] of Object.entries(computedVariants)) {
 			if (variants[key]?.[value]) {
 				variantCss = mergeCss(variantCss, variants[key][value])

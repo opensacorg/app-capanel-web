@@ -102,7 +102,7 @@ function mergeProps(...sources) {
 var isNotNullish = (element) => element != null
 
 function walkObject(target, predicate, options = {}) {
-	const { stop, getKey } = options
+	const {stop, getKey} = options
 
 	function inner(value, path = []) {
 		if (isObjectOrArray(value)) {
@@ -144,8 +144,8 @@ function toResponsiveObject(values, breakpoints) {
 }
 
 function normalizeStyleObject(styles, context, shorthand = true) {
-	const { utility, conditions } = context
-	const { hasShorthand, resolveShorthand } = utility
+	const {utility, conditions} = context
+	const {hasShorthand, resolveShorthand} = utility
 	return walkObject(
 		styles,
 		(value) => {
@@ -166,13 +166,13 @@ function normalizeStyleObject(styles, context, shorthand = true) {
 var fallbackCondition = {
 	shift: (v) => v,
 	finalize: (v) => v,
-	breakpoints: { keys: [] },
+	breakpoints: {keys: []},
 }
 var sanitize = (value) =>
 	typeof value === 'string' ? value.replaceAll(/[\n\s]+/g, ' ') : value
 
 function createCss(context) {
-	const { utility, hash, conditions: conds = fallbackCondition } = context
+	const {utility, hash, conditions: conds = fallbackCondition} = context
 	const formatClassName = (str) =>
 		[utility.prefix, str].filter(Boolean).join('-')
 	const hashFn = (conditions, className) => {
@@ -189,7 +189,7 @@ function createCss(context) {
 		}
 		return result
 	}
-	return memo(({ base, ...styles } = {}) => {
+	return memo(({base, ...styles} = {}) => {
 		const styleObject = Object.assign(styles, base)
 		const normalizedObject = normalizeStyleObject(styleObject, context)
 		const classNames = /* @__PURE__ */ new Set()
@@ -233,7 +233,7 @@ function createMergeCss(context) {
 		return Object.assign({}, ...resolve(styles))
 	}
 
-	return { mergeCss: memo(mergeCss), assignCss }
+	return {mergeCss: memo(mergeCss), assignCss}
 }
 
 // src/hypenate-property.ts
@@ -365,7 +365,7 @@ export {
 }
 
 export function __spreadValues(a, b) {
-	return { ...a, ...b }
+	return {...a, ...b}
 }
 
 export function __objRest(source, exclude) {

@@ -1,5 +1,5 @@
-import { css } from '../css/index.mjs'
-import { getPatternStyles, patternFns } from '../helpers.mjs'
+import {css} from '../css/index.mjs'
+import {getPatternStyles, patternFns} from '../helpers.mjs'
 
 const containerConfig = {
 	transform(props) {
@@ -7,7 +7,7 @@ const containerConfig = {
 			position: 'relative',
 			maxWidth: '8xl',
 			mx: 'auto',
-			px: { base: '4', md: '6', lg: '8' },
+			px: {base: '4', md: '6', lg: '8'},
 			...props,
 		}
 	},

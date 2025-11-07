@@ -17,8 +17,8 @@ type QrCodeSlot = 'root' | 'frame' | 'pattern' | 'overlay' | 'downloadTrigger'
 
 export type QrCodeVariantProps = {
 	[key in keyof QrCodeVariant]?:
-		| ConditionalValue<QrCodeVariant[key]>
-		| undefined
+	| ConditionalValue<QrCodeVariant[key]>
+	| undefined
 }
 
 export interface QrCodeRecipe {

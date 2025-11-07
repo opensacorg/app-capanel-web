@@ -1,6 +1,6 @@
-import { compact, getSlotRecipes, memo, splitProps } from '../helpers.mjs'
-import { cva } from './cva.mjs'
-import { cx } from './cx.mjs'
+import {compact, getSlotRecipes, memo, splitProps} from '../helpers.mjs'
+import {cva} from './cva.mjs'
+import {cx} from './cx.mjs'
 
 export function sva(config) {
 	const slots = Object.entries(getSlotRecipes(config)).map(

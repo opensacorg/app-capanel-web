@@ -17,8 +17,8 @@ type FieldsetSlot = 'root' | 'errorText' | 'helperText' | 'legend' | 'content'
 
 export type FieldsetVariantProps = {
 	[key in keyof FieldsetVariant]?:
-		| ConditionalValue<FieldsetVariant[key]>
-		| undefined
+	| ConditionalValue<FieldsetVariant[key]>
+	| undefined
 }
 
 export interface FieldsetRecipe {

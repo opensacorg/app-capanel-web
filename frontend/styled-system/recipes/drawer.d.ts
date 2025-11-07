@@ -33,8 +33,8 @@ type DrawerSlot =
 
 export type DrawerVariantProps = {
 	[key in keyof DrawerVariant]?:
-		| ConditionalValue<DrawerVariant[key]>
-		| undefined
+	| ConditionalValue<DrawerVariant[key]>
+	| undefined
 }
 
 export interface DrawerRecipe {

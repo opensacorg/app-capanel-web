@@ -21,8 +21,8 @@ type CheckboxSlot = 'root' | 'label' | 'control' | 'indicator' | 'group'
 
 export type CheckboxVariantProps = {
 	[key in keyof CheckboxVariant]?:
-		| ConditionalValue<CheckboxVariant[key]>
-		| undefined
+	| ConditionalValue<CheckboxVariant[key]>
+	| undefined
 }
 
 export interface CheckboxRecipe {

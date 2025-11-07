@@ -26,8 +26,8 @@ type ProgressCircleSlot =
 
 export type ProgressCircleVariantProps = {
 	[key in keyof ProgressCircleVariant]?:
-		| ConditionalValue<ProgressCircleVariant[key]>
-		| undefined
+	| ConditionalValue<ProgressCircleVariant[key]>
+	| undefined
 }
 
 export interface ProgressCircleRecipe {

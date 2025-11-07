@@ -25,8 +25,8 @@ type DataListSlot = 'root' | 'item' | 'itemLabel' | 'itemValue'
 
 export type DataListVariantProps = {
 	[key in keyof DataListVariant]?:
-		| ConditionalValue<DataListVariant[key]>
-		| undefined
+	| ConditionalValue<DataListVariant[key]>
+	| undefined
 }
 
 export interface DataListRecipe {

@@ -12,8 +12,8 @@ type CollapsibleSlot = 'root' | 'trigger' | 'content' | 'indicator'
 
 export type CollapsibleVariantProps = {
 	[key in keyof CollapsibleVariant]?:
-		| ConditionalValue<CollapsibleVariant[key]>
-		| undefined
+	| ConditionalValue<CollapsibleVariant[key]>
+	| undefined
 }
 
 export interface CollapsibleRecipe {

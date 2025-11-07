@@ -36,8 +36,8 @@ type ProgressSlot =
 
 export type ProgressVariantProps = {
 	[key in keyof ProgressVariant]?:
-		| ConditionalValue<ProgressVariant[key]>
-		| undefined
+	| ConditionalValue<ProgressVariant[key]>
+	| undefined
 }
 
 export interface ProgressRecipe {

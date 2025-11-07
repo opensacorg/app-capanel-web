@@ -17,8 +17,8 @@ type RatingGroupSlot = 'root' | 'label' | 'item' | 'control' | 'itemIndicator'
 
 export type RatingGroupVariantProps = {
 	[key in keyof RatingGroupVariant]?:
-		| ConditionalValue<RatingGroupVariant[key]>
-		| undefined
+	| ConditionalValue<RatingGroupVariant[key]>
+	| undefined
 }
 
 export interface RatingGroupRecipe {

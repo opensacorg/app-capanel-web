@@ -10,7 +10,8 @@ export interface VstackProperties {
 
 interface VstackStyles
 	extends VstackProperties,
-		DistributiveOmit<SystemStyleObject, keyof VstackProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof VstackProperties> {
+}
 
 interface VstackPatternFn {
 	raw: (styles?: VstackStyles) => SystemStyleObject

@@ -17,8 +17,8 @@ type HoverCardSlot = 'arrow' | 'arrowTip' | 'trigger' | 'positioner' | 'content'
 
 export type HoverCardVariantProps = {
 	[key in keyof HoverCardVariant]?:
-		| ConditionalValue<HoverCardVariant[key]>
-		| undefined
+	| ConditionalValue<HoverCardVariant[key]>
+	| undefined
 }
 
 export interface HoverCardRecipe {

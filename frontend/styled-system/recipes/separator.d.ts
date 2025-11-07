@@ -23,8 +23,8 @@ type SeparatorVariantMap = {
 
 export type SeparatorVariantProps = {
 	[key in keyof SeparatorVariant]?:
-		| ConditionalValue<SeparatorVariant[key]>
-		| undefined
+	| ConditionalValue<SeparatorVariant[key]>
+	| undefined
 }
 
 export interface SeparatorRecipe {

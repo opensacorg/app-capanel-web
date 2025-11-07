@@ -1,9 +1,9 @@
-import { css } from '../css/index.mjs'
-import { getPatternStyles, patternFns } from '../helpers.mjs'
+import {css} from '../css/index.mjs'
+import {getPatternStyles, patternFns} from '../helpers.mjs'
 
 const centerConfig = {
 	transform(props) {
-		const { inline, ...rest } = props
+		const {inline, ...rest} = props
 		return {
 			display: inline ? 'inline-flex' : 'flex',
 			alignItems: 'center',

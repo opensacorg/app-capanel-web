@@ -12,8 +12,8 @@ type TooltipSlot = 'trigger' | 'arrow' | 'arrowTip' | 'positioner' | 'content'
 
 export type TooltipVariantProps = {
 	[key in keyof TooltipVariant]?:
-		| ConditionalValue<TooltipVariant[key]>
-		| undefined
+	| ConditionalValue<TooltipVariant[key]>
+	| undefined
 }
 
 export interface TooltipRecipe {

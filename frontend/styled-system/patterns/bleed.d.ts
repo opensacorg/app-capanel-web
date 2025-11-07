@@ -10,7 +10,8 @@ export interface BleedProperties {
 
 interface BleedStyles
 	extends BleedProperties,
-		DistributiveOmit<SystemStyleObject, keyof BleedProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof BleedProperties> {
+}
 
 interface BleedPatternFn {
 	raw: (styles?: BleedStyles) => SystemStyleObject

@@ -36,8 +36,8 @@ type SliderSlot =
 
 export type SliderVariantProps = {
 	[key in keyof SliderVariant]?:
-		| ConditionalValue<SliderVariant[key]>
-		| undefined
+	| ConditionalValue<SliderVariant[key]>
+	| undefined
 }
 
 export interface SliderRecipe {

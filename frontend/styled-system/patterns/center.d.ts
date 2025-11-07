@@ -8,7 +8,8 @@ export interface CenterProperties {
 
 interface CenterStyles
 	extends CenterProperties,
-		DistributiveOmit<SystemStyleObject, keyof CenterProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof CenterProperties> {
+}
 
 interface CenterPatternFn {
 	raw: (styles?: CenterStyles) => SystemStyleObject

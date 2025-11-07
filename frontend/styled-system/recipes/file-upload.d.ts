@@ -27,8 +27,8 @@ type FileUploadSlot =
 
 export type FileUploadVariantProps = {
 	[key in keyof FileUploadVariant]?:
-		| ConditionalValue<FileUploadVariant[key]>
-		| undefined
+	| ConditionalValue<FileUploadVariant[key]>
+	| undefined
 }
 
 export interface FileUploadRecipe {

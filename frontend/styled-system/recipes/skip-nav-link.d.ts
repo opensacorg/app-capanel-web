@@ -10,8 +10,8 @@ type SkipNavLinkVariantMap = {
 
 export type SkipNavLinkVariantProps = {
 	[key in keyof SkipNavLinkVariant]?:
-		| ConditionalValue<SkipNavLinkVariant[key]>
-		| undefined
+	| ConditionalValue<SkipNavLinkVariant[key]>
+	| undefined
 }
 
 export interface SkipNavLinkRecipe {

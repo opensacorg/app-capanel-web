@@ -9,7 +9,8 @@ export interface CircleProperties {
 
 interface CircleStyles
 	extends CircleProperties,
-		DistributiveOmit<SystemStyleObject, keyof CircleProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof CircleProperties> {
+}
 
 interface CirclePatternFn {
 	raw: (styles?: CircleStyles) => SystemStyleObject

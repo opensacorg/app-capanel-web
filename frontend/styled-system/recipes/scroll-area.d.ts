@@ -27,8 +27,8 @@ type ScrollAreaSlot =
 
 export type ScrollAreaVariantProps = {
 	[key in keyof ScrollAreaVariant]?:
-		| ConditionalValue<ScrollAreaVariant[key]>
-		| undefined
+	| ConditionalValue<ScrollAreaVariant[key]>
+	| undefined
 }
 
 export interface ScrollAreaRecipe {

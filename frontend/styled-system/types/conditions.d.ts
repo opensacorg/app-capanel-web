@@ -274,8 +274,8 @@ export type ConditionalValue<V> =
 	| V
 	| Array<V | null>
 	| {
-			[K in keyof Conditions]?: ConditionalValue<V>
-	  }
+	[K in keyof Conditions]?: ConditionalValue<V>
+}
 
 export type Nested<P> = P & {
 	[K in Selectors]?: Nested<P>

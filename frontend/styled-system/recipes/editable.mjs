@@ -1,10 +1,5 @@
-import {
-	compact,
-	getSlotCompoundVariant,
-	memo,
-	splitProps,
-} from '../helpers.mjs'
-import { createRecipe } from './create-recipe.mjs'
+import {compact, getSlotCompoundVariant, memo, splitProps,} from '../helpers.mjs'
+import {createRecipe} from './create-recipe.mjs'
 
 const editableDefaultVariants = {
 	size: 'md',

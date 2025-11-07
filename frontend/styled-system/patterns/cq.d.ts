@@ -14,7 +14,8 @@ export interface CqProperties {
 
 interface CqStyles
 	extends CqProperties,
-		DistributiveOmit<SystemStyleObject, keyof CqProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof CqProperties> {
+}
 
 interface CqPatternFn {
 	raw: (styles?: CqStyles) => SystemStyleObject

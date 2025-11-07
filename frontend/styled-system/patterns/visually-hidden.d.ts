@@ -6,7 +6,8 @@ export type VisuallyHiddenProperties = {}
 
 interface VisuallyHiddenStyles
 	extends VisuallyHiddenProperties,
-		DistributiveOmit<SystemStyleObject, keyof VisuallyHiddenProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof VisuallyHiddenProperties> {
+}
 
 interface VisuallyHiddenPatternFn {
 	raw: (styles?: VisuallyHiddenStyles) => SystemStyleObject

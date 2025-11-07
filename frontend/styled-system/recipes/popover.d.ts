@@ -30,8 +30,8 @@ type PopoverSlot =
 
 export type PopoverVariantProps = {
 	[key in keyof PopoverVariant]?:
-		| ConditionalValue<PopoverVariant[key]>
-		| undefined
+	| ConditionalValue<PopoverVariant[key]>
+	| undefined
 }
 
 export interface PopoverRecipe {

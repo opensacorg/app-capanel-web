@@ -1,12 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import type * as Panda from '@pandacss/dev'
-import type {
-	RecipeConfig,
-	RecipeVariantRecord,
-	SlotRecipeConfig,
-	SlotRecipeVariantRecord,
-} from './recipe'
+import type { RecipeConfig, RecipeVariantRecord, SlotRecipeConfig, SlotRecipeVariantRecord, } from './recipe'
 import type { Parts } from './parts'
 import type { PatternConfig, PatternProperties } from './pattern'
 import type { GlobalStyleObject, SystemStyleObject } from './system-types'
