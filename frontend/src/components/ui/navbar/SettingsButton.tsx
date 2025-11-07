@@ -10,8 +10,7 @@ export default function SettingsButton({className}: { className?: string }) {
     return (
         <div className={`${className} `}>
             <Menu.Root
-                navigate={({value, node}) => {
-                    console.log('a');
+                navigate={({value}) => {
                     navigate({to: `/${value}`});
                 }}
             >
