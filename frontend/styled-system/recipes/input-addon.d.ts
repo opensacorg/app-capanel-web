@@ -19,8 +19,8 @@ type InputAddonVariantMap = {
 
 export type InputAddonVariantProps = {
 	[key in keyof InputAddonVariant]?:
-		| ConditionalValue<InputAddonVariant[key]>
-		| undefined
+	| ConditionalValue<InputAddonVariant[key]>
+	| undefined
 }
 
 export interface InputAddonRecipe {

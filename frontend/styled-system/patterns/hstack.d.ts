@@ -10,7 +10,8 @@ export interface HstackProperties {
 
 interface HstackStyles
 	extends HstackProperties,
-		DistributiveOmit<SystemStyleObject, keyof HstackProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof HstackProperties> {
+}
 
 interface HstackPatternFn {
 	raw: (styles?: HstackStyles) => SystemStyleObject

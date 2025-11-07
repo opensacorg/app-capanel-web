@@ -27,16 +27,8 @@ import {
 	FiUser,
 	FiUsers,
 } from 'react-icons/fi'
-import {
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-} from '../../components/ui/card'
-import {
-	useCensusDataById,
-	useTotalEnrollment,
-} from '../../hooks/useCensusData'
+import { Card, CardBody, CardFooter, CardHeader, } from '../../components/ui/card'
+import { useCensusDataById, useTotalEnrollment, } from '../../hooks/useCensusData'
 
 // Component to display total enrollment with loading and error states
 function TotalEnrollmentDisplay() {
@@ -50,7 +42,7 @@ function TotalEnrollmentDisplay() {
 				alignItems='center'
 				height='40px'
 			>
-				<Spinner size='md' color='blue.500' />
+				<Spinner size='md' color='blue.500'/>
 			</Box>
 		)
 	}
@@ -107,6 +99,7 @@ function CensusDataSearchCard() {
 	} = useCensusDataById(searchId)
 
 	// Component to display census data content
+	// @ts-ignore
 	function CensusDataContent({ censusData, isLoading, isError, error }) {
 		if (isLoading) {
 			return (
@@ -114,8 +107,8 @@ function CensusDataSearchCard() {
 					<Text fontSize='sm' color='fg.muted' fontWeight='medium'>
 						Census Data
 					</Text>
-					<Skeleton height='32px' width='120px' />
-					<Skeleton height='16px' width='100px' />
+					<Skeleton height='32px' width='120px'/>
+					<Skeleton height='16px' width='100px'/>
 				</VStack>
 			)
 		}
@@ -160,7 +153,7 @@ function CensusDataSearchCard() {
 		return (
 			<VStack align='stretch' gap={2}>
 				<HStack justify='space-between'>
-					<VStack align='start' spacing={0}>
+					<VStack align='start' gap={0}>
 						<Text fontSize='xs' color='fg.muted'>
 							{data.school_name || 'Unknown School'}
 						</Text>
@@ -168,7 +161,7 @@ function CensusDataSearchCard() {
 							Total Enrollment
 						</Text>
 					</VStack>
-					<Icon as={FiHome} color='blue.500' boxSize={4} />
+					<Icon as={FiHome} color='blue.500' boxSize={4}/>
 				</HStack>
 				<Text fontSize='2xl' fontWeight='bold' color='blue.500'>
 					{data.total_enr?.toLocaleString() || '0'}
@@ -226,7 +219,7 @@ function CensusDataSearchCard() {
 						-
 					</Text>
 					<HStack>
-						<Icon as={FiUsers} color='gray.500' boxSize={3} />
+						<Icon as={FiUsers} color='gray.500' boxSize={3}/>
 						<Text fontSize='sm' color='fg.muted'>
 							No data selected
 						</Text>
@@ -243,7 +236,7 @@ function CensusDataSearchCard() {
 						{searchId ? '✓' : '-'}
 					</Text>
 					<HStack>
-						<Icon as={FiActivity} color='blue.500' boxSize={3} />
+						<Icon as={FiActivity} color='blue.500' boxSize={3}/>
 						<Text fontSize='sm' color='fg.muted'>
 							{searchId ? 'Data loaded' : 'No recent searches'}
 						</Text>
@@ -295,9 +288,9 @@ function Dashboard2Page() {
 										<Text fontSize='sm' color='fg.muted' fontWeight='medium'>
 											Total Users
 										</Text>
-										<TotalEnrollmentDisplay />
+										<TotalEnrollmentDisplay/>
 										<HStack>
-											<Icon as={FiArrowUp} color='green.500' boxSize={3} />
+											<Icon as={FiArrowUp} color='green.500' boxSize={3}/>
 											<Text fontSize='sm' color='green.500'>
 												+12.5% from last month
 											</Text>
@@ -314,7 +307,7 @@ function Dashboard2Page() {
 											1,987
 										</Text>
 										<HStack>
-											<Icon as={FiArrowUp} color='green.500' boxSize={3} />
+											<Icon as={FiArrowUp} color='green.500' boxSize={3}/>
 											<Text fontSize='sm' color='green.500'>
 												+8.3% from last month
 											</Text>
@@ -331,7 +324,7 @@ function Dashboard2Page() {
 											142
 										</Text>
 										<HStack>
-											<Icon as={FiArrowDown} color='red.500' boxSize={3} />
+											<Icon as={FiArrowDown} color='red.500' boxSize={3}/>
 											<Text fontSize='sm' color='red.500'>
 												-5.2% from last week
 											</Text>
@@ -344,7 +337,7 @@ function Dashboard2Page() {
 
 					<Card variant='elevated'>
 						<CardBody>
-							<CensusDataSearchCard />
+							<CensusDataSearchCard/>
 						</CardBody>
 					</Card>
 
@@ -359,14 +352,14 @@ function Dashboard2Page() {
 										1,234
 									</Text>
 									<HStack>
-										<Icon as={FiArrowDown} color='red.500' boxSize={3} />
+										<Icon as={FiArrowDown} color='red.500' boxSize={3}/>
 										<Text fontSize='sm' color='red.500'>
 											-3.1%
 										</Text>
 									</HStack>
 								</Box>
 								<Box p={3} bg='orange.50' borderRadius='lg'>
-									<Icon as={FiShoppingCart} boxSize={6} color='orange.500' />
+									<Icon as={FiShoppingCart} boxSize={6} color='orange.500'/>
 								</Box>
 							</HStack>
 						</CardBody>
@@ -383,14 +376,14 @@ function Dashboard2Page() {
 										15.3%
 									</Text>
 									<HStack>
-										<Icon as={FiArrowUp} color='green.500' boxSize={3} />
+										<Icon as={FiArrowUp} color='green.500' boxSize={3}/>
 										<Text fontSize='sm' color='green.500'>
 											+2.4%
 										</Text>
 									</HStack>
 								</Box>
 								<Box p={3} bg='purple.50' borderRadius='lg'>
-									<Icon as={FiTrendingUp} boxSize={6} color='purple.500' />
+									<Icon as={FiTrendingUp} boxSize={6} color='purple.500'/>
 								</Box>
 							</HStack>
 						</CardBody>
@@ -413,7 +406,7 @@ function Dashboard2Page() {
 							<VStack gap={4} align='stretch'>
 								<HStack>
 									<Box p={2} bg='blue.50' borderRadius='md'>
-										<Icon as={FiUser} color='blue.500' />
+										<Icon as={FiUser} color='blue.500'/>
 									</Box>
 									<Box flex={1}>
 										<Text fontWeight='medium'>New user registered</Text>
@@ -428,7 +421,7 @@ function Dashboard2Page() {
 
 								<HStack>
 									<Box p={2} bg='green.50' borderRadius='md'>
-										<Icon as={FiDollarSign} color='green.500' />
+										<Icon as={FiDollarSign} color='green.500'/>
 									</Box>
 									<Box flex={1}>
 										<Text fontWeight='medium'>Payment received</Text>
@@ -443,7 +436,7 @@ function Dashboard2Page() {
 
 								<HStack>
 									<Box p={2} bg='orange.50' borderRadius='md'>
-										<Icon as={FiShoppingCart} color='orange.500' />
+										<Icon as={FiShoppingCart} color='orange.500'/>
 									</Box>
 									<Box flex={1}>
 										<Text fontWeight='medium'>New order placed</Text>
@@ -472,15 +465,15 @@ function Dashboard2Page() {
 						<CardBody>
 							<VStack gap={3}>
 								<Button width='full' colorScheme='blue' variant='solid'>
-									<Icon as={FiUser} mr={2} />
+									<Icon as={FiUser} mr={2}/>
 									Add New User
 								</Button>
 								<Button width='full' colorScheme='green' variant='outline'>
-									<Icon as={FiActivity} mr={2} />
+									<Icon as={FiActivity} mr={2}/>
 									View Analytics
 								</Button>
 								<Button width='full' colorScheme='gray' variant='outline'>
-									<Icon as={FiSettings} mr={2} />
+									<Icon as={FiSettings} mr={2}/>
 									Settings
 								</Button>
 							</VStack>
@@ -532,7 +525,7 @@ function Dashboard2Page() {
 										234ms
 									</Text>
 									<HStack justify='center'>
-										<Icon as={FiArrowDown} color='green.500' boxSize={3} />
+										<Icon as={FiArrowDown} color='green.500' boxSize={3}/>
 										<Text fontSize='sm' color='green.500'>
 											-12ms from last hour
 										</Text>

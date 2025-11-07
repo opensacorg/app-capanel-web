@@ -19,8 +19,8 @@ type SkeletonVariantMap = {
 
 export type SkeletonVariantProps = {
 	[key in keyof SkeletonVariant]?:
-		| ConditionalValue<SkeletonVariant[key]>
-		| undefined
+	| ConditionalValue<SkeletonVariant[key]>
+	| undefined
 }
 
 export interface SkeletonRecipe {

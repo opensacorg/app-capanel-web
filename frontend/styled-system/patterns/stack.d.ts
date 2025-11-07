@@ -12,7 +12,8 @@ export interface StackProperties {
 
 interface StackStyles
 	extends StackProperties,
-		DistributiveOmit<SystemStyleObject, keyof StackProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof StackProperties> {
+}
 
 interface StackPatternFn {
 	raw: (styles?: StackStyles) => SystemStyleObject

@@ -1,9 +1,9 @@
-import { css } from '../css/index.mjs'
-import { getPatternStyles, patternFns } from '../helpers.mjs'
+import {css} from '../css/index.mjs'
+import {getPatternStyles, patternFns} from '../helpers.mjs'
 
 const hstackConfig = {
 	transform(props) {
-		const { justify, gap, ...rest } = props
+		const {justify, gap, ...rest} = props
 		return {
 			display: 'flex',
 			alignItems: 'center',
@@ -13,7 +13,7 @@ const hstackConfig = {
 			...rest,
 		}
 	},
-	defaultValues: { gap: '10px' },
+	defaultValues: {gap: '10px'},
 }
 
 export const getHstackStyle = (styles = {}) => {

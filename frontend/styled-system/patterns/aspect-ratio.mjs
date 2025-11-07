@@ -1,9 +1,9 @@
-import { css } from '../css/index.mjs'
-import { getPatternStyles, patternFns } from '../helpers.mjs'
+import {css} from '../css/index.mjs'
+import {getPatternStyles, patternFns} from '../helpers.mjs'
 
 const aspectRatioConfig = {
-	transform(props, { map }) {
-		const { ratio = 4 / 3, ...rest } = props
+	transform(props, {map}) {
+		const {ratio = 4 / 3, ...rest} = props
 		return {
 			position: 'relative',
 			_before: {

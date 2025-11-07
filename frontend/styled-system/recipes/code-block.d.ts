@@ -31,8 +31,8 @@ type CodeBlockSlot =
 
 export type CodeBlockVariantProps = {
 	[key in keyof CodeBlockVariant]?:
-		| ConditionalValue<CodeBlockVariant[key]>
-		| undefined
+	| ConditionalValue<CodeBlockVariant[key]>
+	| undefined
 }
 
 export interface CodeBlockRecipe {

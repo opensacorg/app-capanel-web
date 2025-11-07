@@ -17,8 +17,8 @@ type ActionBarSlot =
 
 export type ActionBarVariantProps = {
 	[key in keyof ActionBarVariant]?:
-		| ConditionalValue<ActionBarVariant[key]>
-		| undefined
+	| ConditionalValue<ActionBarVariant[key]>
+	| undefined
 }
 
 export interface ActionBarRecipe {

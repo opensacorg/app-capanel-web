@@ -21,8 +21,8 @@ type BlockquoteSlot = 'root' | 'icon' | 'content' | 'caption'
 
 export type BlockquoteVariantProps = {
 	[key in keyof BlockquoteVariant]?:
-		| ConditionalValue<BlockquoteVariant[key]>
-		| undefined
+	| ConditionalValue<BlockquoteVariant[key]>
+	| undefined
 }
 
 export interface BlockquoteRecipe {

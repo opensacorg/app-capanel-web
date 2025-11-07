@@ -1,5 +1,5 @@
-import { memo, splitProps } from '../helpers.mjs'
-import { createRecipe, mergeRecipes } from './create-recipe.mjs'
+import {memo, splitProps} from '../helpers.mjs'
+import {createRecipe, mergeRecipes} from './create-recipe.mjs'
 
 const checkmarkFn = /* @__PURE__ */ createRecipe(
 	'checkmark',

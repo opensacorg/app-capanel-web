@@ -9,7 +9,8 @@ export interface SpacerProperties {
 
 interface SpacerStyles
 	extends SpacerProperties,
-		DistributiveOmit<SystemStyleObject, keyof SpacerProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof SpacerProperties> {
+}
 
 interface SpacerPatternFn {
 	raw: (styles?: SpacerStyles) => SystemStyleObject

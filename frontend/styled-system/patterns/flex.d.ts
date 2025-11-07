@@ -15,7 +15,8 @@ export interface FlexProperties {
 
 interface FlexStyles
 	extends FlexProperties,
-		DistributiveOmit<SystemStyleObject, keyof FlexProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof FlexProperties> {
+}
 
 interface FlexPatternFn {
 	raw: (styles?: FlexStyles) => SystemStyleObject

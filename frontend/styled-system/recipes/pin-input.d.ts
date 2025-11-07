@@ -22,8 +22,8 @@ type PinInputSlot = 'root' | 'label' | 'input' | 'control'
 
 export type PinInputVariantProps = {
 	[key in keyof PinInputVariant]?:
-		| ConditionalValue<PinInputVariant[key]>
-		| undefined
+	| ConditionalValue<PinInputVariant[key]>
+	| undefined
 }
 
 export interface PinInputRecipe {

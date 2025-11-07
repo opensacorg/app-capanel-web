@@ -21,8 +21,8 @@ type NativeSelectSlot = 'root' | 'field' | 'indicator'
 
 export type NativeSelectVariantProps = {
 	[key in keyof NativeSelectVariant]?:
-		| ConditionalValue<NativeSelectVariant[key]>
-		| undefined
+	| ConditionalValue<NativeSelectVariant[key]>
+	| undefined
 }
 
 export interface NativeSelectRecipe {

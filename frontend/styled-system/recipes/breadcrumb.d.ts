@@ -28,8 +28,8 @@ type BreadcrumbSlot =
 
 export type BreadcrumbVariantProps = {
 	[key in keyof BreadcrumbVariant]?:
-		| ConditionalValue<BreadcrumbVariant[key]>
-		| undefined
+	| ConditionalValue<BreadcrumbVariant[key]>
+	| undefined
 }
 
 export interface BreadcrumbRecipe {

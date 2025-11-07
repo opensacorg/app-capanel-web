@@ -46,8 +46,8 @@ type DialogSlot =
 
 export type DialogVariantProps = {
 	[key in keyof DialogVariant]?:
-		| ConditionalValue<DialogVariant[key]>
-		| undefined
+	| ConditionalValue<DialogVariant[key]>
+	| undefined
 }
 
 export interface DialogRecipe {

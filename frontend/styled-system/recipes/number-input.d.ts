@@ -29,8 +29,8 @@ type NumberInputSlot =
 
 export type NumberInputVariantProps = {
 	[key in keyof NumberInputVariant]?:
-		| ConditionalValue<NumberInputVariant[key]>
-		| undefined
+	| ConditionalValue<NumberInputVariant[key]>
+	| undefined
 }
 
 export interface NumberInputRecipe {

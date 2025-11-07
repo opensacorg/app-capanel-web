@@ -19,8 +19,8 @@ type RadiomarkVariantMap = {
 
 export type RadiomarkVariantProps = {
 	[key in keyof RadiomarkVariant]?:
-		| ConditionalValue<RadiomarkVariant[key]>
-		| undefined
+	| ConditionalValue<RadiomarkVariant[key]>
+	| undefined
 }
 
 export interface RadiomarkRecipe {

@@ -13,8 +13,8 @@ type ContainerVariantMap = {
 
 export type ContainerVariantProps = {
 	[key in keyof ContainerVariant]?:
-		| ConditionalValue<ContainerVariant[key]>
-		| undefined
+	| ConditionalValue<ContainerVariant[key]>
+	| undefined
 }
 
 export interface ContainerRecipe {

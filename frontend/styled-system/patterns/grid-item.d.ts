@@ -13,7 +13,8 @@ export interface GridItemProperties {
 
 interface GridItemStyles
 	extends GridItemProperties,
-		DistributiveOmit<SystemStyleObject, keyof GridItemProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof GridItemProperties> {
+}
 
 interface GridItemPatternFn {
 	raw: (styles?: GridItemStyles) => SystemStyleObject

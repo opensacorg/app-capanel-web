@@ -1,9 +1,9 @@
-import { css } from '../css/index.mjs'
-import { getPatternStyles, patternFns } from '../helpers.mjs'
+import {css} from '../css/index.mjs'
+import {getPatternStyles, patternFns} from '../helpers.mjs'
 
 const bleedConfig = {
-	transform(props, { map, isCssUnit, isCssVar }) {
-		const { inline, block, ...rest } = props
+	transform(props, {map, isCssUnit, isCssVar}) {
+		const {inline, block, ...rest} = props
 		const valueFn = (v) =>
 			isCssUnit(v) || isCssVar(v) ? v : `token(spacing.${v}, ${v})`
 		return {
@@ -14,7 +14,7 @@ const bleedConfig = {
 			...rest,
 		}
 	},
-	defaultValues: { inline: '0', block: '0' },
+	defaultValues: {inline: '0', block: '0'},
 }
 
 export const getBleedStyle = (styles = {}) => {

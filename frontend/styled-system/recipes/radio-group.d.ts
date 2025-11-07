@@ -29,8 +29,8 @@ type RadioGroupSlot =
 
 export type RadioGroupVariantProps = {
 	[key in keyof RadioGroupVariant]?:
-		| ConditionalValue<RadioGroupVariant[key]>
-		| undefined
+	| ConditionalValue<RadioGroupVariant[key]>
+	| undefined
 }
 
 export interface RadioGroupRecipe {

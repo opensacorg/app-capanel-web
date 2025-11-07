@@ -27,8 +27,8 @@ type EditableSlot =
 
 export type EditableVariantProps = {
 	[key in keyof EditableVariant]?:
-		| ConditionalValue<EditableVariant[key]>
-		| undefined
+	| ConditionalValue<EditableVariant[key]>
+	| undefined
 }
 
 export interface EditableRecipe {

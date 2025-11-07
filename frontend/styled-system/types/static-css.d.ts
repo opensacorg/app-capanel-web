@@ -41,8 +41,8 @@ export interface StaticCssOptions {
 	recipes?:
 		| '*'
 		| {
-				[recipe: string]: RecipeRule[]
-		  }
+		[recipe: string]: RecipeRule[]
+	}
 	/**
 	 * The css patterns to generate.
 	 */

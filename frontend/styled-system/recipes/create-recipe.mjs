@@ -1,14 +1,8 @@
-import { finalizeConditions, sortConditions } from '../css/conditions.mjs'
-import { css } from '../css/css.mjs'
-import { assertCompoundVariant, getCompoundVariantCss } from '../css/cva.mjs'
-import { cx } from '../css/cx.mjs'
-import {
-	compact,
-	createCss,
-	splitProps,
-	uniq,
-	withoutSpace,
-} from '../helpers.mjs'
+import {finalizeConditions, sortConditions} from '../css/conditions.mjs'
+import {css} from '../css/css.mjs'
+import {assertCompoundVariant, getCompoundVariantCss} from '../css/cva.mjs'
+import {cx} from '../css/cx.mjs'
+import {compact, createCss, splitProps, uniq, withoutSpace,} from '../helpers.mjs'
 
 export const createRecipe = (name, defaultVariants, compoundVariants) => {
 	const getVariantProps = (variants) => {
@@ -24,18 +18,18 @@ export const createRecipe = (name, defaultVariants, compoundVariants) => {
 			assertCompoundVariant(name, compoundVariants, variants, prop)
 
 			if (value === '__ignore__') {
-				return { className: name }
+				return {className: name}
 			}
 
 			value = withoutSpace(value)
-			return { className: `${name}--${prop}_${value}` }
+			return {className: `${name}--${prop}_${value}`}
 		}
 
 		const recipeCss = createCss({
 			conditions: {
 				shift: sortConditions,
 				finalize: finalizeConditions,
-				breakpoints: { keys: ['base', 'sm', 'md', 'lg', 'xl', '2xl'] },
+				breakpoints: {keys: ['base', 'sm', 'md', 'lg', 'xl', '2xl']},
 			},
 			utility: {
 				toHash: (path, hashFn) => hashFn(path.join(':')),

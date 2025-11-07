@@ -26,8 +26,8 @@ type HeadingVariantMap = {
 
 export type HeadingVariantProps = {
 	[key in keyof HeadingVariant]?:
-		| ConditionalValue<HeadingVariant[key]>
-		| undefined
+	| ConditionalValue<HeadingVariant[key]>
+	| undefined
 }
 
 export interface HeadingRecipe {

@@ -11,7 +11,8 @@ interface AspectRatioStyles
 		DistributiveOmit<
 			SystemStyleObject,
 			keyof AspectRatioProperties | 'aspectRatio'
-		> {}
+		> {
+}
 
 interface AspectRatioPatternFn {
 	raw: (styles?: AspectRatioStyles) => SystemStyleObject

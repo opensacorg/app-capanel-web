@@ -9,7 +9,8 @@ export interface SquareProperties {
 
 interface SquareStyles
 	extends SquareProperties,
-		DistributiveOmit<SystemStyleObject, keyof SquareProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof SquareProperties> {
+}
 
 interface SquarePatternFn {
 	raw: (styles?: SquareStyles) => SystemStyleObject

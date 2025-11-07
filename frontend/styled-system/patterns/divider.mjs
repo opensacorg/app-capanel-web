@@ -1,9 +1,9 @@
-import { css } from '../css/index.mjs'
-import { getPatternStyles, patternFns } from '../helpers.mjs'
+import {css} from '../css/index.mjs'
+import {getPatternStyles, patternFns} from '../helpers.mjs'
 
 const dividerConfig = {
-	transform(props, { map }) {
-		const { orientation, thickness, color, ...rest } = props
+	transform(props, {map}) {
+		const {orientation, thickness, color, ...rest} = props
 		return {
 			'--thickness': thickness,
 			width: map(orientation, (v) => (v === 'vertical' ? void 0 : '100%')),
@@ -18,7 +18,7 @@ const dividerConfig = {
 			...rest,
 		}
 	},
-	defaultValues: { orientation: 'horizontal', thickness: '1px' },
+	defaultValues: {orientation: 'horizontal', thickness: '1px'},
 }
 
 export const getDividerStyle = (styles = {}) => {

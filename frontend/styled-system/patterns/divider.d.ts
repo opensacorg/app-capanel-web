@@ -12,7 +12,8 @@ export interface DividerProperties {
 
 interface DividerStyles
 	extends DividerProperties,
-		DistributiveOmit<SystemStyleObject, keyof DividerProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof DividerProperties> {
+}
 
 interface DividerPatternFn {
 	raw: (styles?: DividerStyles) => SystemStyleObject

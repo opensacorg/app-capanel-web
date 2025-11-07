@@ -37,8 +37,8 @@ type CheckboxCardSlot =
 
 export type CheckboxCardVariantProps = {
 	[key in keyof CheckboxCardVariant]?:
-		| ConditionalValue<CheckboxCardVariant[key]>
-		| undefined
+	| ConditionalValue<CheckboxCardVariant[key]>
+	| undefined
 }
 
 export interface CheckboxCardRecipe {

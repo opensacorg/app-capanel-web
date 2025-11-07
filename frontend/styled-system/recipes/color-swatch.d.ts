@@ -19,8 +19,8 @@ type ColorSwatchVariantMap = {
 
 export type ColorSwatchVariantProps = {
 	[key in keyof ColorSwatchVariant]?:
-		| ConditionalValue<ColorSwatchVariant[key]>
-		| undefined
+	| ConditionalValue<ColorSwatchVariant[key]>
+	| undefined
 }
 
 export interface ColorSwatchRecipe {

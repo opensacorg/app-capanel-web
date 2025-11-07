@@ -13,7 +13,8 @@ export interface WrapProperties {
 
 interface WrapStyles
 	extends WrapProperties,
-		DistributiveOmit<SystemStyleObject, keyof WrapProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof WrapProperties> {
+}
 
 interface WrapPatternFn {
 	raw: (styles?: WrapStyles) => SystemStyleObject

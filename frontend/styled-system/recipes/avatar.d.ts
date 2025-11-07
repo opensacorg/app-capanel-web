@@ -26,8 +26,8 @@ type AvatarSlot = 'root' | 'image' | 'fallback'
 
 export type AvatarVariantProps = {
 	[key in keyof AvatarVariant]?:
-		| ConditionalValue<AvatarVariant[key]>
-		| undefined
+	| ConditionalValue<AvatarVariant[key]>
+	| undefined
 }
 
 export interface AvatarRecipe {

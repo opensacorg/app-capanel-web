@@ -17,8 +17,8 @@ type StatusSlot = 'root' | 'indicator'
 
 export type StatusVariantProps = {
 	[key in keyof StatusVariant]?:
-		| ConditionalValue<StatusVariant[key]>
-		| undefined
+	| ConditionalValue<StatusVariant[key]>
+	| undefined
 }
 
 export interface StatusRecipe {

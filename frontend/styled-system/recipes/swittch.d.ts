@@ -21,8 +21,8 @@ type SwittchSlot = 'root' | 'label' | 'control' | 'thumb' | 'indicator'
 
 export type SwittchVariantProps = {
 	[key in keyof SwittchVariant]?:
-		| ConditionalValue<SwittchVariant[key]>
-		| undefined
+	| ConditionalValue<SwittchVariant[key]>
+	| undefined
 }
 
 export interface SwittchRecipe {

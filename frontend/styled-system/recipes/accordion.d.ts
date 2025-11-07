@@ -27,8 +27,8 @@ type AccordionSlot =
 
 export type AccordionVariantProps = {
 	[key in keyof AccordionVariant]?:
-		| ConditionalValue<AccordionVariant[key]>
-		| undefined
+	| ConditionalValue<AccordionVariant[key]>
+	| undefined
 }
 
 export interface AccordionRecipe {

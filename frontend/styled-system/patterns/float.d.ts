@@ -23,7 +23,8 @@ export interface FloatProperties {
 
 interface FloatStyles
 	extends FloatProperties,
-		DistributiveOmit<SystemStyleObject, keyof FloatProperties> {}
+		DistributiveOmit<SystemStyleObject, keyof FloatProperties> {
+}
 
 interface FloatPatternFn {
 	raw: (styles?: FloatStyles) => SystemStyleObject

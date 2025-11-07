@@ -37,8 +37,8 @@ type ComboboxSlot =
 
 export type ComboboxVariantProps = {
 	[key in keyof ComboboxVariant]?:
-		| ConditionalValue<ComboboxVariant[key]>
-		| undefined
+	| ConditionalValue<ComboboxVariant[key]>
+	| undefined
 }
 
 export interface ComboboxRecipe {

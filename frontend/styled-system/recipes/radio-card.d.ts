@@ -40,8 +40,8 @@ type RadioCardSlot =
 
 export type RadioCardVariantProps = {
 	[key in keyof RadioCardVariant]?:
-		| ConditionalValue<RadioCardVariant[key]>
-		| undefined
+	| ConditionalValue<RadioCardVariant[key]>
+	| undefined
 }
 
 export interface RadioCardRecipe {
