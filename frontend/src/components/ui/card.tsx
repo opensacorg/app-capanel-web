@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, type BoxProps } from '@chakra-ui/react';
-import { forwardRef } from 'react';
+import {Box, type BoxProps} from '@chakra-ui/react';
+import {forwardRef} from 'react';
 
 /**
  * Card component props extending Chakra UI BoxProps
@@ -10,16 +10,16 @@ import { forwardRef } from 'react';
  * @extends BoxProps
  */
 export interface CardProps extends BoxProps {
-	/**
-	 * Visual style variant for the card
-	 *
-	 * - `outline`: Clean border design with transparent background (default)
-	 * - `filled`: Solid muted background, no border
-	 * - `elevated`: Clean background with subtle shadow for depth
-	 *
-	 * @default "outline"
-	 */
-	variant?: 'outline' | 'filled' | 'elevated';
+    /**
+     * Visual style variant for the card
+     *
+     * - `outline`: Clean border design with transparent background (default)
+     * - `filled`: Solid muted background, no border
+     * - `elevated`: Clean background with subtle shadow for depth
+     *
+     * @default "outline"
+     */
+    variant?: 'outline' | 'filled' | 'elevated';
 }
 
 /**
@@ -44,32 +44,32 @@ export interface CardProps extends BoxProps {
  * @param props - All Chakra UI Box props are supported
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-	({ variant = 'outline', ...props }, ref) => {
-		const baseStyles = {
-			borderRadius: 'lg',
-			overflow: 'hidden',
-			position: 'relative' as const,
-		};
+    ({variant = 'outline', ...props}, ref) => {
+        const baseStyles = {
+            borderRadius: 'lg',
+            overflow: 'hidden',
+            position: 'relative' as const,
+        };
 
-		const variantStyles = {
-			outline: {
-				border: '1px solid',
-				borderColor: 'border.default',
-				bg: 'bg.panel',
-			},
-			filled: {
-				bg: 'bg.muted',
-			},
-			elevated: {
-				bg: 'bg.panel',
-				boxShadow: 'lg',
-			},
-		};
+        const variantStyles = {
+            outline: {
+                border: '1px solid',
+                borderColor: 'border.default',
+                bg: 'bg.panel',
+            },
+            filled: {
+                bg: 'bg.muted',
+            },
+            elevated: {
+                bg: 'bg.panel',
+                boxShadow: 'lg',
+            },
+        };
 
-		return (
-			<Box ref={ref} {...baseStyles} {...variantStyles[variant]} {...props} />
-		);
-	},
+        return (
+            <Box ref={ref} {...baseStyles} {...variantStyles[variant]} {...props} />
+        );
+    },
 );
 
 Card.displayName = 'Card';
@@ -93,14 +93,14 @@ Card.displayName = 'Card';
  * - Supports all Chakra UI Box props
  */
 export const CardHeader = forwardRef<HTMLDivElement, BoxProps>((props, ref) => (
-	<Box
-		ref={ref}
-		px={6}
-		py={4}
-		borderBottomWidth='1px'
-		borderColor='border.default'
-		{...props}
-	/>
+    <Box
+        ref={ref}
+        px={6}
+        py={4}
+        borderBottomWidth='1px'
+        borderColor='border.default'
+        {...props}
+    />
 ));
 
 CardHeader.displayName = 'CardHeader';
@@ -123,7 +123,7 @@ CardHeader.displayName = 'CardHeader';
  * - Primary content container
  */
 export const CardBody = forwardRef<HTMLDivElement, BoxProps>((props, ref) => (
-	<Box ref={ref} px={6} py={4} {...props} />
+    <Box ref={ref} px={6} py={4} {...props} />
 ));
 
 CardBody.displayName = 'CardBody';
@@ -148,14 +148,14 @@ CardBody.displayName = 'CardBody';
  * - Ideal for action buttons
  */
 export const CardFooter = forwardRef<HTMLDivElement, BoxProps>((props, ref) => (
-	<Box
-		ref={ref}
-		px={6}
-		py={4}
-		borderTopWidth='1px'
-		borderColor='border.default'
-		{...props}
-	/>
+    <Box
+        ref={ref}
+        px={6}
+        py={4}
+        borderTopWidth='1px'
+        borderColor='border.default'
+        {...props}
+    />
 ));
 
 CardFooter.displayName = 'CardFooter';
