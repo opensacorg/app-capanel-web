@@ -33,5 +33,5 @@
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit"
 	},
-	"explorer.excludeGitIgnore": true
+	"typescript.experimental.useTsgo": true
 }
