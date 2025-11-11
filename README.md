@@ -212,6 +212,76 @@ The input variables, with their default values (some auto generated) are:
 - `postgres_password`: (default: `"changethis"`) The password for the PostgreSQL database, stored in .env, you can generate one with the method above.
 - `sentry_dsn`: (default: "") The DSN for Sentry, if you are using it, you can set it later in .env.
 
+## Documentation Project (Separate Repository)
+
+**Important:** This web application has a **separate documentation repository** that provides comprehensive guides, API references, and developer documentation.
+
+### Two Separate Projects
+
+| Project | Purpose | Location | How to Run |
+|---------|---------|----------|------------|
+| **app-capanel-web** (this repo) | Main application | `C:\Users\Shawn\Desktop\GCC_AI\app-capanel-web` | `docker compose up` |
+| **app-capanel-doc** | Documentation site | `C:\Users\Shawn\Desktop\GCC_AI\app-capanel-doc` | See below |
+
+### Running the Documentation
+
+The documentation is built with **Sphinx** and is **NOT included** when you run `docker compose up`. To view the documentation:
+
+**Step 1: Navigate to the documentation project**
+```powershell
+cd C:\Users\Shawn\Desktop\GCC_AI\app-capanel-doc
+```
+
+**Step 2: Sync dependencies**
+```powershell
+cd backend
+uv sync
+uv add sphinxcontrib-mermaid
+```
+
+**Step 3: Build the documentation**
+```powershell
+cd docs
+uv run sphinx-build -b html source build/html
+```
+
+**Step 4: Serve the documentation**
+```powershell
+cd build/html
+python -m http.server 8000
+```
+
+**Step 5: Open in browser**
+```
+http://localhost:8000
+```
+
+### Running Both Application and Documentation
+
+To run both simultaneously, use **two separate terminals**:
+
+**Terminal 1 - Web Application:**
+```powershell
+cd C:\Users\Shawn\Desktop\GCC_AI\app-capanel-web
+docker compose up
+```
+
+**Terminal 2 - Documentation:**
+```powershell
+cd C:\Users\Shawn\Desktop\GCC_AI\app-capanel-doc\backend\docs\build\html
+python -m http.server 8000
+```
+
+### Key Differences
+
+- ✅ **app-capanel-web** = The actual application (FastAPI backend + React frontend)
+- 📚 **app-capanel-doc** = Documentation website (Sphinx-generated HTML pages)
+- 🔄 They are **completely separate** and do not depend on each other
+- 🚀 Running the web app does **NOT** run the documentation
+- 📖 Running the documentation does **NOT** run the web app
+
+For detailed documentation setup instructions, see: [app-capanel-doc/README.md](https://github.com/opensacorg/app-capanel-doc)
+
 ## Backend Development
 
 Backend docs: [backend/README.md](./backend/README.md).
