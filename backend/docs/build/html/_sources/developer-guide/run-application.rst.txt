@@ -1,0 +1,16 @@
+Run the application
+=========================
+
+1. Create and activate a virtual environment, then install dependencies:
+
+   - Using uv (recommended):
+     uv sync --all-groups
+
+   - Using pip:
+     pip install -e .
+
+3. Start the server:
+
+   uvicorn app.main:app --reload
+
+The OpenAPI docs will be available at http://127.0.0.1:8000/docs

@@ -1,0 +1,12 @@
+Install
+================================================================
+Learn how to build and run the application locally.
+
+.. toctree::
+   :caption: Install
+   :maxdepth: 2
+
+   backend-install-windows
+   backend-install-linux
+   backend-install-mac
+   backend-install-docker

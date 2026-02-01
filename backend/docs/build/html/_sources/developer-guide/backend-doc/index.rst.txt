@@ -1,0 +1,9 @@
+Backend documentation
+================================================================
+Learn how to build and run the application locally.
+
+.. toctree::
+   :caption: Get started
+   :maxdepth: 2
+
+   install
