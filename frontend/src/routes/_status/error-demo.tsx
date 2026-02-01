@@ -243,20 +243,20 @@ export const Route = createFileRoute('/my-route')({
 					<CardDescription>Application-specific error pages</CardDescription>
 				</CardHeader>
 				<CardContent className='flex flex-wrap gap-2'>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/error'>Generic Error</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/error' />}>
+						Generic Error
 					</Button>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/offline'>Offline</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/offline' />}>
+						Offline
 					</Button>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/session-expired'>Session Expired</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/session-expired' />}>
+						Session Expired
 					</Button>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/payment-required'>Payment Required</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/payment-required' />}>
+						Payment Required
 					</Button>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/bandwidth-exceeded'>Bandwidth Exceeded</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/bandwidth-exceeded' />}>
+						Bandwidth Exceeded
 					</Button>
 				</CardContent>
 			</Card>

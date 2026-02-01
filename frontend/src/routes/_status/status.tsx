@@ -288,23 +288,23 @@ function SystemStatusPage() {
 				</CardHeader>
 				<CardContent>
 					<div className='flex flex-wrap gap-2'>
-						<Button variant='outline' size='sm' asChild>
-							<Link to='/status/404'>404</Link>
+						<Button variant='outline' size='sm' render={<Link to='/status/404' />}>
+							404
 						</Button>
-						<Button variant='outline' size='sm' asChild>
-							<Link to='/status/500'>500</Link>
+						<Button variant='outline' size='sm' render={<Link to='/status/500' />}>
+							500
 						</Button>
-						<Button variant='outline' size='sm' asChild>
-							<Link to='/status/maintenance'>Maintenance</Link>
+						<Button variant='outline' size='sm' render={<Link to='/status/maintenance' />}>
+							Maintenance
 						</Button>
-						<Button variant='outline' size='sm' asChild>
-							<Link to='/status/coming-soon'>Coming Soon</Link>
+						<Button variant='outline' size='sm' render={<Link to='/status/coming-soon' />}>
+							Coming Soon
 						</Button>
-						<Button variant='outline' size='sm' asChild>
-							<Link to='/status/success'>Success</Link>
+						<Button variant='outline' size='sm' render={<Link to='/status/success' />}>
+							Success
 						</Button>
-						<Button variant='outline' size='sm' asChild>
-							<Link to='/status/offline'>Offline</Link>
+						<Button variant='outline' size='sm' render={<Link to='/status/offline' />}>
+							Offline
 						</Button>
 					</div>
 				</CardContent>

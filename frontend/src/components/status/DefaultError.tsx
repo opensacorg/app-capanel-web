@@ -44,11 +44,9 @@ export function DefaultError({ error, reset, info, fullPage = true }: DefaultErr
 							Reload Page
 						</Button>
 					)}
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

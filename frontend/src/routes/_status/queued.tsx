@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Clock, Home, ListOrdered, Users } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress, ProgressLabel, ProgressValue } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/queued')({
 	component: QueuedPage,
@@ -26,11 +26,9 @@ function QueuedPage() {
 			title='Request Queued'
 			description='Your request has been added to the processing queue.'
 			footer={
-				<Button variant='outline' asChild>
-					<Link to='/'>
-						<Home className='mr-2 size-4' />
-						Go Home
-					</Link>
+				<Button variant='outline' render={<Link to='/' />}>
+					<Home className='mr-2 size-4' />
+					Go Home
 				</Button>
 			}
 		>

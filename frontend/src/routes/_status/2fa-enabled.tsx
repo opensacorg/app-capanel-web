@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Check, Home, Shield, Smartphone } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/2fa-enabled')({
 	component: TwoFactorEnabledPage,
@@ -26,14 +26,10 @@ function TwoFactorEnabledPage() {
 			description='Two-factor authentication is now active on your account.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/layout/settings'>View Settings</Link>
-					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/layout/settings' />}>View Settings</Button>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

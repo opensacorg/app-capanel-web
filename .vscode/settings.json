@@ -2,5 +2,8 @@
 	"typescript.experimental.useTsgo": true,
 	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.formatOnSave": true,
-	"editor.formatOnSaveMode": "file"
+	"editor.formatOnSaveMode": "file",
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	}
 }

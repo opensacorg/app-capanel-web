@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, Shield, Smartphone } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Button } from '@/components/ui/button'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/2fa-required')({
 	component: TwoFactorRequiredPage,
@@ -27,11 +27,9 @@ function TwoFactorRequiredPage() {
 			footer={
 				<>
 					<Button>Verify</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Cancel
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Cancel
 					</Button>
 				</>
 			}

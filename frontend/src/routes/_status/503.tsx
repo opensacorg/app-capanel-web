@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Clock, Home, ServerOff } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress, ProgressLabel } from '@/components/ui/progress'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/503')({
 	component: ServiceUnavailablePage,
@@ -27,11 +27,9 @@ function ServiceUnavailablePage() {
 			footer={
 				<>
 					<Button onClick={() => window.location.reload()}>Retry Connection</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

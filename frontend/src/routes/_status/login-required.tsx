@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, LogIn, UserCircle } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/login-required')({
 	component: LoginRequiredPage,
@@ -25,17 +25,13 @@ function LoginRequiredPage() {
 			description='Please sign in to access this content.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/login'>
-							<LogIn className='mr-2 size-4' />
-							Sign In
-						</Link>
+					<Button render={<Link to='/login' />}>
+						<LogIn className='mr-2 size-4' />
+						Sign In
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

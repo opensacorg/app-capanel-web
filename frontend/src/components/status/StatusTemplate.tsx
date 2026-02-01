@@ -34,11 +34,11 @@ export function StatusTemplate({
 							FastAPI Cloud
 						</Link>
 						<nav className='flex items-center gap-2'>
-							<Button variant='ghost' size='sm' asChild>
-								<Link to='/'>Home</Link>
+							<Button variant='ghost' size='sm' render={<Link to='/' />}>
+								Home
 							</Button>
-							<Button variant='ghost' size='sm' asChild>
-								<Link to='/status'>Status</Link>
+							<Button variant='ghost' size='sm' render={<Link to='/status' />}>
+								Status
 							</Button>
 						</nav>
 					</div>

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AlertOctagon, Bug, Home, RefreshCcw } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import {
 	Accordion,
 	AccordionContent,
@@ -9,7 +10,6 @@ import {
 } from '@/components/ui/accordion'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/error')({
 	component: GenericErrorPage,
@@ -35,11 +35,9 @@ function GenericErrorPage() {
 						<RefreshCcw className='mr-2 size-4' />
 						Try Again
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

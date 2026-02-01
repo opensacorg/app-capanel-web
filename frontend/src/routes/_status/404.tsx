@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { FileQuestion, Home, Search } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/404')({
 	component: NotFoundPage,
@@ -25,14 +25,12 @@ function NotFoundPage() {
 			description="The page you're looking for doesn't exist or has been moved."
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/status'>View Status</Link>
+					<Button variant='outline' render={<Link to='/status' />}>
+						View Status
 					</Button>
 				</>
 			}

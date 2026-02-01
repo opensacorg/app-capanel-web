@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, Search, SearchX } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/no-results')({
 	component: NoResultsPage,
@@ -25,11 +25,9 @@ function NoResultsPage() {
 			title='No Results Found'
 			description="We couldn't find anything matching your search."
 			footer={
-				<Button variant='outline' asChild>
-					<Link to='/'>
-						<Home className='mr-2 size-4' />
-						Go Home
-					</Link>
+				<Button variant='outline' render={<Link to='/' />}>
+					<Home className='mr-2 size-4' />
+					Go Home
 				</Button>
 			}
 		>

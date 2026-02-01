@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Ghost, Home, Search } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/gone')({
 	component: GonePage,
@@ -25,11 +25,9 @@ function GonePage() {
 			title='410 - Gone'
 			description='This resource has been permanently removed.'
 			footer={
-				<Button asChild>
-					<Link to='/'>
-						<Home className='mr-2 size-4' />
-						Go Home
-					</Link>
+				<Button render={<Link to='/' />}>
+					<Home className='mr-2 size-4' />
+					Go Home
 				</Button>
 			}
 		>

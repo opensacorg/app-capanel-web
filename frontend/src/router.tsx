@@ -1,7 +1,9 @@
 import { createRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 
-import { DefaultError, DefaultNotFound, DefaultPending } from '@/components/status'
+import { DefaultError } from '@/components/status/DefaultError'
+import { DefaultNotFound } from '@/components/status/DefaultNotFound'
+import { DefaultPending } from '@/components/status/DefaultPending'
 import { deLocalizeUrl, localizeUrl } from '@/integrations/paraglide/runtime'
 
 import * as TanstackQuery from './integrations/tanstack-query/root-provider'

@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, Mail, RefreshCcw } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/verify-email')({
 	component: VerifyEmailPage,
@@ -30,11 +30,9 @@ function VerifyEmailPage() {
 						<RefreshCcw className='mr-2 size-4' />
 						Resend Email
 					</Button>
-					<Button variant='ghost' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='ghost' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

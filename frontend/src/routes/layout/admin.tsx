@@ -6,8 +6,8 @@ import AddUser from '@/components/Admin/AddUser'
 import { columns, type UserTableData } from '@/components/Admin/columns'
 import { DataTable } from '@/components/Common/DataTable'
 import PendingUsers from '@/components/Pending/PendingUsers'
+import useAuth from '@/hooks/useAuth'
 import { type UserPublic, UsersService } from '@/lib/client'
-import useAuth from '@/lib/hooks/useAuth'
 
 function getUsersQueryOptions() {
 	return {

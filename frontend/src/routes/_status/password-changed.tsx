@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Check, Home, KeyRound, LogIn } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/password-changed')({
 	component: PasswordChangedPage,
@@ -26,17 +26,13 @@ function PasswordChangedPage() {
 			description='Your password has been updated successfully.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/login'>
-							<LogIn className='mr-2 size-4' />
-							Sign In
-						</Link>
+					<Button render={<Link to='/login' />}>
+						<LogIn className='mr-2 size-4' />
+						Sign In
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

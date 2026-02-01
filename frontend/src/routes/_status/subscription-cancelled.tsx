@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { CreditCard, Home, Sparkles, XCircle } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/subscription-cancelled')({
 	component: SubscriptionCancelledPage,
@@ -26,17 +26,13 @@ function SubscriptionCancelledPage() {
 			description='Your subscription has been cancelled.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/pricing'>
-							<Sparkles className='mr-2 size-4' />
-							Resubscribe
-						</Link>
+					<Button render={<Link to='/pricing' />}>
+						<Sparkles className='mr-2 size-4' />
+						Resubscribe
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

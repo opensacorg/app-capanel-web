@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, ShieldOff } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/403')({
 	component: ForbiddenPage,
@@ -25,14 +25,12 @@ function ForbiddenPage() {
 			description="You don't have permission to access this resource."
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/support'>Contact Support</Link>
+					<Button variant='outline' render={<Link to='/support' />}>
+						Contact Support
 					</Button>
 				</>
 			}

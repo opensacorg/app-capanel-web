@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, Trash2, Undo2 } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/deleted')({
 	component: DeletedPage,
@@ -26,14 +26,12 @@ function DeletedPage() {
 			description='Your account has been successfully deleted.'
 			footer={
 				<>
-					<Button variant='outline' asChild>
-						<Link to='/signup'>Create New Account</Link>
+					<Button variant='outline' render={<Link to='/signup' />}>
+						Create New Account
 					</Button>
-					<Button variant='ghost' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='ghost' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

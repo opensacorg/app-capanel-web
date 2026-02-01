@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, BookOpen, Rocket, Settings, Sparkles } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/welcome')({
 	component: WelcomePage,
@@ -26,11 +26,9 @@ function WelcomePage() {
 			title='Welcome to FastAPI Cloud!'
 			description='Your account has been successfully created.'
 			footer={
-				<Button asChild>
-					<Link to='/layout'>
-						Get Started
-						<ArrowRight className='ml-2 size-4' />
-					</Link>
+				<Button render={<Link to='/layout' />}>
+					Get Started
+					<ArrowRight className='ml-2 size-4' />
 				</Button>
 			}
 		>

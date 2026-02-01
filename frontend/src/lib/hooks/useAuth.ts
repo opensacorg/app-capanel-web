@@ -13,8 +13,6 @@ import { handleError } from '@/lib/client-utils.ts'
 import useCustomToast from './useCustomToast'
 
 const isLoggedIn = () => {
-	if (typeof window === 'undefined' || typeof localStorage === 'undefined' || !localStorage.getItem)
-		return false
 	return localStorage.getItem('access_token') !== null
 }
 

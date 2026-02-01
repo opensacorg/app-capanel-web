@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Check, Home, Webhook } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/webhook-configured')({
 	component: WebhookConfiguredPage,
@@ -26,14 +26,10 @@ function WebhookConfiguredPage() {
 			description='Your webhook endpoint has been set up successfully.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/layout/settings'>Manage Webhooks</Link>
-					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/layout/settings' />}>Manage Webhooks</Button>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Clock, Home, LogIn, TimerOff } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/session-expired')({
 	component: SessionExpiredPage,
@@ -25,17 +25,13 @@ function SessionExpiredPage() {
 			description='Your session has expired due to inactivity.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/login'>
-							<LogIn className='mr-2 size-4' />
-							Sign In Again
-						</Link>
+					<Button render={<Link to='/login' />}>
+						<LogIn className='mr-2 size-4' />
+						Sign In Again
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

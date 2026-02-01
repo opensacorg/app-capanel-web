@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { RefreshCcw, WifiOff } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/offline')({
 	component: OfflinePage,

@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Check, Home, Mail, Users, X } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/invitation')({
 	component: InvitationPage,
@@ -62,11 +62,9 @@ function InvitationPage() {
 				</p>
 
 				<div className='text-center'>
-					<Button variant='ghost' size='sm' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Skip for now
-						</Link>
+					<Button variant='ghost' size='sm' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Skip for now
 					</Button>
 				</div>
 			</div>

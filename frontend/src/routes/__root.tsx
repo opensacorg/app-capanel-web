@@ -4,7 +4,9 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-import { DefaultError, DefaultNotFound, DefaultPending } from '@/components/status'
+import { DefaultError } from '@/components/status/DefaultError'
+import { DefaultNotFound } from '@/components/status/DefaultNotFound'
+import { DefaultPending } from '@/components/status/DefaultPending'
 import { getLocale } from '@/integrations/paraglide/runtime'
 
 import appCss from '../globals.css?url'

@@ -83,11 +83,9 @@ export function DefaultCatchBoundary({ error, reset, fullPage = true }: DefaultC
 						<RotateCcw className='mr-2 size-4' />
 						Go Back
 					</Button>
-					<Button variant='ghost' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Home
-						</Link>
+					<Button variant='ghost' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Home
 					</Button>
 				</>
 			}

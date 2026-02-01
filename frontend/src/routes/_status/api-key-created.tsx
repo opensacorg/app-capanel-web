@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AlertTriangle, Copy, Home, Key } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/api-key-created')({
 	component: ApiKeyCreatedPage,
@@ -28,14 +28,10 @@ function ApiKeyCreatedPage() {
 			description='Your new API key has been generated.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/layout/settings'>View API Keys</Link>
-					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/layout/settings' />}>View API Keys</Button>
+					<Button variant='outline' render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 				</>
 			}

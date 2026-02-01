@@ -139,17 +139,17 @@ function InfoStatesPage() {
 					<CardDescription>Jump to related sections</CardDescription>
 				</CardHeader>
 				<CardContent className='flex flex-wrap gap-2'>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/error-demo'>Error States</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/error-demo' />}>
+						Error States
 					</Button>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/success-states'>Success States</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/success-states' />}>
+						Success States
 					</Button>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status/loading'>Loading States</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status/loading' />}>
+						Loading States
 					</Button>
-					<Button variant='outline' size='sm' asChild>
-						<Link to='/status'>System Status</Link>
+					<Button variant='outline' size='sm' render={<Link to='/status' />}>
+						System Status
 					</Button>
 				</CardContent>
 			</Card>

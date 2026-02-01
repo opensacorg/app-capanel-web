@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { CheckCircle2, Home, PartyPopper } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/success')({
 	component: SuccessPage,
@@ -26,14 +26,12 @@ function SuccessPage() {
 			description='Your action was completed successfully.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/layout'>Go to Dashboard</Link>
+					<Button variant='outline' render={<Link to='/layout' />}>
+						Go to Dashboard
 					</Button>
 				</>
 			}

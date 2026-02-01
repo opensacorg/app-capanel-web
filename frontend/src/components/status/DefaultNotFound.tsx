@@ -26,14 +26,12 @@ export function DefaultNotFound({ data, fullPage = true }: DefaultNotFoundProps)
 			description="The page you're looking for doesn't exist or has been moved."
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
-					<Button variant='outline' asChild>
-						<Link to='/status'>View Status</Link>
+					<Button variant='outline' render={<Link to='/status' />}>
+						View Status
 					</Button>
 				</>
 			}

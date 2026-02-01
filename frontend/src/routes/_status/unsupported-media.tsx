@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { FileX, Home } from 'lucide-react'
 
+import { StatusCard } from '@/components/status/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { StatusCard } from '@/routes/_status'
 
 export const Route = createFileRoute('/_status/unsupported-media')({
 	component: UnsupportedMediaPage,
@@ -26,11 +26,9 @@ function UnsupportedMediaPage() {
 			description='The file format is not supported.'
 			footer={
 				<>
-					<Button asChild>
-						<Link to='/'>
-							<Home className='mr-2 size-4' />
-							Go Home
-						</Link>
+					<Button render={<Link to='/' />}>
+						<Home className='mr-2 size-4' />
+						Go Home
 					</Button>
 					<Button variant='outline' onClick={() => window.history.back()}>
 						Go Back
