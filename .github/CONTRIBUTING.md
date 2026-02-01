@@ -1,8 +1,6 @@
-Contributing to the California Accountability Panel.
-======================
+# Contributing to the California Accountability Panel.
 
-Getting started
----------------
+## Getting started
 
 Check out the documentation website. https://github.com/opensacorg/app-capanel-doc
 

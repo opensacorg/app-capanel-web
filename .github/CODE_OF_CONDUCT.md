@@ -10,7 +10,7 @@
 6. Invites members and leaders to practice active listening to better understand new perspectives.
 7. Strives to build open source tools for public use. Private gain is not the priority.
 8. Sees the strength in diverse teams and seeks input from those who's voices have been excluded.
-9. Works to bring in people who are not recognized as "main stream" for any reason including race, gender, economic status, etc. They shall be included throughout the planning, designing, and implementation phases of civic tech. This includes encouraging participation from women, minorities, and traditionally marginalized groups. 
+9. Works to bring in people who are not recognized as "main stream" for any reason including race, gender, economic status, etc. They shall be included throughout the planning, designing, and implementation phases of civic tech. This includes encouraging participation from women, minorities, and traditionally marginalized groups.
 10. Seeks out people with subject matter expertise in the decision making processes.
 11. Ensure that the relationships and conversations between community members, the local government staff and community partners remain respectful, participatory, and productive.
 
@@ -22,7 +22,7 @@ This anti-harassment policy is based on [the example policy](http://geekfeminism
 
 This policy is based on several other policies, including the Ohio LinuxFest anti-harassment policy, written by Esther Filderman and Beth Lynn Eicher, and the Con Anti-Harassment Project. Mary Gardiner, Valerie Aurora, Sarah Smith, and Donna Benjamin generalized the policies and added supporting material. Many members of LinuxChix, Geek Feminism and other groups contributed to this work.
 
-* * * 
+---
 
 ### Open Sacramento fosters a community that:
 

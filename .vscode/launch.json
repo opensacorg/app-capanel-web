@@ -28,10 +28,9 @@
 			"name": "Launch server",
 			"request": "launch",
 			"runtimeArgs": [
-				"run",
 				"dev"
 			],
-			"runtimeExecutable": "npm",
+			"runtimeExecutable": "bun",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
@@ -41,8 +40,8 @@
 			}
 		},
 		{
-			"type": "msedge",
-			"name": "edge",
+			"type": "chrome",
+			"name": "browser",
 			"request": "launch",
 			"runtimeArgs": [
 				"--remote-debugging-port=9222"
@@ -74,7 +73,7 @@
 			"name": "Debug",
 			"configurations": [
 				"Launch server",
-				"edge"
+				"browser"
 			]
 		},
 		{

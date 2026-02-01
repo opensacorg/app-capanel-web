@@ -1,24 +1,26 @@
 # Full Stack FastAPI Template
 
-<a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3ATest" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test/badge.svg" alt="Test"></a>
+<a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3A%22Test+Docker+Compose%22" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test%20Docker%20Compose/badge.svg" alt="Test Docker Compose"></a>
+<a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3A%22Test+Backend%22" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test%20Backend/badge.svg" alt="Test Backend"></a>
 <a href="https://coverage-badge.samuelcolvin.workers.dev/redirect/fastapi/full-stack-fastapi-template" target="_blank"><img src="https://coverage-badge.samuelcolvin.workers.dev/fastapi/full-stack-fastapi-template.svg" alt="Coverage"></a>
 
 ## Technology Stack and Features
 
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
-    - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
-    - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
-    - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
+  - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
+  - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
+  - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
 - 🚀 [React](https://react.dev) for the frontend.
-    - 💃 Using TypeScript, hooks, Vite, and other parts of a modern frontend stack.
-    - 🎨 [Chakra UI](https://chakra-ui.com) for the frontend components.
-    - 🤖 An automatically generated frontend client.
-    - 🧪 [Playwright](https://playwright.dev) for End-to-End testing.
-    - 🦇 Dark mode support.
+  - 💃 Using TypeScript, hooks, [Vite](https://vitejs.dev), and other parts of a modern frontend stack.
+  - 🎨 [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com) for the frontend components.
+  - 🤖 An automatically generated frontend client.
+  - 🧪 [Playwright](https://playwright.dev) for End-to-End testing.
+  - 🦇 Dark mode support.
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - 🔒 Secure password hashing by default.
 - 🔑 JWT (JSON Web Token) authentication.
 - 📫 Email based password recovery.
+- 📬 [Mailcatcher](https://mailcatcher.me) for local email testing during development.
 - ✅ Tests with [Pytest](https://pytest.org).
 - 📞 [Traefik](https://traefik.io) as a reverse proxy / load balancer.
 - 🚢 Deployment instructions using Docker Compose, including how to set up a frontend Traefik proxy to handle automatic HTTPS certificates.
@@ -32,17 +34,9 @@
 
 [![API docs](img/dashboard.png)](https://github.com/fastapi/full-stack-fastapi-template)
 
-### Dashboard - Create User
-
-[![API docs](img/dashboard-create.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
 ### Dashboard - Items
 
 [![API docs](img/dashboard-items.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-### Dashboard - User Settings
-
-[![API docs](img/dashboard-user-settings.png)](https://github.com/fastapi/full-stack-fastapi-template)
 
 ### Dashboard - Dark Mode
 
@@ -212,76 +206,6 @@ The input variables, with their default values (some auto generated) are:
 - `postgres_password`: (default: `"changethis"`) The password for the PostgreSQL database, stored in .env, you can generate one with the method above.
 - `sentry_dsn`: (default: "") The DSN for Sentry, if you are using it, you can set it later in .env.
 
-## Documentation Project (Separate Repository)
-
-**Important:** This web application has a **separate documentation repository** that provides comprehensive guides, API references, and developer documentation.
-
-### Two Separate Projects
-
-| Project | Purpose | Location | How to Run |
-|---------|---------|----------|------------|
-| **app-capanel-web** (this repo) | Main application | `C:\Users\Shawn\Desktop\GCC_AI\app-capanel-web` | `docker compose up` |
-| **app-capanel-doc** | Documentation site | `C:\Users\Shawn\Desktop\GCC_AI\app-capanel-doc` | See below |
-
-### Running the Documentation
-
-The documentation is built with **Sphinx** and is **NOT included** when you run `docker compose up`. To view the documentation:
-
-**Step 1: Navigate to the documentation project**
-```powershell
-cd C:\Users\Shawn\Desktop\GCC_AI\app-capanel-doc
-```
-
-**Step 2: Sync dependencies**
-```powershell
-cd backend
-uv sync
-uv add sphinxcontrib-mermaid
-```
-
-**Step 3: Build the documentation**
-```powershell
-cd docs
-uv run sphinx-build -b html source build/html
-```
-
-**Step 4: Serve the documentation**
-```powershell
-cd build/html
-python -m http.server 8000
-```
-
-**Step 5: Open in browser**
-```
-http://localhost:8000
-```
-
-### Running Both Application and Documentation
-
-To run both simultaneously, use **two separate terminals**:
-
-**Terminal 1 - Web Application:**
-```powershell
-cd C:\Users\Shawn\Desktop\GCC_AI\app-capanel-web
-docker compose up
-```
-
-**Terminal 2 - Documentation:**
-```powershell
-cd C:\Users\Shawn\Desktop\GCC_AI\app-capanel-doc\backend\docs\build\html
-python -m http.server 8000
-```
-
-### Key Differences
-
-- ✅ **app-capanel-web** = The actual application (FastAPI backend + React frontend)
-- 📚 **app-capanel-doc** = Documentation website (Sphinx-generated HTML pages)
-- 🔄 They are **completely separate** and do not depend on each other
-- 🚀 Running the web app does **NOT** run the documentation
-- 📖 Running the documentation does **NOT** run the web app
-
-For detailed documentation setup instructions, see: [app-capanel-doc/README.md](https://github.com/opensacorg/app-capanel-doc)
-
 ## Backend Development
 
 Backend docs: [backend/README.md](./backend/README.md).
@@ -307,3 +231,4 @@ Check the file [release-notes.md](./release-notes.md).
 ## License
 
 The Full Stack FastAPI Template is licensed under the terms of the MIT license.
+
