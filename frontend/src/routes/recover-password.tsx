@@ -1,95 +1,120 @@
-import { Container, Heading, Input, Text } from '@chakra-ui/react'
+import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { createFileRoute, redirect } from '@tanstack/react-router'
-import { type SubmitHandler, useForm } from 'react-hook-form'
-import { FiMail } from 'react-icons/fi'
+import { createFileRoute, Link as RouterLink, redirect } from '@tanstack/react-router'
+import { z } from 'zod'
 
-import { type ApiError, LoginService } from '../client'
-import { Button } from '../components/ui/button'
-import { Field } from '../components/ui/field'
-import { InputGroup } from '../components/ui/input-group'
-import { isLoggedIn } from '../hooks/useAuth'
-import useCustomToast from '../hooks/useCustomToast'
-import { emailPattern, handleError } from '../utils'
+import { AuthLayout } from '@/components/Common/AuthLayout'
+import { Button } from '@/components/ui/button'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/spinner'
+import { LoginService } from '@/lib/client'
+import { handleError } from '@/lib/client-utils'
+import { isLoggedIn } from '@/lib/hooks/useAuth'
+import useCustomToast from '@/lib/hooks/useCustomToast'
 
-interface FormData {
-	email: string
-}
+const recoverSchema = z.object({
+	email: z.string().email({ message: 'Please enter a valid email address' }),
+})
+
+type RecoverFormValues = z.infer<typeof recoverSchema>
 
 export const Route = createFileRoute('/recover-password')({
 	component: RecoverPassword,
 	beforeLoad: async () => {
 		if (isLoggedIn()) {
-			throw redirect({
-				to: '/',
-			})
+			throw redirect({ to: '/' })
 		}
 	},
+	head: () => ({
+		meta: [{ title: 'Recover Password - FastAPI Cloud' }],
+	}),
 })
 
 function RecoverPassword() {
-	const {
-		register,
-		handleSubmit,
-		reset,
-		formState: { errors, isSubmitting },
-	} = useForm<FormData>()
-	const { showSuccessToast } = useCustomToast()
+	const { showSuccessToast, showErrorToast } = useCustomToast()
 
-	const recoverPassword = async (data: FormData) => {
-		await LoginService.recoverPassword({
-			email: data.email,
-		})
-	}
-
-	const mutation = useMutation({
-		mutationFn: recoverPassword,
-		onSuccess: () => {
-			showSuccessToast('Password recovery email sent successfully.')
-			reset()
+	const form = useForm({
+		defaultValues: {
+			email: '',
+		} as RecoverFormValues,
+		validators: {
+			onChange: recoverSchema,
 		},
-		onError: (err: ApiError) => {
-			handleError(err)
+		onSubmit: async ({ value }) => {
+			if (mutation.isPending) return
+			mutation.mutate(value)
 		},
 	})
 
-	const onSubmit: SubmitHandler<FormData> = async (data) => {
-		mutation.mutate(data)
-	}
+	const mutation = useMutation({
+		mutationFn: async (data: RecoverFormValues) => {
+			await LoginService.recoverPassword({ email: data.email })
+		},
+		onSuccess: () => {
+			showSuccessToast('Password recovery email sent successfully')
+			form.reset()
+		},
+		onError: handleError.bind(showErrorToast),
+	})
 
 	return (
-		<Container
-			as='form'
-			onSubmit={handleSubmit(onSubmit)}
-			h='100vh'
-			maxW='sm'
-			alignItems='stretch'
-			justifyContent='center'
-			gap={4}
-			centerContent
-		>
-			<Heading size='xl' color='ui.main' textAlign='center' mb={2}>
-				Password Recovery
-			</Heading>
-			<Text textAlign='center'>
-				A password recovery email will be sent to the registered account.
-			</Text>
-			<Field invalid={!!errors.email} errorText={errors.email?.message}>
-				<InputGroup w='100%' startElement={<FiMail />}>
-					<Input
-						id='email'
-						{...register('email', {
-							required: 'Email is required',
-							pattern: emailPattern,
-						})}
-						placeholder='Email'
-						type='email'
+		<AuthLayout>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault()
+					e.stopPropagation()
+					form.handleSubmit()
+				}}
+				className='flex flex-col gap-6'
+			>
+				<div className='flex flex-col items-center gap-2 text-center'>
+					<h1 className='text-2xl font-bold'>Password Recovery</h1>
+				</div>
+
+				<div className='grid gap-4'>
+					<form.Field
+						name='email'
+						children={(field) => (
+							<Field>
+								<FieldLabel htmlFor={field.name}>Email</FieldLabel>
+								<Input
+									id={field.name}
+									name={field.name}
+									data-testid='email-input'
+									placeholder='user@example.com'
+									type='email'
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+								/>
+								{field.state.meta.isTouched && !field.state.meta.isValid && (
+									<FieldError>
+										{field.state.meta.errors.map((err) => err.message).join(', ')}
+									</FieldError>
+								)}
+							</Field>
+						)}
 					/>
-				</InputGroup>
-			</Field>
-			<Button variant='solid' type='submit' loading={isSubmitting}>
-				Continue
-			</Button>
-		</Container>
+
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
+						children={([canSubmit, isSubmitting]) => (
+							<Button type='submit' className='w-full' disabled={!canSubmit || mutation.isPending}>
+								{(isSubmitting || mutation.isPending) && <Spinner className='mr-2' />}
+								Continue
+							</Button>
+						)}
+					/>
+				</div>
+
+				<div className='text-center text-sm'>
+					Remember your password?{' '}
+					<RouterLink to='/login' className='underline underline-offset-4'>
+						Log in
+					</RouterLink>
+				</div>
+			</form>
+		</AuthLayout>
 	)
 }

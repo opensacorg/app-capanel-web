@@ -1,0 +1,26 @@
+{
+	"projectName": "capanel",
+	"mode": "file-router",
+	"typescript": true,
+	"packageManager": "pnpm",
+	"tailwind": true,
+	"addOnOptions": {},
+	"git": true,
+	"version": 1,
+	"framework": "react-cra",
+	"chosenAddOns": [
+		"biome",
+		"tanstack-query",
+		"store",
+		"table",
+		"shadcn",
+		"paraglide",
+		"mcp",
+		"form",
+		"db",
+		"compiler",
+		"ai",
+		"strapi",
+		"start"
+	]
+}

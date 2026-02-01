@@ -12,23 +12,102 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as HomeRouteImport } from './routes/_home'
-import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as StatusRouteImport } from './routes/_status'
+import { Route as LayoutIndexRouteImport } from './routes/layout/index'
+import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as Dashboard2IndexRouteImport } from './routes/dashboard2/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
-import { Route as HomeDocsRouteImport } from './routes/_home/docs'
-import { Route as HomeApiSyncRouteImport } from './routes/_home/api-sync'
-import { Route as HomeDemoRouteImport } from './routes/_home/_demo'
-import { Route as AuthUserRouteImport } from './routes/_auth/user'
-import { Route as AuthSettingsRouteImport } from './routes/_auth/settings'
-import { Route as AuthItemsRouteImport } from './routes/_auth/items'
-import { Route as AuthAdminRouteImport } from './routes/_auth/admin'
-import { Route as HomeDemoDemoTanstackQueryRouteImport } from './routes/_home/_demo/demo.tanstack-query'
-import { Route as HomeDemoDemoTableRouteImport } from './routes/_home/_demo/demo.table'
-import { Route as HomeDemoDemoFormSimpleRouteImport } from './routes/_home/_demo/demo.form.simple'
-import { Route as HomeDemoDemoFormAddressRouteImport } from './routes/_home/_demo/demo.form.address'
+import { Route as PrivatePrivateRouteImport } from './routes/private/_private'
+import { Route as LayoutSettingsRouteImport } from './routes/layout/settings'
+import { Route as LayoutItemsRouteImport } from './routes/layout/items'
+import { Route as LayoutAdminRouteImport } from './routes/layout/admin'
+import { Route as LayoutLayoutRouteImport } from './routes/layout/_layout'
+import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
+import { Route as DemoTableRouteImport } from './routes/demo/table'
+import { Route as DemoStrapiRouteImport } from './routes/demo/strapi'
+import { Route as DemoStoreRouteImport } from './routes/demo/store'
+import { Route as DemoMcpTodosRouteImport } from './routes/demo/mcp-todos'
+import { Route as DemoI18nRouteImport } from './routes/demo/i18n'
+import { Route as DemoDocsRouteImport } from './routes/demo/docs'
+import { Route as DemoDbChatApiRouteImport } from './routes/demo/db-chat-api'
+import { Route as DemoDbChatRouteImport } from './routes/demo/db-chat'
+import { Route as DemoApiSyncRouteImport } from './routes/demo/api-sync'
+import { Route as DemoAiStructuredRouteImport } from './routes/demo/ai-structured'
+import { Route as DemoAiImageRouteImport } from './routes/demo/ai-image'
+import { Route as DemoAiChatRouteImport } from './routes/demo/ai-chat'
+import { Route as DemoHomeRouteImport } from './routes/demo/_home'
+import { Route as StatusWelcomeRouteImport } from './routes/_status/welcome'
+import { Route as StatusWebhookConfiguredRouteImport } from './routes/_status/webhook-configured'
+import { Route as StatusVerifyEmailRouteImport } from './routes/_status/verify-email'
+import { Route as StatusUpgradeSuccessRouteImport } from './routes/_status/upgrade-success'
+import { Route as StatusUnsupportedMediaRouteImport } from './routes/_status/unsupported-media'
+import { Route as StatusUnderConstructionRouteImport } from './routes/_status/under-construction'
+import { Route as StatusTimeoutRouteImport } from './routes/_status/timeout'
+import { Route as StatusSuccessStatesRouteImport } from './routes/_status/success-states'
+import { Route as StatusSuccessRouteImport } from './routes/_status/success'
+import { Route as StatusSubscriptionCancelledRouteImport } from './routes/_status/subscription-cancelled'
+import { Route as StatusStatusRouteImport } from './routes/_status/status'
+import { Route as StatusSessionExpiredRouteImport } from './routes/_status/session-expired'
+import { Route as StatusRateLimitedRouteImport } from './routes/_status/rate-limited'
+import { Route as StatusQueuedRouteImport } from './routes/_status/queued'
+import { Route as StatusProcessingRouteImport } from './routes/_status/processing'
+import { Route as StatusPaymentRequiredRouteImport } from './routes/_status/payment-required'
+import { Route as StatusPasswordChangedRouteImport } from './routes/_status/password-changed'
+import { Route as StatusOfflineRouteImport } from './routes/_status/offline'
+import { Route as StatusNoResultsRouteImport } from './routes/_status/no-results'
+import { Route as StatusMaintenanceRouteImport } from './routes/_status/maintenance'
+import { Route as StatusLoginRequiredRouteImport } from './routes/_status/login-required'
+import { Route as StatusLockedRouteImport } from './routes/_status/locked'
+import { Route as StatusLoadingRouteImport } from './routes/_status/loading'
+import { Route as StatusInvitationRouteImport } from './routes/_status/invitation'
+import { Route as StatusInfoStatesRouteImport } from './routes/_status/info-states'
+import { Route as StatusImportCompleteRouteImport } from './routes/_status/import-complete'
+import { Route as StatusGoneRouteImport } from './routes/_status/gone'
+import { Route as StatusGatewayTimeoutRouteImport } from './routes/_status/gateway-timeout'
+import { Route as StatusExportReadyRouteImport } from './routes/_status/export-ready'
+import { Route as StatusErrorDemoRouteImport } from './routes/_status/error-demo'
+import { Route as StatusErrorRouteImport } from './routes/_status/error'
+import { Route as StatusEmptyStateRouteImport } from './routes/_status/empty-state'
+import { Route as StatusEmailSentRouteImport } from './routes/_status/email-sent'
+import { Route as StatusDowngradeRouteImport } from './routes/_status/downgrade'
+import { Route as StatusDeviceVerifiedRouteImport } from './routes/_status/device-verified'
+import { Route as StatusDeletedRouteImport } from './routes/_status/deleted'
+import { Route as StatusConflictRouteImport } from './routes/_status/conflict'
+import { Route as StatusComingSoonRouteImport } from './routes/_status/coming-soon'
+import { Route as StatusCancelledRouteImport } from './routes/_status/cancelled'
+import { Route as StatusBandwidthExceededRouteImport } from './routes/_status/bandwidth-exceeded'
+import { Route as StatusBadRequestRouteImport } from './routes/_status/bad-request'
+import { Route as StatusBadGatewayRouteImport } from './routes/_status/bad-gateway'
+import { Route as StatusBackupCompleteRouteImport } from './routes/_status/backup-complete'
+import { Route as StatusApiKeyCreatedRouteImport } from './routes/_status/api-key-created'
+import { Route as Status503RouteImport } from './routes/_status/503'
+import { Route as Status500RouteImport } from './routes/_status/500'
+import { Route as Status404RouteImport } from './routes/_status/404'
+import { Route as Status403RouteImport } from './routes/_status/403'
+import { Route as Status401RouteImport } from './routes/_status/401'
+import { Route as Status2faRequiredRouteImport } from './routes/_status/2fa-required'
+import { Route as Status2faEnabledRouteImport } from './routes/_status/2fa-enabled'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as DemoGuitarsIndexRouteImport } from './routes/demo/guitars/index'
+import { Route as DemoStrapiArticleIdRouteImport } from './routes/demo/strapi_.$articleId'
+import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
+import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
+import { Route as DemoGuitarsGuitarIdRouteImport } from './routes/demo/guitars/$guitarId'
+import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
+import { Route as DemoFormAddressRouteImport } from './routes/demo/form.address'
+import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
+import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as DemoApiMcpTodosRouteImport } from './routes/demo/api.mcp-todos'
+import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
+import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
+import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
+import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
+import { Route as DemoApiAiTtsRouteImport } from './routes/demo/api.ai.tts'
+import { Route as DemoApiAiTranscriptionRouteImport } from './routes/demo/api.ai.transcription'
+import { Route as DemoApiAiStructuredRouteImport } from './routes/demo/api.ai.structured'
+import { Route as DemoApiAiImageRouteImport } from './routes/demo/api.ai.image'
+import { Route as DemoApiAiChatRouteImport } from './routes/demo/api.ai.chat'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -45,17 +124,18 @@ const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
   path: '/recover-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const StatusRoute = StatusRouteImport.update({
+  id: '/_status',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/_home',
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
+  id: '/layout/',
+  path: '/layout/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/_auth',
+const DemoIndexRoute = DemoIndexRouteImport.update({
+  id: '/demo/',
+  path: '/demo/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Dashboard2IndexRoute = Dashboard2IndexRouteImport.update({
@@ -69,199 +149,1113 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
-  id: '/',
+  id: '/_home/',
   path: '/',
-  getParentRoute: () => HomeRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const HomeDocsRoute = HomeDocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => HomeRoute,
+const PrivatePrivateRoute = PrivatePrivateRouteImport.update({
+  id: '/private/_private',
+  path: '/private',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const HomeApiSyncRoute = HomeApiSyncRouteImport.update({
-  id: '/api-sync',
-  path: '/api-sync',
-  getParentRoute: () => HomeRoute,
+const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
+  id: '/layout/settings',
+  path: '/layout/settings',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const HomeDemoRoute = HomeDemoRouteImport.update({
-  id: '/_demo',
-  getParentRoute: () => HomeRoute,
+const LayoutItemsRoute = LayoutItemsRouteImport.update({
+  id: '/layout/items',
+  path: '/layout/items',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthUserRoute = AuthUserRouteImport.update({
-  id: '/user',
-  path: '/user',
-  getParentRoute: () => AuthRoute,
+const LayoutAdminRoute = LayoutAdminRouteImport.update({
+  id: '/layout/admin',
+  path: '/layout/admin',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthSettingsRoute = AuthSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AuthRoute,
+const LayoutLayoutRoute = LayoutLayoutRouteImport.update({
+  id: '/layout/_layout',
+  path: '/layout',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthItemsRoute = AuthItemsRouteImport.update({
-  id: '/items',
-  path: '/items',
-  getParentRoute: () => AuthRoute,
+const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
+  id: '/demo/tanstack-query',
+  path: '/demo/tanstack-query',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthAdminRoute = AuthAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthRoute,
-} as any)
-const HomeDemoDemoTanstackQueryRoute =
-  HomeDemoDemoTanstackQueryRouteImport.update({
-    id: '/demo/tanstack-query',
-    path: '/demo/tanstack-query',
-    getParentRoute: () => HomeDemoRoute,
-  } as any)
-const HomeDemoDemoTableRoute = HomeDemoDemoTableRouteImport.update({
+const DemoTableRoute = DemoTableRouteImport.update({
   id: '/demo/table',
   path: '/demo/table',
-  getParentRoute: () => HomeDemoRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const HomeDemoDemoFormSimpleRoute = HomeDemoDemoFormSimpleRouteImport.update({
+const DemoStrapiRoute = DemoStrapiRouteImport.update({
+  id: '/demo/strapi',
+  path: '/demo/strapi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStoreRoute = DemoStoreRouteImport.update({
+  id: '/demo/store',
+  path: '/demo/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
+  id: '/demo/mcp-todos',
+  path: '/demo/mcp-todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoI18nRoute = DemoI18nRouteImport.update({
+  id: '/demo/i18n',
+  path: '/demo/i18n',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoDocsRoute = DemoDocsRouteImport.update({
+  id: '/demo/docs',
+  path: '/demo/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoDbChatApiRoute = DemoDbChatApiRouteImport.update({
+  id: '/demo/db-chat-api',
+  path: '/demo/db-chat-api',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoDbChatRoute = DemoDbChatRouteImport.update({
+  id: '/demo/db-chat',
+  path: '/demo/db-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiSyncRoute = DemoApiSyncRouteImport.update({
+  id: '/demo/api-sync',
+  path: '/demo/api-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoAiStructuredRoute = DemoAiStructuredRouteImport.update({
+  id: '/demo/ai-structured',
+  path: '/demo/ai-structured',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoAiImageRoute = DemoAiImageRouteImport.update({
+  id: '/demo/ai-image',
+  path: '/demo/ai-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoAiChatRoute = DemoAiChatRouteImport.update({
+  id: '/demo/ai-chat',
+  path: '/demo/ai-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoHomeRoute = DemoHomeRouteImport.update({
+  id: '/demo/_home',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusWelcomeRoute = StatusWelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusWebhookConfiguredRoute = StatusWebhookConfiguredRouteImport.update({
+  id: '/webhook-configured',
+  path: '/webhook-configured',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusVerifyEmailRoute = StatusVerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusUpgradeSuccessRoute = StatusUpgradeSuccessRouteImport.update({
+  id: '/upgrade-success',
+  path: '/upgrade-success',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusUnsupportedMediaRoute = StatusUnsupportedMediaRouteImport.update({
+  id: '/unsupported-media',
+  path: '/unsupported-media',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusUnderConstructionRoute = StatusUnderConstructionRouteImport.update({
+  id: '/under-construction',
+  path: '/under-construction',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusTimeoutRoute = StatusTimeoutRouteImport.update({
+  id: '/timeout',
+  path: '/timeout',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusSuccessStatesRoute = StatusSuccessStatesRouteImport.update({
+  id: '/success-states',
+  path: '/success-states',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusSuccessRoute = StatusSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusSubscriptionCancelledRoute =
+  StatusSubscriptionCancelledRouteImport.update({
+    id: '/subscription-cancelled',
+    path: '/subscription-cancelled',
+    getParentRoute: () => StatusRoute,
+  } as any)
+const StatusStatusRoute = StatusStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusSessionExpiredRoute = StatusSessionExpiredRouteImport.update({
+  id: '/session-expired',
+  path: '/session-expired',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusRateLimitedRoute = StatusRateLimitedRouteImport.update({
+  id: '/rate-limited',
+  path: '/rate-limited',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusQueuedRoute = StatusQueuedRouteImport.update({
+  id: '/queued',
+  path: '/queued',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusProcessingRoute = StatusProcessingRouteImport.update({
+  id: '/processing',
+  path: '/processing',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusPaymentRequiredRoute = StatusPaymentRequiredRouteImport.update({
+  id: '/payment-required',
+  path: '/payment-required',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusPasswordChangedRoute = StatusPasswordChangedRouteImport.update({
+  id: '/password-changed',
+  path: '/password-changed',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusOfflineRoute = StatusOfflineRouteImport.update({
+  id: '/offline',
+  path: '/offline',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusNoResultsRoute = StatusNoResultsRouteImport.update({
+  id: '/no-results',
+  path: '/no-results',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusMaintenanceRoute = StatusMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusLoginRequiredRoute = StatusLoginRequiredRouteImport.update({
+  id: '/login-required',
+  path: '/login-required',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusLockedRoute = StatusLockedRouteImport.update({
+  id: '/locked',
+  path: '/locked',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusLoadingRoute = StatusLoadingRouteImport.update({
+  id: '/loading',
+  path: '/loading',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusInvitationRoute = StatusInvitationRouteImport.update({
+  id: '/invitation',
+  path: '/invitation',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusInfoStatesRoute = StatusInfoStatesRouteImport.update({
+  id: '/info-states',
+  path: '/info-states',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusImportCompleteRoute = StatusImportCompleteRouteImport.update({
+  id: '/import-complete',
+  path: '/import-complete',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusGoneRoute = StatusGoneRouteImport.update({
+  id: '/gone',
+  path: '/gone',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusGatewayTimeoutRoute = StatusGatewayTimeoutRouteImport.update({
+  id: '/gateway-timeout',
+  path: '/gateway-timeout',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusExportReadyRoute = StatusExportReadyRouteImport.update({
+  id: '/export-ready',
+  path: '/export-ready',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusErrorDemoRoute = StatusErrorDemoRouteImport.update({
+  id: '/error-demo',
+  path: '/error-demo',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusErrorRoute = StatusErrorRouteImport.update({
+  id: '/error',
+  path: '/error',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusEmptyStateRoute = StatusEmptyStateRouteImport.update({
+  id: '/empty-state',
+  path: '/empty-state',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusEmailSentRoute = StatusEmailSentRouteImport.update({
+  id: '/email-sent',
+  path: '/email-sent',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusDowngradeRoute = StatusDowngradeRouteImport.update({
+  id: '/downgrade',
+  path: '/downgrade',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusDeviceVerifiedRoute = StatusDeviceVerifiedRouteImport.update({
+  id: '/device-verified',
+  path: '/device-verified',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusDeletedRoute = StatusDeletedRouteImport.update({
+  id: '/deleted',
+  path: '/deleted',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusConflictRoute = StatusConflictRouteImport.update({
+  id: '/conflict',
+  path: '/conflict',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusComingSoonRoute = StatusComingSoonRouteImport.update({
+  id: '/coming-soon',
+  path: '/coming-soon',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusCancelledRoute = StatusCancelledRouteImport.update({
+  id: '/cancelled',
+  path: '/cancelled',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusBandwidthExceededRoute = StatusBandwidthExceededRouteImport.update({
+  id: '/bandwidth-exceeded',
+  path: '/bandwidth-exceeded',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusBadRequestRoute = StatusBadRequestRouteImport.update({
+  id: '/bad-request',
+  path: '/bad-request',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusBadGatewayRoute = StatusBadGatewayRouteImport.update({
+  id: '/bad-gateway',
+  path: '/bad-gateway',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusBackupCompleteRoute = StatusBackupCompleteRouteImport.update({
+  id: '/backup-complete',
+  path: '/backup-complete',
+  getParentRoute: () => StatusRoute,
+} as any)
+const StatusApiKeyCreatedRoute = StatusApiKeyCreatedRouteImport.update({
+  id: '/api-key-created',
+  path: '/api-key-created',
+  getParentRoute: () => StatusRoute,
+} as any)
+const Status503Route = Status503RouteImport.update({
+  id: '/503',
+  path: '/503',
+  getParentRoute: () => StatusRoute,
+} as any)
+const Status500Route = Status500RouteImport.update({
+  id: '/500',
+  path: '/500',
+  getParentRoute: () => StatusRoute,
+} as any)
+const Status404Route = Status404RouteImport.update({
+  id: '/404',
+  path: '/404',
+  getParentRoute: () => StatusRoute,
+} as any)
+const Status403Route = Status403RouteImport.update({
+  id: '/403',
+  path: '/403',
+  getParentRoute: () => StatusRoute,
+} as any)
+const Status401Route = Status401RouteImport.update({
+  id: '/401',
+  path: '/401',
+  getParentRoute: () => StatusRoute,
+} as any)
+const Status2faRequiredRoute = Status2faRequiredRouteImport.update({
+  id: '/2fa-required',
+  path: '/2fa-required',
+  getParentRoute: () => StatusRoute,
+} as any)
+const Status2faEnabledRoute = Status2faEnabledRouteImport.update({
+  id: '/2fa-enabled',
+  path: '/2fa-enabled',
+  getParentRoute: () => StatusRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/_auth/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoGuitarsIndexRoute = DemoGuitarsIndexRouteImport.update({
+  id: '/demo/guitars/',
+  path: '/demo/guitars/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStrapiArticleIdRoute = DemoStrapiArticleIdRouteImport.update({
+  id: '/demo/strapi_/$articleId',
+  path: '/demo/strapi/$articleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
+  id: '/demo/start/server-funcs',
+  path: '/demo/start/server-funcs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
+  id: '/demo/start/api-request',
+  path: '/demo/start/api-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoGuitarsGuitarIdRoute = DemoGuitarsGuitarIdRouteImport.update({
+  id: '/demo/guitars/$guitarId',
+  path: '/demo/guitars/$guitarId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoFormSimpleRoute = DemoFormSimpleRouteImport.update({
   id: '/demo/form/simple',
   path: '/demo/form/simple',
-  getParentRoute: () => HomeDemoRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const HomeDemoDemoFormAddressRoute = HomeDemoDemoFormAddressRouteImport.update({
+const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
   id: '/demo/form/address',
   path: '/demo/form/address',
-  getParentRoute: () => HomeDemoRoute,
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiTqTodosRoute = DemoApiTqTodosRouteImport.update({
+  id: '/demo/api/tq-todos',
+  path: '/demo/api/tq-todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
+  id: '/demo/api/names',
+  path: '/demo/api/names',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiMcpTodosRoute = DemoApiMcpTodosRouteImport.update({
+  id: '/demo/api/mcp-todos',
+  path: '/demo/api/mcp-todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
+  id: '/demo/start/ssr/',
+  path: '/demo/start/ssr/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartSsrSpaModeRoute = DemoStartSsrSpaModeRouteImport.update({
+  id: '/demo/start/ssr/spa-mode',
+  path: '/demo/start/ssr/spa-mode',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartSsrFullSsrRoute = DemoStartSsrFullSsrRouteImport.update({
+  id: '/demo/start/ssr/full-ssr',
+  path: '/demo/start/ssr/full-ssr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
+  id: '/demo/start/ssr/data-only',
+  path: '/demo/start/ssr/data-only',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiAiTtsRoute = DemoApiAiTtsRouteImport.update({
+  id: '/demo/api/ai/tts',
+  path: '/demo/api/ai/tts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiAiTranscriptionRoute = DemoApiAiTranscriptionRouteImport.update({
+  id: '/demo/api/ai/transcription',
+  path: '/demo/api/ai/transcription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiAiStructuredRoute = DemoApiAiStructuredRouteImport.update({
+  id: '/demo/api/ai/structured',
+  path: '/demo/api/ai/structured',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiAiImageRoute = DemoApiAiImageRouteImport.update({
+  id: '/demo/api/ai/image',
+  path: '/demo/api/ai/image',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiAiChatRoute = DemoApiAiChatRouteImport.update({
+  id: '/demo/api/ai/chat',
+  path: '/demo/api/ai/chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/login': typeof LoginRoute
+  '/': typeof HomeIndexRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof AuthAdminRoute
-  '/items': typeof AuthItemsRoute
-  '/settings': typeof AuthSettingsRoute
-  '/user': typeof AuthUserRoute
-  '/api-sync': typeof HomeApiSyncRoute
-  '/docs': typeof HomeDocsRoute
-  '/': typeof HomeIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/dashboard2': typeof Dashboard2IndexRoute
-  '/demo/table': typeof HomeDemoDemoTableRoute
-  '/demo/tanstack-query': typeof HomeDemoDemoTanstackQueryRoute
-  '/demo/form/address': typeof HomeDemoDemoFormAddressRoute
-  '/demo/form/simple': typeof HomeDemoDemoFormSimpleRoute
+  '/login': typeof AuthLoginRoute
+  '/2fa-enabled': typeof Status2faEnabledRoute
+  '/2fa-required': typeof Status2faRequiredRoute
+  '/401': typeof Status401Route
+  '/403': typeof Status403Route
+  '/404': typeof Status404Route
+  '/500': typeof Status500Route
+  '/503': typeof Status503Route
+  '/api-key-created': typeof StatusApiKeyCreatedRoute
+  '/backup-complete': typeof StatusBackupCompleteRoute
+  '/bad-gateway': typeof StatusBadGatewayRoute
+  '/bad-request': typeof StatusBadRequestRoute
+  '/bandwidth-exceeded': typeof StatusBandwidthExceededRoute
+  '/cancelled': typeof StatusCancelledRoute
+  '/coming-soon': typeof StatusComingSoonRoute
+  '/conflict': typeof StatusConflictRoute
+  '/deleted': typeof StatusDeletedRoute
+  '/device-verified': typeof StatusDeviceVerifiedRoute
+  '/downgrade': typeof StatusDowngradeRoute
+  '/email-sent': typeof StatusEmailSentRoute
+  '/empty-state': typeof StatusEmptyStateRoute
+  '/error': typeof StatusErrorRoute
+  '/error-demo': typeof StatusErrorDemoRoute
+  '/export-ready': typeof StatusExportReadyRoute
+  '/gateway-timeout': typeof StatusGatewayTimeoutRoute
+  '/gone': typeof StatusGoneRoute
+  '/import-complete': typeof StatusImportCompleteRoute
+  '/info-states': typeof StatusInfoStatesRoute
+  '/invitation': typeof StatusInvitationRoute
+  '/loading': typeof StatusLoadingRoute
+  '/locked': typeof StatusLockedRoute
+  '/login-required': typeof StatusLoginRequiredRoute
+  '/maintenance': typeof StatusMaintenanceRoute
+  '/no-results': typeof StatusNoResultsRoute
+  '/offline': typeof StatusOfflineRoute
+  '/password-changed': typeof StatusPasswordChangedRoute
+  '/payment-required': typeof StatusPaymentRequiredRoute
+  '/processing': typeof StatusProcessingRoute
+  '/queued': typeof StatusQueuedRoute
+  '/rate-limited': typeof StatusRateLimitedRoute
+  '/session-expired': typeof StatusSessionExpiredRoute
+  '/status': typeof StatusStatusRoute
+  '/subscription-cancelled': typeof StatusSubscriptionCancelledRoute
+  '/success': typeof StatusSuccessRoute
+  '/success-states': typeof StatusSuccessStatesRoute
+  '/timeout': typeof StatusTimeoutRoute
+  '/under-construction': typeof StatusUnderConstructionRoute
+  '/unsupported-media': typeof StatusUnsupportedMediaRoute
+  '/upgrade-success': typeof StatusUpgradeSuccessRoute
+  '/verify-email': typeof StatusVerifyEmailRoute
+  '/webhook-configured': typeof StatusWebhookConfiguredRoute
+  '/welcome': typeof StatusWelcomeRoute
+  '/demo': typeof DemoHomeRoute
+  '/demo/ai-chat': typeof DemoAiChatRoute
+  '/demo/ai-image': typeof DemoAiImageRoute
+  '/demo/ai-structured': typeof DemoAiStructuredRoute
+  '/demo/api-sync': typeof DemoApiSyncRoute
+  '/demo/db-chat': typeof DemoDbChatRoute
+  '/demo/db-chat-api': typeof DemoDbChatApiRoute
+  '/demo/docs': typeof DemoDocsRoute
+  '/demo/i18n': typeof DemoI18nRoute
+  '/demo/mcp-todos': typeof DemoMcpTodosRoute
+  '/demo/store': typeof DemoStoreRoute
+  '/demo/strapi': typeof DemoStrapiRoute
+  '/demo/table': typeof DemoTableRoute
+  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/layout': typeof LayoutLayoutRoute
+  '/layout/admin': typeof LayoutAdminRoute
+  '/layout/items': typeof LayoutItemsRoute
+  '/layout/settings': typeof LayoutSettingsRoute
+  '/private': typeof PrivatePrivateRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard2/': typeof Dashboard2IndexRoute
+  '/demo/': typeof DemoIndexRoute
+  '/layout/': typeof LayoutIndexRoute
+  '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
+  '/demo/api/names': typeof DemoApiNamesRoute
+  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
+  '/demo/form/address': typeof DemoFormAddressRoute
+  '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
+  '/demo/start/api-request': typeof DemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/demo/strapi/$articleId': typeof DemoStrapiArticleIdRoute
+  '/demo/guitars/': typeof DemoGuitarsIndexRoute
+  '/demo/api/ai/chat': typeof DemoApiAiChatRoute
+  '/demo/api/ai/image': typeof DemoApiAiImageRoute
+  '/demo/api/ai/structured': typeof DemoApiAiStructuredRoute
+  '/demo/api/ai/transcription': typeof DemoApiAiTranscriptionRoute
+  '/demo/api/ai/tts': typeof DemoApiAiTtsRoute
+  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
+  '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
+  '/': typeof HomeIndexRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof AuthAdminRoute
-  '/items': typeof AuthItemsRoute
-  '/settings': typeof AuthSettingsRoute
-  '/user': typeof AuthUserRoute
-  '/api-sync': typeof HomeApiSyncRoute
-  '/docs': typeof HomeDocsRoute
-  '/': typeof HomeIndexRoute
+  '/login': typeof AuthLoginRoute
+  '/2fa-enabled': typeof Status2faEnabledRoute
+  '/2fa-required': typeof Status2faRequiredRoute
+  '/401': typeof Status401Route
+  '/403': typeof Status403Route
+  '/404': typeof Status404Route
+  '/500': typeof Status500Route
+  '/503': typeof Status503Route
+  '/api-key-created': typeof StatusApiKeyCreatedRoute
+  '/backup-complete': typeof StatusBackupCompleteRoute
+  '/bad-gateway': typeof StatusBadGatewayRoute
+  '/bad-request': typeof StatusBadRequestRoute
+  '/bandwidth-exceeded': typeof StatusBandwidthExceededRoute
+  '/cancelled': typeof StatusCancelledRoute
+  '/coming-soon': typeof StatusComingSoonRoute
+  '/conflict': typeof StatusConflictRoute
+  '/deleted': typeof StatusDeletedRoute
+  '/device-verified': typeof StatusDeviceVerifiedRoute
+  '/downgrade': typeof StatusDowngradeRoute
+  '/email-sent': typeof StatusEmailSentRoute
+  '/empty-state': typeof StatusEmptyStateRoute
+  '/error': typeof StatusErrorRoute
+  '/error-demo': typeof StatusErrorDemoRoute
+  '/export-ready': typeof StatusExportReadyRoute
+  '/gateway-timeout': typeof StatusGatewayTimeoutRoute
+  '/gone': typeof StatusGoneRoute
+  '/import-complete': typeof StatusImportCompleteRoute
+  '/info-states': typeof StatusInfoStatesRoute
+  '/invitation': typeof StatusInvitationRoute
+  '/loading': typeof StatusLoadingRoute
+  '/locked': typeof StatusLockedRoute
+  '/login-required': typeof StatusLoginRequiredRoute
+  '/maintenance': typeof StatusMaintenanceRoute
+  '/no-results': typeof StatusNoResultsRoute
+  '/offline': typeof StatusOfflineRoute
+  '/password-changed': typeof StatusPasswordChangedRoute
+  '/payment-required': typeof StatusPaymentRequiredRoute
+  '/processing': typeof StatusProcessingRoute
+  '/queued': typeof StatusQueuedRoute
+  '/rate-limited': typeof StatusRateLimitedRoute
+  '/session-expired': typeof StatusSessionExpiredRoute
+  '/status': typeof StatusStatusRoute
+  '/subscription-cancelled': typeof StatusSubscriptionCancelledRoute
+  '/success': typeof StatusSuccessRoute
+  '/success-states': typeof StatusSuccessStatesRoute
+  '/timeout': typeof StatusTimeoutRoute
+  '/under-construction': typeof StatusUnderConstructionRoute
+  '/unsupported-media': typeof StatusUnsupportedMediaRoute
+  '/upgrade-success': typeof StatusUpgradeSuccessRoute
+  '/verify-email': typeof StatusVerifyEmailRoute
+  '/webhook-configured': typeof StatusWebhookConfiguredRoute
+  '/welcome': typeof StatusWelcomeRoute
+  '/demo': typeof DemoIndexRoute
+  '/demo/ai-chat': typeof DemoAiChatRoute
+  '/demo/ai-image': typeof DemoAiImageRoute
+  '/demo/ai-structured': typeof DemoAiStructuredRoute
+  '/demo/api-sync': typeof DemoApiSyncRoute
+  '/demo/db-chat': typeof DemoDbChatRoute
+  '/demo/db-chat-api': typeof DemoDbChatApiRoute
+  '/demo/docs': typeof DemoDocsRoute
+  '/demo/i18n': typeof DemoI18nRoute
+  '/demo/mcp-todos': typeof DemoMcpTodosRoute
+  '/demo/store': typeof DemoStoreRoute
+  '/demo/strapi': typeof DemoStrapiRoute
+  '/demo/table': typeof DemoTableRoute
+  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/layout': typeof LayoutIndexRoute
+  '/layout/admin': typeof LayoutAdminRoute
+  '/layout/items': typeof LayoutItemsRoute
+  '/layout/settings': typeof LayoutSettingsRoute
+  '/private': typeof PrivatePrivateRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard2': typeof Dashboard2IndexRoute
-  '/demo/table': typeof HomeDemoDemoTableRoute
-  '/demo/tanstack-query': typeof HomeDemoDemoTanstackQueryRoute
-  '/demo/form/address': typeof HomeDemoDemoFormAddressRoute
-  '/demo/form/simple': typeof HomeDemoDemoFormSimpleRoute
+  '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
+  '/demo/api/names': typeof DemoApiNamesRoute
+  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
+  '/demo/form/address': typeof DemoFormAddressRoute
+  '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
+  '/demo/start/api-request': typeof DemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/demo/strapi/$articleId': typeof DemoStrapiArticleIdRoute
+  '/demo/guitars': typeof DemoGuitarsIndexRoute
+  '/demo/api/ai/chat': typeof DemoApiAiChatRoute
+  '/demo/api/ai/image': typeof DemoApiAiImageRoute
+  '/demo/api/ai/structured': typeof DemoApiAiStructuredRoute
+  '/demo/api/ai/transcription': typeof DemoApiAiTranscriptionRoute
+  '/demo/api/ai/tts': typeof DemoApiAiTtsRoute
+  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
+  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_auth': typeof AuthRouteWithChildren
-  '/_home': typeof HomeRouteWithChildren
-  '/login': typeof LoginRoute
+  '/_status': typeof StatusRouteWithChildren
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/_auth/admin': typeof AuthAdminRoute
-  '/_auth/items': typeof AuthItemsRoute
-  '/_auth/settings': typeof AuthSettingsRoute
-  '/_auth/user': typeof AuthUserRoute
-  '/_home/_demo': typeof HomeDemoRouteWithChildren
-  '/_home/api-sync': typeof HomeApiSyncRoute
-  '/_home/docs': typeof HomeDocsRoute
+  '/_auth/login': typeof AuthLoginRoute
+  '/_status/2fa-enabled': typeof Status2faEnabledRoute
+  '/_status/2fa-required': typeof Status2faRequiredRoute
+  '/_status/401': typeof Status401Route
+  '/_status/403': typeof Status403Route
+  '/_status/404': typeof Status404Route
+  '/_status/500': typeof Status500Route
+  '/_status/503': typeof Status503Route
+  '/_status/api-key-created': typeof StatusApiKeyCreatedRoute
+  '/_status/backup-complete': typeof StatusBackupCompleteRoute
+  '/_status/bad-gateway': typeof StatusBadGatewayRoute
+  '/_status/bad-request': typeof StatusBadRequestRoute
+  '/_status/bandwidth-exceeded': typeof StatusBandwidthExceededRoute
+  '/_status/cancelled': typeof StatusCancelledRoute
+  '/_status/coming-soon': typeof StatusComingSoonRoute
+  '/_status/conflict': typeof StatusConflictRoute
+  '/_status/deleted': typeof StatusDeletedRoute
+  '/_status/device-verified': typeof StatusDeviceVerifiedRoute
+  '/_status/downgrade': typeof StatusDowngradeRoute
+  '/_status/email-sent': typeof StatusEmailSentRoute
+  '/_status/empty-state': typeof StatusEmptyStateRoute
+  '/_status/error': typeof StatusErrorRoute
+  '/_status/error-demo': typeof StatusErrorDemoRoute
+  '/_status/export-ready': typeof StatusExportReadyRoute
+  '/_status/gateway-timeout': typeof StatusGatewayTimeoutRoute
+  '/_status/gone': typeof StatusGoneRoute
+  '/_status/import-complete': typeof StatusImportCompleteRoute
+  '/_status/info-states': typeof StatusInfoStatesRoute
+  '/_status/invitation': typeof StatusInvitationRoute
+  '/_status/loading': typeof StatusLoadingRoute
+  '/_status/locked': typeof StatusLockedRoute
+  '/_status/login-required': typeof StatusLoginRequiredRoute
+  '/_status/maintenance': typeof StatusMaintenanceRoute
+  '/_status/no-results': typeof StatusNoResultsRoute
+  '/_status/offline': typeof StatusOfflineRoute
+  '/_status/password-changed': typeof StatusPasswordChangedRoute
+  '/_status/payment-required': typeof StatusPaymentRequiredRoute
+  '/_status/processing': typeof StatusProcessingRoute
+  '/_status/queued': typeof StatusQueuedRoute
+  '/_status/rate-limited': typeof StatusRateLimitedRoute
+  '/_status/session-expired': typeof StatusSessionExpiredRoute
+  '/_status/status': typeof StatusStatusRoute
+  '/_status/subscription-cancelled': typeof StatusSubscriptionCancelledRoute
+  '/_status/success': typeof StatusSuccessRoute
+  '/_status/success-states': typeof StatusSuccessStatesRoute
+  '/_status/timeout': typeof StatusTimeoutRoute
+  '/_status/under-construction': typeof StatusUnderConstructionRoute
+  '/_status/unsupported-media': typeof StatusUnsupportedMediaRoute
+  '/_status/upgrade-success': typeof StatusUpgradeSuccessRoute
+  '/_status/verify-email': typeof StatusVerifyEmailRoute
+  '/_status/webhook-configured': typeof StatusWebhookConfiguredRoute
+  '/_status/welcome': typeof StatusWelcomeRoute
+  '/demo/_home': typeof DemoHomeRoute
+  '/demo/ai-chat': typeof DemoAiChatRoute
+  '/demo/ai-image': typeof DemoAiImageRoute
+  '/demo/ai-structured': typeof DemoAiStructuredRoute
+  '/demo/api-sync': typeof DemoApiSyncRoute
+  '/demo/db-chat': typeof DemoDbChatRoute
+  '/demo/db-chat-api': typeof DemoDbChatApiRoute
+  '/demo/docs': typeof DemoDocsRoute
+  '/demo/i18n': typeof DemoI18nRoute
+  '/demo/mcp-todos': typeof DemoMcpTodosRoute
+  '/demo/store': typeof DemoStoreRoute
+  '/demo/strapi': typeof DemoStrapiRoute
+  '/demo/table': typeof DemoTableRoute
+  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/layout/_layout': typeof LayoutLayoutRoute
+  '/layout/admin': typeof LayoutAdminRoute
+  '/layout/items': typeof LayoutItemsRoute
+  '/layout/settings': typeof LayoutSettingsRoute
+  '/private/_private': typeof PrivatePrivateRoute
   '/_home/': typeof HomeIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard2/': typeof Dashboard2IndexRoute
-  '/_home/_demo/demo/table': typeof HomeDemoDemoTableRoute
-  '/_home/_demo/demo/tanstack-query': typeof HomeDemoDemoTanstackQueryRoute
-  '/_home/_demo/demo/form/address': typeof HomeDemoDemoFormAddressRoute
-  '/_home/_demo/demo/form/simple': typeof HomeDemoDemoFormSimpleRoute
+  '/demo/': typeof DemoIndexRoute
+  '/layout/': typeof LayoutIndexRoute
+  '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
+  '/demo/api/names': typeof DemoApiNamesRoute
+  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
+  '/demo/form/address': typeof DemoFormAddressRoute
+  '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
+  '/demo/start/api-request': typeof DemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/demo/strapi_/$articleId': typeof DemoStrapiArticleIdRoute
+  '/demo/guitars/': typeof DemoGuitarsIndexRoute
+  '/demo/api/ai/chat': typeof DemoApiAiChatRoute
+  '/demo/api/ai/image': typeof DemoApiAiImageRoute
+  '/demo/api/ai/structured': typeof DemoApiAiStructuredRoute
+  '/demo/api/ai/transcription': typeof DemoApiAiTranscriptionRoute
+  '/demo/api/ai/tts': typeof DemoApiAiTtsRoute
+  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
+  '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/login'
+    | '/'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/admin'
-    | '/items'
-    | '/settings'
-    | '/user'
-    | '/api-sync'
-    | '/docs'
-    | '/'
-    | '/dashboard'
-    | '/dashboard2'
+    | '/login'
+    | '/2fa-enabled'
+    | '/2fa-required'
+    | '/401'
+    | '/403'
+    | '/404'
+    | '/500'
+    | '/503'
+    | '/api-key-created'
+    | '/backup-complete'
+    | '/bad-gateway'
+    | '/bad-request'
+    | '/bandwidth-exceeded'
+    | '/cancelled'
+    | '/coming-soon'
+    | '/conflict'
+    | '/deleted'
+    | '/device-verified'
+    | '/downgrade'
+    | '/email-sent'
+    | '/empty-state'
+    | '/error'
+    | '/error-demo'
+    | '/export-ready'
+    | '/gateway-timeout'
+    | '/gone'
+    | '/import-complete'
+    | '/info-states'
+    | '/invitation'
+    | '/loading'
+    | '/locked'
+    | '/login-required'
+    | '/maintenance'
+    | '/no-results'
+    | '/offline'
+    | '/password-changed'
+    | '/payment-required'
+    | '/processing'
+    | '/queued'
+    | '/rate-limited'
+    | '/session-expired'
+    | '/status'
+    | '/subscription-cancelled'
+    | '/success'
+    | '/success-states'
+    | '/timeout'
+    | '/under-construction'
+    | '/unsupported-media'
+    | '/upgrade-success'
+    | '/verify-email'
+    | '/webhook-configured'
+    | '/welcome'
+    | '/demo'
+    | '/demo/ai-chat'
+    | '/demo/ai-image'
+    | '/demo/ai-structured'
+    | '/demo/api-sync'
+    | '/demo/db-chat'
+    | '/demo/db-chat-api'
+    | '/demo/docs'
+    | '/demo/i18n'
+    | '/demo/mcp-todos'
+    | '/demo/store'
+    | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/layout'
+    | '/layout/admin'
+    | '/layout/items'
+    | '/layout/settings'
+    | '/private'
+    | '/dashboard/'
+    | '/dashboard2/'
+    | '/demo/'
+    | '/layout/'
+    | '/demo/api/mcp-todos'
+    | '/demo/api/names'
+    | '/demo/api/tq-todos'
     | '/demo/form/address'
     | '/demo/form/simple'
+    | '/demo/guitars/$guitarId'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
+    | '/demo/strapi/$articleId'
+    | '/demo/guitars/'
+    | '/demo/api/ai/chat'
+    | '/demo/api/ai/image'
+    | '/demo/api/ai/structured'
+    | '/demo/api/ai/transcription'
+    | '/demo/api/ai/tts'
+    | '/demo/start/ssr/data-only'
+    | '/demo/start/ssr/full-ssr'
+    | '/demo/start/ssr/spa-mode'
+    | '/demo/start/ssr/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/login'
+    | '/'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/admin'
-    | '/items'
-    | '/settings'
-    | '/user'
-    | '/api-sync'
-    | '/docs'
-    | '/'
-    | '/dashboard'
-    | '/dashboard2'
+    | '/login'
+    | '/2fa-enabled'
+    | '/2fa-required'
+    | '/401'
+    | '/403'
+    | '/404'
+    | '/500'
+    | '/503'
+    | '/api-key-created'
+    | '/backup-complete'
+    | '/bad-gateway'
+    | '/bad-request'
+    | '/bandwidth-exceeded'
+    | '/cancelled'
+    | '/coming-soon'
+    | '/conflict'
+    | '/deleted'
+    | '/device-verified'
+    | '/downgrade'
+    | '/email-sent'
+    | '/empty-state'
+    | '/error'
+    | '/error-demo'
+    | '/export-ready'
+    | '/gateway-timeout'
+    | '/gone'
+    | '/import-complete'
+    | '/info-states'
+    | '/invitation'
+    | '/loading'
+    | '/locked'
+    | '/login-required'
+    | '/maintenance'
+    | '/no-results'
+    | '/offline'
+    | '/password-changed'
+    | '/payment-required'
+    | '/processing'
+    | '/queued'
+    | '/rate-limited'
+    | '/session-expired'
+    | '/status'
+    | '/subscription-cancelled'
+    | '/success'
+    | '/success-states'
+    | '/timeout'
+    | '/under-construction'
+    | '/unsupported-media'
+    | '/upgrade-success'
+    | '/verify-email'
+    | '/webhook-configured'
+    | '/welcome'
+    | '/demo'
+    | '/demo/ai-chat'
+    | '/demo/ai-image'
+    | '/demo/ai-structured'
+    | '/demo/api-sync'
+    | '/demo/db-chat'
+    | '/demo/db-chat-api'
+    | '/demo/docs'
+    | '/demo/i18n'
+    | '/demo/mcp-todos'
+    | '/demo/store'
+    | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/layout'
+    | '/layout/admin'
+    | '/layout/items'
+    | '/layout/settings'
+    | '/private'
+    | '/dashboard'
+    | '/dashboard2'
+    | '/demo/api/mcp-todos'
+    | '/demo/api/names'
+    | '/demo/api/tq-todos'
     | '/demo/form/address'
     | '/demo/form/simple'
+    | '/demo/guitars/$guitarId'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
+    | '/demo/strapi/$articleId'
+    | '/demo/guitars'
+    | '/demo/api/ai/chat'
+    | '/demo/api/ai/image'
+    | '/demo/api/ai/structured'
+    | '/demo/api/ai/transcription'
+    | '/demo/api/ai/tts'
+    | '/demo/start/ssr/data-only'
+    | '/demo/start/ssr/full-ssr'
+    | '/demo/start/ssr/spa-mode'
+    | '/demo/start/ssr'
   id:
     | '__root__'
-    | '/_auth'
-    | '/_home'
-    | '/login'
+    | '/_status'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/_auth/admin'
-    | '/_auth/items'
-    | '/_auth/settings'
-    | '/_auth/user'
-    | '/_home/_demo'
-    | '/_home/api-sync'
-    | '/_home/docs'
+    | '/_auth/login'
+    | '/_status/2fa-enabled'
+    | '/_status/2fa-required'
+    | '/_status/401'
+    | '/_status/403'
+    | '/_status/404'
+    | '/_status/500'
+    | '/_status/503'
+    | '/_status/api-key-created'
+    | '/_status/backup-complete'
+    | '/_status/bad-gateway'
+    | '/_status/bad-request'
+    | '/_status/bandwidth-exceeded'
+    | '/_status/cancelled'
+    | '/_status/coming-soon'
+    | '/_status/conflict'
+    | '/_status/deleted'
+    | '/_status/device-verified'
+    | '/_status/downgrade'
+    | '/_status/email-sent'
+    | '/_status/empty-state'
+    | '/_status/error'
+    | '/_status/error-demo'
+    | '/_status/export-ready'
+    | '/_status/gateway-timeout'
+    | '/_status/gone'
+    | '/_status/import-complete'
+    | '/_status/info-states'
+    | '/_status/invitation'
+    | '/_status/loading'
+    | '/_status/locked'
+    | '/_status/login-required'
+    | '/_status/maintenance'
+    | '/_status/no-results'
+    | '/_status/offline'
+    | '/_status/password-changed'
+    | '/_status/payment-required'
+    | '/_status/processing'
+    | '/_status/queued'
+    | '/_status/rate-limited'
+    | '/_status/session-expired'
+    | '/_status/status'
+    | '/_status/subscription-cancelled'
+    | '/_status/success'
+    | '/_status/success-states'
+    | '/_status/timeout'
+    | '/_status/under-construction'
+    | '/_status/unsupported-media'
+    | '/_status/upgrade-success'
+    | '/_status/verify-email'
+    | '/_status/webhook-configured'
+    | '/_status/welcome'
+    | '/demo/_home'
+    | '/demo/ai-chat'
+    | '/demo/ai-image'
+    | '/demo/ai-structured'
+    | '/demo/api-sync'
+    | '/demo/db-chat'
+    | '/demo/db-chat-api'
+    | '/demo/docs'
+    | '/demo/i18n'
+    | '/demo/mcp-todos'
+    | '/demo/store'
+    | '/demo/strapi'
+    | '/demo/table'
+    | '/demo/tanstack-query'
+    | '/layout/_layout'
+    | '/layout/admin'
+    | '/layout/items'
+    | '/layout/settings'
+    | '/private/_private'
     | '/_home/'
     | '/dashboard/'
     | '/dashboard2/'
-    | '/_home/_demo/demo/table'
-    | '/_home/_demo/demo/tanstack-query'
-    | '/_home/_demo/demo/form/address'
-    | '/_home/_demo/demo/form/simple'
+    | '/demo/'
+    | '/layout/'
+    | '/demo/api/mcp-todos'
+    | '/demo/api/names'
+    | '/demo/api/tq-todos'
+    | '/demo/form/address'
+    | '/demo/form/simple'
+    | '/demo/guitars/$guitarId'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
+    | '/demo/strapi_/$articleId'
+    | '/demo/guitars/'
+    | '/demo/api/ai/chat'
+    | '/demo/api/ai/image'
+    | '/demo/api/ai/structured'
+    | '/demo/api/ai/transcription'
+    | '/demo/api/ai/tts'
+    | '/demo/start/ssr/data-only'
+    | '/demo/start/ssr/full-ssr'
+    | '/demo/start/ssr/spa-mode'
+    | '/demo/start/ssr/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthRoute: typeof AuthRouteWithChildren
-  HomeRoute: typeof HomeRouteWithChildren
-  LoginRoute: typeof LoginRoute
+  StatusRoute: typeof StatusRouteWithChildren
   RecoverPasswordRoute: typeof RecoverPasswordRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  DemoHomeRoute: typeof DemoHomeRoute
+  DemoAiChatRoute: typeof DemoAiChatRoute
+  DemoAiImageRoute: typeof DemoAiImageRoute
+  DemoAiStructuredRoute: typeof DemoAiStructuredRoute
+  DemoApiSyncRoute: typeof DemoApiSyncRoute
+  DemoDbChatRoute: typeof DemoDbChatRoute
+  DemoDbChatApiRoute: typeof DemoDbChatApiRoute
+  DemoDocsRoute: typeof DemoDocsRoute
+  DemoI18nRoute: typeof DemoI18nRoute
+  DemoMcpTodosRoute: typeof DemoMcpTodosRoute
+  DemoStoreRoute: typeof DemoStoreRoute
+  DemoStrapiRoute: typeof DemoStrapiRoute
+  DemoTableRoute: typeof DemoTableRoute
+  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  LayoutLayoutRoute: typeof LayoutLayoutRoute
+  LayoutAdminRoute: typeof LayoutAdminRoute
+  LayoutItemsRoute: typeof LayoutItemsRoute
+  LayoutSettingsRoute: typeof LayoutSettingsRoute
+  PrivatePrivateRoute: typeof PrivatePrivateRoute
+  HomeIndexRoute: typeof HomeIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   Dashboard2IndexRoute: typeof Dashboard2IndexRoute
+  DemoIndexRoute: typeof DemoIndexRoute
+  LayoutIndexRoute: typeof LayoutIndexRoute
+  DemoApiMcpTodosRoute: typeof DemoApiMcpTodosRoute
+  DemoApiNamesRoute: typeof DemoApiNamesRoute
+  DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
+  DemoFormAddressRoute: typeof DemoFormAddressRoute
+  DemoFormSimpleRoute: typeof DemoFormSimpleRoute
+  DemoGuitarsGuitarIdRoute: typeof DemoGuitarsGuitarIdRoute
+  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
+  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
+  DemoStrapiArticleIdRoute: typeof DemoStrapiArticleIdRoute
+  DemoGuitarsIndexRoute: typeof DemoGuitarsIndexRoute
+  DemoApiAiChatRoute: typeof DemoApiAiChatRoute
+  DemoApiAiImageRoute: typeof DemoApiAiImageRoute
+  DemoApiAiStructuredRoute: typeof DemoApiAiStructuredRoute
+  DemoApiAiTranscriptionRoute: typeof DemoApiAiTranscriptionRoute
+  DemoApiAiTtsRoute: typeof DemoApiAiTtsRoute
+  DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
+  DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
+  DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
+  DemoStartSsrIndexRoute: typeof DemoStartSsrIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -287,38 +1281,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecoverPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/_status': {
+      id: '/_status'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof StatusRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_home': {
-      id: '/_home'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof HomeRouteImport
+    '/layout/': {
+      id: '/layout/'
+      path: '/layout'
+      fullPath: '/layout/'
+      preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRouteImport
+    '/demo/': {
+      id: '/demo/'
+      path: '/demo'
+      fullPath: '/demo/'
+      preLoaderRoute: typeof DemoIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard2/': {
       id: '/dashboard2/'
       path: '/dashboard2'
-      fullPath: '/dashboard2'
+      fullPath: '/dashboard2/'
       preLoaderRoute: typeof Dashboard2IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/dashboard'
-      fullPath: '/dashboard'
+      fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -327,148 +1321,811 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof HomeIndexRouteImport
-      parentRoute: typeof HomeRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/_home/docs': {
-      id: '/_home/docs'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof HomeDocsRouteImport
-      parentRoute: typeof HomeRoute
+    '/private/_private': {
+      id: '/private/_private'
+      path: '/private'
+      fullPath: '/private'
+      preLoaderRoute: typeof PrivatePrivateRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_home/api-sync': {
-      id: '/_home/api-sync'
-      path: '/api-sync'
-      fullPath: '/api-sync'
-      preLoaderRoute: typeof HomeApiSyncRouteImport
-      parentRoute: typeof HomeRoute
+    '/layout/settings': {
+      id: '/layout/settings'
+      path: '/layout/settings'
+      fullPath: '/layout/settings'
+      preLoaderRoute: typeof LayoutSettingsRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_home/_demo': {
-      id: '/_home/_demo'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof HomeDemoRouteImport
-      parentRoute: typeof HomeRoute
+    '/layout/items': {
+      id: '/layout/items'
+      path: '/layout/items'
+      fullPath: '/layout/items'
+      preLoaderRoute: typeof LayoutItemsRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_auth/user': {
-      id: '/_auth/user'
-      path: '/user'
-      fullPath: '/user'
-      preLoaderRoute: typeof AuthUserRouteImport
-      parentRoute: typeof AuthRoute
+    '/layout/admin': {
+      id: '/layout/admin'
+      path: '/layout/admin'
+      fullPath: '/layout/admin'
+      preLoaderRoute: typeof LayoutAdminRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_auth/settings': {
-      id: '/_auth/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthSettingsRouteImport
-      parentRoute: typeof AuthRoute
+    '/layout/_layout': {
+      id: '/layout/_layout'
+      path: '/layout'
+      fullPath: '/layout'
+      preLoaderRoute: typeof LayoutLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_auth/items': {
-      id: '/_auth/items'
-      path: '/items'
-      fullPath: '/items'
-      preLoaderRoute: typeof AuthItemsRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/admin': {
-      id: '/_auth/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthAdminRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_home/_demo/demo/tanstack-query': {
-      id: '/_home/_demo/demo/tanstack-query'
+    '/demo/tanstack-query': {
+      id: '/demo/tanstack-query'
       path: '/demo/tanstack-query'
       fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof HomeDemoDemoTanstackQueryRouteImport
-      parentRoute: typeof HomeDemoRoute
+      preLoaderRoute: typeof DemoTanstackQueryRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_home/_demo/demo/table': {
-      id: '/_home/_demo/demo/table'
+    '/demo/table': {
+      id: '/demo/table'
       path: '/demo/table'
       fullPath: '/demo/table'
-      preLoaderRoute: typeof HomeDemoDemoTableRouteImport
-      parentRoute: typeof HomeDemoRoute
+      preLoaderRoute: typeof DemoTableRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_home/_demo/demo/form/simple': {
-      id: '/_home/_demo/demo/form/simple'
+    '/demo/strapi': {
+      id: '/demo/strapi'
+      path: '/demo/strapi'
+      fullPath: '/demo/strapi'
+      preLoaderRoute: typeof DemoStrapiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/store': {
+      id: '/demo/store'
+      path: '/demo/store'
+      fullPath: '/demo/store'
+      preLoaderRoute: typeof DemoStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/mcp-todos': {
+      id: '/demo/mcp-todos'
+      path: '/demo/mcp-todos'
+      fullPath: '/demo/mcp-todos'
+      preLoaderRoute: typeof DemoMcpTodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/i18n': {
+      id: '/demo/i18n'
+      path: '/demo/i18n'
+      fullPath: '/demo/i18n'
+      preLoaderRoute: typeof DemoI18nRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/docs': {
+      id: '/demo/docs'
+      path: '/demo/docs'
+      fullPath: '/demo/docs'
+      preLoaderRoute: typeof DemoDocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/db-chat-api': {
+      id: '/demo/db-chat-api'
+      path: '/demo/db-chat-api'
+      fullPath: '/demo/db-chat-api'
+      preLoaderRoute: typeof DemoDbChatApiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/db-chat': {
+      id: '/demo/db-chat'
+      path: '/demo/db-chat'
+      fullPath: '/demo/db-chat'
+      preLoaderRoute: typeof DemoDbChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api-sync': {
+      id: '/demo/api-sync'
+      path: '/demo/api-sync'
+      fullPath: '/demo/api-sync'
+      preLoaderRoute: typeof DemoApiSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/ai-structured': {
+      id: '/demo/ai-structured'
+      path: '/demo/ai-structured'
+      fullPath: '/demo/ai-structured'
+      preLoaderRoute: typeof DemoAiStructuredRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/ai-image': {
+      id: '/demo/ai-image'
+      path: '/demo/ai-image'
+      fullPath: '/demo/ai-image'
+      preLoaderRoute: typeof DemoAiImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/ai-chat': {
+      id: '/demo/ai-chat'
+      path: '/demo/ai-chat'
+      fullPath: '/demo/ai-chat'
+      preLoaderRoute: typeof DemoAiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/_home': {
+      id: '/demo/_home'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoHomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_status/welcome': {
+      id: '/_status/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof StatusWelcomeRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/webhook-configured': {
+      id: '/_status/webhook-configured'
+      path: '/webhook-configured'
+      fullPath: '/webhook-configured'
+      preLoaderRoute: typeof StatusWebhookConfiguredRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/verify-email': {
+      id: '/_status/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof StatusVerifyEmailRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/upgrade-success': {
+      id: '/_status/upgrade-success'
+      path: '/upgrade-success'
+      fullPath: '/upgrade-success'
+      preLoaderRoute: typeof StatusUpgradeSuccessRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/unsupported-media': {
+      id: '/_status/unsupported-media'
+      path: '/unsupported-media'
+      fullPath: '/unsupported-media'
+      preLoaderRoute: typeof StatusUnsupportedMediaRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/under-construction': {
+      id: '/_status/under-construction'
+      path: '/under-construction'
+      fullPath: '/under-construction'
+      preLoaderRoute: typeof StatusUnderConstructionRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/timeout': {
+      id: '/_status/timeout'
+      path: '/timeout'
+      fullPath: '/timeout'
+      preLoaderRoute: typeof StatusTimeoutRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/success-states': {
+      id: '/_status/success-states'
+      path: '/success-states'
+      fullPath: '/success-states'
+      preLoaderRoute: typeof StatusSuccessStatesRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/success': {
+      id: '/_status/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof StatusSuccessRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/subscription-cancelled': {
+      id: '/_status/subscription-cancelled'
+      path: '/subscription-cancelled'
+      fullPath: '/subscription-cancelled'
+      preLoaderRoute: typeof StatusSubscriptionCancelledRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/status': {
+      id: '/_status/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof StatusStatusRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/session-expired': {
+      id: '/_status/session-expired'
+      path: '/session-expired'
+      fullPath: '/session-expired'
+      preLoaderRoute: typeof StatusSessionExpiredRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/rate-limited': {
+      id: '/_status/rate-limited'
+      path: '/rate-limited'
+      fullPath: '/rate-limited'
+      preLoaderRoute: typeof StatusRateLimitedRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/queued': {
+      id: '/_status/queued'
+      path: '/queued'
+      fullPath: '/queued'
+      preLoaderRoute: typeof StatusQueuedRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/processing': {
+      id: '/_status/processing'
+      path: '/processing'
+      fullPath: '/processing'
+      preLoaderRoute: typeof StatusProcessingRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/payment-required': {
+      id: '/_status/payment-required'
+      path: '/payment-required'
+      fullPath: '/payment-required'
+      preLoaderRoute: typeof StatusPaymentRequiredRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/password-changed': {
+      id: '/_status/password-changed'
+      path: '/password-changed'
+      fullPath: '/password-changed'
+      preLoaderRoute: typeof StatusPasswordChangedRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/offline': {
+      id: '/_status/offline'
+      path: '/offline'
+      fullPath: '/offline'
+      preLoaderRoute: typeof StatusOfflineRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/no-results': {
+      id: '/_status/no-results'
+      path: '/no-results'
+      fullPath: '/no-results'
+      preLoaderRoute: typeof StatusNoResultsRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/maintenance': {
+      id: '/_status/maintenance'
+      path: '/maintenance'
+      fullPath: '/maintenance'
+      preLoaderRoute: typeof StatusMaintenanceRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/login-required': {
+      id: '/_status/login-required'
+      path: '/login-required'
+      fullPath: '/login-required'
+      preLoaderRoute: typeof StatusLoginRequiredRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/locked': {
+      id: '/_status/locked'
+      path: '/locked'
+      fullPath: '/locked'
+      preLoaderRoute: typeof StatusLockedRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/loading': {
+      id: '/_status/loading'
+      path: '/loading'
+      fullPath: '/loading'
+      preLoaderRoute: typeof StatusLoadingRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/invitation': {
+      id: '/_status/invitation'
+      path: '/invitation'
+      fullPath: '/invitation'
+      preLoaderRoute: typeof StatusInvitationRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/info-states': {
+      id: '/_status/info-states'
+      path: '/info-states'
+      fullPath: '/info-states'
+      preLoaderRoute: typeof StatusInfoStatesRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/import-complete': {
+      id: '/_status/import-complete'
+      path: '/import-complete'
+      fullPath: '/import-complete'
+      preLoaderRoute: typeof StatusImportCompleteRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/gone': {
+      id: '/_status/gone'
+      path: '/gone'
+      fullPath: '/gone'
+      preLoaderRoute: typeof StatusGoneRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/gateway-timeout': {
+      id: '/_status/gateway-timeout'
+      path: '/gateway-timeout'
+      fullPath: '/gateway-timeout'
+      preLoaderRoute: typeof StatusGatewayTimeoutRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/export-ready': {
+      id: '/_status/export-ready'
+      path: '/export-ready'
+      fullPath: '/export-ready'
+      preLoaderRoute: typeof StatusExportReadyRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/error-demo': {
+      id: '/_status/error-demo'
+      path: '/error-demo'
+      fullPath: '/error-demo'
+      preLoaderRoute: typeof StatusErrorDemoRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/error': {
+      id: '/_status/error'
+      path: '/error'
+      fullPath: '/error'
+      preLoaderRoute: typeof StatusErrorRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/empty-state': {
+      id: '/_status/empty-state'
+      path: '/empty-state'
+      fullPath: '/empty-state'
+      preLoaderRoute: typeof StatusEmptyStateRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/email-sent': {
+      id: '/_status/email-sent'
+      path: '/email-sent'
+      fullPath: '/email-sent'
+      preLoaderRoute: typeof StatusEmailSentRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/downgrade': {
+      id: '/_status/downgrade'
+      path: '/downgrade'
+      fullPath: '/downgrade'
+      preLoaderRoute: typeof StatusDowngradeRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/device-verified': {
+      id: '/_status/device-verified'
+      path: '/device-verified'
+      fullPath: '/device-verified'
+      preLoaderRoute: typeof StatusDeviceVerifiedRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/deleted': {
+      id: '/_status/deleted'
+      path: '/deleted'
+      fullPath: '/deleted'
+      preLoaderRoute: typeof StatusDeletedRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/conflict': {
+      id: '/_status/conflict'
+      path: '/conflict'
+      fullPath: '/conflict'
+      preLoaderRoute: typeof StatusConflictRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/coming-soon': {
+      id: '/_status/coming-soon'
+      path: '/coming-soon'
+      fullPath: '/coming-soon'
+      preLoaderRoute: typeof StatusComingSoonRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/cancelled': {
+      id: '/_status/cancelled'
+      path: '/cancelled'
+      fullPath: '/cancelled'
+      preLoaderRoute: typeof StatusCancelledRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/bandwidth-exceeded': {
+      id: '/_status/bandwidth-exceeded'
+      path: '/bandwidth-exceeded'
+      fullPath: '/bandwidth-exceeded'
+      preLoaderRoute: typeof StatusBandwidthExceededRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/bad-request': {
+      id: '/_status/bad-request'
+      path: '/bad-request'
+      fullPath: '/bad-request'
+      preLoaderRoute: typeof StatusBadRequestRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/bad-gateway': {
+      id: '/_status/bad-gateway'
+      path: '/bad-gateway'
+      fullPath: '/bad-gateway'
+      preLoaderRoute: typeof StatusBadGatewayRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/backup-complete': {
+      id: '/_status/backup-complete'
+      path: '/backup-complete'
+      fullPath: '/backup-complete'
+      preLoaderRoute: typeof StatusBackupCompleteRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/api-key-created': {
+      id: '/_status/api-key-created'
+      path: '/api-key-created'
+      fullPath: '/api-key-created'
+      preLoaderRoute: typeof StatusApiKeyCreatedRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/503': {
+      id: '/_status/503'
+      path: '/503'
+      fullPath: '/503'
+      preLoaderRoute: typeof Status503RouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/500': {
+      id: '/_status/500'
+      path: '/500'
+      fullPath: '/500'
+      preLoaderRoute: typeof Status500RouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/404': {
+      id: '/_status/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof Status404RouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/403': {
+      id: '/_status/403'
+      path: '/403'
+      fullPath: '/403'
+      preLoaderRoute: typeof Status403RouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/401': {
+      id: '/_status/401'
+      path: '/401'
+      fullPath: '/401'
+      preLoaderRoute: typeof Status401RouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/2fa-required': {
+      id: '/_status/2fa-required'
+      path: '/2fa-required'
+      fullPath: '/2fa-required'
+      preLoaderRoute: typeof Status2faRequiredRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_status/2fa-enabled': {
+      id: '/_status/2fa-enabled'
+      path: '/2fa-enabled'
+      fullPath: '/2fa-enabled'
+      preLoaderRoute: typeof Status2faEnabledRouteImport
+      parentRoute: typeof StatusRoute
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/guitars/': {
+      id: '/demo/guitars/'
+      path: '/demo/guitars'
+      fullPath: '/demo/guitars/'
+      preLoaderRoute: typeof DemoGuitarsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/strapi_/$articleId': {
+      id: '/demo/strapi_/$articleId'
+      path: '/demo/strapi/$articleId'
+      fullPath: '/demo/strapi/$articleId'
+      preLoaderRoute: typeof DemoStrapiArticleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/server-funcs': {
+      id: '/demo/start/server-funcs'
+      path: '/demo/start/server-funcs'
+      fullPath: '/demo/start/server-funcs'
+      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/api-request': {
+      id: '/demo/start/api-request'
+      path: '/demo/start/api-request'
+      fullPath: '/demo/start/api-request'
+      preLoaderRoute: typeof DemoStartApiRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/guitars/$guitarId': {
+      id: '/demo/guitars/$guitarId'
+      path: '/demo/guitars/$guitarId'
+      fullPath: '/demo/guitars/$guitarId'
+      preLoaderRoute: typeof DemoGuitarsGuitarIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/form/simple': {
+      id: '/demo/form/simple'
       path: '/demo/form/simple'
       fullPath: '/demo/form/simple'
-      preLoaderRoute: typeof HomeDemoDemoFormSimpleRouteImport
-      parentRoute: typeof HomeDemoRoute
+      preLoaderRoute: typeof DemoFormSimpleRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_home/_demo/demo/form/address': {
-      id: '/_home/_demo/demo/form/address'
+    '/demo/form/address': {
+      id: '/demo/form/address'
       path: '/demo/form/address'
       fullPath: '/demo/form/address'
-      preLoaderRoute: typeof HomeDemoDemoFormAddressRouteImport
-      parentRoute: typeof HomeDemoRoute
+      preLoaderRoute: typeof DemoFormAddressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/tq-todos': {
+      id: '/demo/api/tq-todos'
+      path: '/demo/api/tq-todos'
+      fullPath: '/demo/api/tq-todos'
+      preLoaderRoute: typeof DemoApiTqTodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/names': {
+      id: '/demo/api/names'
+      path: '/demo/api/names'
+      fullPath: '/demo/api/names'
+      preLoaderRoute: typeof DemoApiNamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/mcp-todos': {
+      id: '/demo/api/mcp-todos'
+      path: '/demo/api/mcp-todos'
+      fullPath: '/demo/api/mcp-todos'
+      preLoaderRoute: typeof DemoApiMcpTodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/ssr/': {
+      id: '/demo/start/ssr/'
+      path: '/demo/start/ssr'
+      fullPath: '/demo/start/ssr/'
+      preLoaderRoute: typeof DemoStartSsrIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/ssr/spa-mode': {
+      id: '/demo/start/ssr/spa-mode'
+      path: '/demo/start/ssr/spa-mode'
+      fullPath: '/demo/start/ssr/spa-mode'
+      preLoaderRoute: typeof DemoStartSsrSpaModeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/ssr/full-ssr': {
+      id: '/demo/start/ssr/full-ssr'
+      path: '/demo/start/ssr/full-ssr'
+      fullPath: '/demo/start/ssr/full-ssr'
+      preLoaderRoute: typeof DemoStartSsrFullSsrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/ssr/data-only': {
+      id: '/demo/start/ssr/data-only'
+      path: '/demo/start/ssr/data-only'
+      fullPath: '/demo/start/ssr/data-only'
+      preLoaderRoute: typeof DemoStartSsrDataOnlyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/ai/tts': {
+      id: '/demo/api/ai/tts'
+      path: '/demo/api/ai/tts'
+      fullPath: '/demo/api/ai/tts'
+      preLoaderRoute: typeof DemoApiAiTtsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/ai/transcription': {
+      id: '/demo/api/ai/transcription'
+      path: '/demo/api/ai/transcription'
+      fullPath: '/demo/api/ai/transcription'
+      preLoaderRoute: typeof DemoApiAiTranscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/ai/structured': {
+      id: '/demo/api/ai/structured'
+      path: '/demo/api/ai/structured'
+      fullPath: '/demo/api/ai/structured'
+      preLoaderRoute: typeof DemoApiAiStructuredRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/ai/image': {
+      id: '/demo/api/ai/image'
+      path: '/demo/api/ai/image'
+      fullPath: '/demo/api/ai/image'
+      preLoaderRoute: typeof DemoApiAiImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/ai/chat': {
+      id: '/demo/api/ai/chat'
+      path: '/demo/api/ai/chat'
+      fullPath: '/demo/api/ai/chat'
+      preLoaderRoute: typeof DemoApiAiChatRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface AuthRouteChildren {
-  AuthAdminRoute: typeof AuthAdminRoute
-  AuthItemsRoute: typeof AuthItemsRoute
-  AuthSettingsRoute: typeof AuthSettingsRoute
-  AuthUserRoute: typeof AuthUserRoute
+interface StatusRouteChildren {
+  Status2faEnabledRoute: typeof Status2faEnabledRoute
+  Status2faRequiredRoute: typeof Status2faRequiredRoute
+  Status401Route: typeof Status401Route
+  Status403Route: typeof Status403Route
+  Status404Route: typeof Status404Route
+  Status500Route: typeof Status500Route
+  Status503Route: typeof Status503Route
+  StatusApiKeyCreatedRoute: typeof StatusApiKeyCreatedRoute
+  StatusBackupCompleteRoute: typeof StatusBackupCompleteRoute
+  StatusBadGatewayRoute: typeof StatusBadGatewayRoute
+  StatusBadRequestRoute: typeof StatusBadRequestRoute
+  StatusBandwidthExceededRoute: typeof StatusBandwidthExceededRoute
+  StatusCancelledRoute: typeof StatusCancelledRoute
+  StatusComingSoonRoute: typeof StatusComingSoonRoute
+  StatusConflictRoute: typeof StatusConflictRoute
+  StatusDeletedRoute: typeof StatusDeletedRoute
+  StatusDeviceVerifiedRoute: typeof StatusDeviceVerifiedRoute
+  StatusDowngradeRoute: typeof StatusDowngradeRoute
+  StatusEmailSentRoute: typeof StatusEmailSentRoute
+  StatusEmptyStateRoute: typeof StatusEmptyStateRoute
+  StatusErrorRoute: typeof StatusErrorRoute
+  StatusErrorDemoRoute: typeof StatusErrorDemoRoute
+  StatusExportReadyRoute: typeof StatusExportReadyRoute
+  StatusGatewayTimeoutRoute: typeof StatusGatewayTimeoutRoute
+  StatusGoneRoute: typeof StatusGoneRoute
+  StatusImportCompleteRoute: typeof StatusImportCompleteRoute
+  StatusInfoStatesRoute: typeof StatusInfoStatesRoute
+  StatusInvitationRoute: typeof StatusInvitationRoute
+  StatusLoadingRoute: typeof StatusLoadingRoute
+  StatusLockedRoute: typeof StatusLockedRoute
+  StatusLoginRequiredRoute: typeof StatusLoginRequiredRoute
+  StatusMaintenanceRoute: typeof StatusMaintenanceRoute
+  StatusNoResultsRoute: typeof StatusNoResultsRoute
+  StatusOfflineRoute: typeof StatusOfflineRoute
+  StatusPasswordChangedRoute: typeof StatusPasswordChangedRoute
+  StatusPaymentRequiredRoute: typeof StatusPaymentRequiredRoute
+  StatusProcessingRoute: typeof StatusProcessingRoute
+  StatusQueuedRoute: typeof StatusQueuedRoute
+  StatusRateLimitedRoute: typeof StatusRateLimitedRoute
+  StatusSessionExpiredRoute: typeof StatusSessionExpiredRoute
+  StatusStatusRoute: typeof StatusStatusRoute
+  StatusSubscriptionCancelledRoute: typeof StatusSubscriptionCancelledRoute
+  StatusSuccessRoute: typeof StatusSuccessRoute
+  StatusSuccessStatesRoute: typeof StatusSuccessStatesRoute
+  StatusTimeoutRoute: typeof StatusTimeoutRoute
+  StatusUnderConstructionRoute: typeof StatusUnderConstructionRoute
+  StatusUnsupportedMediaRoute: typeof StatusUnsupportedMediaRoute
+  StatusUpgradeSuccessRoute: typeof StatusUpgradeSuccessRoute
+  StatusVerifyEmailRoute: typeof StatusVerifyEmailRoute
+  StatusWebhookConfiguredRoute: typeof StatusWebhookConfiguredRoute
+  StatusWelcomeRoute: typeof StatusWelcomeRoute
 }
 
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthAdminRoute: AuthAdminRoute,
-  AuthItemsRoute: AuthItemsRoute,
-  AuthSettingsRoute: AuthSettingsRoute,
-  AuthUserRoute: AuthUserRoute,
+const StatusRouteChildren: StatusRouteChildren = {
+  Status2faEnabledRoute: Status2faEnabledRoute,
+  Status2faRequiredRoute: Status2faRequiredRoute,
+  Status401Route: Status401Route,
+  Status403Route: Status403Route,
+  Status404Route: Status404Route,
+  Status500Route: Status500Route,
+  Status503Route: Status503Route,
+  StatusApiKeyCreatedRoute: StatusApiKeyCreatedRoute,
+  StatusBackupCompleteRoute: StatusBackupCompleteRoute,
+  StatusBadGatewayRoute: StatusBadGatewayRoute,
+  StatusBadRequestRoute: StatusBadRequestRoute,
+  StatusBandwidthExceededRoute: StatusBandwidthExceededRoute,
+  StatusCancelledRoute: StatusCancelledRoute,
+  StatusComingSoonRoute: StatusComingSoonRoute,
+  StatusConflictRoute: StatusConflictRoute,
+  StatusDeletedRoute: StatusDeletedRoute,
+  StatusDeviceVerifiedRoute: StatusDeviceVerifiedRoute,
+  StatusDowngradeRoute: StatusDowngradeRoute,
+  StatusEmailSentRoute: StatusEmailSentRoute,
+  StatusEmptyStateRoute: StatusEmptyStateRoute,
+  StatusErrorRoute: StatusErrorRoute,
+  StatusErrorDemoRoute: StatusErrorDemoRoute,
+  StatusExportReadyRoute: StatusExportReadyRoute,
+  StatusGatewayTimeoutRoute: StatusGatewayTimeoutRoute,
+  StatusGoneRoute: StatusGoneRoute,
+  StatusImportCompleteRoute: StatusImportCompleteRoute,
+  StatusInfoStatesRoute: StatusInfoStatesRoute,
+  StatusInvitationRoute: StatusInvitationRoute,
+  StatusLoadingRoute: StatusLoadingRoute,
+  StatusLockedRoute: StatusLockedRoute,
+  StatusLoginRequiredRoute: StatusLoginRequiredRoute,
+  StatusMaintenanceRoute: StatusMaintenanceRoute,
+  StatusNoResultsRoute: StatusNoResultsRoute,
+  StatusOfflineRoute: StatusOfflineRoute,
+  StatusPasswordChangedRoute: StatusPasswordChangedRoute,
+  StatusPaymentRequiredRoute: StatusPaymentRequiredRoute,
+  StatusProcessingRoute: StatusProcessingRoute,
+  StatusQueuedRoute: StatusQueuedRoute,
+  StatusRateLimitedRoute: StatusRateLimitedRoute,
+  StatusSessionExpiredRoute: StatusSessionExpiredRoute,
+  StatusStatusRoute: StatusStatusRoute,
+  StatusSubscriptionCancelledRoute: StatusSubscriptionCancelledRoute,
+  StatusSuccessRoute: StatusSuccessRoute,
+  StatusSuccessStatesRoute: StatusSuccessStatesRoute,
+  StatusTimeoutRoute: StatusTimeoutRoute,
+  StatusUnderConstructionRoute: StatusUnderConstructionRoute,
+  StatusUnsupportedMediaRoute: StatusUnsupportedMediaRoute,
+  StatusUpgradeSuccessRoute: StatusUpgradeSuccessRoute,
+  StatusVerifyEmailRoute: StatusVerifyEmailRoute,
+  StatusWebhookConfiguredRoute: StatusWebhookConfiguredRoute,
+  StatusWelcomeRoute: StatusWelcomeRoute,
 }
 
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
-
-interface HomeDemoRouteChildren {
-  HomeDemoDemoTableRoute: typeof HomeDemoDemoTableRoute
-  HomeDemoDemoTanstackQueryRoute: typeof HomeDemoDemoTanstackQueryRoute
-  HomeDemoDemoFormAddressRoute: typeof HomeDemoDemoFormAddressRoute
-  HomeDemoDemoFormSimpleRoute: typeof HomeDemoDemoFormSimpleRoute
-}
-
-const HomeDemoRouteChildren: HomeDemoRouteChildren = {
-  HomeDemoDemoTableRoute: HomeDemoDemoTableRoute,
-  HomeDemoDemoTanstackQueryRoute: HomeDemoDemoTanstackQueryRoute,
-  HomeDemoDemoFormAddressRoute: HomeDemoDemoFormAddressRoute,
-  HomeDemoDemoFormSimpleRoute: HomeDemoDemoFormSimpleRoute,
-}
-
-const HomeDemoRouteWithChildren = HomeDemoRoute._addFileChildren(
-  HomeDemoRouteChildren,
-)
-
-interface HomeRouteChildren {
-  HomeDemoRoute: typeof HomeDemoRouteWithChildren
-  HomeApiSyncRoute: typeof HomeApiSyncRoute
-  HomeDocsRoute: typeof HomeDocsRoute
-  HomeIndexRoute: typeof HomeIndexRoute
-}
-
-const HomeRouteChildren: HomeRouteChildren = {
-  HomeDemoRoute: HomeDemoRouteWithChildren,
-  HomeApiSyncRoute: HomeApiSyncRoute,
-  HomeDocsRoute: HomeDocsRoute,
-  HomeIndexRoute: HomeIndexRoute,
-}
-
-const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+const StatusRouteWithChildren =
+  StatusRoute._addFileChildren(StatusRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthRoute: AuthRouteWithChildren,
-  HomeRoute: HomeRouteWithChildren,
-  LoginRoute: LoginRoute,
+  StatusRoute: StatusRouteWithChildren,
   RecoverPasswordRoute: RecoverPasswordRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  DemoHomeRoute: DemoHomeRoute,
+  DemoAiChatRoute: DemoAiChatRoute,
+  DemoAiImageRoute: DemoAiImageRoute,
+  DemoAiStructuredRoute: DemoAiStructuredRoute,
+  DemoApiSyncRoute: DemoApiSyncRoute,
+  DemoDbChatRoute: DemoDbChatRoute,
+  DemoDbChatApiRoute: DemoDbChatApiRoute,
+  DemoDocsRoute: DemoDocsRoute,
+  DemoI18nRoute: DemoI18nRoute,
+  DemoMcpTodosRoute: DemoMcpTodosRoute,
+  DemoStoreRoute: DemoStoreRoute,
+  DemoStrapiRoute: DemoStrapiRoute,
+  DemoTableRoute: DemoTableRoute,
+  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  LayoutLayoutRoute: LayoutLayoutRoute,
+  LayoutAdminRoute: LayoutAdminRoute,
+  LayoutItemsRoute: LayoutItemsRoute,
+  LayoutSettingsRoute: LayoutSettingsRoute,
+  PrivatePrivateRoute: PrivatePrivateRoute,
+  HomeIndexRoute: HomeIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   Dashboard2IndexRoute: Dashboard2IndexRoute,
+  DemoIndexRoute: DemoIndexRoute,
+  LayoutIndexRoute: LayoutIndexRoute,
+  DemoApiMcpTodosRoute: DemoApiMcpTodosRoute,
+  DemoApiNamesRoute: DemoApiNamesRoute,
+  DemoApiTqTodosRoute: DemoApiTqTodosRoute,
+  DemoFormAddressRoute: DemoFormAddressRoute,
+  DemoFormSimpleRoute: DemoFormSimpleRoute,
+  DemoGuitarsGuitarIdRoute: DemoGuitarsGuitarIdRoute,
+  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
+  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
+  DemoStrapiArticleIdRoute: DemoStrapiArticleIdRoute,
+  DemoGuitarsIndexRoute: DemoGuitarsIndexRoute,
+  DemoApiAiChatRoute: DemoApiAiChatRoute,
+  DemoApiAiImageRoute: DemoApiAiImageRoute,
+  DemoApiAiStructuredRoute: DemoApiAiStructuredRoute,
+  DemoApiAiTranscriptionRoute: DemoApiAiTranscriptionRoute,
+  DemoApiAiTtsRoute: DemoApiAiTtsRoute,
+  DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
+  DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
+  DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
+  DemoStartSsrIndexRoute: DemoStartSsrIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

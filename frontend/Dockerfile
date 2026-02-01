@@ -1,21 +1,28 @@
-FROM node:25 AS build-stage
+# Stage 0, "build-stage", based on Node, to build and compile the frontend
+FROM node:22-alpine AS build-stage
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
-COPY package*.json /app/
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /app/
 
-RUN npm install
+COPY frontend/package.json /app/frontend/
 
-COPY ./ /app/
+WORKDIR /app/frontend
 
-ARG VITE_API_URL=${VITE_API_URL}
+RUN pnpm install --frozen-lockfile
 
-RUN npm run build
-RUN node -v
+COPY ./frontend /app/frontend
+ARG VITE_API_URL
 
+RUN pnpm run build
+
+
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
 FROM nginx:1
 
-COPY --from=build-stage /app/dist/ /usr/share/nginx/html
+COPY --from=build-stage /app/frontend/dist/ /usr/share/nginx/html
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
+COPY ./frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./frontend/nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf

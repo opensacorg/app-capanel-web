@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+
 import DashboardD09 from '../../components/Dashboard/DashboardD09'
 import NavbarD52 from '../../components/ui/navbar/NavbarD52'
-import ScrollReset from '../../hooks/ScrollReset'
+import ScrollReset from "@/lib/hooks/ScrollReset.tsx";
 
 export const Route = createFileRoute('/dashboard/')({
 	component: DashboardPage,

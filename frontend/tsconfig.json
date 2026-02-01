@@ -1,35 +1,27 @@
 {
 	"compilerOptions": {
-		"target": "ES2020",
-		"useDefineForClassFields": true,
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"target": "ES2022",
+		"jsx": "react-jsx",
 		"module": "ESNext",
-		"skipLibCheck": true,
-		/* Bundler mode */
+		"useDefineForClassFields": true,
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react-jsx",
-		/* Linting */
+		"skipLibCheck": true,
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"forceConsistentCasingInFileNames": true,
-		"allowSyntheticDefaultImports": true
+		"forceConsistentCasingInFileNames": true
 	},
-	"include": [
-		"src/**/*.ts",
-		"tests/**/*.ts",
-		"playwright.config.ts",
-		"panda.config.ts",
-		"vite.config.ts"
-	],
+	"include": ["src", "tests", "playwright.config.ts"],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"
