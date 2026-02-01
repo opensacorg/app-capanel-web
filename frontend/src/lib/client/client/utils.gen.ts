@@ -16,7 +16,7 @@ export const createQuerySerializer = <T = unknown>({
 	parameters = {},
 	...args
 }: QuerySerializerOptions = {}) => {
-	const querySerializer = (queryParams: T) => {
+	return (queryParams: T) => {
 		const search: string[] = []
 		if (queryParams && typeof queryParams === 'object') {
 			for (const name in queryParams) {
@@ -60,7 +60,6 @@ export const createQuerySerializer = <T = unknown>({
 		}
 		return search.join('&')
 	}
-	return querySerializer
 }
 
 /**
@@ -109,14 +108,11 @@ const checkForExistence = (
 	if (!name) {
 		return false
 	}
-	if (
+	return !!(
 		options.headers.has(name) ||
 		options.query?.[name] ||
 		options.headers.get('Cookie')?.includes(`${name}=`)
-	) {
-		return true
-	}
-	return false
+	)
 }
 
 export const setAuthParams = async ({

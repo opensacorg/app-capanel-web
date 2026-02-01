@@ -14,7 +14,7 @@ export interface PathSerializer {
 	url: string
 }
 
-export const PATH_PARAM_RE = /\{[^{}]+\}/g
+export const PATH_PARAM_RE = /\{[^{}]+}/g
 
 export const defaultPathSerializer = ({ path, url: _url }: PathSerializer) => {
 	let url = _url

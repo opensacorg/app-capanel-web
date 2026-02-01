@@ -4,7 +4,6 @@ import { AlertOctagon, AlertTriangle, Bug, FileQuestion, Network, ShieldOff } fr
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 
 export const Route = createFileRoute('/_status/error-demo')({
 	component: ErrorDemoPage,
@@ -166,7 +165,8 @@ function ErrorDemoPage() {
 				<CardContent className='space-y-4'>
 					<div className='rounded-lg bg-muted p-4 font-mono text-xs overflow-auto'>
 						<pre>{`// Router-level defaults (router.tsx)
-const router = createRouter({
+import DefaultError from "@/components/status/DefaultError"; 
+import DefaultCatchBoundary from "@/components/status/DefaultCatchBoundary"; const router = createRouter({
   routeTree,
   defaultErrorComponent: ({ error, reset, info }) => (
     <DefaultError error={error} reset={reset} info={info} />

@@ -3,7 +3,6 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import CardGrid from '@/components/CardGrid.tsx'
 import { Button } from '@/components/ui/button'
 import NavbarD52 from '@/components/ui/navbar/NavbarD52.tsx'
-import ScrollReset from '@/lib/hooks/ScrollReset.tsx'
 
 export const Route = createFileRoute('/_home/')({
 	component: HomePage,

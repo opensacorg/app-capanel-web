@@ -16,12 +16,7 @@ export interface DefaultCatchBoundaryProps extends Partial<ErrorComponentProps> 
  * This is useful for route-level error boundaries where you want to offer
  * the user options to retry or navigate away.
  */
-export function DefaultCatchBoundary({
-	error,
-	reset,
-	info,
-	fullPage = true,
-}: DefaultCatchBoundaryProps) {
+export function DefaultCatchBoundary({ error, reset, fullPage = true }: DefaultCatchBoundaryProps) {
 	const router = useRouter()
 
 	const isNotFound = error instanceof Error && error.message.includes('Not Found')

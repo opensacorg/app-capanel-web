@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ImageIcon, Loader2, Download } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const SIZES = ['1024x1024', '1536x1024', '1024x1536', 'auto']
 
@@ -67,7 +67,7 @@ function ImagePage() {
 			a.click()
 			document.body.removeChild(a)
 			URL.revokeObjectURL(url)
-		} catch (err) {
+		} catch {
 			// Failed to download image
 		}
 	}

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Check, Home, Laptop, Monitor, Smartphone } from 'lucide-react'
+import { Check, Laptop, Monitor, Smartphone } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
