@@ -16,28 +16,28 @@ export const Route = createFileRoute('/_status/2fa-required')({
 function TwoFactorRequiredPage() {
 	return (
 		<StatusCard
-			variant="info"
+			variant='info'
 			icon={
-				<div className="rounded-full bg-blue-500/10 p-6">
-					<Shield className="size-16 text-blue-500" />
+				<div className='rounded-full bg-blue-500/10 p-6'>
+					<Shield className='size-16 text-blue-500' />
 				</div>
 			}
-			title="Two-Factor Authentication"
-			description="Enter the code from your authenticator app."
+			title='Two-Factor Authentication'
+			description='Enter the code from your authenticator app.'
 			footer={
 				<>
 					<Button>Verify</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Cancel
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<div className="flex justify-center">
+			<div className='space-y-4'>
+				<div className='flex justify-center'>
 					<InputOTP maxLength={6}>
 						<InputOTPGroup>
 							<InputOTPSlot index={0} />
@@ -55,14 +55,14 @@ function TwoFactorRequiredPage() {
 
 				<Separator />
 
-				<div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-					<Smartphone className="size-4" />
+				<div className='flex items-center justify-center gap-2 text-sm text-muted-foreground'>
+					<Smartphone className='size-4' />
 					<span>Open your authenticator app</span>
 				</div>
 
-				<p className="text-center text-sm text-muted-foreground">
+				<p className='text-center text-sm text-muted-foreground'>
 					Don't have access to your device?{' '}
-					<Link to="/recover-password" className="text-primary hover:underline">
+					<Link to='/recover-password' className='text-primary hover:underline'>
 						Use a recovery code
 					</Link>
 				</p>

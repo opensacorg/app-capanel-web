@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import SearchHomepageForm from '@/components/form/home-search-form.tsx'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 
 export const Route = createFileRoute('/demo/api-sync')({
 	component: RouteComponent,

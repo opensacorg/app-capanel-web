@@ -15,39 +15,39 @@ export const Route = createFileRoute('/_status/401')({
 function UnauthorizedPage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<KeyRound className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<KeyRound className='size-16 text-yellow-500' />
 				</div>
 			}
-			title="401 - Unauthorized"
-			description="You need to sign in to access this page."
+			title='401 - Unauthorized'
+			description='You need to sign in to access this page.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/login">
-							<LogIn className="mr-2 size-4" />
+						<Link to='/login'>
+							<LogIn className='mr-2 size-4' />
 							Sign In
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4 text-center">
-				<p className="text-sm text-muted-foreground">
+			<div className='space-y-4 text-center'>
+				<p className='text-sm text-muted-foreground'>
 					Please sign in with your credentials to continue.
 				</p>
 				<Separator />
-				<p className="text-sm text-muted-foreground">
+				<p className='text-sm text-muted-foreground'>
 					Don't have an account?{' '}
-					<Link to="/signup" className="text-primary hover:underline">
+					<Link to='/signup' className='text-primary hover:underline'>
 						Sign up
 					</Link>
 				</p>

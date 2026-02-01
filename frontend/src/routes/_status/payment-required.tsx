@@ -17,54 +17,54 @@ export const Route = createFileRoute('/_status/payment-required')({
 function PaymentRequiredPage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<CreditCard className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<CreditCard className='size-16 text-yellow-500' />
 				</div>
 			}
-			title="402 - Payment Required"
-			description="You need an active subscription to access this feature."
+			title='402 - Payment Required'
+			description='You need an active subscription to access this feature.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/pricing">
-							<Sparkles className="mr-2 size-4" />
+						<Link to='/pricing'>
+							<Sparkles className='mr-2 size-4' />
 							View Plans
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
+			<div className='space-y-4'>
 				<Separator />
 
-				<div className="grid gap-2">
-					<Card size="sm">
-						<CardHeader className="pb-2">
-							<div className="flex items-center justify-between">
-								<CardTitle className="text-sm">Pro Plan</CardTitle>
-								<Badge variant="default">Popular</Badge>
+				<div className='grid gap-2'>
+					<Card size='sm'>
+						<CardHeader className='pb-2'>
+							<div className='flex items-center justify-between'>
+								<CardTitle className='text-sm'>Pro Plan</CardTitle>
+								<Badge variant='default'>Popular</Badge>
 							</div>
-							<CardDescription className="text-xs">$29/month</CardDescription>
+							<CardDescription className='text-xs'>$29/month</CardDescription>
 						</CardHeader>
-						<CardContent className="text-xs text-muted-foreground">
+						<CardContent className='text-xs text-muted-foreground'>
 							Unlimited API calls, priority support
 						</CardContent>
 					</Card>
 
-					<Card size="sm">
-						<CardHeader className="pb-2">
-							<CardTitle className="text-sm">Team Plan</CardTitle>
-							<CardDescription className="text-xs">$99/month</CardDescription>
+					<Card size='sm'>
+						<CardHeader className='pb-2'>
+							<CardTitle className='text-sm'>Team Plan</CardTitle>
+							<CardDescription className='text-xs'>$99/month</CardDescription>
 						</CardHeader>
-						<CardContent className="text-xs text-muted-foreground">
+						<CardContent className='text-xs text-muted-foreground'>
 							Everything in Pro + team features
 						</CardContent>
 					</Card>

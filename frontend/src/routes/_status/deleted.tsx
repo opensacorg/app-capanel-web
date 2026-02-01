@@ -16,33 +16,31 @@ export const Route = createFileRoute('/_status/deleted')({
 function DeletedPage() {
 	return (
 		<StatusCard
-			variant="default"
+			variant='default'
 			icon={
-				<div className="rounded-full bg-muted p-6">
-					<Trash2 className="size-16 text-muted-foreground" />
+				<div className='rounded-full bg-muted p-6'>
+					<Trash2 className='size-16 text-muted-foreground' />
 				</div>
 			}
-			title="Account Deleted"
-			description="Your account has been successfully deleted."
+			title='Account Deleted'
+			description='Your account has been successfully deleted.'
 			footer={
 				<>
-					<Button variant="outline" asChild>
-						<Link to="/signup">
-							Create New Account
-						</Link>
+					<Button variant='outline' asChild>
+						<Link to='/signup'>Create New Account</Link>
 					</Button>
-					<Button variant="ghost" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='ghost' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
+			<div className='space-y-4'>
 				<Alert>
-					<Undo2 className="size-4" />
+					<Undo2 className='size-4' />
 					<AlertTitle>30-Day Recovery Period</AlertTitle>
 					<AlertDescription>
 						You can recover your account within 30 days by contacting support.
@@ -51,9 +49,9 @@ function DeletedPage() {
 
 				<Separator />
 
-				<div className="text-center text-sm text-muted-foreground">
+				<div className='text-center text-sm text-muted-foreground'>
 					<p>What happens next:</p>
-					<ul className="mt-2 space-y-1 text-left">
+					<ul className='mt-2 space-y-1 text-left'>
 						<li>All data will be permanently deleted after 30 days</li>
 						<li>You'll stop receiving all emails from us</li>
 						<li>Your username may become available for others</li>

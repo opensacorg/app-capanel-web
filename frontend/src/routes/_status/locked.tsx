@@ -15,36 +15,37 @@ export const Route = createFileRoute('/_status/locked')({
 function LockedPage() {
 	return (
 		<StatusCard
-			variant="error"
+			variant='error'
 			icon={
-				<div className="rounded-full bg-destructive/10 p-6">
-					<Lock className="size-16 text-destructive" />
+				<div className='rounded-full bg-destructive/10 p-6'>
+					<Lock className='size-16 text-destructive' />
 				</div>
 			}
-			title="423 - Account Locked"
-			description="Your account has been temporarily locked."
+			title='423 - Account Locked'
+			description='Your account has been temporarily locked.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/support">
-							<Mail className="mr-2 size-4" />
+						<Link to='/support'>
+							<Mail className='mr-2 size-4' />
 							Contact Support
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<Alert variant="destructive">
-				<Lock className="size-4" />
+			<Alert variant='destructive'>
+				<Lock className='size-4' />
 				<AlertTitle>Account Security</AlertTitle>
 				<AlertDescription>
-					This may be due to multiple failed login attempts or suspicious activity. Please contact support to unlock your account.
+					This may be due to multiple failed login attempts or suspicious activity. Please contact
+					support to unlock your account.
 				</AlertDescription>
 			</Alert>
 		</StatusCard>

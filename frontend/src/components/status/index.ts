@@ -1,5 +1,10 @@
 // Status Template Components
-export { StatusTemplate, StatusCard, type StatusTemplateProps, type StatusCardProps } from './StatusTemplate'
+export {
+	StatusTemplate,
+	StatusCard,
+	type StatusTemplateProps,
+	type StatusCardProps,
+} from './StatusTemplate'
 
 // TanStack Router Integration Components
 export { DefaultNotFound, type DefaultNotFoundProps } from './DefaultNotFound'

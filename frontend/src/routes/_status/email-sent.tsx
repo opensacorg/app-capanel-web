@@ -15,39 +15,39 @@ export const Route = createFileRoute('/_status/email-sent')({
 function EmailSentPage() {
 	return (
 		<StatusCard
-			variant="success"
+			variant='success'
 			icon={
-				<div className="rounded-full bg-green-500/10 p-6">
-					<Mail className="size-16 text-green-500" />
+				<div className='rounded-full bg-green-500/10 p-6'>
+					<Mail className='size-16 text-green-500' />
 				</div>
 			}
-			title="Email Sent"
+			title='Email Sent'
 			description="We've sent an email to your address."
 			footer={
 				<>
-					<Button variant="outline">
-						<RefreshCcw className="mr-2 size-4" />
+					<Button variant='outline'>
+						<RefreshCcw className='mr-2 size-4' />
 						Resend Email
 					</Button>
-					<Button variant="ghost" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='ghost' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4 text-center">
-				<p className="text-sm text-muted-foreground">
+			<div className='space-y-4 text-center'>
+				<p className='text-sm text-muted-foreground'>
 					Please check your inbox and follow the instructions in the email.
 				</p>
 
 				<Separator />
 
-				<div className="text-sm text-muted-foreground">
+				<div className='text-sm text-muted-foreground'>
 					<p>Can't find the email?</p>
-					<ul className="mt-2 space-y-1 text-left">
+					<ul className='mt-2 space-y-1 text-left'>
 						<li>Check your spam or junk folder</li>
 						<li>Make sure the email address is correct</li>
 						<li>Wait a few minutes and try again</li>

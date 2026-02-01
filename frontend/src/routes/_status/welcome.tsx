@@ -17,80 +17,78 @@ export const Route = createFileRoute('/_status/welcome')({
 function WelcomePage() {
 	return (
 		<StatusCard
-			variant="success"
+			variant='success'
 			icon={
-				<div className="rounded-full bg-green-500/10 p-6">
-					<Sparkles className="size-16 text-green-500" />
+				<div className='rounded-full bg-green-500/10 p-6'>
+					<Sparkles className='size-16 text-green-500' />
 				</div>
 			}
-			title="Welcome to FastAPI Cloud!"
-			description="Your account has been successfully created."
+			title='Welcome to FastAPI Cloud!'
+			description='Your account has been successfully created.'
 			footer={
 				<Button asChild>
-					<Link to="/layout">
+					<Link to='/layout'>
 						Get Started
-						<ArrowRight className="ml-2 size-4" />
+						<ArrowRight className='ml-2 size-4' />
 					</Link>
 				</Button>
 			}
 		>
-			<div className="space-y-4">
-				<div className="flex items-center justify-center">
-					<Badge variant="default">
-						<Sparkles className="mr-1 size-3" />
+			<div className='space-y-4'>
+				<div className='flex items-center justify-center'>
+					<Badge variant='default'>
+						<Sparkles className='mr-1 size-3' />
 						Account Active
 					</Badge>
 				</div>
 
 				<Separator />
 
-				<div className="space-y-3">
-					<p className="text-center text-sm text-muted-foreground">
-						Quick start guide:
-					</p>
+				<div className='space-y-3'>
+					<p className='text-center text-sm text-muted-foreground'>Quick start guide:</p>
 
-					<Card size="sm">
-						<CardHeader className="pb-2">
-							<CardTitle className="flex items-center gap-2 text-sm">
-								<Rocket className="size-4" />
+					<Card size='sm'>
+						<CardHeader className='pb-2'>
+							<CardTitle className='flex items-center gap-2 text-sm'>
+								<Rocket className='size-4' />
 								Explore the Dashboard
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<CardDescription className="text-xs">
-								<Link to="/layout" className="text-primary hover:underline">
+							<CardDescription className='text-xs'>
+								<Link to='/layout' className='text-primary hover:underline'>
 									View your dashboard
 								</Link>
 							</CardDescription>
 						</CardContent>
 					</Card>
 
-					<Card size="sm">
-						<CardHeader className="pb-2">
-							<CardTitle className="flex items-center gap-2 text-sm">
-								<Settings className="size-4" />
+					<Card size='sm'>
+						<CardHeader className='pb-2'>
+							<CardTitle className='flex items-center gap-2 text-sm'>
+								<Settings className='size-4' />
 								Configure Settings
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<CardDescription className="text-xs">
-								<Link to="/layout/settings" className="text-primary hover:underline">
+							<CardDescription className='text-xs'>
+								<Link to='/layout/settings' className='text-primary hover:underline'>
 									Update your preferences
 								</Link>
 							</CardDescription>
 						</CardContent>
 					</Card>
 
-					<Card size="sm">
-						<CardHeader className="pb-2">
-							<CardTitle className="flex items-center gap-2 text-sm">
-								<BookOpen className="size-4" />
+					<Card size='sm'>
+						<CardHeader className='pb-2'>
+							<CardTitle className='flex items-center gap-2 text-sm'>
+								<BookOpen className='size-4' />
 								Read the Docs
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<CardDescription className="text-xs">
-								<Link to="/docs" className="text-primary hover:underline">
+							<CardDescription className='text-xs'>
+								<Link to='/docs' className='text-primary hover:underline'>
 									Learn how to get the most out of FastAPI Cloud
 								</Link>
 							</CardDescription>

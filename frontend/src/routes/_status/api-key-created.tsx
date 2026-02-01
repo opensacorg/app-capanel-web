@@ -18,56 +18,54 @@ function ApiKeyCreatedPage() {
 
 	return (
 		<StatusCard
-			variant="success"
+			variant='success'
 			icon={
-				<div className="rounded-full bg-green-500/10 p-6">
-					<Key className="size-16 text-green-500" />
+				<div className='rounded-full bg-green-500/10 p-6'>
+					<Key className='size-16 text-green-500' />
 				</div>
 			}
-			title="API Key Created"
-			description="Your new API key has been generated."
+			title='API Key Created'
+			description='Your new API key has been generated.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/layout/settings">
-							View API Keys
-						</Link>
+						<Link to='/layout/settings'>View API Keys</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<Alert variant="destructive">
-					<AlertTriangle className="size-4" />
+			<div className='space-y-4'>
+				<Alert variant='destructive'>
+					<AlertTriangle className='size-4' />
 					<AlertTitle>Save This Key Now</AlertTitle>
 					<AlertDescription>
 						This is the only time you'll see this key. Copy it and store it securely.
 					</AlertDescription>
 				</Alert>
 
-				<div className="relative">
-					<div className="rounded-lg border bg-muted p-3 font-mono text-xs break-all pr-10">
+				<div className='relative'>
+					<div className='rounded-lg border bg-muted p-3 font-mono text-xs break-all pr-10'>
 						{apiKey}
 					</div>
 					<Button
-						variant="ghost"
-						size="icon-xs"
-						className="absolute right-2 top-1/2 -translate-y-1/2"
+						variant='ghost'
+						size='icon-xs'
+						className='absolute right-2 top-1/2 -translate-y-1/2'
 						onClick={() => navigator.clipboard.writeText(apiKey)}
 					>
-						<Copy className="size-3" />
+						<Copy className='size-3' />
 					</Button>
 				</div>
 
 				<Separator />
 
-				<p className="text-center text-sm text-muted-foreground">
+				<p className='text-center text-sm text-muted-foreground'>
 					Use this key in the Authorization header of your API requests.
 				</p>
 			</div>

@@ -15,23 +15,23 @@ export const Route = createFileRoute('/_status/conflict')({
 function ConflictPage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<GitMerge className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<GitMerge className='size-16 text-yellow-500' />
 				</div>
 			}
-			title="409 - Conflict"
-			description="The request conflicts with the current state of the resource."
+			title='409 - Conflict'
+			description='The request conflicts with the current state of the resource.'
 			footer={
 				<>
 					<Button onClick={() => window.location.reload()}>
-						<RefreshCcw className="mr-2 size-4" />
+						<RefreshCcw className='mr-2 size-4' />
 						Refresh
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
@@ -39,10 +39,11 @@ function ConflictPage() {
 			}
 		>
 			<Alert>
-				<GitMerge className="size-4" />
+				<GitMerge className='size-4' />
 				<AlertTitle>Resource Conflict</AlertTitle>
 				<AlertDescription>
-					This usually happens when the resource was modified by another request. Please refresh and try again.
+					This usually happens when the resource was modified by another request. Please refresh and
+					try again.
 				</AlertDescription>
 			</Alert>
 		</StatusCard>

@@ -16,32 +16,32 @@ export const Route = createFileRoute('/_status/verify-email')({
 function VerifyEmailPage() {
 	return (
 		<StatusCard
-			variant="info"
+			variant='info'
 			icon={
-				<div className="rounded-full bg-blue-500/10 p-6">
-					<Mail className="size-16 text-blue-500" />
+				<div className='rounded-full bg-blue-500/10 p-6'>
+					<Mail className='size-16 text-blue-500' />
 				</div>
 			}
-			title="Verify Your Email"
-			description="Please check your inbox and click the verification link."
+			title='Verify Your Email'
+			description='Please check your inbox and click the verification link.'
 			footer={
 				<>
-					<Button variant="outline">
-						<RefreshCcw className="mr-2 size-4" />
+					<Button variant='outline'>
+						<RefreshCcw className='mr-2 size-4' />
 						Resend Email
 					</Button>
-					<Button variant="ghost" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='ghost' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
+			<div className='space-y-4'>
 				<Alert>
-					<Mail className="size-4" />
+					<Mail className='size-4' />
 					<AlertTitle>Check Your Inbox</AlertTitle>
 					<AlertDescription>
 						We've sent a verification email to your registered email address.
@@ -50,9 +50,9 @@ function VerifyEmailPage() {
 
 				<Separator />
 
-				<div className="text-center text-sm text-muted-foreground">
+				<div className='text-center text-sm text-muted-foreground'>
 					<p>Didn't receive the email?</p>
-					<ul className="mt-2 space-y-1 text-left">
+					<ul className='mt-2 space-y-1 text-left'>
 						<li>Check your spam folder</li>
 						<li>Make sure your email address is correct</li>
 						<li>Wait a few minutes and try again</li>

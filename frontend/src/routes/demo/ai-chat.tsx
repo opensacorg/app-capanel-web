@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Streamdown } from 'streamdown'
 
 import type { ChatMessages } from '@/lib/demo-ai-hook'
-import { useGuitarRecommendationChat } from '@/lib/demo-ai-hook'
 
 import GuitarRecommendation from '@/components/demo-GuitarRecommendation'
+import { useGuitarRecommendationChat } from '@/lib/demo-ai-hook'
 
 import './ai-chat.css'
 import { useAudioRecorder } from '@/lib/hooks/demo-useAudioRecorder.ts'
-import { useTTS } from "@/lib/hooks/demo-useTTS.ts";
+import { useTTS } from '@/lib/hooks/demo-useTTS.ts'
 
 function InitialLayout({ children }: { children: React.ReactNode }) {
 	return (

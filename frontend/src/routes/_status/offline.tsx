@@ -15,33 +15,31 @@ export const Route = createFileRoute('/_status/offline')({
 function OfflinePage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<WifiOff className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<WifiOff className='size-16 text-yellow-500' />
 				</div>
 			}
 			title="You're Offline"
 			description="It looks like you've lost your internet connection."
 			footer={
 				<Button onClick={() => window.location.reload()}>
-					<RefreshCcw className="mr-2 size-4" />
+					<RefreshCcw className='mr-2 size-4' />
 					Retry Connection
 				</Button>
 			}
 		>
-			<div className="space-y-4">
+			<div className='space-y-4'>
 				<Alert>
-					<WifiOff className="size-4" />
+					<WifiOff className='size-4' />
 					<AlertTitle>No Internet Connection</AlertTitle>
-					<AlertDescription>
-						Please check your network settings and try again.
-					</AlertDescription>
+					<AlertDescription>Please check your network settings and try again.</AlertDescription>
 				</Alert>
 
-				<div className="text-center text-sm text-muted-foreground">
+				<div className='text-center text-sm text-muted-foreground'>
 					<p>Things to try:</p>
-					<ul className="mt-2 space-y-1 text-left">
+					<ul className='mt-2 space-y-1 text-left'>
 						<li>Check your Wi-Fi connection</li>
 						<li>Check your router or modem</li>
 						<li>Disable airplane mode if enabled</li>

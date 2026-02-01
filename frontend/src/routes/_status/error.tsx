@@ -1,7 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AlertOctagon, Bug, Home, RefreshCcw } from 'lucide-react'
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from '@/components/ui/accordion'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { StatusCard } from '@/routes/_status'
@@ -16,48 +21,51 @@ export const Route = createFileRoute('/_status/error')({
 function GenericErrorPage() {
 	return (
 		<StatusCard
-			variant="error"
+			variant='error'
 			icon={
-				<div className="rounded-full bg-destructive/10 p-6">
-					<AlertOctagon className="size-16 text-destructive" />
+				<div className='rounded-full bg-destructive/10 p-6'>
+					<AlertOctagon className='size-16 text-destructive' />
 				</div>
 			}
-			title="Something Went Wrong"
-			description="An unexpected error occurred while processing your request."
+			title='Something Went Wrong'
+			description='An unexpected error occurred while processing your request.'
 			footer={
 				<>
 					<Button onClick={() => window.location.reload()}>
-						<RefreshCcw className="mr-2 size-4" />
+						<RefreshCcw className='mr-2 size-4' />
 						Try Again
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<Alert variant="destructive">
-					<Bug className="size-4" />
+			<div className='space-y-4'>
+				<Alert variant='destructive'>
+					<Bug className='size-4' />
 					<AlertTitle>Error Code: E_UNKNOWN</AlertTitle>
 					<AlertDescription>
 						This error has been logged and our team will investigate.
 					</AlertDescription>
 				</Alert>
 
-				<Accordion type="single" collapsible>
-					<AccordionItem value="details">
-						<AccordionTrigger className="text-sm">
-							Technical Details
-						</AccordionTrigger>
+				<Accordion type='single' collapsible>
+					<AccordionItem value='details'>
+						<AccordionTrigger className='text-sm'>Technical Details</AccordionTrigger>
 						<AccordionContent>
-							<div className="rounded-md bg-muted p-3 font-mono text-xs">
+							<div className='rounded-md bg-muted p-3 font-mono text-xs'>
 								<p>Timestamp: {new Date().toISOString()}</p>
 								<p>Request ID: req_abc123xyz</p>
-								<p>User Agent: {typeof navigator !== 'undefined' ? navigator.userAgent.substring(0, 50) + '...' : 'Unknown'}</p>
+								<p>
+									User Agent:{' '}
+									{typeof navigator !== 'undefined'
+										? navigator.userAgent.substring(0, 50) + '...'
+										: 'Unknown'}
+								</p>
 							</div>
 						</AccordionContent>
 					</AccordionItem>

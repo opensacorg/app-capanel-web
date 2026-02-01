@@ -32,7 +32,7 @@ export const getRouter = () => {
 		defaultErrorComponent: ({ error, reset, info }) => (
 			<DefaultError error={error} reset={reset} info={info} fullPage />
 		),
-		defaultPendingComponent: () => <DefaultPending fullPage={false} variant="spinner" />,
+		defaultPendingComponent: () => <DefaultPending fullPage={false} variant='spinner' />,
 		// Use catch boundary for route-level errors with navigation support
 		// This provides retry and back navigation functionality
 		// Individual routes can override with their own errorComponent

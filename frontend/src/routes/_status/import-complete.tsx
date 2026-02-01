@@ -17,35 +17,35 @@ export const Route = createFileRoute('/_status/import-complete')({
 function ImportCompletePage() {
 	return (
 		<StatusCard
-			variant="success"
+			variant='success'
 			icon={
-				<div className="rounded-full bg-green-500/10 p-6">
-					<FileUp className="size-16 text-green-500" />
+				<div className='rounded-full bg-green-500/10 p-6'>
+					<FileUp className='size-16 text-green-500' />
 				</div>
 			}
-			title="Import Complete"
-			description="Your data has been imported successfully."
+			title='Import Complete'
+			description='Your data has been imported successfully.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/layout">
+						<Link to='/layout'>
 							View Data
-							<ArrowRight className="ml-2 size-4" />
+							<ArrowRight className='ml-2 size-4' />
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<div className="flex items-center justify-center gap-2">
-					<Badge variant="default">
-						<Check className="mr-1 size-3" />
+			<div className='space-y-4'>
+				<div className='flex items-center justify-center gap-2'>
+					<Badge variant='default'>
+						<Check className='mr-1 size-3' />
 						Success
 					</Badge>
 				</div>
@@ -57,18 +57,18 @@ function ImportCompletePage() {
 
 				<Separator />
 
-				<div className="space-y-2 text-sm">
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Total Records</span>
-						<span className="font-medium">2,500</span>
+				<div className='space-y-2 text-sm'>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Total Records</span>
+						<span className='font-medium'>2,500</span>
 					</div>
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Imported</span>
-						<span className="font-medium text-green-500">2,487</span>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Imported</span>
+						<span className='font-medium text-green-500'>2,487</span>
 					</div>
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Skipped</span>
-						<span className="font-medium text-yellow-500">13</span>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Skipped</span>
+						<span className='font-medium text-yellow-500'>13</span>
 					</div>
 				</div>
 			</div>

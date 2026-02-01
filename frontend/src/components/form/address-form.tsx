@@ -1,4 +1,4 @@
-import { useAppForm } from "@/components/form/use-app-form.ts";
+import { useAppForm } from '@/components/form/use-app-form.ts'
 
 export default function AddressForm() {
 	const form = useAppForm({

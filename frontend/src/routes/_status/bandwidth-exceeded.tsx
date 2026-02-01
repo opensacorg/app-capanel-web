@@ -17,34 +17,34 @@ export const Route = createFileRoute('/_status/bandwidth-exceeded')({
 function BandwidthExceededPage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<Activity className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<Activity className='size-16 text-yellow-500' />
 				</div>
 			}
-			title="509 - Bandwidth Exceeded"
-			description="You have exceeded your bandwidth limit for this period."
+			title='509 - Bandwidth Exceeded'
+			description='You have exceeded your bandwidth limit for this period.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/pricing">
-							<Sparkles className="mr-2 size-4" />
+						<Link to='/pricing'>
+							<Sparkles className='mr-2 size-4' />
 							Upgrade Plan
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<div className="flex items-center justify-center">
-					<Badge variant="destructive">Limit Reached</Badge>
+			<div className='space-y-4'>
+				<div className='flex items-center justify-center'>
+					<Badge variant='destructive'>Limit Reached</Badge>
 				</div>
 
 				<Progress value={100}>
@@ -54,20 +54,20 @@ function BandwidthExceededPage() {
 
 				<Separator />
 
-				<div className="space-y-2 text-sm">
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Current Plan</span>
-						<span className="font-medium">Basic</span>
+				<div className='space-y-2 text-sm'>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Current Plan</span>
+						<span className='font-medium'>Basic</span>
 					</div>
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Resets On</span>
-						<span className="font-medium">Feb 1, 2026</span>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Resets On</span>
+						<span className='font-medium'>Feb 1, 2026</span>
 					</div>
 				</div>
 
 				<Separator />
 
-				<p className="text-center text-sm text-muted-foreground">
+				<p className='text-center text-sm text-muted-foreground'>
 					Upgrade your plan for unlimited bandwidth.
 				</p>
 			</div>

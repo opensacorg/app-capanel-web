@@ -15,30 +15,30 @@ export const Route = createFileRoute('/_status/bad-request')({
 function BadRequestPage() {
 	return (
 		<StatusCard
-			variant="error"
+			variant='error'
 			icon={
-				<div className="rounded-full bg-destructive/10 p-6">
-					<FileWarning className="size-16 text-destructive" />
+				<div className='rounded-full bg-destructive/10 p-6'>
+					<FileWarning className='size-16 text-destructive' />
 				</div>
 			}
-			title="400 - Bad Request"
-			description="The request could not be understood by the server."
+			title='400 - Bad Request'
+			description='The request could not be understood by the server.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
-					<Button variant="outline" onClick={() => window.history.back()}>
+					<Button variant='outline' onClick={() => window.history.back()}>
 						Go Back
 					</Button>
 				</>
 			}
 		>
-			<Alert variant="destructive">
-				<AlertCircle className="size-4" />
+			<Alert variant='destructive'>
+				<AlertCircle className='size-4' />
 				<AlertTitle>Invalid Request</AlertTitle>
 				<AlertDescription>
 					Please check the URL or form data and try again. If the problem persists, contact support.

@@ -16,34 +16,34 @@ export const Route = createFileRoute('/_status/subscription-cancelled')({
 function SubscriptionCancelledPage() {
 	return (
 		<StatusCard
-			variant="default"
+			variant='default'
 			icon={
-				<div className="rounded-full bg-muted p-6">
-					<XCircle className="size-16 text-muted-foreground" />
+				<div className='rounded-full bg-muted p-6'>
+					<XCircle className='size-16 text-muted-foreground' />
 				</div>
 			}
-			title="Subscription Cancelled"
-			description="Your subscription has been cancelled."
+			title='Subscription Cancelled'
+			description='Your subscription has been cancelled.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/pricing">
-							<Sparkles className="mr-2 size-4" />
+						<Link to='/pricing'>
+							<Sparkles className='mr-2 size-4' />
 							Resubscribe
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
+			<div className='space-y-4'>
 				<Alert>
-					<CreditCard className="size-4" />
+					<CreditCard className='size-4' />
 					<AlertTitle>Access Until End of Billing Period</AlertTitle>
 					<AlertDescription>
 						You'll continue to have access to Pro features until Feb 28, 2026.
@@ -52,7 +52,7 @@ function SubscriptionCancelledPage() {
 
 				<Separator />
 
-				<p className="text-center text-sm text-muted-foreground">
+				<p className='text-center text-sm text-muted-foreground'>
 					We're sorry to see you go. If you change your mind, you can resubscribe anytime.
 				</p>
 			</div>

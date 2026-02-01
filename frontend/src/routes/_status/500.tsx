@@ -15,34 +15,35 @@ export const Route = createFileRoute('/_status/500')({
 function InternalServerErrorPage() {
 	return (
 		<StatusCard
-			variant="error"
+			variant='error'
 			icon={
-				<div className="rounded-full bg-destructive/10 p-6">
-					<AlertTriangle className="size-16 text-destructive" />
+				<div className='rounded-full bg-destructive/10 p-6'>
+					<AlertTriangle className='size-16 text-destructive' />
 				</div>
 			}
-			title="500 - Internal Server Error"
+			title='500 - Internal Server Error'
 			description="Something went wrong on our end. We're working to fix it."
 			footer={
 				<>
 					<Button onClick={() => window.location.reload()}>
-						<RefreshCcw className="mr-2 size-4" />
+						<RefreshCcw className='mr-2 size-4' />
 						Try Again
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<Alert variant="destructive">
-				<AlertTriangle className="size-4" />
+			<Alert variant='destructive'>
+				<AlertTriangle className='size-4' />
 				<AlertTitle>Error Details</AlertTitle>
 				<AlertDescription>
-					Our team has been notified and is investigating the issue. Please try again in a few minutes.
+					Our team has been notified and is investigating the issue. Please try again in a few
+					minutes.
 				</AlertDescription>
 			</Alert>
 		</StatusCard>

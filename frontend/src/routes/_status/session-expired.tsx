@@ -15,25 +15,25 @@ export const Route = createFileRoute('/_status/session-expired')({
 function SessionExpiredPage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<TimerOff className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<TimerOff className='size-16 text-yellow-500' />
 				</div>
 			}
-			title="Session Expired"
-			description="Your session has expired due to inactivity."
+			title='Session Expired'
+			description='Your session has expired due to inactivity.'
 			footer={
 				<>
 					<Button asChild>
-						<Link to="/login">
-							<LogIn className="mr-2 size-4" />
+						<Link to='/login'>
+							<LogIn className='mr-2 size-4' />
 							Sign In Again
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
@@ -41,7 +41,7 @@ function SessionExpiredPage() {
 			}
 		>
 			<Alert>
-				<Clock className="size-4" />
+				<Clock className='size-4' />
 				<AlertTitle>Security Notice</AlertTitle>
 				<AlertDescription>
 					For your security, sessions automatically expire after 30 minutes of inactivity.

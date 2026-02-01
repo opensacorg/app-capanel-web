@@ -15,23 +15,23 @@ export const Route = createFileRoute('/_status/timeout')({
 function TimeoutPage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<Timer className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<Timer className='size-16 text-yellow-500' />
 				</div>
 			}
-			title="408 - Request Timeout"
-			description="The server took too long to respond."
+			title='408 - Request Timeout'
+			description='The server took too long to respond.'
 			footer={
 				<>
 					<Button onClick={() => window.location.reload()}>
-						<RefreshCcw className="mr-2 size-4" />
+						<RefreshCcw className='mr-2 size-4' />
 						Try Again
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
@@ -39,7 +39,7 @@ function TimeoutPage() {
 			}
 		>
 			<Alert>
-				<Clock className="size-4" />
+				<Clock className='size-4' />
 				<AlertTitle>Connection Timed Out</AlertTitle>
 				<AlertDescription>
 					This could be due to slow network conditions or server load. Please try again.

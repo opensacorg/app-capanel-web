@@ -15,23 +15,23 @@ export const Route = createFileRoute('/_status/cancelled')({
 function CancelledPage() {
 	return (
 		<StatusCard
-			variant="default"
+			variant='default'
 			icon={
-				<div className="rounded-full bg-muted p-6">
-					<Ban className="size-16 text-muted-foreground" />
+				<div className='rounded-full bg-muted p-6'>
+					<Ban className='size-16 text-muted-foreground' />
 				</div>
 			}
-			title="Action Cancelled"
-			description="The operation was cancelled. No changes were made."
+			title='Action Cancelled'
+			description='The operation was cancelled. No changes were made.'
 			footer={
 				<>
 					<Button onClick={() => window.history.back()}>
-						<RefreshCcw className="mr-2 size-4" />
+						<RefreshCcw className='mr-2 size-4' />
 						Try Again
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
@@ -39,7 +39,7 @@ function CancelledPage() {
 			}
 		>
 			<Alert>
-				<Ban className="size-4" />
+				<Ban className='size-4' />
 				<AlertTitle>No Changes Made</AlertTitle>
 				<AlertDescription>
 					Your data remains unchanged. You can safely navigate away or try again.

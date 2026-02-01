@@ -1,6 +1,7 @@
 import { createFormHookContexts } from '@tanstack/react-form'
 import { createFormHook } from '@tanstack/react-form'
 import { useStore } from '@tanstack/react-form'
+
 import { Button } from '@/components/ui/button.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Label } from '@/components/ui/label.tsx'
@@ -79,10 +80,10 @@ export function TextArea({ label, rows = 3 }: { label: string; rows?: number }) 
 }
 
 export function Select({
-						   label,
-						   values,
-						   placeholder,
-					   }: {
+	label,
+	values,
+	placeholder,
+}: {
 	label: string
 	values: Array<{ label: string; value: string }>
 	placeholder?: string

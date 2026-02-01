@@ -17,34 +17,32 @@ export const Route = createFileRoute('/_status/maintenance')({
 function MaintenancePage() {
 	return (
 		<StatusCard
-			variant="info"
+			variant='info'
 			icon={
-				<div className="rounded-full bg-blue-500/10 p-6">
-					<Construction className="size-16 text-blue-500" />
+				<div className='rounded-full bg-blue-500/10 p-6'>
+					<Construction className='size-16 text-blue-500' />
 				</div>
 			}
-			title="Scheduled Maintenance"
+			title='Scheduled Maintenance'
 			description="We're performing scheduled maintenance to improve our services."
 			footer={
 				<>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/status">
-							View Status
-						</Link>
+					<Button variant='outline' asChild>
+						<Link to='/status'>View Status</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<div className="flex items-center justify-center gap-2">
-					<Badge variant="outline">
-						<Wrench className="mr-1 size-3" />
+			<div className='space-y-4'>
+				<div className='flex items-center justify-center gap-2'>
+					<Badge variant='outline'>
+						<Wrench className='mr-1 size-3' />
 						In Progress
 					</Badge>
 				</div>
@@ -56,18 +54,18 @@ function MaintenancePage() {
 
 				<Separator />
 
-				<div className="space-y-2 text-sm">
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Started</span>
-						<span className="flex items-center gap-1">
-							<Clock className="size-3" />
+				<div className='space-y-2 text-sm'>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Started</span>
+						<span className='flex items-center gap-1'>
+							<Clock className='size-3' />
 							2:00 AM UTC
 						</span>
 					</div>
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Expected End</span>
-						<span className="flex items-center gap-1">
-							<Clock className="size-3" />
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Expected End</span>
+						<span className='flex items-center gap-1'>
+							<Clock className='size-3' />
 							4:00 AM UTC
 						</span>
 					</div>
@@ -75,9 +73,9 @@ function MaintenancePage() {
 
 				<Separator />
 
-				<div className="text-center text-sm text-muted-foreground">
+				<div className='text-center text-sm text-muted-foreground'>
 					<p>Updates being performed:</p>
-					<ul className="mt-2 space-y-1">
+					<ul className='mt-2 space-y-1'>
 						<li>Database optimization</li>
 						<li>Security patches</li>
 						<li>Performance improvements</li>

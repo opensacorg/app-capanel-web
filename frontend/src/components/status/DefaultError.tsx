@@ -1,7 +1,12 @@
 import { Link, type ErrorComponentProps } from '@tanstack/react-router'
 import { AlertOctagon, Bug, Home, RefreshCcw } from 'lucide-react'
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from '@/components/ui/accordion'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 
@@ -18,64 +23,62 @@ export function DefaultError({ error, reset, info, fullPage = true }: DefaultErr
 
 	const content = (
 		<StatusCard
-			variant="error"
+			variant='error'
 			icon={
-				<div className="rounded-full bg-destructive/10 p-6">
-					<AlertOctagon className="size-16 text-destructive" />
+				<div className='rounded-full bg-destructive/10 p-6'>
+					<AlertOctagon className='size-16 text-destructive' />
 				</div>
 			}
-			title="Something Went Wrong"
-			description="An unexpected error occurred while processing your request."
+			title='Something Went Wrong'
+			description='An unexpected error occurred while processing your request.'
 			footer={
 				<>
 					{reset ? (
 						<Button onClick={reset}>
-							<RefreshCcw className="mr-2 size-4" />
+							<RefreshCcw className='mr-2 size-4' />
 							Try Again
 						</Button>
 					) : (
 						<Button onClick={() => window.location.reload()}>
-							<RefreshCcw className="mr-2 size-4" />
+							<RefreshCcw className='mr-2 size-4' />
 							Reload Page
 						</Button>
 					)}
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<Alert variant="destructive">
-					<Bug className="size-4" />
+			<div className='space-y-4'>
+				<Alert variant='destructive'>
+					<Bug className='size-4' />
 					<AlertTitle>Error Details</AlertTitle>
-					<AlertDescription className="break-words">
-						{errorMessage}
-					</AlertDescription>
+					<AlertDescription className='break-words'>{errorMessage}</AlertDescription>
 				</Alert>
 
 				{(errorStack || info?.componentStack) && (
-					<Accordion type="single" collapsible>
-						<AccordionItem value="stack">
-							<AccordionTrigger className="text-sm">
-								Technical Details
-							</AccordionTrigger>
+					<Accordion type='single' collapsible>
+						<AccordionItem value='stack'>
+							<AccordionTrigger className='text-sm'>Technical Details</AccordionTrigger>
 							<AccordionContent>
-								<div className="rounded-md bg-muted p-3 font-mono text-xs overflow-auto max-h-48">
-									<p className="mb-2">Timestamp: {new Date().toISOString()}</p>
+								<div className='rounded-md bg-muted p-3 font-mono text-xs overflow-auto max-h-48'>
+									<p className='mb-2'>Timestamp: {new Date().toISOString()}</p>
 									{errorStack && (
 										<>
-											<p className="font-semibold mb-1">Stack Trace:</p>
-											<pre className="whitespace-pre-wrap text-destructive/80">{errorStack}</pre>
+											<p className='font-semibold mb-1'>Stack Trace:</p>
+											<pre className='whitespace-pre-wrap text-destructive/80'>{errorStack}</pre>
 										</>
 									)}
 									{info?.componentStack && (
 										<>
-											<p className="font-semibold mb-1 mt-2">Component Stack:</p>
-											<pre className="whitespace-pre-wrap text-muted-foreground">{info.componentStack}</pre>
+											<p className='font-semibold mb-1 mt-2'>Component Stack:</p>
+											<pre className='whitespace-pre-wrap text-muted-foreground'>
+												{info.componentStack}
+											</pre>
 										</>
 									)}
 								</div>
@@ -88,11 +91,7 @@ export function DefaultError({ error, reset, info, fullPage = true }: DefaultErr
 	)
 
 	if (!fullPage) {
-		return (
-			<div className="flex items-center justify-center min-h-[60vh] p-4">
-				{content}
-			</div>
-		)
+		return <div className='flex items-center justify-center min-h-[60vh] p-4'>{content}</div>
 	}
 
 	return <StatusTemplate>{content}</StatusTemplate>

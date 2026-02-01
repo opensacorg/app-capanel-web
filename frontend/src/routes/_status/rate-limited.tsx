@@ -17,33 +17,33 @@ export const Route = createFileRoute('/_status/rate-limited')({
 function RateLimitedPage() {
 	return (
 		<StatusCard
-			variant="warning"
+			variant='warning'
 			icon={
-				<div className="rounded-full bg-yellow-500/10 p-6">
-					<Gauge className="size-16 text-yellow-500" />
+				<div className='rounded-full bg-yellow-500/10 p-6'>
+					<Gauge className='size-16 text-yellow-500' />
 				</div>
 			}
-			title="429 - Too Many Requests"
+			title='429 - Too Many Requests'
 			description="You've exceeded the rate limit. Please slow down."
 			footer={
 				<>
 					<Button disabled>
-						<Timer className="mr-2 size-4" />
+						<Timer className='mr-2 size-4' />
 						Wait 60 seconds
 					</Button>
-					<Button variant="outline" asChild>
-						<Link to="/">
-							<Home className="mr-2 size-4" />
+					<Button variant='outline' asChild>
+						<Link to='/'>
+							<Home className='mr-2 size-4' />
 							Go Home
 						</Link>
 					</Button>
 				</>
 			}
 		>
-			<div className="space-y-4">
-				<div className="flex items-center justify-center gap-2">
-					<Badge variant="secondary">
-						<Clock className="mr-1 size-3" />
+			<div className='space-y-4'>
+				<div className='flex items-center justify-center gap-2'>
+					<Badge variant='secondary'>
+						<Clock className='mr-1 size-3' />
 						Cooldown Active
 					</Badge>
 				</div>
@@ -55,26 +55,26 @@ function RateLimitedPage() {
 
 				<Separator />
 
-				<div className="space-y-2 text-sm">
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Requests Used</span>
-						<span className="font-medium">100 / 100</span>
+				<div className='space-y-2 text-sm'>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Requests Used</span>
+						<span className='font-medium'>100 / 100</span>
 					</div>
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Reset In</span>
-						<span className="font-medium">60 seconds</span>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Reset In</span>
+						<span className='font-medium'>60 seconds</span>
 					</div>
-					<div className="flex items-center justify-between">
-						<span className="text-muted-foreground">Rate Limit</span>
-						<span className="font-medium">100 req/min</span>
+					<div className='flex items-center justify-between'>
+						<span className='text-muted-foreground'>Rate Limit</span>
+						<span className='font-medium'>100 req/min</span>
 					</div>
 				</div>
 
 				<Separator />
 
-				<p className="text-center text-sm text-muted-foreground">
+				<p className='text-center text-sm text-muted-foreground'>
 					Need higher limits?{' '}
-					<Link to="/pricing" className="text-primary hover:underline">
+					<Link to='/pricing' className='text-primary hover:underline'>
 						Upgrade your plan
 					</Link>
 				</p>

@@ -57,7 +57,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	errorComponent: ({ error, reset, info }) => (
 		<DefaultError error={error} reset={reset} info={info} fullPage />
 	),
-	pendingComponent: () => <DefaultPending fullPage={false} variant="card" message="Loading application..." />,
+	pendingComponent: () => (
+		<DefaultPending fullPage={false} variant='card' message='Loading application...' />
+	),
 
 	shellComponent: RootDocument,
 })
