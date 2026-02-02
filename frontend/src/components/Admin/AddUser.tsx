@@ -67,7 +67,7 @@ const AddUser = () => {
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: UserCreate) => UsersService.createUser({ requestBody: data }),
+		mutationFn: (data: UserCreate) => UsersService.usersCreateUser({ requestBody: data }),
 		onSuccess: () => {
 			showSuccessToast('User created successfully')
 			form.reset()

@@ -19,6 +19,7 @@ const config = defineConfig({
 			project: './src/integrations/project.inlang',
 			outdir: './src/integrations/paraglide',
 			strategy: ['url'],
+			emitTsDeclarations: true,
 		}),
 		viteTsConfigPaths({
 			projects: ['./tsconfig.json'],

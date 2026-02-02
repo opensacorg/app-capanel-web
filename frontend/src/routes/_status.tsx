@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_status')({
 	head: () => ({
 		meta: [{ title: 'Status - FastAPI Cloud' }],
 	}),
-	// Route-specific status handlers for the _status layout group
+	// Route-specific status handlers for the _status user group
 	// These provide a consistent experience within the status section
 	notFoundComponent: () => <DefaultNotFound fullPage={false} />,
 	errorComponent: ({ error, reset, info }) => (

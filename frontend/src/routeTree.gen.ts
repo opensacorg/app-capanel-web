@@ -13,16 +13,16 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
 import { Route as StatusRouteImport } from './routes/_status'
-import { Route as LayoutIndexRouteImport } from './routes/layout/index'
+import { Route as UserIndexRouteImport } from './routes/user/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as Dashboard2IndexRouteImport } from './routes/dashboard2/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
+import { Route as UserSettingsRouteImport } from './routes/user/settings'
+import { Route as UserItemsRouteImport } from './routes/user/items'
+import { Route as UserAdminRouteImport } from './routes/user/admin'
+import { Route as UserLayoutRouteImport } from './routes/user/_layout'
 import { Route as PrivatePrivateRouteImport } from './routes/private/_private'
-import { Route as LayoutSettingsRouteImport } from './routes/layout/settings'
-import { Route as LayoutItemsRouteImport } from './routes/layout/items'
-import { Route as LayoutAdminRouteImport } from './routes/layout/admin'
-import { Route as LayoutLayoutRouteImport } from './routes/layout/_layout'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoStrapiRouteImport } from './routes/demo/strapi'
@@ -128,9 +128,9 @@ const StatusRoute = StatusRouteImport.update({
   id: '/_status',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutIndexRoute = LayoutIndexRouteImport.update({
-  id: '/layout/',
-  path: '/layout/',
+const UserIndexRoute = UserIndexRouteImport.update({
+  id: '/user/',
+  path: '/user/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoIndexRoute = DemoIndexRouteImport.update({
@@ -153,29 +153,29 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserSettingsRoute = UserSettingsRouteImport.update({
+  id: '/user/settings',
+  path: '/user/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserItemsRoute = UserItemsRouteImport.update({
+  id: '/user/items',
+  path: '/user/items',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserAdminRoute = UserAdminRouteImport.update({
+  id: '/user/admin',
+  path: '/user/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserLayoutRoute = UserLayoutRouteImport.update({
+  id: '/user/_layout',
+  path: '/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivatePrivateRoute = PrivatePrivateRouteImport.update({
   id: '/private/_private',
   path: '/private',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
-  id: '/layout/settings',
-  path: '/layout/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutItemsRoute = LayoutItemsRouteImport.update({
-  id: '/layout/items',
-  path: '/layout/items',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutAdminRoute = LayoutAdminRouteImport.update({
-  id: '/layout/admin',
-  path: '/layout/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutLayoutRoute = LayoutLayoutRouteImport.update({
-  id: '/layout/_layout',
-  path: '/layout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
@@ -676,15 +676,15 @@ export interface FileRoutesByFullPath {
   '/demo/strapi': typeof DemoStrapiRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/layout': typeof LayoutLayoutRoute
-  '/layout/admin': typeof LayoutAdminRoute
-  '/layout/items': typeof LayoutItemsRoute
-  '/layout/settings': typeof LayoutSettingsRoute
   '/private': typeof PrivatePrivateRoute
+  '/user': typeof UserLayoutRoute
+  '/user/admin': typeof UserAdminRoute
+  '/user/items': typeof UserItemsRoute
+  '/user/settings': typeof UserSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard2/': typeof Dashboard2IndexRoute
   '/demo/': typeof DemoIndexRoute
-  '/layout/': typeof LayoutIndexRoute
+  '/user/': typeof UserIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -776,11 +776,11 @@ export interface FileRoutesByTo {
   '/demo/strapi': typeof DemoStrapiRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/layout': typeof LayoutIndexRoute
-  '/layout/admin': typeof LayoutAdminRoute
-  '/layout/items': typeof LayoutItemsRoute
-  '/layout/settings': typeof LayoutSettingsRoute
   '/private': typeof PrivatePrivateRoute
+  '/user': typeof UserIndexRoute
+  '/user/admin': typeof UserAdminRoute
+  '/user/items': typeof UserItemsRoute
+  '/user/settings': typeof UserSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard2': typeof Dashboard2IndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
@@ -875,16 +875,16 @@ export interface FileRoutesById {
   '/demo/strapi': typeof DemoStrapiRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/layout/_layout': typeof LayoutLayoutRoute
-  '/layout/admin': typeof LayoutAdminRoute
-  '/layout/items': typeof LayoutItemsRoute
-  '/layout/settings': typeof LayoutSettingsRoute
   '/private/_private': typeof PrivatePrivateRoute
+  '/user/_layout': typeof UserLayoutRoute
+  '/user/admin': typeof UserAdminRoute
+  '/user/items': typeof UserItemsRoute
+  '/user/settings': typeof UserSettingsRoute
   '/_home/': typeof HomeIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard2/': typeof Dashboard2IndexRoute
   '/demo/': typeof DemoIndexRoute
-  '/layout/': typeof LayoutIndexRoute
+  '/user/': typeof UserIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -978,15 +978,15 @@ export interface FileRouteTypes {
     | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
-    | '/layout'
-    | '/layout/admin'
-    | '/layout/items'
-    | '/layout/settings'
     | '/private'
+    | '/user'
+    | '/user/admin'
+    | '/user/items'
+    | '/user/settings'
     | '/dashboard/'
     | '/dashboard2/'
     | '/demo/'
-    | '/layout/'
+    | '/user/'
     | '/demo/api/mcp-todos'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -1078,11 +1078,11 @@ export interface FileRouteTypes {
     | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
-    | '/layout'
-    | '/layout/admin'
-    | '/layout/items'
-    | '/layout/settings'
     | '/private'
+    | '/user'
+    | '/user/admin'
+    | '/user/items'
+    | '/user/settings'
     | '/dashboard'
     | '/dashboard2'
     | '/demo/api/mcp-todos'
@@ -1176,16 +1176,16 @@ export interface FileRouteTypes {
     | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
-    | '/layout/_layout'
-    | '/layout/admin'
-    | '/layout/items'
-    | '/layout/settings'
     | '/private/_private'
+    | '/user/_layout'
+    | '/user/admin'
+    | '/user/items'
+    | '/user/settings'
     | '/_home/'
     | '/dashboard/'
     | '/dashboard2/'
     | '/demo/'
-    | '/layout/'
+    | '/user/'
     | '/demo/api/mcp-todos'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -1227,16 +1227,16 @@ export interface RootRouteChildren {
   DemoStrapiRoute: typeof DemoStrapiRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
-  LayoutLayoutRoute: typeof LayoutLayoutRoute
-  LayoutAdminRoute: typeof LayoutAdminRoute
-  LayoutItemsRoute: typeof LayoutItemsRoute
-  LayoutSettingsRoute: typeof LayoutSettingsRoute
   PrivatePrivateRoute: typeof PrivatePrivateRoute
+  UserLayoutRoute: typeof UserLayoutRoute
+  UserAdminRoute: typeof UserAdminRoute
+  UserItemsRoute: typeof UserItemsRoute
+  UserSettingsRoute: typeof UserSettingsRoute
   HomeIndexRoute: typeof HomeIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   Dashboard2IndexRoute: typeof Dashboard2IndexRoute
   DemoIndexRoute: typeof DemoIndexRoute
-  LayoutIndexRoute: typeof LayoutIndexRoute
+  UserIndexRoute: typeof UserIndexRoute
   DemoApiMcpTodosRoute: typeof DemoApiMcpTodosRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
@@ -1288,11 +1288,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatusRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/layout/': {
-      id: '/layout/'
-      path: '/layout'
-      fullPath: '/layout/'
-      preLoaderRoute: typeof LayoutIndexRouteImport
+    '/user/': {
+      id: '/user/'
+      path: '/user'
+      fullPath: '/user/'
+      preLoaderRoute: typeof UserIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/': {
@@ -1323,39 +1323,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/user/settings': {
+      id: '/user/settings'
+      path: '/user/settings'
+      fullPath: '/user/settings'
+      preLoaderRoute: typeof UserSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/items': {
+      id: '/user/items'
+      path: '/user/items'
+      fullPath: '/user/items'
+      preLoaderRoute: typeof UserItemsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/admin': {
+      id: '/user/admin'
+      path: '/user/admin'
+      fullPath: '/user/admin'
+      preLoaderRoute: typeof UserAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/_layout': {
+      id: '/user/_layout'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof UserLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/private/_private': {
       id: '/private/_private'
       path: '/private'
       fullPath: '/private'
       preLoaderRoute: typeof PrivatePrivateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/layout/settings': {
-      id: '/layout/settings'
-      path: '/layout/settings'
-      fullPath: '/layout/settings'
-      preLoaderRoute: typeof LayoutSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/layout/items': {
-      id: '/layout/items'
-      path: '/layout/items'
-      fullPath: '/layout/items'
-      preLoaderRoute: typeof LayoutItemsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/layout/admin': {
-      id: '/layout/admin'
-      path: '/layout/admin'
-      fullPath: '/layout/admin'
-      preLoaderRoute: typeof LayoutAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/layout/_layout': {
-      id: '/layout/_layout'
-      path: '/layout'
-      fullPath: '/layout'
-      preLoaderRoute: typeof LayoutLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/tanstack-query': {
@@ -2087,16 +2087,16 @@ const rootRouteChildren: RootRouteChildren = {
   DemoStrapiRoute: DemoStrapiRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
-  LayoutLayoutRoute: LayoutLayoutRoute,
-  LayoutAdminRoute: LayoutAdminRoute,
-  LayoutItemsRoute: LayoutItemsRoute,
-  LayoutSettingsRoute: LayoutSettingsRoute,
   PrivatePrivateRoute: PrivatePrivateRoute,
+  UserLayoutRoute: UserLayoutRoute,
+  UserAdminRoute: UserAdminRoute,
+  UserItemsRoute: UserItemsRoute,
+  UserSettingsRoute: UserSettingsRoute,
   HomeIndexRoute: HomeIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   Dashboard2IndexRoute: Dashboard2IndexRoute,
   DemoIndexRoute: DemoIndexRoute,
-  LayoutIndexRoute: LayoutIndexRoute,
+  UserIndexRoute: UserIndexRoute,
   DemoApiMcpTodosRoute: DemoApiMcpTodosRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,

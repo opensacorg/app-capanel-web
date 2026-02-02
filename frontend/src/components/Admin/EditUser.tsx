@@ -75,7 +75,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 
 	const mutation = useMutation({
 		mutationFn: (data: Partial<FormData>) =>
-			UsersService.updateUser({ userId: user.id, requestBody: data }),
+			UsersService.usersUpdateUser({ userId: user.id, requestBody: data }),
 		onSuccess: () => {
 			showSuccessToast('User updated successfully')
 			setIsOpen(false)

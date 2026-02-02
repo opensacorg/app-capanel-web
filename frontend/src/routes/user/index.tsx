@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import useAuth from '@/hooks/useAuth'
+import useAuth from '@/lib/hooks/useAuth'
 
-export const Route = createFileRoute('/layout/')({
+export const Route = createFileRoute('/user/')({
 	component: Dashboard,
 	head: () => ({
 		meta: [

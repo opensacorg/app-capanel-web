@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ChangePassword from '@/components/UserSettings/ChangePassword'
 import DeleteAccount from '@/components/UserSettings/DeleteAccount'
 import UserInformation from '@/components/UserSettings/UserInformation'
+import useAuth from "@/lib/hooks/useAuth.ts";
 
 const tabsConfig = [
 	{ value: 'my-profile', title: 'My profile', component: UserInformation },
@@ -11,7 +12,7 @@ const tabsConfig = [
 	{ value: 'danger-zone', title: 'Danger zone', component: DeleteAccount },
 ]
 
-export const Route = createFileRoute('/layout/settings')({
+export const Route = createFileRoute('/user/settings')({
 	component: UserSettings,
 	head: () => ({
 		meta: [

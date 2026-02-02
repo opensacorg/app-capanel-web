@@ -6,20 +6,20 @@ import AddUser from '@/components/Admin/AddUser'
 import { columns, type UserTableData } from '@/components/Admin/columns'
 import { DataTable } from '@/components/Common/DataTable'
 import PendingUsers from '@/components/Pending/PendingUsers'
-import useAuth from '@/hooks/useAuth'
+import useAuth from '@/lib/hooks/useAuth'
 import { type UserPublic, UsersService } from '@/lib/client'
 
 function getUsersQueryOptions() {
 	return {
-		queryFn: () => UsersService.readUsers({ skip: 0, limit: 100 }),
+		queryFn: () => UsersService.usersReadUsers({ skip: 0, limit: 100 }),
 		queryKey: ['users'],
 	}
 }
 
-export const Route = createFileRoute('/layout/admin')({
+export const Route = createFileRoute('/user/admin')({
 	component: Admin,
 	beforeLoad: async () => {
-		const user = await UsersService.readUserMe()
+		const user = await UsersService.usersReadUserMe()
 		if (!user.is_superuser) {
 			throw redirect({
 				to: '/',

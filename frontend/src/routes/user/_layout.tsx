@@ -5,7 +5,7 @@ import AppSidebar from '@/components/Sidebar/AppSidebar'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { isLoggedIn } from '@/lib/hooks/useAuth'
 
-export const Route = createFileRoute('/layout/_layout')({
+export const Route = createFileRoute('/user/_layout')({
 	component: Layout,
 	beforeLoad: async () => {
 		if (!isLoggedIn()) {

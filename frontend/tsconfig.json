@@ -15,13 +15,13 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		},
 		"forceConsistentCasingInFileNames": true
 	},
 	"include": ["src", "tests", "playwright.config.ts"],
+	"exclude": ["src/lib/client", "tests"],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"
