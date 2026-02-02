@@ -3,7 +3,7 @@
 California Accountability Panel is a dashboard for viewing school standards. Contributions are welcome!
 
 > [!NOTE]
-> Learn about the project on the documentation website. [https://capanel.readthedocs.io/](https://app-capanel-web.readthedocs.io/)
+> Learn about the project on the documentation website [capanel.readthedocs.io](https://app-capanel-web.readthedocs.io).
 
 ## Overview
 
@@ -23,7 +23,7 @@ For support and to keep updated on news:
 
 ## Self-hosting with Docker
 
-The application can be started by running `docker compose up`. **Before the first run**, make sure to update the configs in the `.env` files to customize your configurations. For help, see [deployment documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
+All parts of the application can be started by running `docker compose up`. **Before the first run**, make sure to update the configs in the `.env` files to customize your configurations. For help, see [deployment documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
 
 The minimum required environment variables are:
 
