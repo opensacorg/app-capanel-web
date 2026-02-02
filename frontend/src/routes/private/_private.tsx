@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import useAuth from "@/lib/hooks/useAuth.ts";
 import { Button } from "@/components/ui/button.tsx";
 

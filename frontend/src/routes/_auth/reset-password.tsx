@@ -32,7 +32,7 @@ const resetSchema = z
 
 type ResetFormValues = z.infer<typeof resetSchema>
 
-export const Route = createFileRoute('/reset-password')({
+export const Route = createFileRoute('/_auth/reset-password')({
 	component: ResetPassword,
 	validateSearch: searchSchema,
 	beforeLoad: async ({ search }) => {

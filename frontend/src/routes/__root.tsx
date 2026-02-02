@@ -1,32 +1,27 @@
 import type { QueryClient } from '@tanstack/react-query'
 
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router'
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-import { DefaultError } from '@/components/status/DefaultError'
-import { DefaultNotFound } from '@/components/status/DefaultNotFound'
 import { DefaultPending } from '@/components/status/DefaultPending'
-import { getLocale } from '@/integrations/paraglide/runtime'
 
 import appCss from '../globals.css?url'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
+import { Provider } from '../integrations/tanstack-query/root-provider'
 import AiDevtools from '../lib/ai-devtools'
 import StoreDevtools from '../lib/demo-store-devtools'
+import { ReactNode } from "react";
 
 interface MyRouterContext {
 	queryClient: QueryClient
 }
 
+/**
+ * Other redirect strategies are possible; see
+ * https://github.com/TanStack/router/tree/main/examples/react/i18n-paraglide#offline-redirect
+ */
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-	beforeLoad: async () => {
-		// Other redirect strategies are possible; see
-		// https://github.com/TanStack/router/tree/main/examples/react/i18n-paraglide#offline-redirect
-		if (typeof document !== 'undefined') {
-			document.documentElement.setAttribute('lang', getLocale())
-		}
-	},
-
 	head: () => ({
 		meta: [
 			{
@@ -37,7 +32,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: 'width=device-width, initial-scale=1',
 			},
 			{
-				title: 'TanStack Start Starter',
+				title: 'California Accountability Panel',
 			},
 		],
 		links: [
@@ -47,22 +42,25 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
-
-	// Root-level status components (these are the fallbacks for the entire app)
-	notFoundComponent: () => <DefaultNotFound fullPage />,
-	errorComponent: ({ error, reset, info }) => (
-		<DefaultError error={error} reset={reset} info={info} fullPage />
-	),
 	pendingComponent: () => (
 		<DefaultPending fullPage={false} variant='card' message='Loading application...' />
 	),
-
+	component: RootComponent,
 	shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootComponent() {
+	const { queryClient } = Route.useRouteContext()
 	return (
-		<html lang={getLocale()}>
+		<Provider queryClient={queryClient}>
+			<Outlet />
+		</Provider>
+	)
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
+	return (
+		<html lang="en">
 			<head>
 				<HeadContent />
 			</head>
@@ -87,7 +85,3 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		</html>
 	)
 }
-
-// 	notFoundComponent: () => <NotFound />,
-// 	errorComponent: () => <ErrorComponent />,
-// });

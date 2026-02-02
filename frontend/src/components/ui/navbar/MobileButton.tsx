@@ -1,7 +1,7 @@
-import { useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { FaBars } from 'react-icons/fa'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -12,46 +12,30 @@ import useAuth from '@/lib/hooks/useAuth'
 
 export default function MobileButton({ className }: { className?: string }) {
 	const { user: currentUser } = useAuth()
-	const navigate = useNavigate()
 
 	return (
 		<div className={className}>
 			<DropdownMenu>
-				<DropdownMenuTrigger render={<Button variant='outline' size='sm' />}>
+				<DropdownMenuTrigger className={buttonVariants({ variant: 'outline', size: 'sm' })}>
 					<FaBars className='h-5 w-5' />
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
-					<DropdownMenuItem
-						onSelect={() => navigate({ to: '/' })}
-						className='text-base p-3 tracking-wide'
-					>
+					<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/' />}>
 						Home
 					</DropdownMenuItem>
-					<DropdownMenuItem
-						onSelect={() => navigate({ to: '/dashboard' })}
-						className='text-base p-3 tracking-wide'
-					>
+					<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/dashboard' />}>
 						Dashboard
 					</DropdownMenuItem>
 					{currentUser ? (
-						<DropdownMenuItem
-							onSelect={() => navigate({ to: '/sign-out' })}
-							className='text-base p-3 tracking-wide'
-						>
+						<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/sign-out' />}>
 							Sign Out
 						</DropdownMenuItem>
 					) : (
 						<>
-							<DropdownMenuItem
-								onSelect={() => navigate({ to: '/login' })}
-								className='text-base p-3 tracking-wide'
-							>
+							<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/login' />}>
 								Sign In
 							</DropdownMenuItem>
-							<DropdownMenuItem
-								onSelect={() => navigate({ to: '/sign-up' })}
-								className='text-base p-3 tracking-wide'
-							>
+							<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/sign-up' />}>
 								Sign Up
 							</DropdownMenuItem>
 						</>

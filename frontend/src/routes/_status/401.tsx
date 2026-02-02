@@ -43,7 +43,7 @@ function UnauthorizedPage() {
 				<Separator />
 				<p className='text-sm text-muted-foreground'>
 					Don't have an account?{' '}
-					<Link to='/signup' className='text-primary hover:underline'>
+					<Link to='/sign-up' className='text-primary hover:underline'>
 						Sign up
 					</Link>
 				</p>

@@ -43,7 +43,7 @@ function LoginRequiredPage() {
 				<Separator />
 				<p className='text-sm text-muted-foreground'>
 					New user?{' '}
-					<Link to='/signup' className='text-primary hover:underline'>
+					<Link to='/sign-up' className='text-primary hover:underline'>
 						Create an account
 					</Link>
 				</p>

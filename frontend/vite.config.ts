@@ -1,4 +1,3 @@
-import { paraglideVitePlugin } from '@inlang/paraglide-js'
 import tailwindcss from '@tailwindcss/vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
@@ -15,12 +14,6 @@ const config = defineConfig({
 	},
 	plugins: [
 		devtools(),
-		paraglideVitePlugin({
-			project: './src/integrations/project.inlang',
-			outdir: './src/integrations/paraglide',
-			strategy: ['url'],
-			emitTsDeclarations: true,
-		}),
 		viteTsConfigPaths({
 			projects: ['./tsconfig.json'],
 		}),

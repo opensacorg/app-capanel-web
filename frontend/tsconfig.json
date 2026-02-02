@@ -18,7 +18,8 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"forceConsistentCasingInFileNames": true
+		"forceConsistentCasingInFileNames": true,
+		"allowJs": true
 	},
 	"include": ["src", "tests", "playwright.config.ts"],
 	"exclude": ["src/lib/client", "tests"],

@@ -26,7 +26,7 @@ function DeletedPage() {
 			description='Your account has been successfully deleted.'
 			footer={
 				<>
-					<Button variant='outline' render={<Link to='/signup' />}>
+					<Button variant='outline' render={<Link to='/sign-up' />}>
 						Create New Account
 					</Button>
 					<Button variant='ghost' render={<Link to='/' />}>

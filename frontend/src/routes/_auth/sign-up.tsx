@@ -27,7 +27,7 @@ const signupSchema = z
 
 type SignupFormValues = z.infer<typeof signupSchema>
 
-export const Route = createFileRoute('/signup')({
+export const Route = createFileRoute('/_auth/sign-up')({
 	component: SignUp,
 	beforeLoad: async () => {
 		if (isLoggedIn()) {

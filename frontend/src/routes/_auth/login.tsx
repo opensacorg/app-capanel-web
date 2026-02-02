@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link as RouterLink, redirect } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import type { Body_login_login_access_token as AccessToken } from '@/lib/client'
+import type { BodyLoginLoginAccessToken as AccessToken } from '@/lib/client'
 
 import { AuthLayout } from '@/components/Common/AuthLayout'
 import { Button } from '@/components/ui/button'
@@ -138,7 +138,7 @@ function Login() {
 
 				<div className='text-center text-sm'>
 					Don't have an account yet?{' '}
-					<RouterLink to='/signup' className='underline underline-offset-4'>
+					<RouterLink to='/sign-up' className='underline underline-offset-4'>
 						Sign up
 					</RouterLink>
 				</div>

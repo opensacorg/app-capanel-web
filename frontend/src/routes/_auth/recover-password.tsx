@@ -19,7 +19,7 @@ const recoverSchema = z.object({
 
 type RecoverFormValues = z.infer<typeof recoverSchema>
 
-export const Route = createFileRoute('/recover-password')({
+export const Route = createFileRoute('/_auth/recover-password')({
 	component: RecoverPassword,
 	beforeLoad: async () => {
 		if (isLoggedIn()) {

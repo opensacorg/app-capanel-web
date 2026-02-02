@@ -4,7 +4,7 @@ import CardGrid from '@/components/CardGrid.tsx'
 import { Button } from '@/components/ui/button'
 import NavbarD52 from '@/components/ui/navbar/NavbarD52.tsx'
 
-export const Route = createFileRoute('/_home/')({
+export const Route = createFileRoute('/')({
 	component: HomePage,
 })
 
@@ -21,7 +21,7 @@ function HomePage() {
 						<p className='text-lg  text-element-text-regular font-urbanist font-medium'>
 							Discover standards based on California's Accountability System.
 						</p>
-						<Button className='tracking-wider' mt={4} render={<Link to='/dashboard' />}>
+						<Button className='tracking-wider mt-4' render={<Link to='/dashboard' />}>
 							Search for a school or district
 						</Button>
 						<Button className='tracking-wider' render={<Link to='/dashboard' />}>

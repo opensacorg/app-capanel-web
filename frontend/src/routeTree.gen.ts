@@ -9,15 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
 import { Route as StatusRouteImport } from './routes/_status'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserIndexRouteImport } from './routes/user/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as Dashboard2IndexRouteImport } from './routes/dashboard2/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as UserSettingsRouteImport } from './routes/user/settings'
 import { Route as UserItemsRouteImport } from './routes/user/items'
 import { Route as UserAdminRouteImport } from './routes/user/admin'
@@ -88,6 +85,9 @@ import { Route as Status403RouteImport } from './routes/_status/403'
 import { Route as Status401RouteImport } from './routes/_status/401'
 import { Route as Status2faRequiredRouteImport } from './routes/_status/2fa-required'
 import { Route as Status2faEnabledRouteImport } from './routes/_status/2fa-enabled'
+import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
+import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
+import { Route as AuthRecoverPasswordRouteImport } from './routes/_auth/recover-password'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DemoGuitarsIndexRouteImport } from './routes/demo/guitars/index'
 import { Route as DemoStrapiArticleIdRouteImport } from './routes/demo/strapi_.$articleId'
@@ -109,23 +109,13 @@ import { Route as DemoApiAiStructuredRouteImport } from './routes/demo/api.ai.st
 import { Route as DemoApiAiImageRouteImport } from './routes/demo/api.ai.image'
 import { Route as DemoApiAiChatRouteImport } from './routes/demo/api.ai.chat'
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
-  id: '/recover-password',
-  path: '/recover-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const StatusRoute = StatusRouteImport.update({
   id: '/_status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UserIndexRoute = UserIndexRouteImport.update({
@@ -146,11 +136,6 @@ const Dashboard2IndexRoute = Dashboard2IndexRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeIndexRoute = HomeIndexRouteImport.update({
-  id: '/_home/',
-  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UserSettingsRoute = UserSettingsRouteImport.update({
@@ -504,6 +489,21 @@ const Status2faEnabledRoute = Status2faEnabledRouteImport.update({
   path: '/2fa-enabled',
   getParentRoute: () => StatusRoute,
 } as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/_auth/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/_auth/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRecoverPasswordRoute = AuthRecoverPasswordRouteImport.update({
+  id: '/_auth/recover-password',
+  path: '/recover-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/_auth/login',
   path: '/login',
@@ -606,11 +606,11 @@ const DemoApiAiChatRoute = DemoApiAiChatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof HomeIndexRoute
-  '/recover-password': typeof RecoverPasswordRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/signup': typeof SignupRoute
+  '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
+  '/recover-password': typeof AuthRecoverPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/sign-up': typeof AuthSignUpRoute
   '/2fa-enabled': typeof Status2faEnabledRoute
   '/2fa-required': typeof Status2faRequiredRoute
   '/401': typeof Status401Route
@@ -706,11 +706,11 @@ export interface FileRoutesByFullPath {
   '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof HomeIndexRoute
-  '/recover-password': typeof RecoverPasswordRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/signup': typeof SignupRoute
+  '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
+  '/recover-password': typeof AuthRecoverPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/sign-up': typeof AuthSignUpRoute
   '/2fa-enabled': typeof Status2faEnabledRoute
   '/2fa-required': typeof Status2faRequiredRoute
   '/401': typeof Status401Route
@@ -805,11 +805,12 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_status': typeof StatusRouteWithChildren
-  '/recover-password': typeof RecoverPasswordRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/signup': typeof SignupRoute
   '/_auth/login': typeof AuthLoginRoute
+  '/_auth/recover-password': typeof AuthRecoverPasswordRoute
+  '/_auth/reset-password': typeof AuthResetPasswordRoute
+  '/_auth/sign-up': typeof AuthSignUpRoute
   '/_status/2fa-enabled': typeof Status2faEnabledRoute
   '/_status/2fa-required': typeof Status2faRequiredRoute
   '/_status/401': typeof Status401Route
@@ -880,7 +881,6 @@ export interface FileRoutesById {
   '/user/admin': typeof UserAdminRoute
   '/user/items': typeof UserItemsRoute
   '/user/settings': typeof UserSettingsRoute
-  '/_home/': typeof HomeIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard2/': typeof Dashboard2IndexRoute
   '/demo/': typeof DemoIndexRoute
@@ -909,10 +909,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
     | '/recover-password'
     | '/reset-password'
-    | '/signup'
-    | '/login'
+    | '/sign-up'
     | '/2fa-enabled'
     | '/2fa-required'
     | '/401'
@@ -1009,10 +1009,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
     | '/recover-password'
     | '/reset-password'
-    | '/signup'
-    | '/login'
+    | '/sign-up'
     | '/2fa-enabled'
     | '/2fa-required'
     | '/401'
@@ -1106,11 +1106,12 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   id:
     | '__root__'
+    | '/'
     | '/_status'
-    | '/recover-password'
-    | '/reset-password'
-    | '/signup'
     | '/_auth/login'
+    | '/_auth/recover-password'
+    | '/_auth/reset-password'
+    | '/_auth/sign-up'
     | '/_status/2fa-enabled'
     | '/_status/2fa-required'
     | '/_status/401'
@@ -1181,7 +1182,6 @@ export interface FileRouteTypes {
     | '/user/admin'
     | '/user/items'
     | '/user/settings'
-    | '/_home/'
     | '/dashboard/'
     | '/dashboard2/'
     | '/demo/'
@@ -1208,11 +1208,12 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   StatusRoute: typeof StatusRouteWithChildren
-  RecoverPasswordRoute: typeof RecoverPasswordRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
-  SignupRoute: typeof SignupRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthRecoverPasswordRoute: typeof AuthRecoverPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
   DemoHomeRoute: typeof DemoHomeRoute
   DemoAiChatRoute: typeof DemoAiChatRoute
   DemoAiImageRoute: typeof DemoAiImageRoute
@@ -1232,7 +1233,6 @@ export interface RootRouteChildren {
   UserAdminRoute: typeof UserAdminRoute
   UserItemsRoute: typeof UserItemsRoute
   UserSettingsRoute: typeof UserSettingsRoute
-  HomeIndexRoute: typeof HomeIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   Dashboard2IndexRoute: typeof Dashboard2IndexRoute
   DemoIndexRoute: typeof DemoIndexRoute
@@ -1260,32 +1260,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recover-password': {
-      id: '/recover-password'
-      path: '/recover-password'
-      fullPath: '/recover-password'
-      preLoaderRoute: typeof RecoverPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_status': {
       id: '/_status'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof StatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/user/': {
@@ -1314,13 +1300,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_home/': {
-      id: '/_home/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/user/settings': {
@@ -1813,6 +1792,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Status2faEnabledRouteImport
       parentRoute: typeof StatusRoute
     }
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/reset-password': {
+      id: '/_auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/recover-password': {
+      id: '/_auth/recover-password'
+      path: '/recover-password'
+      fullPath: '/recover-password'
+      preLoaderRoute: typeof AuthRecoverPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/login': {
       id: '/_auth/login'
       path: '/login'
@@ -2068,11 +2068,12 @@ const StatusRouteWithChildren =
   StatusRoute._addFileChildren(StatusRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   StatusRoute: StatusRouteWithChildren,
-  RecoverPasswordRoute: RecoverPasswordRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
-  SignupRoute: SignupRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthRecoverPasswordRoute: AuthRecoverPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
   DemoHomeRoute: DemoHomeRoute,
   DemoAiChatRoute: DemoAiChatRoute,
   DemoAiImageRoute: DemoAiImageRoute,
@@ -2092,7 +2093,6 @@ const rootRouteChildren: RootRouteChildren = {
   UserAdminRoute: UserAdminRoute,
   UserItemsRoute: UserItemsRoute,
   UserSettingsRoute: UserSettingsRoute,
-  HomeIndexRoute: HomeIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   Dashboard2IndexRoute: Dashboard2IndexRoute,
   DemoIndexRoute: DemoIndexRoute,
