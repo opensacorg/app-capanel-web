@@ -7,9 +7,9 @@ California Accountability Panel is a dashboard for viewing school standards. Con
 
 ## Overview
 
-1. Search for a school or school district.
-2. Explore test scores and standards.
-3. Get detailed breakdowns.
+1. Search for a school or school district. ![Search](screenshots/dashboard-items.png)
+3. Explore test scores and standards. ![Dashboard](screenshots/dashboard.png)
+4. Get detailed breakdowns. ![Details](screenshots/docs.png)
 
 ## Contribute
 
