@@ -1,13 +1,11 @@
-# California Accountability Panel web application
+# The California Accountability Panel web application
 
-The California Accountability Panel is a dashboard for viewing school standards. Contributions are welcome!
+California Accountability Panel is a dashboard for viewing school standards. Contributions are welcome!
 
 > [!NOTE]
 > Learn about the project on the documentation website. [https://capanel.readthedocs.io/](https://app-capanel-web.readthedocs.io/)
 
 ## Overview
-
-The application is a web application that allows users to search for a school or school district and view their test scores and standards.
 
 1. Search for a school or school district.
 2. Explore test scores and standards.
@@ -15,17 +13,17 @@ The application is a web application that allows users to search for a school or
 
 ## Contribute
 
-The easist way to get started is to use the [Docker](https://www.docker.com/) container. If you want to contribute to the project, it is recommended to install the Python and Node.js requirements and run each part (frontend, backend, strapi) seperately. See the [developer documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/) for help.
+The easist way to get started is to use the [Docker](https://www.docker.com/) container. If you want to contribute to the project, it is recommended to install the Python and Node.js requirements and run each part (frontend, backend, strapi) seperately. For help, see the [developer documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
 
-For support:
+For support and to keep updated on news:
 
-- Attend a virtual [Community Hack Night](https://opensacramento.org/hacknights).
-- Join our [Slack channel](https://opensacramento.org/slack).
-- Email us at [EMAIL_ADDRESS]
+- Attend a virtual [Community Hack Night](https://www.meetup.com/opensacorg).
+- Join our [Slack channel (updated 2026-02-01)](https://join.slack.com/t/opensacorg/shared_invite/zt-3orx8kjdj-8gULmv2wuTHhAUxUt9SY8A).
+- Email us at info@opensac.org or info@innovateforcalifornia.org.
 
 ## Self-hosting with Docker
 
-The application can be started by running `docker compose up`. **Before the first run**, make sure to update the configs in the `.env` files to customize your configurations. See the [developer documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/) for help.
+The application can be started by running `docker compose up`. **Before the first run**, make sure to update the configs in the `.env` files to customize your configurations. For help, see [deployment documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
 
 The minimum required environment variables are:
 
@@ -57,10 +55,8 @@ We are currently working on support for Google Cloud Run.
 
 We strive to make this application secure. Some highlights include:
 
-- Secure authentication and authorization
-- Secure password storage
-- Secure session management
-- Secure API access
+- Hashed passwords
+- Based on an actively mantained open-source project (full-stack-fastapi-postgres)
 
 ### Security concerns
 
