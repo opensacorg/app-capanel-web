@@ -14,7 +14,7 @@ import { isLoggedIn } from '@/lib/hooks/useAuth'
 import useCustomToast from '@/lib/hooks/useCustomToast'
 
 const searchSchema = z.object({
-	token: z.string().catch(''),
+	token: z.coerce.string().catch(''),
 })
 
 const resetSchema = z

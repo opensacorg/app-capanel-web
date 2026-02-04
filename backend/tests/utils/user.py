@@ -1,9 +1,9 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from app.utility import crud
+from app.service import crud
 from app.core.config import settings
-from app.utility.models import User, UserCreate, UserUpdate
+from app.model.user import UserCreate, UserUpdate, User
 from tests.utils.utils import random_email, random_lower_string
 
 

@@ -1,7 +1,4 @@
-import type { CancelablePromise } from '../client/core/CancelablePromise'
-
-import { OpenAPI } from '../client/core/OpenAPI'
-import { request as __request } from '../client/core/request'
+import axios from 'axios'
 
 export interface CensusData {
 	total_enr: number
@@ -56,16 +53,9 @@ export class CensusService {
 	 * @returns CensusDataResponse Successful Response
 	 * @throws ApiError
 	 */
-	public static getCensusData(): CancelablePromise<CensusDataResponse> {
-		return __request(OpenAPI, {
-			method: 'GET',
-			url: '/api/v1/censusdata',
-			errors: {
-				404: 'Census data not found',
-				422: 'Validation Error',
-				500: 'Internal Server Error',
-			},
-		})
+	public static async getCensusData(): Promise<CensusDataResponse> {
+		const response = await axios.get<CensusDataResponse>('/api/v1/censusdata')
+		return response.data
 	}
 
 	/**
@@ -75,16 +65,8 @@ export class CensusService {
 	 * @returns CensusDataByIdResponse Successful Response
 	 * @throws ApiError
 	 */
-	public static getCensusDataById(id: string): CancelablePromise<CensusDataByIdResponse> {
-		return __request(OpenAPI, {
-			method: 'GET',
-			url: `/api/v1/censusdata/${id}`,
-			errors: {
-				403: 'Not enough permissions',
-				404: 'Census data not found',
-				422: 'Validation Error',
-				500: 'Internal Server Error',
-			},
-		})
+	public static async getCensusDataById(id: string): Promise<CensusDataByIdResponse> {
+		const response = await axios.get<CensusDataByIdResponse>(`/api/v1/censusdata/${id}`)
+		return response.data
 	}
 }

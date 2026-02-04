@@ -23,19 +23,31 @@ export default function MobileButton({ className }: { className?: string }) {
 					<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/' />}>
 						Home
 					</DropdownMenuItem>
-					<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/dashboard' />}>
+					<DropdownMenuItem
+						className='text-base p-3 tracking-wide'
+						render={<Link to='/dashboard' />}
+					>
 						Dashboard
 					</DropdownMenuItem>
 					{currentUser ? (
-						<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/sign-out' />}>
+						<DropdownMenuItem
+							className='text-base p-3 tracking-wide'
+							render={<Link to='/sign-out' />}
+						>
 							Sign Out
 						</DropdownMenuItem>
 					) : (
 						<>
-							<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/login' />}>
+							<DropdownMenuItem
+								className='text-base p-3 tracking-wide'
+								render={<Link to='/login' />}
+							>
 								Sign In
 							</DropdownMenuItem>
-							<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/sign-up' />}>
+							<DropdownMenuItem
+								className='text-base p-3 tracking-wide'
+								render={<Link to='/sign-up' />}
+							>
 								Sign Up
 							</DropdownMenuItem>
 						</>
