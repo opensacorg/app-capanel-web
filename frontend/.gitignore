@@ -29,7 +29,16 @@ openapi.json
 /playwright/.cache/
 /playwright/.auth/
 
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
 count.txt
 .env
 .nitro
 .tanstack
+.wrangler
+mcp-todos.json.output
+.vinxi
+todos.json

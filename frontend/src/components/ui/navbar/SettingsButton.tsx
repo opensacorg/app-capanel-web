@@ -1,57 +1,41 @@
-import {Button, Menu, Portal} from '@chakra-ui/react';
-import {useNavigate} from '@tanstack/react-router';
-import {FaGear} from 'react-icons/fa6';
-import useAuth from '../../../hooks/useAuth.ts';
+import { Link } from '@tanstack/react-router'
+import { FaGear } from 'react-icons/fa6'
 
-export default function SettingsButton({className}: { className?: string }) {
-    const {user: currentUser} = useAuth();
-    const navigate = useNavigate();
+import { buttonVariants } from '@/components/ui/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import useAuth from '@/lib/hooks/useAuth'
 
-    return (
-        <div className={`${className} `}>
-            <Menu.Root
-                navigate={({value}) => {
-                    navigate({to: `/${value}`});
-                }}
-            >
-                <Menu.Trigger asChild>
-                    <Button variant='outline' size='sm'>
-                        <FaGear className='h-5 w-5'/>
-                    </Button>
-                </Menu.Trigger>
-                <Portal>
-                    <Menu.Positioner>
-                        <Menu.Content>
-                            {currentUser ? (
-                                <Menu.Item
-                                    value='sign-out'
-                                    onSelect={() => navigate({to: '/sign-out'})}
-                                    className='text-[1rem] p-3 tracking-wide'
-                                >
-                                    Sign Out
-                                </Menu.Item>
-                            ) : (
-                                <>
-                                    <Menu.Item
-                                        value='login'
-                                        onSelect={() => navigate({to: '/login'})}
-                                        className='text-[1rem] p-3 tracking-wide'
-                                    >
-                                        Sign In
-                                    </Menu.Item>
-                                    <Menu.Item
-                                        value='sign-up'
-                                        onSelect={() => navigate({to: '/sign-up'})}
-                                        className='text-[1rem] p-3 tracking-wide'
-                                    >
-                                        Sign Up
-                                    </Menu.Item>
-                                </>
-                            )}
-                        </Menu.Content>
-                    </Menu.Positioner>
-                </Portal>
-            </Menu.Root>
-        </div>
-    );
+export default function SettingsButton({ className }: { className?: string }) {
+	const { user: currentUser } = useAuth()
+
+	return (
+		<div className={className}>
+			<DropdownMenu>
+				<DropdownMenuTrigger className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+					<FaGear className='h-5 w-5' />
+				</DropdownMenuTrigger>
+				<DropdownMenuContent>
+					{currentUser ? (
+						<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/sign-out' />}>
+							Sign Out
+						</DropdownMenuItem>
+					) : (
+						<>
+							<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/login' />}>
+								Sign In
+							</DropdownMenuItem>
+							<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/sign-up' />}>
+								Sign Up
+							</DropdownMenuItem>
+						</>
+					)}
+				</DropdownMenuContent>
+			</DropdownMenu>
+		</div>
+	)
 }
