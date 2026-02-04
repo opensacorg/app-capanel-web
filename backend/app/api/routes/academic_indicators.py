@@ -13,6 +13,7 @@ from app.model.dashboard import DashboardAggregation, IndicatorSummary, Dashboar
 from app.model.academic_indicator import AcademicIndicator, AcademicIndicatorCreate, AcademicIndicatorUpdate, \
     AcademicIndicatorPublic, AcademicIndicatorsPublic
 from app.model.user import UserPublic, UserPreferencesUpdate
+from app.service.color_calculator import calculate_all
 
 router = APIRouter(prefix="/academic-indicators", tags=["academic-indicators"])
 
@@ -153,15 +154,39 @@ def get_dashboard_summary(
     for code in ALL_INDICATORS:
         ind = indicators_by_code.get(code)
         if ind:
+            # Calculate colors on-the-fly if missing (for legacy/state data)
+            statuslevel = ind.statuslevel
+            changelevel = ind.changelevel
+            color = ind.color
+            change = ind.change
+
+            if color is None and ind.currstatus is not None:
+                # State assessment data has Mean Scale Score - convert to DFS
+                is_mean_scale = (
+                    code in ("ELA", "MATH")
+                    and ind.currstatus is not None
+                    and ind.currstatus > 1000  # Mean scale scores are ~2400-2700
+                )
+                color_data = calculate_all(
+                    indicator=code,
+                    currstatus=ind.currstatus,
+                    priorstatus=ind.priorstatus,
+                    is_mean_scale_score=is_mean_scale,
+                )
+                statuslevel = color_data["statuslevel"]
+                changelevel = color_data["changelevel"]
+                color = color_data["color"]
+                change = color_data["change"]
+
             indicator_summaries.append(
                 IndicatorSummary(
                     indicator=code,
                     currstatus=ind.currstatus,
                     priorstatus=ind.priorstatus,
-                    change=ind.change,
-                    statuslevel=ind.statuslevel,
-                    changelevel=ind.changelevel,
-                    color=ind.color,
+                    change=change,
+                    statuslevel=statuslevel,
+                    changelevel=changelevel,
+                    color=color,
                     currdenom=ind.currdenom,
                 )
             )

@@ -176,10 +176,11 @@ class StateParser(BaseIndicatorParser):
         print(f"Reading TXT file: {file_path}")
 
         # Read in chunks for large files
+        # Use latin-1 encoding to handle Spanish characters (ñ, accents, etc.)
         chunk_iter = pd.read_csv(
             file_path,
             sep="^",
-            encoding="utf-8",
+            encoding="latin-1",
             dtype=str,
             chunksize=self.CHUNK_SIZE,
             on_bad_lines="skip",

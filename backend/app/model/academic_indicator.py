@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, Column, JSON
+from sqlalchemy import DateTime, Column, JSON, UniqueConstraint
 from sqlmodel import SQLModel, Field
 
 from app.utility.utils import get_datetime_utc
@@ -108,6 +108,13 @@ class AcademicIndicatorBase(SQLModel):
 
 
 class AcademicIndicator(AcademicIndicatorBase, table=True):
+    __table_args__ = (
+        UniqueConstraint(
+            'cds', 'indicator', 'studentgroup', 'reportingyear',
+            name='uq_indicator_natural_key'
+        ),
+    )
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     created_at: datetime | None = Field(
         default_factory=get_datetime_utc,
