@@ -93,11 +93,11 @@ export const INDICATOR_ORDER: IndicatorCode[] = [
  * Color level names and their CSS colors.
  */
 export const COLOR_LEVELS = {
-	1: { name: 'Red', color: '#e74c3c', label: 'Very Low' },
-	2: { name: 'Orange', color: '#e67e22', label: 'Low' },
-	3: { name: 'Yellow', color: '#f1c40f', label: 'Medium' },
-	4: { name: 'Green', color: '#27ae60', label: 'High' },
-	5: { name: 'Blue', color: '#3498db', label: 'Very High' },
+	1: { name: 'Red', color: 'var(--color-cde-dashboard-red)', label: 'Very Low' },
+	2: { name: 'Orange', color: 'var(--color-cde-dashboard-orange)', label: 'Low' },
+	3: { name: 'Yellow', color: 'var(--color-cde-dashboard-yellow)', label: 'Medium' },
+	4: { name: 'Green', color: 'var(--color-cde-dashboard-green)', label: 'High' },
+	5: { name: 'Blue', color: 'var(--color-cde-dashboard-blue)', label: 'Very High' },
 	0: { name: 'None', color: '#95a5a6', label: 'No Data' },
 } as const
 

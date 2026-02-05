@@ -1,15 +1,16 @@
 'use memo'
 
-const LEVEL_LABELS = {
+const COLOR_LEVEL_LABELS = {
 	0: 'No Data',
-	1: 'Very Low',
-	2: 'Low',
-	3: 'Medium',
-	4: 'High',
-	5: 'Very High',
+	1: 'Red',
+	2: 'Orange',
+	3: 'Yellow',
+	4: 'Green',
+	5: 'Blue',
+	6: 'Blue',
 } as const
 
-type PerformanceLevel = 0 | 1 | 2 | 3 | 4 | 5
+type PerformanceLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 interface GaugeProps {
 	value: PerformanceLevel
@@ -22,11 +23,11 @@ interface GaugeProps {
  * Gauge component using static SVG assets.
  * Displays a smooth rounded semicircle with an arrow pointing to the selected level.
  * Uses fade-in animation for transitions.
+ * Map value to SVG file path
  */
 export function Gauge({ value, label, size = 200, className = '' }: GaugeProps) {
-	// Map value to SVG file path
 	const svgPath = `/gauge-${value}.svg`
-	const svgHeight = size * 0.65
+	const svgHeight = size * 0.55
 
 	return (
 		<div className={`flex flex-col items-center justify-end gap-2 ${className}`}>
@@ -38,7 +39,7 @@ export function Gauge({ value, label, size = 200, className = '' }: GaugeProps) 
 				<img
 					key={value}
 					src={svgPath}
-					alt={`Performance gauge showing ${LEVEL_LABELS[value]}`}
+					alt={`Performance gauge showing ${COLOR_LEVEL_LABELS[value]}`}
 					width={size}
 					height={svgHeight}
 					className='animate-in fade-in duration-300'
@@ -48,11 +49,11 @@ export function Gauge({ value, label, size = 200, className = '' }: GaugeProps) 
 				/>
 
 				{/* Label overlay */}
-				<div className='absolute bottom-0 flex flex-col items-center pb-2'>
-					<span className='px-3 py-1 text-sm font-bold uppercase tracking-wide rounded-full bg-white/90 shadow-sm transition-all duration-300'>
-						{LEVEL_LABELS[value]}
-					</span>
-				</div>
+				{/*<div className='absolute bottom-0 flex flex-col items-center pb-2'>*/}
+				{/*	<span className='px-3 py-1 text-sm font-bold uppercase tracking-wide rounded-full bg-white/90 shadow-sm transition-all duration-300'>*/}
+				{/*		{COLOR_LEVEL_LABELS[value]}*/}
+				{/*	</span>*/}
+				{/*</div>*/}
 			</div>
 
 			{/* Description label */}

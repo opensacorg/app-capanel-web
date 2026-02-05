@@ -5,7 +5,7 @@ from typing import Any
 from sqlalchemy import DateTime, Column, JSON, UniqueConstraint
 from sqlmodel import SQLModel, Field
 
-from app.utility.utils import get_datetime_utc
+from app.core.utils import get_datetime_utc
 
 
 class AcademicIndicatorBase(SQLModel):

@@ -14,7 +14,7 @@ export default function SettingsButton({ className }: { className?: string }) {
 	const { user: currentUser } = useAuth()
 
 	return (
-		<div className={className}>
+		<div className={className + ' font-urbanist'}>
 			<DropdownMenu>
 				<DropdownMenuTrigger className={buttonVariants({ variant: 'outline', size: 'sm' })}>
 					<FaGear className='h-5 w-5' />

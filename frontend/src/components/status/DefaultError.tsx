@@ -65,6 +65,9 @@ export function DefaultError({ error, reset, info, fullPage = true }: DefaultErr
 							<AccordionContent>
 								<div className='rounded-md bg-muted p-3 font-mono text-xs overflow-auto max-h-48'>
 									<p className='mb-2'>Timestamp: {new Date().toISOString()}</p>
+									<p className='mb-2'>
+										URL: {typeof window !== 'undefined' ? window.location.href : 'Unknown'}
+									</p>
 									{errorStack && (
 										<>
 											<p className='font-semibold mb-1'>Stack Trace:</p>

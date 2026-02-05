@@ -11,7 +11,7 @@ from app.core import security
 from app.core.config import settings
 from app.model.models import Message, Token
 from app.model.user import UserUpdate, UserPublic, NewPassword
-from app.utility.utils import (
+from app.core.utils import (
     generate_password_reset_token,
     generate_reset_password_email,
     send_email,

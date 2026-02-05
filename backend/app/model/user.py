@@ -5,7 +5,7 @@ from pydantic import EmailStr
 from sqlalchemy import DateTime
 from sqlmodel import SQLModel, Field, Relationship
 
-from app.utility.utils import get_datetime_utc
+from app.core.utils import get_datetime_utc
 
 
 class UserBase(SQLModel):

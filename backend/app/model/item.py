@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import DateTime
 from sqlmodel import SQLModel, Field, Relationship
 
-from app.utility.utils import get_datetime_utc
+from app.core.utils import get_datetime_utc
 
 
 class ItemBase(SQLModel):

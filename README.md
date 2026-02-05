@@ -6,7 +6,7 @@ California Accountability Panel is a dashboard for viewing school standards. Con
 > Academic performance data for 2024 and 2025 can be downloaded in a zip file on Nate's google drive https://drive.google.com/drive/folders/1ifRu7gL8OVxN7oHKadEydS3e7c85ityr?usp=sharing.
 
 > [!NOTE]
-> Learn about the project on the documentation website [capanel.readthedocs.io](https://app-capanel-web.readthedocs.io).
+> Learn about the project on the documentation website [capanel.readthedocs.io](https://app-capanel-web.readthedocs.io) (under development).
 
 ## Overview
 
@@ -16,7 +16,7 @@ California Accountability Panel is a dashboard for viewing school standards. Con
 
 ## Contribute
 
-The easist way to get started is to use the [Docker](https://www.docker.com/) container. If you want to contribute to the project, it is recommended to install the Python and Node.js requirements and run each part (frontend, backend, strapi) seperately. For help, see the [developer documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
+The easiest way to get started is to use the [Docker](https://www.docker.com/) container (under development). If you want to contribute to the project, it is recommended to install the PostgreSQL, Python and Node.js requirements and run each part separately. For help, see the [developer documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
 
 For support and to keep updated on news:
 
@@ -56,16 +56,16 @@ We are currently working on support for Google Cloud Run.
 
 ## Security
 
-We strive to make this application secure. Some highlights include:
+We strive to make this application secure as possible. Some highlights include:
 
-- Hashed passwords
-- Based on an actively mantained open-source project (full-stack-fastapi-postgres)
+- Hashed passwords.
+- Based on an actively maintained open-source project (full-stack-fastapi-postgres). We can mimic the versions of the pyproject dependencies and know when things need upgrading.
 
 ### Security concerns
 
 The application does not enforce https by default. You can enable it by setting `SECURE_SSL_REDIRECT` to `True` in the `.env` file.
 
-See [Security.md](Security.md) for more information on reporting security vulnerabilities. For other security related topics see the [security documentation page](https://app-capanel-web.readthedocs.io/en/latest/security/).
+See [Security.md](Security.md) for more information on reporting security vulnerabilities. For other security related topics see the [security documentation page](https://app-capanel-web.readthedocs.io/en/latest/security/). You can also email info@opensac.org.
 
 # Other resources
 

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
+import { Button } from '@/components/ui/button.tsx'
 import NavbarD52 from '@/components/ui/navbar/NavbarD52.tsx'
 
 export const Route = createFileRoute('/')({
@@ -17,51 +18,48 @@ function RouteComponent() {
 					<div className='space-y-6'>
 						<h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
 							California Accountability Panel
-						</h1>{' '}
-						<p>
-							<strong className='text-gray-900'>For Everyone:</strong> Designed for parents,
-							educators, administrators, and community members who care about the quality of
-							education in California.
-						</p>
-						<ol className='list-decimal list-outside ml-5 space-y-4 text-lg text-gray-700'>
+						</h1>
+						<ol className='list-decimal list-outside ml-5 space-y-6 text-lg text-muted-foreground'>
+							{/* Item 1: Primary Action */}
 							<li className='pl-2'>
-								View aggregated state-wide performance data.
-								<br />
-								<Link to='/dashboard' className='text-blue-500'>
-									View state-wide summary
-								</Link>
+								<span className='block mb-2 text-foreground'>Explore the dashboard.</span>
+								<Button render={<Link to='/dashboard'>Find a school</Link>} variant='default' />
+								<Button
+									render={<Link to='/dashboard'>View state-wide summary</Link>}
+									variant='default'
+								/>
 							</li>
+
+							{/* Item 2: Secondary Action */}
 							<li className='pl-2'>
-								Search for a school or district to view performance data.
-								<br />
-								<Link to='/dashboard' className='text-blue-500'>
-									Find a school
-								</Link>
+								<span className='block mb-2 text-foreground'>
+									Search for a school or district to view performance data.
+								</span>
+								<Button asChild variant='outline'></Button>
 							</li>
+
+							{/* Item 3: Ghost/Tertiary Action */}
 							<li className='pl-2'>
-								Personalize the dashboard by uploading custom CSV data.
-								<br />
-								<Link to='/dashboard' className='text-blue-500'>
-									Upload CSV file
-								</Link>
+								<span className='block mb-2 text-foreground'>
+									Personalize the dashboard by uploading custom CSV data.
+								</span>
+								<Button asChild variant='secondary'>
+									<Link to='/dashboard'>Upload CSV file</Link>
+								</Button>
 							</li>
 						</ol>
-						<p>
-							This application <b>does not</b> store sensitive information or track with third-party
-							cookies. See data privacy for more details.
-						</p>
 					</div>
 
 					{/* Right Side: Features & Overview (Unordered List) */}
 					<div className=' rounded-2xl'>
 						<ul className='list-disc  space-y-3 text-gray-600'>
 							<li>
-								Use the
+								Use
 								<a
 									href='https://www.cde.ca.gov/ta/ac/cm/fivebyfivecolortables.asp'
 									className='pl-2 text-blue-500'
 								>
-									Five-color system
+									________________
 								</a>{' '}
 								to identify strengths and areas for improvement to support student success.
 								<br />
@@ -70,10 +68,6 @@ function RouteComponent() {
 							<li className='pl-2'>
 								Over 1,500 schools and districts (including alternative schools) are available. See
 								the support list for details.{' '}
-							</li>
-							<li className='pl-2'>
-								Includes diverse measures such as student engagement, school climate, parent
-								engagement and college and career readiness. (See below)
 							</li>
 						</ul>
 					</div>

@@ -1,5 +1,15 @@
 import { COLOR_LEVELS, getStudentGroupName } from '@/lib/constants/indicators'
 
+export type ColorKey = 'red' | 'orange' | 'yellow' | 'green' | 'blue'
+
+const COLOR_KEY_TO_LEVEL: Record<ColorKey, number> = {
+	red: 1,
+	orange: 2,
+	yellow: 3,
+	green: 4,
+	blue: 5,
+}
+
 interface ColorCounts {
 	red: number
 	orange: number
@@ -20,6 +30,7 @@ interface EquityReportProps {
 	colorCounts: ColorCounts
 	groups: EquityGroupSummary[]
 	showGroupList?: boolean
+	filterColor?: ColorKey | null
 }
 
 function ColorBar({ colorCounts }: { colorCounts: ColorCounts }) {
@@ -101,22 +112,47 @@ function GroupList({ groups }: { groups: EquityGroupSummary[] }) {
 	)
 }
 
-export function EquityReport({ colorCounts, groups, showGroupList = true }: EquityReportProps) {
+export function EquityReport({
+	colorCounts,
+	groups,
+	showGroupList = true,
+	filterColor,
+}: EquityReportProps) {
+	// Filter groups by color if filterColor is provided
+	const filteredGroups = filterColor
+		? groups.filter((g) => g.color === COLOR_KEY_TO_LEVEL[filterColor])
+		: groups
+
+	// Create filtered color counts if filterColor is provided
+	const filteredColorCounts = filterColor
+		? {
+				red: filterColor === 'red' ? colorCounts.red : 0,
+				orange: filterColor === 'orange' ? colorCounts.orange : 0,
+				yellow: filterColor === 'yellow' ? colorCounts.yellow : 0,
+				green: filterColor === 'green' ? colorCounts.green : 0,
+				blue: filterColor === 'blue' ? colorCounts.blue : 0,
+				none: 0,
+			}
+		: colorCounts
+
+	const colorLabel = filterColor ? filterColor.charAt(0).toUpperCase() + filterColor.slice(1) : null
+
 	return (
 		<div className='space-y-4'>
 			<div>
 				<h4 className='mb-2 text-sm font-medium text-muted-foreground'>
 					Student Group Performance Distribution
+					{colorLabel && <span className='ml-1'>({colorLabel} only)</span>}
 				</h4>
-				<ColorBar colorCounts={colorCounts} />
+				<ColorBar colorCounts={filteredColorCounts} />
 			</div>
 
-			{showGroupList && groups.length > 0 && (
+			{showGroupList && filteredGroups.length > 0 && (
 				<div>
 					<h4 className='mb-2 text-sm font-medium text-muted-foreground'>
-						Student Groups ({groups.length})
+						Student Groups ({filteredGroups.length})
 					</h4>
-					<GroupList groups={groups} />
+					<GroupList groups={filteredGroups} />
 				</div>
 			)}
 		</div>

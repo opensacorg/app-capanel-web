@@ -18,7 +18,7 @@ def init_db(session: Session) -> None:
     # the tables un-commenting the next lines
     # from sqlmodel import SQLModel
 
-    # This works because the models are already imported and registered from app.utility.models
+    # This works because the models are already imported and registered from app.core.models
     SQLModel.metadata.create_all(engine)
 
     user = session.exec(

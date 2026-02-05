@@ -1,6 +1,6 @@
 import { INDICATOR_ORDER, type IndicatorCode } from '@/lib/constants/indicators'
 
-import { IndicatorCard, IndicatorCardSkeleton } from './card/IndicatorCard'
+import { IndicatorCard, IndicatorCardSkeleton, type ColorKey } from './card/IndicatorCard'
 
 interface IndicatorSummary {
 	indicator: string
@@ -16,15 +16,21 @@ interface IndicatorSummary {
 interface IndicatorGridProps {
 	indicators: IndicatorSummary[]
 	onIndicatorClick?: (code: IndicatorCode) => void
+	onColorClick?: (code: IndicatorCode, color: ColorKey) => void
 	compact?: boolean
-	columns?: 1 | 2 | 4
+	columns?: 1 | 2 | 4 | 5
+	cds?: string
+	reportingyear?: string
 }
 
 export function IndicatorGrid({
 	indicators,
 	onIndicatorClick,
+	onColorClick,
 	compact = false,
-	columns = 4,
+	columns = 5,
+	cds,
+	reportingyear,
 }: IndicatorGridProps) {
 	// Create a map for quick lookup
 	const indicatorMap = new Map(indicators.map((ind) => [ind.indicator, ind]))
@@ -49,17 +55,20 @@ export function IndicatorGrid({
 	const gridClasses = {
 		1: 'grid-cols-1',
 		2: 'grid-cols-1 sm:grid-cols-2',
-		4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+		5: 'grid-cols-1 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
 	}
 
 	return (
-		<div className={`grid gap-4 ${gridClasses[columns]}`}>
+		<div className={`font-figtree grid gap-4 ${gridClasses[columns]}`}>
 			{sortedIndicators.map((ind) => (
 				<IndicatorCard
 					key={ind.indicator}
 					indicator={ind}
 					onClick={() => onIndicatorClick?.(ind.indicator as IndicatorCode)}
+					onColorClick={(color) => onColorClick?.(ind.indicator as IndicatorCode, color)}
 					compact={compact}
+					cds={cds}
+					reportingyear={reportingyear}
 				/>
 			))}
 		</div>
@@ -72,13 +81,14 @@ export function IndicatorGridSkeleton({
 	count = 8,
 }: {
 	compact?: boolean
-	columns?: 1 | 2 | 4
+	columns?: 1 | 2 | 4 | 5
 	count?: number
 }) {
 	const gridClasses = {
 		1: 'grid-cols-1',
 		2: 'grid-cols-1 sm:grid-cols-2',
 		4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+		5: 'grid-cols-1 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
 	}
 
 	return (

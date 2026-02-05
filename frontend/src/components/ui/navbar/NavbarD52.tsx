@@ -47,6 +47,15 @@ export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 						>
 							Dashboard
 						</Link>
+						<Link
+							to='/dashboard/generate-report'
+							className={styles.link}
+							activeProps={{
+								className: styles.linkSelected,
+							}}
+						>
+							Report
+						</Link>
 						<SettingsButton className='px-3' />
 						{currentUser && (
 							<Link to='/user'>

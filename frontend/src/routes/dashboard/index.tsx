@@ -3,6 +3,8 @@ import { ChevronLeft } from 'lucide-react'
 import { Suspense, useCallback, useState } from 'react'
 import { z } from 'zod'
 
+import type { ColorKey } from '@/components/Dashboard/card/IndicatorCard'
+
 import { IndicatorDetailModal } from '@/components/Dashboard/detail/IndicatorDetailModal'
 import { IndicatorGrid, IndicatorGridSkeleton } from '@/components/Dashboard/IndicatorGrid'
 import { Button } from '@/components/ui/button'
@@ -18,6 +20,8 @@ import { STATEWIDE_CDS, type IndicatorCode } from '@/lib/constants/indicators'
 import ScrollReset from '@/lib/hooks/ScrollReset'
 import { useDashboardSummarySuspense } from '@/lib/hooks/useDashboardData'
 import { useLastViewedSchool } from '@/lib/hooks/useLastViewedSchool'
+
+import styles from './index.module.css'
 
 const AVAILABLE_YEARS = ['2025', '2024'] as const
 type ReportingYear = (typeof AVAILABLE_YEARS)[number]
@@ -38,115 +42,46 @@ export const Route = createFileRoute('/dashboard/')({
 	validateSearch: searchSchema,
 })
 
-function DashboardContent({
-	cds,
-	year,
-	onIndicatorClick,
-}: {
-	cds: string
-	year: ReportingYear
-	onIndicatorClick: (code: IndicatorCode) => void
-}) {
-	const { data } = useDashboardSummarySuspense(cds, year)
-
-	const entityName =
-		data.schoolname ||
-		data.districtname ||
-		(cds === STATEWIDE_CDS ? 'California Statewide' : 'Unknown')
-
-	return (
-		<div className='space-y-6'>
-			{/* Header */}
-			<div>
-				<h1 className='text-2xl font-bold text-gray-900'>{entityName}</h1>
-				{data.countyname && cds !== STATEWIDE_CDS && (
-					<p className='text-muted-foreground'>
-						{data.districtname && data.schoolname
-							? `${data.districtname} | ${data.countyname}`
-							: data.countyname}
-					</p>
-				)}
-				<p className='mt-1 text-sm text-muted-foreground'>
-					{data.reportingyear} California School Dashboard
-					{data.charter_flag === 'Y' && ' | Charter School'}
-				</p>
-			</div>
-
-			{/* Indicator Grid */}
-			<div>
-				<h2 className='mb-4 text-lg font-semibold text-gray-800'>Accountability Indicators</h2>
-				<IndicatorGrid indicators={data.indicators} onIndicatorClick={onIndicatorClick} />
-			</div>
-		</div>
-	)
-}
-
-function YearSelector({
-	value,
-	onChange,
-}: {
-	value: ReportingYear
-	onChange: (year: ReportingYear) => void
-}) {
-	return (
-		<Select value={value} onValueChange={(val) => onChange(val as ReportingYear)}>
-			<SelectTrigger className='w-30 bg-white'>
-				<SelectValue />
-			</SelectTrigger>
-			<SelectContent>
-				{AVAILABLE_YEARS.map((year) => (
-					<SelectItem key={year} value={year}>
-						{year}
-					</SelectItem>
-				))}
-			</SelectContent>
-		</Select>
-	)
-}
-
 function DashboardPage() {
 	const { q, year: urlYear } = Route.useSearch()
 	const navigate = useNavigate()
 	const router = useRouter()
-
-	// Get last viewed school, default to statewide
 	const { cds: lastViewedCds } = useLastViewedSchool()
 
-	// Use URL param if provided, otherwise use last viewed or statewide
 	const effectiveCds = q || lastViewedCds || STATEWIDE_CDS
 	const effectiveYear: ReportingYear = urlYear || '2025'
 
-	// Modal state
 	const [selectedIndicator, setSelectedIndicator] = useState<IndicatorCode | null>(null)
+	const [selectedColor, setSelectedColor] = useState<ColorKey | null>(null)
 
-	// Handle year change
+	const handleIndicatorClick = useCallback((code: IndicatorCode) => {
+		setSelectedIndicator(code)
+		setSelectedColor(null)
+	}, [])
+
+	const handleColorClick = useCallback((code: IndicatorCode, color: ColorKey) => {
+		setSelectedIndicator(code)
+		setSelectedColor(color)
+	}, [])
+
+	const handleCloseModal = useCallback(() => {
+		setSelectedIndicator(null)
+		setSelectedColor(null)
+	}, [])
+
 	const handleYearChange = useCallback(
 		(year: ReportingYear) => {
-			navigate({
-				to: '/dashboard/',
-				search: (prev) => ({ ...prev, year }),
-			})
+			navigate({ to: '/dashboard/', search: (prev) => ({ ...prev, year }) })
 		},
 		[navigate],
 	)
 
-	// Handle indicator click
-	const handleIndicatorClick = useCallback((code: IndicatorCode) => {
-		setSelectedIndicator(code)
-	}, [])
-
-	// Close modal
-	const handleCloseModal = useCallback(() => {
-		setSelectedIndicator(null)
-	}, [])
-
 	return (
-		<div className='min-h-screen bg-[#f3f4fa]'>
+		<div className={styles.page}>
 			<ScrollReset />
 			<NavbarD52 shadow />
-			<div className='mx-auto max-w-7xl px-4 py-8'>
-				{/* Navigation and Year selector */}
-				<div className='mb-6 flex items-center justify-between'>
+			<div className={styles.container}>
+				<div className={styles.topBar}>
 					<Button
 						variant='outline'
 						size='sm'
@@ -156,9 +91,23 @@ function DashboardPage() {
 						<ChevronLeft className='h-4 w-4' />
 						Go back
 					</Button>
-					<div className='flex items-center gap-2'>
-						<span className='text-sm text-muted-foreground'>Reporting Year:</span>
-						<YearSelector value={effectiveYear} onChange={handleYearChange} />
+					<div className={styles.yearSelector}>
+						<span className={styles.yearLabel}>Reporting Year:</span>
+						<Select
+							value={effectiveYear}
+							onValueChange={(val) => handleYearChange(val as ReportingYear)}
+						>
+							<SelectTrigger className='w-30 bg-white'>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								{AVAILABLE_YEARS.map((year) => (
+									<SelectItem key={year} value={year}>
+										{year}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
 					</div>
 				</div>
 
@@ -166,17 +115,11 @@ function DashboardPage() {
 					<DashboardContent
 						cds={effectiveCds}
 						year={effectiveYear}
-						onIndicatorClick={handleIndicatorClick}
-					/>
-				</Suspense>
-
-				{/* Indicator Detail Modal - shown when an indicator is selected */}
-				<Suspense fallback={null}>
-					<IndicatorDetailModalWrapper
-						cds={effectiveCds}
-						year={effectiveYear}
 						selectedIndicator={selectedIndicator}
-						onClose={handleCloseModal}
+						selectedColor={selectedColor}
+						onIndicatorClick={handleIndicatorClick}
+						onColorClick={handleColorClick}
+						onCloseModal={handleCloseModal}
 					/>
 				</Suspense>
 			</div>
@@ -184,51 +127,86 @@ function DashboardPage() {
 	)
 }
 
-function IndicatorDetailModalWrapper({
+function DashboardContent({
 	cds,
 	year,
 	selectedIndicator,
-	onClose,
+	selectedColor,
+	onIndicatorClick,
+	onColorClick,
+	onCloseModal,
 }: {
 	cds: string
 	year: ReportingYear
 	selectedIndicator: IndicatorCode | null
-	onClose: () => void
+	selectedColor: ColorKey | null
+	onIndicatorClick: (code: IndicatorCode) => void
+	onColorClick: (code: IndicatorCode, color: ColorKey) => void
+	onCloseModal: () => void
 }) {
-	// Fetch data only when modal is open
 	const { data } = useDashboardSummarySuspense(cds, year)
 
-	if (!selectedIndicator || !data) {
-		return null
-	}
+	const entityName =
+		data.schoolname ||
+		data.districtname ||
+		(cds === STATEWIDE_CDS ? 'California Statewide' : 'Unknown')
 
-	const indicatorData = data.indicators.find((ind) => ind.indicator === selectedIndicator)
+	const indicatorData = selectedIndicator
+		? data.indicators.find((ind) => ind.indicator === selectedIndicator)
+		: null
 
 	return (
-		<IndicatorDetailModal
-			isOpen={!!selectedIndicator}
-			onClose={onClose}
-			cds={cds}
-			indicator={indicatorData || null}
-			reportingyear={data.reportingyear}
-		/>
+		<>
+			<div className={styles.content}>
+				<div className={styles.header}>
+					<h1>{entityName}</h1>
+					{data.countyname && cds !== STATEWIDE_CDS && (
+						<p className={styles.subtitle}>
+							{data.districtname && data.schoolname
+								? `${data.districtname} | ${data.countyname}`
+								: data.countyname}
+						</p>
+					)}
+					<p className={styles.meta}>
+						{data.reportingyear} California School Dashboard
+						{data.charter_flag === 'Y' && ' | Charter School'}
+					</p>
+				</div>
+
+				<div className={styles.gridSection}>
+					<IndicatorGrid
+						indicators={data.indicators}
+						onIndicatorClick={onIndicatorClick}
+						onColorClick={onColorClick}
+						compact={true}
+						cds={cds}
+						reportingyear={year}
+					/>
+				</div>
+			</div>
+
+			<IndicatorDetailModal
+				isOpen={!!selectedIndicator}
+				onClose={onCloseModal}
+				cds={cds}
+				indicator={indicatorData || null}
+				reportingyear={data.reportingyear}
+				selectedColor={selectedColor}
+			/>
+		</>
 	)
 }
 
 function DashboardSkeleton() {
 	return (
-		<div className='space-y-6'>
-			{/* Header skeleton */}
-			<div>
-				<div className='h-8 w-64 animate-pulse rounded bg-muted/40' />
-				<div className='mt-2 h-4 w-48 animate-pulse rounded bg-muted/40' />
-				<div className='mt-1 h-4 w-56 animate-pulse rounded bg-muted/40' />
+		<div className={styles.content}>
+			<div className={styles.header}>
+				<div className={styles.skeleton} style={{ height: 32, width: 256 }} />
+				<div className={styles.skeleton} style={{ height: 16, width: 192, marginTop: 8 }} />
+				<div className={styles.skeleton} style={{ height: 16, width: 224, marginTop: 4 }} />
 			</div>
-
-			{/* Title skeleton */}
-			<div>
-				<div className='mb-4 h-6 w-48 animate-pulse rounded bg-muted/40' />
-				<IndicatorGridSkeleton />
+			<div className={styles.gridSection}>
+				<IndicatorGridSkeleton compact={true} />
 			</div>
 		</div>
 	)
