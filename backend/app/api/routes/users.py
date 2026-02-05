@@ -16,8 +16,16 @@ from app.model.models import (
     Message,
 )
 from app.model.item import Item
-from app.model.user import UserCreate, UserRegister, UserUpdate, UserUpdateMe, UpdatePassword, User, UserPublic, \
-    UsersPublic
+from app.model.user import (
+    UserCreate,
+    UserRegister,
+    UserUpdate,
+    UserUpdateMe,
+    UpdatePassword,
+    User,
+    UserPublic,
+    UsersPublic,
+)
 from app.utility.utils import generate_new_account_email, send_email
 
 router = APIRouter(prefix="/users", tags=["users"])

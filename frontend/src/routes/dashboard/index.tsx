@@ -1,13 +1,12 @@
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { ChevronLeft } from 'lucide-react'
 import { Suspense, useCallback, useState } from 'react'
 import { z } from 'zod'
 
-import { ChevronLeft } from 'lucide-react'
-
 import { IndicatorDetailModal } from '@/components/Dashboard/detail/IndicatorDetailModal'
 import { IndicatorGrid, IndicatorGridSkeleton } from '@/components/Dashboard/IndicatorGrid'
-import NavbarD52 from '@/components/ui/navbar/NavbarD52'
 import { Button } from '@/components/ui/button'
+import NavbarD52 from '@/components/ui/navbar/NavbarD52'
 import {
 	Select,
 	SelectContent,
@@ -91,7 +90,7 @@ function YearSelector({
 }) {
 	return (
 		<Select value={value} onValueChange={(val) => onChange(val as ReportingYear)}>
-			<SelectTrigger className='w-[120px] bg-white'>
+			<SelectTrigger className='w-30 bg-white'>
 				<SelectValue />
 			</SelectTrigger>
 			<SelectContent>

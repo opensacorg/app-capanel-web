@@ -5,6 +5,7 @@ class DashboardAggregation(SQLModel):
     """
     Dashboard aggregation response model (legacy single-indicator)
     """
+
     cds: str
     schoolname: str | None = None
     districtname: str | None = None

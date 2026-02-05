@@ -7,6 +7,7 @@ class CensusDataBase(SQLModel):
     """
     Shared properties for CensusData
     """
+
     academic_year: int = Field(index=True)
     aggregation_level: str = Field(index=True)
     county_code: str = Field(index=True)
@@ -38,6 +39,7 @@ class CensusData(CensusDataBase, table=True):
     """
     A simple CensusData model following the same pattern as User.
     """
+
     census_data_id: uuid.UUID = Field(
         default_factory=uuid.uuid4, primary_key=True
     )  # need to add timestamp
@@ -227,6 +229,7 @@ class CensusCreate(CensusDataBase):
     """
     Properties to receive on item creation
     """
+
     pass
 
 
@@ -234,6 +237,7 @@ class CensusUpdate(CensusDataBase):
     """
     Properties to receive on item update
     """
+
     pass
 
 
@@ -241,6 +245,7 @@ class CensusDataPublic(CensusDataBase):
     """
     Properties to return via API, id is always required
     """
+
     census_data_id: uuid.UUID
 
 

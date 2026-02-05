@@ -12,6 +12,7 @@ class AcademicIndicatorBase(SQLModel):
     """
     Shared properties for AcademicIndicator (California Dashboard data)
     """
+
     # Identifiers
     cds: str = Field(max_length=14, index=True)  # 14-char CDS code
     rtype: str = Field(max_length=1)  # S/D/X (School/District/State)
@@ -110,8 +111,11 @@ class AcademicIndicatorBase(SQLModel):
 class AcademicIndicator(AcademicIndicatorBase, table=True):
     __table_args__ = (
         UniqueConstraint(
-            'cds', 'indicator', 'studentgroup', 'reportingyear',
-            name='uq_indicator_natural_key'
+            "cds",
+            "indicator",
+            "studentgroup",
+            "reportingyear",
+            name="uq_indicator_natural_key",
         ),
     )
 

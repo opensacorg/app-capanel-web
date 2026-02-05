@@ -8,10 +8,20 @@ from app.api.deps import CurrentUser, SessionDep
 from app.model.models import (
     Message,
 )
-from app.model.dashboard import DashboardAggregation, IndicatorSummary, DashboardSummaryResponse, EquityGroupSummary, \
-    EquityReportResponse
-from app.model.academic_indicator import AcademicIndicator, AcademicIndicatorCreate, AcademicIndicatorUpdate, \
-    AcademicIndicatorPublic, AcademicIndicatorsPublic
+from app.model.dashboard import (
+    DashboardAggregation,
+    IndicatorSummary,
+    DashboardSummaryResponse,
+    EquityGroupSummary,
+    EquityReportResponse,
+)
+from app.model.academic_indicator import (
+    AcademicIndicator,
+    AcademicIndicatorCreate,
+    AcademicIndicatorUpdate,
+    AcademicIndicatorPublic,
+    AcademicIndicatorsPublic,
+)
 from app.model.user import UserPublic, UserPreferencesUpdate
 from app.service.color_calculator import calculate_all
 
