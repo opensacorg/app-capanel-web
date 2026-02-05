@@ -3,6 +3,9 @@
 California Accountability Panel is a dashboard for viewing school standards. Contributions are welcome!
 
 > [!NOTE]
+> Academic performance data for 2024 and 2025 can be downloaded in a zip file on Nate's google drive https://drive.google.com/drive/folders/1ifRu7gL8OVxN7oHKadEydS3e7c85ityr?usp=sharing.
+
+> [!NOTE]
 > Learn about the project on the documentation website [capanel.readthedocs.io](https://app-capanel-web.readthedocs.io).
 
 ## Overview
