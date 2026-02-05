@@ -13,12 +13,14 @@ export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 	const { user: currentUser } = useAuth()
 
 	return (
-		<div className={`${styles.container} ${shadow ? styles.containerShadow : styles.containerBorder}`}>
+		<div
+			className={`${styles.container} ${shadow ? styles.containerShadow : styles.containerBorder}`}
+		>
 			<nav className={styles.nav}>
 				<div className={styles.logoWrapper}>
 					<Link className={styles.logoLink} to='/'>
-						<img src='/assets/logo/logo.svg' alt='Logo' className='h-14' />
-						<span className='hidden navbar-search:block'>
+						<img src='/assets/logo/logo.svg' alt='Logo' className='h-12' />
+						<span className='hidden md:block'>
 							<span className='font-bold'>California Accountability</span> Panel
 						</span>
 					</Link>

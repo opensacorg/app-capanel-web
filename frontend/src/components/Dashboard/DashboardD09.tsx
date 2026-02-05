@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import {
 	FiActivity,
 	FiArrowDown,
@@ -11,14 +12,67 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Gauge, GaugeSkeleton } from '@/components/ui/gauge'
+import { useDashboardDataSuspense } from '@/lib/hooks/useDashboardData'
 
 import DashboardCardD655 from './card/DashboardCardD655'
 
 interface DashboardD09Data {
 	organization?: string
-	data?: {
-		data: any
+	queryKey?: string
+}
+
+function DashboardGaugeContent({ cds }: { cds: string }) {
+	const { data } = useDashboardDataSuspense(cds)
+
+	const performanceLevel = (data.statuslevel ?? 0) as 0 | 1 | 2 | 3 | 4 | 5
+
+	return (
+		<div className='rounded-lg bg-white p-6 shadow'>
+			<h2 className='mb-4 text-lg font-semibold text-gray-800'>
+				{data.schoolname || data.districtname || 'Academic Performance'}
+			</h2>
+			<div className='flex flex-col items-center'>
+				<Gauge
+					value={performanceLevel}
+					label={`${data.indicator} - ${data.reportingyear}`}
+					size={240}
+				/>
+				{data.currstatus != null && (
+					<p className='mt-4 text-sm text-gray-600'>
+						Current Status: <span className='font-medium'>{data.currstatus.toFixed(1)}</span>
+						{data.change != null && (
+							<span className={data.change >= 0 ? 'ml-2 text-green-600' : 'ml-2 text-red-600'}>
+								({data.change >= 0 ? '+' : ''}
+								{data.change.toFixed(1)})
+							</span>
+						)}
+					</p>
+				)}
+			</div>
+		</div>
+	)
+}
+
+function DashboardGauge({ cds }: { cds: string | undefined }) {
+	if (!cds) {
+		return (
+			<div className='rounded-lg bg-white p-6 shadow'>
+				<p className='text-center text-gray-500'>
+					Enter a CDS code in the URL to view academic indicator data.
+				</p>
+				<p className='mt-2 text-center text-sm text-gray-400'>
+					Example: /dashboard?q=01234567890123
+				</p>
+			</div>
+		)
 	}
+
+	return (
+		<Suspense fallback={<GaugeSkeleton size={240} />}>
+			<DashboardGaugeContent cds={cds} />
+		</Suspense>
+	)
 }
 
 export default function DashboardD09({ data }: { data: DashboardD09Data }) {
@@ -74,7 +128,9 @@ export default function DashboardD09({ data }: { data: DashboardD09Data }) {
 						</CardContent>
 					</Card>
 				</div>
-
+				<div className='mb-8'>
+					<DashboardGauge cds={data?.queryKey} />
+				</div>
 				{/* Main Content Cards */}
 				<div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6'>
 					{/* Activity Card */}

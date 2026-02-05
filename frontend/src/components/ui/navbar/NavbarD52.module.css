@@ -5,7 +5,7 @@
 	display: flex;
 	align-items: center;
 	color: var(--color-echart-text-primary);
-	font-size: 1rem;
+	font-size: 0.98rem;
 	font-weight: 400;
 	transition:
 		border-color 0.3s ease 0s,
@@ -44,7 +44,7 @@
 
 .container {
 	background-color: white;
-	height: 4.25rem;
+	height: 4rem;
 	color: var(--color-element-text-primary);
 	width: 100%;
 	position: sticky;
@@ -53,7 +53,9 @@
 }
 
 .containerShadow {
-	box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+	box-shadow:
+		0 20px 25px -5px rgb(0 0 0 / 0.1),
+		0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .containerBorder {
@@ -76,18 +78,15 @@
 	display: flex;
 	align-items: center;
 	height: 100%;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
 	white-space: nowrap;
 }
 
 .logoLink {
 	padding-right: 1rem;
-	height: 100%;
 	border-radius: 0.25rem;
 	gap: 13px;
 	color: #0a2d3c;
-	font-size: 1.875rem;
+	font-size: 1.5rem;
 	display: flex;
 	align-items: center;
 	line-height: 1;
@@ -112,8 +111,8 @@
 }
 
 .searchIcon {
-	height: 1.5rem;
-	width: 1.5rem;
+	/* height: 1.5rem; */
+	/* width: 1.5rem; */
 	margin-inline-end: 1.5rem;
 
 	@media (min-width: 640px) {

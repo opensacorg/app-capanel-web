@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ChangePassword from '@/components/UserSettings/ChangePassword'
 import DeleteAccount from '@/components/UserSettings/DeleteAccount'
 import UserInformation from '@/components/UserSettings/UserInformation'
-import useAuth from "@/lib/hooks/useAuth.ts";
+import useAuth from '@/lib/hooks/useAuth.ts'
 
 const tabsConfig = [
 	{ value: 'my-profile', title: 'My profile', component: UserInformation },
