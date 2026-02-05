@@ -24,8 +24,8 @@ interface GaugeProps {
  * Uses fade-in animation for transitions.
  */
 export function Gauge({ value, label, size = 200, className = '' }: GaugeProps) {
-	// Map value to SVG file path (0 defaults to showing level 1 in dimmed state)
-	const svgPath = value === 0 ? '/gauge-1.svg' : `/gauge-${value}.svg`
+	// Map value to SVG file path
+	const svgPath = `/gauge-${value}.svg`
 	const svgHeight = size * 0.65
 
 	return (
