@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     Use the top level .env file (one level above ./backend/).
     Access not expires in 60 minutes * 24 hours * 8 days = 8 days
     """
+
     model_config = SettingsConfigDict(
         env_file="../.env",
         env_ignore_empty=True,

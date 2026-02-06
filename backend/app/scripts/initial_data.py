@@ -14,7 +14,7 @@ def init() -> None:
 
 
 def main() -> None:
-    """ Creating initial data. """
+    """Creating initial data."""
     init()
 
 
