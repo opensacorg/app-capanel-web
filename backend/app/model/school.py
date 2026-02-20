@@ -12,9 +12,10 @@ class SchoolBase(SQLModel):
     """
 
     # Unique identifier
-    cds_code: str = Field(max_length=255, unique=True)
-    nces_dist: str | None = Field(default=None, max_length=255)
-    nces_school: str | None = Field(default=None, max_length=255)
+    cds_code: str = Field(max_length=255, primary_key=True, index=True)
+    nces_dist: str = Field(max_length=255)
+    nces_school: str = Field(max_length=255)
+    school_code: str = Field(max_length=255)
 
     # General school info
     status_type: str | None = Field(default=None, max_length=255)
@@ -123,6 +124,7 @@ class SchoolSummary(SQLModel):
     city: str | None = None
     county: str | None = None
     cds_code: str | None = None
+    school_code: str | None = None
 
 
 class SchoolsSummary(SQLModel):

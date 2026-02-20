@@ -1,92 +1,95 @@
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
-from sqlalchemy import DateTime, Column, JSON, UniqueConstraint
-from sqlmodel import SQLModel, Field
+from sqlalchemy import DateTime, Column, JSON, UniqueConstraint, ForeignKey
+from sqlmodel import SQLModel, Field, Relationship
 
 from app.core.utils import get_datetime_utc
 
+if TYPE_CHECKING:
+    from typing import List
 
-class AcademicIndicatorBase(SQLModel):
+
+# ============================================================
+# CURRENT METRICS TABLE (Separated for timestamp tracking)
+# ============================================================
+
+class CurrentMetricsBase(SQLModel):
     """
-    Shared properties for AcademicIndicator (California Dashboard data)
+    Current metrics extracted into separate table for timestamp tracking.
+    Foreign key links to AcademicIndicator via cds.
     """
 
-    # Identifiers
-    cds: str = Field(max_length=14, index=True)  # 14-char CDS code
-    rtype: str = Field(max_length=1)  # S/D/X (School/District/State)
-    schoolname: str | None = Field(default=None, max_length=255)
-    districtname: str | None = Field(default=None, max_length=255)
-    countyname: str | None = Field(default=None, max_length=255)
+    # Foreign key to AcademicIndicator
+    cds: str = Field(
+        foreign_key="academicindicator.cds",
+        max_length=14,
+        index=True,
+    )
 
-    # Flags (Y or blank)
-    charter_flag: str | None = Field(default=None, max_length=1)
-    coe_flag: str | None = Field(default=None, max_length=1)
-    dass_flag: str | None = Field(default=None, max_length=1)
+    # Current metrics (basic)
+    currdenom: int | None = Field(default=None, index=True)
+    currstatus: float | None = Field(default=None, index=True)
 
-    # Demographics
-    studentgroup: str = Field(index=True, max_length=10)  # ALL, AA, AI, AS, etc.
-
-    # Current metrics
-    currdenom: int | None = Field(default=None)
-    currstatus: float | None = Field(default=None)
-
-    # Prior metrics
-    priordenom: int | None = Field(default=None)
-    priorstatus: float | None = Field(default=None)
-
-    # Performance
-    change: float | None = Field(default=None)
-    statuslevel: int | None = Field(default=None)  # 1-5 or 0
-    changelevel: int | None = Field(default=None)  # 1-5 or 0
-    color: int | None = Field(default=None)  # 1-5 or 0
-    box: int | None = Field(default=None)  # 0-250
-
-    # Accountability
-    currnsizemet: str | None = Field(default=None, max_length=10)
-    priornsizemet: str | None = Field(default=None, max_length=10)
-    accountabilitymet: str | None = Field(default=None, max_length=10)
-    hscutpoints: str | None = Field(default=None, max_length=255)
-    pairshare_method: str | None = Field(default=None, max_length=255)
+    # Accountability (current)
+    currnsizemet: str | None = Field(default=None, max_length=10, index=True)
 
     # Participation (current)
+    currprate_enrolled: int | None = Field(default=None, index=True)
+    currprate_tested: int | None = Field(default=None, index=True)
+    currprate: float | None = Field(default=None, index=True)
+    currnumprloss: int | None = Field(default=None)
+    currdenom_withoutprloss: int | None = Field(default=None)
+    currstatus_withoutprloss: float | None = Field(default=None)
+
+    # Common current fields (Chronic, Suspension, Graduation, ELPI)
+    currnumer: int | None = Field(default=None, index=True)
+    certifyflag: str | None = Field(default=None, max_length=10, index=True)
+
+    # ELPI-specific current fields
+    currprogressed: int | None = Field(default=None, index=True)
+    currmaintainpl4: int | None = Field(default=None)
+    currmaintainoth: int | None = Field(default=None)
+    currdeclined: int | None = Field(default=None)
+    currprogressed_alternate: int | None = Field(default=None)
+    currmaintainpl3_alternate: int | None = Field(default=None)
+    currnotprognotmain_alternate: int | None = Field(default=None)
+    curr95: int | None = Field(default=None)
+
+
+class CurrentMetrics(CurrentMetricsBase, table=True):
+    """
+    Current metrics table with timestamp tracking.
+    """
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    updated_at: datetime | None = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+        index=True,
+    )
+
+    # Relationship back to AcademicIndicator
+    academic_indicator: "AcademicIndicator" = Relationship(back_populates="current_metrics")
+
+
+class CurrentMetricsCreate(CurrentMetricsBase):
+    pass
+
+
+class CurrentMetricsUpdate(SQLModel):
+    currdenom: int | None = Field(default=None)
+    currstatus: float | None = Field(default=None)
+    currnsizemet: str | None = Field(default=None, max_length=10)
     currprate_enrolled: int | None = Field(default=None)
     currprate_tested: int | None = Field(default=None)
     currprate: float | None = Field(default=None)
     currnumprloss: int | None = Field(default=None)
     currdenom_withoutprloss: int | None = Field(default=None)
     currstatus_withoutprloss: float | None = Field(default=None)
-
-    # Participation (prior)
-    priorprate_enrolled: int | None = Field(default=None)
-    priorprate_tested: int | None = Field(default=None)
-    priorprate: float | None = Field(default=None)
-    priornumprloss: int | None = Field(default=None)
-    priordenom_withoutprloss: int | None = Field(default=None)
-    priorstatus_withoutprloss: float | None = Field(default=None)
-
-    # Metadata
-    indicator: str = Field(default="ELA", max_length=10)
-    reportingyear: str = Field(max_length=10)  # e.g., "2025"
-
-    # === Extended fields for all indicator types ===
-
-    # Common fields (Chronic, Suspension, Graduation, ELPI)
     currnumer: int | None = Field(default=None)
-    priornumer: int | None = Field(default=None)
-    smalldenom: str | None = Field(default=None, max_length=10)
     certifyflag: str | None = Field(default=None, max_length=10)
-    priorcertifyflag: str | None = Field(default=None, max_length=10)
-    dataerrorflag: str | None = Field(default=None, max_length=10)
-
-    # Suspension-specific
-    school_type: str | None = Field(default=None, max_length=50)  # 'type' column
-
-    # Graduation-specific
-    fiveyrnumer: int | None = Field(default=None)
-
-    # ELPI-specific (English Learner Progress)
     currprogressed: int | None = Field(default=None)
     currmaintainpl4: int | None = Field(default=None)
     currmaintainoth: int | None = Field(default=None)
@@ -95,7 +98,83 @@ class AcademicIndicatorBase(SQLModel):
     currmaintainpl3_alternate: int | None = Field(default=None)
     currnotprognotmain_alternate: int | None = Field(default=None)
     curr95: int | None = Field(default=None)
-    priorprogressed: int | None = Field(default=None)
+
+
+class CurrentMetricsPublic(CurrentMetricsBase):
+    id: uuid.UUID
+    updated_at: datetime | None = None
+
+
+# ============================================================
+# ACADEMIC INDICATOR TABLE (Base)
+# ============================================================
+
+class AcademicIndicatorBase(SQLModel):
+    """
+    Shared properties for AcademicIndicator (California Dashboard data)
+    Current metrics have been moved to CurrentMetrics table.
+    """
+
+    # Identifiers
+    cds: str = Field(primary_key=True, max_length=14, index=True)  # 14-char CDS code
+    rtype: str = Field(max_length=1, index=True)  # S/D/X (School/District/State)
+    schoolname: str | None = Field(default=None, max_length=255, index=True)
+    districtname: str | None = Field(default=None, max_length=255, index=True)
+    countyname: str | None = Field(default=None, max_length=255, index=True)
+
+    # Flags (Y or blank)
+    charter_flag: str | None = Field(default=None, max_length=1, index=True)
+    coe_flag: str | None = Field(default=None, max_length=1, index=True)
+    dass_flag: str | None = Field(default=None, max_length=1, index=True)
+
+    # Demographics
+    studentgroup: str = Field(index=True, max_length=10)  # ALL, AA, AI, AS, etc.
+
+    # Prior metrics
+    priordenom: int | None = Field(default=None, index=True)
+    priorstatus: float | None = Field(default=None, index=True)
+
+    # Performance
+    change: float | None = Field(default=None, index=True)
+    statuslevel: int | None = Field(default=None, index=True)  # 1-5 or 0
+    changelevel: int | None = Field(default=None, index=True)  # 1-5 or 0
+    color: int | None = Field(default=None, index=True)  # 1-5 or 0
+    box: int | None = Field(default=None, index=True)  # 0-250
+
+    # Accountability
+    priornsizemet: str | None = Field(default=None, max_length=10, index=True)
+    accountabilitymet: str | None = Field(default=None, max_length=10, index=True)
+    hscutpoints: str | None = Field(default=None, max_length=255)
+    pairshare_method: str | None = Field(default=None, max_length=255)
+
+    # Participation (prior)
+    priorprate_enrolled: int | None = Field(default=None, index=True)
+    priorprate_tested: int | None = Field(default=None, index=True)
+    priorprate: float | None = Field(default=None, index=True)
+    priornumprloss: int | None = Field(default=None)
+    priordenom_withoutprloss: int | None = Field(default=None)
+    priorstatus_withoutprloss: float | None = Field(default=None)
+
+    # Metadata
+    indicator: str = Field(default="ELA", max_length=10, index=True)
+    reportingyear: str = Field(max_length=10, index=True)  # e.g., "2025"
+
+    # === Extended fields for all indicator types ===
+
+    # Common fields (Chronic, Suspension, Graduation, ELPI)
+    priornumer: int | None = Field(default=None, index=True)
+    smalldenom: str | None = Field(default=None, max_length=10, index=True)
+    priorcertifyflag: str | None = Field(default=None, max_length=10, index=True)
+    dataerrorflag: str | None = Field(default=None, max_length=10, index=True)
+
+    # Suspension-specific
+    school_type: str | None = Field(default=None, max_length=50, index=True)  # 'type' column
+
+    # Graduation-specific
+    fiveyrnumer: int | None = Field(default=None)
+
+    # ELPI-specific (English Learner Progress) - Prior fields
+    priorprogressed: int | None = Field(default=None, index=True)
     priormaintainpl4: int | None = Field(default=None)
     priormaintainoth: int | None = Field(default=None)
     priordeclined: int | None = Field(default=None)
@@ -105,7 +184,7 @@ class AcademicIndicatorBase(SQLModel):
     prior95: int | None = Field(default=None)
 
     # CCI studentgroup percentage
-    studentgroup_pct: float | None = Field(default=None)
+    studentgroup_pct: float | None = Field(default=None, index=True)
 
 
 class AcademicIndicator(AcademicIndicatorBase, table=True):
@@ -123,9 +202,13 @@ class AcademicIndicator(AcademicIndicatorBase, table=True):
     created_at: datetime | None = Field(
         default_factory=get_datetime_utc,
         sa_type=DateTime(timezone=True),  # type: ignore
+        index=True,
     )
     # CCI-specific (stored as JSON to avoid 100+ columns)
     cci_details: dict[str, Any] | None = Field(default=None, sa_column=Column(JSON))
+
+    # Relationship to CurrentMetrics (one-to-many)
+    current_metrics: list["CurrentMetrics"] = Relationship(back_populates="academic_indicator")
 
 
 class AcademicIndicatorCreate(AcademicIndicatorBase):
@@ -142,8 +225,6 @@ class AcademicIndicatorUpdate(SQLModel):
     coe_flag: str | None = Field(default=None, max_length=1)
     dass_flag: str | None = Field(default=None, max_length=1)
     studentgroup: str | None = Field(default=None, max_length=10)
-    currdenom: int | None = Field(default=None)
-    currstatus: float | None = Field(default=None)
     priordenom: int | None = Field(default=None)
     priorstatus: float | None = Field(default=None)
     change: float | None = Field(default=None)
@@ -151,17 +232,10 @@ class AcademicIndicatorUpdate(SQLModel):
     changelevel: int | None = Field(default=None)
     color: int | None = Field(default=None)
     box: int | None = Field(default=None)
-    currnsizemet: str | None = Field(default=None, max_length=10)
     priornsizemet: str | None = Field(default=None, max_length=10)
     accountabilitymet: str | None = Field(default=None, max_length=10)
     hscutpoints: str | None = Field(default=None, max_length=255)
     pairshare_method: str | None = Field(default=None, max_length=255)
-    currprate_enrolled: int | None = Field(default=None)
-    currprate_tested: int | None = Field(default=None)
-    currprate: float | None = Field(default=None)
-    currnumprloss: int | None = Field(default=None)
-    currdenom_withoutprloss: int | None = Field(default=None)
-    currstatus_withoutprloss: float | None = Field(default=None)
     priorprate_enrolled: int | None = Field(default=None)
     priorprate_tested: int | None = Field(default=None)
     priorprate: float | None = Field(default=None)
