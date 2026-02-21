@@ -4,27 +4,26 @@
 @import '@fontsource-variable/urbanist';
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/figtree';
 
-body {
-	font-family: 'Helvetica Neue', sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
+/* body { */
+/* 	font-family: 'Helvetica Neue', sans-serif; */
+/* 	-webkit-font-smoothing: antialiased; */
+/* 	-moz-osx-font-smoothing: grayscale; */
+/* } */
 
-.serif {
-	font-family: -apple-system, BlinkMacSystemFont, 'Source Serif 4', serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
+/* .serif { */
+/* 	font-family: -apple-system, BlinkMacSystemFont, 'Source Serif 4', serif; */
+/* 	-webkit-font-smoothing: antialiased; */
+/* 	-moz-osx-font-smoothing: grayscale; */
+/* } */
 
 @custom-variant dark (&:is(.dark *));
 
 body {
 	@apply m-0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+	/* font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -209,19 +208,12 @@ code {
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
-		@apply border-border outline-ring/50;
-		@apply border-border outline-ring/50;
-		@apply border-border outline-ring/50;
 	}
 	body {
 		@apply bg-background text-foreground;
 		@apply font-sans bg-background text-foreground;
-		@apply font-sans bg-background text-foreground;
-		@apply font-sans bg-background text-foreground;
 	}
 	html {
-		@apply font-sans;
-		@apply font-sans;
 		@apply font-sans;
 	}
 }
