@@ -24,7 +24,7 @@ const fetchSchoolsSummary = async (query: string): Promise<SchoolsSummaryRespons
 		params.append('q', query)
 	}
 	params.append('limit', '10')
-	const response = await fetch(`http://localhost:8000/api/v1/schools/summary?${params}`)
+	const response = await fetch(`/api/v1/schools/summary?${params}`)
 	if (!response.ok) {
 		throw new Error('Failed to fetch schools')
 	}

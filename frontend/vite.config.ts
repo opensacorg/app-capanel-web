@@ -7,6 +7,8 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 
+const apiTarget = process.env.VITE_API_URL || 'http://localhost:8000'
+
 const config = defineConfig({
 	resolve: {
 		alias: {
@@ -16,7 +18,7 @@ const config = defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				target: 'http://localhost:8000',
+				target: apiTarget,
 				changeOrigin: true,
 			},
 		},

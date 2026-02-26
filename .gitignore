@@ -8,3 +8,5 @@ node_modules/
 .idea/
 nohup.out
 .env
+.gcloud/
+

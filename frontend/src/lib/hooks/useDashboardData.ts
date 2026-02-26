@@ -30,7 +30,7 @@ function getApiErrorMessage(error: unknown, fallback: string) {
 	}
 
 	if (error instanceof Error && /failed to fetch|networkerror|load failed/i.test(error.message)) {
-		return 'Cannot reach the API. Ensure the backend is running on http://localhost:8000.'
+		return 'Cannot reach the API. Ensure the backend is reachable at /api.'
 	}
 
 	return fallback

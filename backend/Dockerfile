@@ -1,3 +1,19 @@
+FROM node:22-slim AS frontend-builder
+
+WORKDIR /app
+
+RUN corepack enable
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /app/
+COPY frontend/package.json /app/frontend/package.json
+
+RUN pnpm install --frozen-lockfile
+
+COPY frontend /app/frontend
+
+RUN pnpm --filter frontend build
+
+
 FROM python:3.14-slim
 
 ENV PYTHONUNBUFFERED=1
@@ -38,6 +54,7 @@ COPY ./backend/scripts /app/backend/scripts
 COPY ./backend/pyproject.toml ./backend/alembic.ini /app/backend/
 
 COPY ./backend/app /app/backend/app
+COPY --from=frontend-builder /app/frontend/dist /app/backend/app/frontend_dist
 
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers

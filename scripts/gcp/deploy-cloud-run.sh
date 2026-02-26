@@ -26,11 +26,11 @@ BACKEND_CORS_ORIGINS="${BACKEND_CORS_ORIGINS:-https://localhost}"
 CLOUD_SQL_CONNECTION_NAME="${GCP_PROJECT_ID}:${GCP_REGION}:${CLOUD_SQL_INSTANCE}"
 RUN_SERVICE_ACCOUNT_EMAIL="${RUN_SERVICE_ACCOUNT}@${GCP_PROJECT_ID}.iam.gserviceaccount.com"
 RUN_DATA_IMPORTS="${RUN_DATA_IMPORTS:-false}"
-IMPORT_GCS_URI="${IMPORT_GCS_URI:-gs://ca-panel-001-resources}"
+IMPORT_GCS_URI="${IMPORT_GCS_URI:-gs://ca-panel-001-resources/resources}"
 IMPORT_RESOURCES_LOCAL_PATH="${IMPORT_RESOURCES_LOCAL_PATH:-$HOME/Downloads/resources}"
 SYNC_LOCAL_IMPORTS_TO_BUCKET="${SYNC_LOCAL_IMPORTS_TO_BUCKET:-true}"
 BACKEND_INIT_JOB="${BACKEND_INIT_JOB:-${BACKEND_SERVICE}-init}"
-RUN_BACKEND_INIT_JOB="${RUN_BACKEND_INIT_JOB:-true}"
+INIT_TRIGGER_FUNCTION_NAME="${INIT_TRIGGER_FUNCTION_NAME:-${BACKEND_SERVICE}-init-trigger}"
 
 BACKEND_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_AR_REPOSITORY}/${BACKEND_SERVICE}:${TAG}"
 FRONTEND_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_AR_REPOSITORY}/${FRONTEND_SERVICE}:${TAG}"
@@ -41,6 +41,8 @@ gcloud config set project "${GCP_PROJECT_ID}"
 
 gcloud services enable \
   run.googleapis.com \
+  cloudfunctions.googleapis.com \
+  eventarc.googleapis.com \
   artifactregistry.googleapis.com \
   cloudbuild.googleapis.com \
   sqladmin.googleapis.com \
@@ -91,18 +93,21 @@ gcloud run jobs deploy "${BACKEND_INIT_JOB}" \
   --subnet "${VPC_SUBNET}" \
   --vpc-egress private-ranges-only \
   --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
-  --command bash \
-  --args scripts/prestart.sh \
-  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_PASSWORD=${CLOUD_SQL_PASSWORD},SECRET_KEY=${SECRET_KEY},FIRST_SUPERUSER=${FIRST_SUPERUSER},FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD},RUN_DATA_IMPORTS=true,IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}"
+  --command python \
+  --args app/scripts/initial_data.py \
+  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_PASSWORD=${CLOUD_SQL_PASSWORD},SECRET_KEY=${SECRET_KEY},FIRST_SUPERUSER=${FIRST_SUPERUSER},FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD},RUN_DATA_IMPORTS=false,IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}"
 
-if [[ "${RUN_BACKEND_INIT_JOB,,}" == "true" ]]; then
-  echo "Executing backend init job ${BACKEND_INIT_JOB}"
-  gcloud run jobs execute "${BACKEND_INIT_JOB}" \
-    --region "${GCP_REGION}" \
-    --wait
-else
-  echo "RUN_BACKEND_INIT_JOB=${RUN_BACKEND_INIT_JOB}; skipping job execution."
-fi
+echo "Deploying manual init trigger function ${INIT_TRIGGER_FUNCTION_NAME}"
+gcloud functions deploy "${INIT_TRIGGER_FUNCTION_NAME}" \
+  --gen2 \
+  --runtime python312 \
+  --region "${GCP_REGION}" \
+  --source scripts/gcp/functions/manual_backend_init \
+  --entry-point trigger_backend_init \
+  --trigger-http \
+  --no-allow-unauthenticated \
+  --service-account "${RUN_SERVICE_ACCOUNT_EMAIL}" \
+  --set-env-vars "GCP_PROJECT_ID=${GCP_PROJECT_ID},GCP_REGION=${GCP_REGION},BACKEND_INIT_JOB=${BACKEND_INIT_JOB}"
 
 BACKEND_URL="$(
   gcloud run services describe "${BACKEND_SERVICE}" \
@@ -144,4 +149,13 @@ FRONTEND_URL="$(
 )"
 
 echo "Frontend URL: ${FRONTEND_URL}"
+INIT_TRIGGER_FUNCTION_URL="$(
+  gcloud functions describe "${INIT_TRIGGER_FUNCTION_NAME}" \
+    --region "${GCP_REGION}" \
+    --gen2 \
+    --format='value(serviceConfig.uri)'
+)"
+echo "Manual init trigger URL: ${INIT_TRIGGER_FUNCTION_URL}"
+echo "Invoke with:"
+echo "curl -X POST -H \"Authorization: Bearer \$(gcloud auth print-identity-token)\" \"${INIT_TRIGGER_FUNCTION_URL}\""
 echo "Done."

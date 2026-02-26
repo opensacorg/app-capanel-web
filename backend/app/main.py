@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import sentry_sdk
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.routing import APIRoute
+from fastapi.responses import FileResponse
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
@@ -8,7 +11,8 @@ from app.core.config import settings
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
-    return f"{route.tags[0]}-{route.name}"
+    tag = route.tags[0] if route.tags else "default"
+    return f"{tag}-{route.name}"
 
 
 if settings.SENTRY_DSN and settings.ENVIRONMENT != "local":
@@ -31,3 +35,18 @@ if settings.all_cors_origins:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+frontend_dist = Path(__file__).parent / "frontend_dist"
+frontend_index = frontend_dist / "index.html"
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_frontend(full_path: str):
+    if not frontend_index.exists():
+        raise HTTPException(status_code=404, detail="Frontend not deployed")
+
+    candidate = (frontend_dist / full_path).resolve()
+    if full_path and candidate.is_file() and frontend_dist.resolve() in candidate.parents:
+        return FileResponse(candidate)
+
+    return FileResponse(frontend_index)

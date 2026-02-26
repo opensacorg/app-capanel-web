@@ -22,9 +22,13 @@ gcloud config set project "${GCP_PROJECT_ID}"
 
 gcloud services enable \
   run.googleapis.com \
+  cloudfunctions.googleapis.com \
+  eventarc.googleapis.com \
+  pubsub.googleapis.com \
   artifactregistry.googleapis.com \
   cloudbuild.googleapis.com \
   sqladmin.googleapis.com \
+  storage.googleapis.com \
   servicenetworking.googleapis.com \
   compute.googleapis.com
 
@@ -48,6 +52,14 @@ gcloud projects add-iam-policy-binding "${GCP_PROJECT_ID}" \
 gcloud projects add-iam-policy-binding "${GCP_PROJECT_ID}" \
   --member="serviceAccount:${RUN_SERVICE_ACCOUNT_EMAIL}" \
   --role="roles/artifactregistry.reader" >/dev/null
+
+gcloud projects add-iam-policy-binding "${GCP_PROJECT_ID}" \
+  --member="serviceAccount:${RUN_SERVICE_ACCOUNT_EMAIL}" \
+  --role="roles/run.developer" >/dev/null
+
+gcloud projects add-iam-policy-binding "${GCP_PROJECT_ID}" \
+  --member="serviceAccount:${RUN_SERVICE_ACCOUNT_EMAIL}" \
+  --role="roles/storage.objectViewer" >/dev/null
 
 if ! gcloud compute addresses describe "${PRIVATE_RANGE_NAME}" \
   --global >/dev/null 2>&1; then

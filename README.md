@@ -80,11 +80,12 @@ Copy the content and use that as password / secret key. And run that again to ge
 
 Cloud Run + Cloud SQL support is available through `scripts/gcp/deploy-cloud-run.sh`.
 
-For Cloud Run, backend data imports now run in a separate Cloud Run Job (not in request-serving startup), and can pull files from GCS via:
+For Cloud Run, deploy now supports syncing local resources from `~/Downloads/resources` to GCS before image deploy:
 
 ```env
-IMPORT_GCS_URI=gs://ca-panel-001-resources
-RUN_BACKEND_INIT_JOB=true
+IMPORT_RESOURCES_LOCAL_PATH=~/Downloads/resources
+IMPORT_GCS_URI=gs://ca-panel-001-resources/resources
+SYNC_LOCAL_IMPORTS_TO_BUCKET=true
 ```
 
 ## Database modes
@@ -150,8 +151,10 @@ bash scripts/gcp/deploy-cloud-run.sh
 Notes:
 
 - Backend service startup is configured to be Cloud Run compatible (`PORT`, usually `8080`).
-- Heavy DB/data initialization runs in `${BACKEND_SERVICE}-init` job by default.
-- Ensure the runtime service account has bucket read access (`roles/storage.objectViewer`) on `ca-panel-001-resources`.
+- The `${BACKEND_SERVICE}-init` Cloud Run Job is deployed and never auto-executed during deploy.
+- The init job runs only `backend/app/scripts/initial_data.py`.
+- A manual HTTP Cloud Function `${INIT_TRIGGER_FUNCTION_NAME}` is deployed and can trigger the init job on demand.
+- Ensure callers have `roles/cloudfunctions.invoker` on the trigger function.
 
 Suggested Google Cloud resource names:
 
