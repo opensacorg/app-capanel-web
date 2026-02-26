@@ -42,7 +42,9 @@ def get_access_token(client: httpx.Client) -> str:
     return str(token)
 
 
-def list_objects(client: httpx.Client, token: str, bucket: str, prefix: str) -> list[str]:
+def list_objects(
+    client: httpx.Client, token: str, bucket: str, prefix: str
+) -> list[str]:
     object_names: list[str] = []
     page_token: str | None = None
     headers = {"Authorization": f"Bearer {token}"}

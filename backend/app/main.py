@@ -2,8 +2,8 @@ from pathlib import Path
 
 import sentry_sdk
 from fastapi import FastAPI, HTTPException
-from fastapi.routing import APIRoute
 from fastapi.responses import FileResponse
+from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
@@ -46,7 +46,11 @@ async def serve_frontend(full_path: str):
         raise HTTPException(status_code=404, detail="Frontend not deployed")
 
     candidate = (frontend_dist / full_path).resolve()
-    if full_path and candidate.is_file() and frontend_dist.resolve() in candidate.parents:
+    if (
+        full_path
+        and candidate.is_file()
+        and frontend_dist.resolve() in candidate.parents
+    ):
         return FileResponse(candidate)
 
     return FileResponse(frontend_index)
