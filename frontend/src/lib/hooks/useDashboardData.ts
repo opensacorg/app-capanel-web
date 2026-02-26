@@ -13,6 +13,29 @@ export const DASHBOARD_QUERY_KEY = ['dashboard', 'data'] as const
 export const DASHBOARD_SUMMARY_KEY = ['dashboard', 'summary'] as const
 export const EQUITY_REPORT_KEY = ['dashboard', 'equity'] as const
 
+function getApiErrorMessage(error: unknown, fallback: string) {
+	if (error && typeof error === 'object') {
+		const detail = (error as { detail?: unknown }).detail
+
+		if (typeof detail === 'string' && detail.trim().length > 0) {
+			return detail
+		}
+
+		if (Array.isArray(detail) && detail.length > 0) {
+			const first = detail[0] as { msg?: string } | undefined
+			if (first?.msg) {
+				return first.msg
+			}
+		}
+	}
+
+	if (error instanceof Error && /failed to fetch|networkerror|load failed/i.test(error.message)) {
+		return 'Cannot reach the API. Ensure the backend is running on http://localhost:8000.'
+	}
+
+	return fallback
+}
+
 // ===== Legacy single-indicator hooks =====
 
 export function dashboardQueryOptions(cds: string | null) {
@@ -23,8 +46,7 @@ export function dashboardQueryOptions(cds: string | null) {
 				query: { q: cds! },
 			})
 			if (response.error) {
-				const errorDetail = (response.error as { detail?: string })?.detail
-				throw new Error(errorDetail || 'Failed to fetch dashboard data')
+				throw new Error(getApiErrorMessage(response.error, 'Failed to fetch dashboard data'))
 			}
 			return response.data as DashboardAggregation
 		},
@@ -56,8 +78,7 @@ export function dashboardSummaryQueryOptions(
 				query: { cds: cds!, reportingyear, studentgroup },
 			})
 			if (response.error) {
-				const errorDetail = (response.error as { detail?: string })?.detail
-				throw new Error(errorDetail || 'Failed to fetch dashboard summary')
+				throw new Error(getApiErrorMessage(response.error, 'Failed to fetch dashboard summary'))
 			}
 			return response.data as DashboardSummaryResponse
 		},
@@ -97,8 +118,7 @@ export function equityReportQueryOptions(
 				query: { cds: cds!, indicator: indicator!, reportingyear },
 			})
 			if (response.error) {
-				const errorDetail = (response.error as { detail?: string })?.detail
-				throw new Error(errorDetail || 'Failed to fetch equity report')
+				throw new Error(getApiErrorMessage(response.error, 'Failed to fetch equity report'))
 			}
 			return response.data as EquityReportResponse
 		},

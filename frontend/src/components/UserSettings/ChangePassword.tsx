@@ -48,7 +48,7 @@ const ChangePassword = () => {
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: UpdatePassword) => UsersService.usersUpdatePasswordMe({ requestBody: data }),
+		mutationFn: (data: UpdatePassword) => UsersService.usersUpdatePasswordMe({ body: data }),
 		onSuccess: () => {
 			showSuccessToast('Password updated successfully')
 			form.reset()
@@ -83,7 +83,7 @@ const ChangePassword = () => {
 							/>
 							{field.state.meta.isTouched && !field.state.meta.isValid && (
 								<FieldError>
-									{field.state.meta.errors.map((err) => err.message).join(', ')}
+									{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 								</FieldError>
 							)}
 						</Field>
@@ -106,7 +106,7 @@ const ChangePassword = () => {
 							/>
 							{field.state.meta.isTouched && !field.state.meta.isValid && (
 								<FieldError>
-									{field.state.meta.errors.map((err) => err.message).join(', ')}
+									{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 								</FieldError>
 							)}
 						</Field>
@@ -129,7 +129,7 @@ const ChangePassword = () => {
 							/>
 							{field.state.meta.isTouched && !field.state.meta.isValid && (
 								<FieldError>
-									{field.state.meta.errors.map((err) => err.message).join(', ')}
+									{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 								</FieldError>
 							)}
 						</Field>

@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
 
-type LucideIcon = React.FC<React.SVGProps<SVGSVGElement>>
+type LucideIcon = typeof Monitor
 
 const ICON_MAP: Record<Theme, LucideIcon> = {
 	system: Monitor,

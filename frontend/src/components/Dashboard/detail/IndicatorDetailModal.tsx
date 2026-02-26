@@ -10,6 +10,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { Gauge } from '@/components/ui/gauge'
+import type { IndicatorSummary } from '@/lib/client'
 import { type IndicatorCode, INDICATORS, getIndicatorLabel } from '@/lib/constants/indicators'
 import { useEquityReport } from '@/lib/hooks/useDashboardData'
 
@@ -35,17 +36,6 @@ function CollapsibleSection({ title, defaultOpen = true, children }: Collapsible
 			<CollapsibleContent className='px-2'>{children}</CollapsibleContent>
 		</Collapsible>
 	)
-}
-
-interface IndicatorSummary {
-	indicator: string
-	currstatus: number | null
-	priorstatus: number | null
-	change: number | null
-	statuslevel: number | null
-	changelevel: number | null
-	color: number | null
-	currdenom: number | null
 }
 
 interface IndicatorDetailModalProps {
@@ -162,7 +152,7 @@ export function IndicatorDetailModal({
 								<div>
 									<p className='text-sm font-medium text-muted-foreground'>Current Status</p>
 									<p className='text-2xl font-bold'>
-										{formatStatus(indicator.currstatus, indicator.indicator)}
+										{formatStatus(indicator.currstatus ?? null, indicator.indicator)}
 									</p>
 								</div>
 
@@ -170,7 +160,10 @@ export function IndicatorDetailModal({
 									<p className='text-sm font-medium text-muted-foreground'>
 										Change from Prior Year
 									</p>
-									<ChangeDisplay change={indicator.change} indicator={indicator.indicator} />
+									<ChangeDisplay
+										change={indicator.change ?? null}
+										indicator={indicator.indicator}
+									/>
 								</div>
 
 								{indicator.currdenom && (
@@ -184,7 +177,7 @@ export function IndicatorDetailModal({
 									<div>
 										<p className='text-sm font-medium text-muted-foreground'>Prior Year Status</p>
 										<p className='text-lg'>
-											{formatStatus(indicator.priorstatus, indicator.indicator)}
+											{formatStatus(indicator.priorstatus ?? null, indicator.indicator)}
 										</p>
 									</div>
 								)}

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Activity, Home, Sparkles } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress, ProgressLabel, ProgressValue } from '@/components/ui/progress'
@@ -27,7 +27,7 @@ function BandwidthExceededPage() {
 			description='You have exceeded your bandwidth limit for this period.'
 			footer={
 				<>
-					<Button render={<Link to='/pricing' />}>
+					<Button render={<Link to='/dashboard' />}>
 						<Sparkles className='mr-2 size-4' />
 						Upgrade Plan
 					</Button>

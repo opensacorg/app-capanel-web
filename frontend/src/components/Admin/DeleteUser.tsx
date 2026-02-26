@@ -29,7 +29,7 @@ const DeleteUser = ({ id, onSuccess }: DeleteUserProps) => {
 	const { showSuccessToast, showErrorToast } = useCustomToast()
 
 	const mutation = useMutation({
-		mutationFn: () => UsersService.usersDeleteUser({ userId: id }),
+		mutationFn: () => UsersService.usersDeleteUser({ path: { user_id: id } }),
 		onSuccess: () => {
 			showSuccessToast('The user was deleted successfully')
 			setIsOpen(false)

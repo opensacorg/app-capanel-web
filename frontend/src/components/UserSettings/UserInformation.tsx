@@ -53,7 +53,7 @@ const UserInformation = () => {
 	}
 
 	const mutation = useMutation({
-		mutationFn: (data: UserUpdateMe) => UsersService.usersUpdateUserMe({ requestBody: data }),
+		mutationFn: (data: UserUpdateMe) => UsersService.usersUpdateUserMe({ body: data }),
 		onSuccess: () => {
 			showSuccessToast('User updated successfully')
 			toggleEditMode()
@@ -96,7 +96,7 @@ const UserInformation = () => {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>
@@ -132,7 +132,7 @@ const UserInformation = () => {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>

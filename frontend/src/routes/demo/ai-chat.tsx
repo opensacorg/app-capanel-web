@@ -3,9 +3,8 @@ import { Loader2, Mic, MicOff, Send, Square, Volume2, VolumeX } from 'lucide-rea
 import { useEffect, useRef, useState } from 'react'
 import { Streamdown } from 'streamdown'
 
-import type { ChatMessages } from '@/lib/demo-ai-hook'
-
 import GuitarRecommendation from '@/components/demo-GuitarRecommendation'
+import type { ChatMessages } from '@/lib/demo-ai-hook'
 import { useGuitarRecommendationChat } from '@/lib/demo-ai-hook'
 
 import './ai-chat.css'

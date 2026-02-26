@@ -49,7 +49,7 @@ function RecoverPassword() {
 
 	const mutation = useMutation({
 		mutationFn: async (data: RecoverFormValues) => {
-			await LoginService.loginRecoverPassword({ email: data.email })
+			await LoginService.loginRecoverPassword({ path: { email: data.email } })
 		},
 		onSuccess: () => {
 			showSuccessToast('Password recovery email sent successfully')
@@ -90,7 +90,7 @@ function RecoverPassword() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>

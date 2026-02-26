@@ -4,7 +4,6 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import col, delete, func, select
 
-from app.service import crud
 from app.api.deps import (
     CurrentUser,
     SessionDep,
@@ -12,21 +11,22 @@ from app.api.deps import (
 )
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
+from app.core.utils import generate_new_account_email, send_email
+from app.model.item import Item
 from app.model.models import (
     Message,
 )
-from app.model.item import Item
 from app.model.user import (
-    UserCreate,
-    UserRegister,
-    UserUpdate,
-    UserUpdateMe,
     UpdatePassword,
     User,
+    UserCreate,
     UserPublic,
+    UserRegister,
     UsersPublic,
+    UserUpdate,
+    UserUpdateMe,
 )
-from app.core.utils import generate_new_account_email, send_email
+from app.service import crud
 
 router = APIRouter(prefix="/users", tags=["users"])
 

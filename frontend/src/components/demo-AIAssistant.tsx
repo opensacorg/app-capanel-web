@@ -64,6 +64,7 @@ function Messages({ messages }: { messages: ChatMessages }) {
 								</div>
 							)
 						}
+						return null
 					})}
 				</div>
 			))}
@@ -72,7 +73,7 @@ function Messages({ messages }: { messages: ChatMessages }) {
 }
 
 export default function AIAssistant() {
-	const isOpen = useStore(showAIAssistant)
+	const isOpen = useStore(showAIAssistant, (state) => state)
 	const { messages, sendMessage } = useGuitarRecommendationChat()
 	const [input, setInput] = useState('')
 

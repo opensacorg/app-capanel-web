@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
 
-import { fullName, store } from '@/lib/demo-store'
+import { store } from '@/lib/demo-store'
 
 export const Route = createFileRoute('/demo/store')({
 	component: DemoStore,
@@ -32,7 +32,7 @@ function LastName() {
 }
 
 function FullName() {
-	const fName = useStore(fullName)
+	const fName = useStore(store, (state) => `${state.firstName} ${state.lastName}`)
 	return <div className='bg-white/10 rounded-lg px-4 py-2 outline-none '>{fName}</div>
 }
 

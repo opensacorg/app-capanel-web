@@ -59,7 +59,7 @@ export function DefaultError({ error, reset, info, fullPage = true }: DefaultErr
 				</Alert>
 
 				{(errorStack || info?.componentStack) && (
-					<Accordion type='single' collapsible>
+					<Accordion>
 						<AccordionItem value='stack'>
 							<AccordionTrigger className='text-sm'>Technical Details</AccordionTrigger>
 							<AccordionContent>

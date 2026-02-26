@@ -101,15 +101,6 @@
 	justify-content: flex-end;
 }
 
-.searchbar {
-	margin-inline-end: 2rem;
-	display: none;
-
-	@media (min-width: 640px) {
-		display: block;
-	}
-}
-
 .searchIcon {
 	/* height: 1.5rem; */
 	/* width: 1.5rem; */
@@ -125,13 +116,7 @@
 	height: 100%;
 	align-items: center;
 
-	@media (min-width: 1110px) {
+	@media (min-width: 1180px) {
 		display: flex;
-	}
-}
-
-.mobileButtonWrapper {
-	@media (min-width: 1110px) {
-		display: none;
 	}
 }

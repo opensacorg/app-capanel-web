@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Clock, Gauge, Home, Timer } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress, ProgressLabel, ProgressValue } from '@/components/ui/progress'
@@ -72,7 +72,7 @@ function RateLimitedPage() {
 
 				<p className='text-center text-sm text-muted-foreground'>
 					Need higher limits?{' '}
-					<Link to='/pricing' className='text-primary hover:underline'>
+					<Link to='/dashboard' className='text-primary hover:underline'>
 						Upgrade your plan
 					</Link>
 				</p>

@@ -75,7 +75,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 
 	const mutation = useMutation({
 		mutationFn: (data: Partial<FormData>) =>
-			UsersService.usersUpdateUser({ userId: user.id, requestBody: data }),
+			UsersService.usersUpdateUser({ path: { user_id: user.id }, body: data }),
 		onSuccess: () => {
 			showSuccessToast('User updated successfully')
 			setIsOpen(false)
@@ -124,7 +124,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -147,7 +147,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -169,7 +169,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -191,7 +191,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>

@@ -87,7 +87,7 @@ export function User({ user }: { user: any }) {
 						<DropdownMenuSeparator />
 
 						{/* Use 'render' prop for routing components in Base UI to avoid nesting issues */}
-						<DropdownMenuItem render={<RouterLink to='/settings' />} onClick={handleMenuClick}>
+						<DropdownMenuItem render={<RouterLink to='/user/settings' />} onClick={handleMenuClick}>
 							<Settings />
 							User Settings
 						</DropdownMenuItem>

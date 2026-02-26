@@ -48,7 +48,7 @@ const AddItem = () => {
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: ItemCreate) => ItemsService.createItem({ requestBody: data }),
+		mutationFn: (data: ItemCreate) => ItemsService.itemsCreateItem({ body: data }),
 		onSuccess: () => {
 			showSuccessToast('Item created successfully')
 			form.reset()
@@ -97,7 +97,7 @@ const AddItem = () => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -120,7 +120,7 @@ const AddItem = () => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>

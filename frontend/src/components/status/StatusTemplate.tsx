@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react'
-
 import { Link } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -64,7 +63,7 @@ export function StatusTemplate({
 									Documentation
 								</a>
 								<Separator orientation='vertical' className='h-4' />
-								<Link to='/support' className='hover:text-foreground transition-colors'>
+								<Link to='/demo/docs' className='hover:text-foreground transition-colors'>
 									Support
 								</Link>
 							</div>

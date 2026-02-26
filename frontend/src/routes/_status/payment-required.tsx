@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { CreditCard, Home, Sparkles } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -27,7 +27,7 @@ function PaymentRequiredPage() {
 			description='You need an active subscription to access this feature.'
 			footer={
 				<>
-					<Button render={<Link to='/pricing' />}>
+					<Button render={<Link to='/dashboard' />}>
 						<Sparkles className='mr-2 size-4' />
 						View Plans
 					</Button>

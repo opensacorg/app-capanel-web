@@ -5,14 +5,14 @@ Provides common functionality for parsing and importing California Dashboard
 accountability indicator data.
 """
 
+import sys
 from abc import ABC, abstractmethod
-from typing import Any, Generator
+from collections.abc import Generator
+from pathlib import Path
+from typing import Any
 
 import pandas as pd
 from sqlmodel import Session
-
-import sys
-from pathlib import Path
 
 # Add the parent directory to the path so we can import app modules
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))

@@ -128,7 +128,7 @@ export default function SearchBar({
 		addRecentSearch(result)
 		setOpen(false)
 		setQuery('')
-		navigate({ to: '/dashboard/', search: { q: result.cds } })
+		navigate({ to: '/dashboard', search: { q: result.cds } })
 	}
 
 	const handleClearRecent = (e: React.MouseEvent) => {
@@ -148,7 +148,7 @@ export default function SearchBar({
 	}, [query])
 
 	return (
-		<>
+		<div className={styles.searchbar}>
 			{/* Trigger Button */}
 			<button type='button' onClick={() => setOpen(true)} className={cn(styles.trigger, className)}>
 				<Search className='h-4 w-4 shrink-0' />
@@ -284,6 +284,6 @@ export default function SearchBar({
 					</div>
 				</Command>
 			</CommandDialog>
-		</>
+		</div>
 	)
 }

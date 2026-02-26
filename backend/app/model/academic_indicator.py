@@ -1,19 +1,20 @@
 import uuid
 from datetime import datetime
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import DateTime, Column, JSON, UniqueConstraint, ForeignKey
-from sqlmodel import SQLModel, Field, Relationship
+from sqlalchemy import JSON, Column, DateTime, UniqueConstraint
+from sqlmodel import Field, Relationship, SQLModel
 
 from app.core.utils import get_datetime_utc
 
 if TYPE_CHECKING:
-    from typing import List
+    pass
 
 
 # ============================================================
 # ACADEMIC INDICATOR TABLE (Base)
 # ============================================================
+
 
 class AcademicIndicatorBase(SQLModel):
     """
@@ -74,7 +75,9 @@ class AcademicIndicatorBase(SQLModel):
     dataerrorflag: str | None = Field(default=None, max_length=10, index=True)
 
     # Suspension-specific
-    school_type: str | None = Field(default=None, max_length=50, index=True)  # 'type' column
+    school_type: str | None = Field(
+        default=None, max_length=50, index=True
+    )  # 'type' column
 
     # Graduation-specific
     fiveyrnumer: int | None = Field(default=None)
@@ -114,7 +117,9 @@ class AcademicIndicator(AcademicIndicatorBase, table=True):
     cci_details: dict[str, Any] | None = Field(default=None, sa_column=Column(JSON))
 
     # Relationship to CurrentMetrics (one-to-many)
-    current_metrics: list["CurrentMetrics"] = Relationship(back_populates="academic_indicator")
+    current_metrics: list["CurrentMetrics"] = Relationship(
+        back_populates="academic_indicator"
+    )
 
 
 class AcademicIndicatorCreate(AcademicIndicatorBase):
@@ -165,6 +170,7 @@ class AcademicIndicatorsPublic(SQLModel):
 # ============================================================
 # CURRENT METRICS TABLE (Separated for timestamp tracking)
 # ============================================================
+
 
 class CurrentMetricsBase(SQLModel):
     """
@@ -222,7 +228,9 @@ class CurrentMetrics(CurrentMetricsBase, table=True):
     )
 
     # Relationship back to AcademicIndicator
-    academic_indicator: "AcademicIndicator" = Relationship(back_populates="current_metrics")
+    academic_indicator: "AcademicIndicator" = Relationship(
+        back_populates="current_metrics"
+    )
 
 
 class CurrentMetricsCreate(CurrentMetricsBase):
@@ -254,4 +262,3 @@ class CurrentMetricsUpdate(SQLModel):
 class CurrentMetricsPublic(CurrentMetricsBase):
     id: uuid.UUID
     updated_at: datetime | None = None
-

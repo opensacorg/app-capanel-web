@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, Check, FileUp, Home } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress, ProgressLabel, ProgressValue } from '@/components/ui/progress'
@@ -27,7 +27,7 @@ function ImportCompletePage() {
 			description='Your data has been imported successfully.'
 			footer={
 				<>
-					<Button render={<Link to='/layout' />}>
+					<Button render={<Link to='/dashboard' />}>
 						View Data
 						<ArrowRight className='ml-2 size-4' />
 					</Button>

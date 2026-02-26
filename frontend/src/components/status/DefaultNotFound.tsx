@@ -1,5 +1,6 @@
 import { Link, type NotFoundRouteProps } from '@tanstack/react-router'
 import { FileQuestion, Home, Search } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -46,15 +47,15 @@ export function DefaultNotFound({ data, fullPage = true }: DefaultNotFoundProps)
 						<Search className='size-4' />
 					</Button>
 				</div>
-				{data && (
+				{data != null ? (
 					<p className='text-center text-xs text-muted-foreground font-mono'>
 						Path:{' '}
 						{typeof data === 'object' && 'pathname' in data ? String(data.pathname) : 'Unknown'}
 					</p>
-				)}
+				) : null}
 			</div>
 		</StatusCard>
-	)
+	) as ReactNode
 
 	if (!fullPage) {
 		return <div className='flex items-center justify-center min-h-[60vh] p-4'>{content}</div>

@@ -6,15 +6,14 @@ data downloads. These contain raw assessment results rather than accountability
 indicators.
 """
 
+import sys
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 import pandas as pd
 from sqlmodel import Session
 
 from .base import BaseIndicatorParser
-
-import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 

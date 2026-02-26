@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, Lock, Mail } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 
@@ -25,7 +25,7 @@ function LockedPage() {
 			description='Your account has been temporarily locked.'
 			footer={
 				<>
-					<Button render={<Link to='/support' />}>
+					<Button render={<Link to='/demo/docs' />}>
 						<Mail className='mr-2 size-4' />
 						Contact Support
 					</Button>

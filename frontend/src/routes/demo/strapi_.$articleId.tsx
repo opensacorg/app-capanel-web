@@ -17,7 +17,7 @@ function RouteComponent() {
 		<div className='min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-8'>
 			<div className='max-w-4xl mx-auto'>
 				<Link
-					to='/home/strapi'
+					to='/demo/strapi'
 					className='inline-flex items-center text-cyan-400 hover:text-cyan-300 mb-6 transition-colors'
 				>
 					<svg

@@ -9,22 +9,20 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import useAuth from '@/lib/hooks/useAuth'
+import { cn } from '@/lib/utils'
 
-export default function SettingsButton({ className }: { className?: string }) {
+export default function SettingsButton() {
 	const { user: currentUser } = useAuth()
 
 	return (
-		<div className={className + ' font-urbanist'}>
+		<div className='ml-1'>
 			<DropdownMenu>
-				<DropdownMenuTrigger className={buttonVariants({ variant: 'outline', size: 'sm' })}>
-					<FaGear className='h-5 w-5' />
+				<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline' }))}>
+					<FaGear />
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
 					{currentUser ? (
-						<DropdownMenuItem
-							className='text-base p-3 tracking-wide'
-							render={<Link to='/sign-out' />}
-						>
+						<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/login' />}>
 							Sign Out
 						</DropdownMenuItem>
 					) : (

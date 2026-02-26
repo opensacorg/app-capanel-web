@@ -4,10 +4,11 @@ import { FaMagnifyingGlass } from 'react-icons/fa6'
 import useAuth from '@/lib/hooks/useAuth.ts'
 
 import MobileButton from './MobileButton'
-import styles from './NavbarD52.module.css'
 import SearchBar from './SearchBar'
 import SettingsButton from './SettingsButton'
 import UserAvatar from './UserAvatar'
+
+import styles from './NavbarD52.module.css'
 
 export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 	const { user: currentUser } = useAuth()
@@ -19,14 +20,14 @@ export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 			<nav className={styles.nav}>
 				<div className={styles.logoWrapper}>
 					<Link className={styles.logoLink} to='/'>
-						<img src='/assets/logo/logo.svg' alt='Logo' className='h-12' />
+						<img src='/assets/logo/logo.svg' alt='Logo' className='h-10' />
 						<span className='hidden md:block'>
 							<span className='font-bold'>California Accountability</span> Panel
 						</span>
 					</Link>
 				</div>
 				<div className={styles.right}>
-					<SearchBar className={styles.searchbar} />
+					<SearchBar />
 					<FaMagnifyingGlass className={styles.searchIcon} />
 					<div className={styles.linksContainer}>
 						<Link
@@ -48,7 +49,7 @@ export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 							Dashboard
 						</Link>
 						<Link
-							to='/dashboard/generate-report'
+							to='/report'
 							className={styles.link}
 							activeProps={{
 								className: styles.linkSelected,
@@ -56,7 +57,7 @@ export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 						>
 							Report
 						</Link>
-						<SettingsButton className='px-3' />
+						<SettingsButton />
 						{currentUser && (
 							<Link to='/user'>
 								<UserAvatar />
@@ -64,9 +65,7 @@ export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 						)}
 					</div>
 				</div>
-				<div className={styles.mobileButtonWrapper}>
-					<MobileButton />
-				</div>
+				<MobileButton />
 			</nav>
 		</div>
 	)

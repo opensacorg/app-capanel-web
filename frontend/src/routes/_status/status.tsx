@@ -162,7 +162,7 @@ function SystemStatusPage() {
 				<CardContent>
 					<div className='grid gap-4 sm:grid-cols-2 md:grid-cols-4'>
 						<Link
-							to='/status/error-demo'
+							to='/error-demo'
 							className='flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-muted/50 transition-colors'
 						>
 							<div className='rounded-full bg-destructive/10 p-3'>
@@ -172,7 +172,7 @@ function SystemStatusPage() {
 							<span className='text-xs text-muted-foreground'>HTTP errors & failures</span>
 						</Link>
 						<Link
-							to='/status/success-states'
+							to='/success-states'
 							className='flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-muted/50 transition-colors'
 						>
 							<div className='rounded-full bg-green-500/10 p-3'>
@@ -182,7 +182,7 @@ function SystemStatusPage() {
 							<span className='text-xs text-muted-foreground'>Confirmations</span>
 						</Link>
 						<Link
-							to='/status/info-states'
+							to='/info-states'
 							className='flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-muted/50 transition-colors'
 						>
 							<div className='rounded-full bg-blue-500/10 p-3'>
@@ -192,7 +192,7 @@ function SystemStatusPage() {
 							<span className='text-xs text-muted-foreground'>Notifications</span>
 						</Link>
 						<Link
-							to='/status/loading'
+							to='/loading'
 							className='flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-muted/50 transition-colors'
 						>
 							<div className='rounded-full bg-primary/10 p-3'>
@@ -288,22 +288,22 @@ function SystemStatusPage() {
 				</CardHeader>
 				<CardContent>
 					<div className='flex flex-wrap gap-2'>
-						<Button variant='outline' size='sm' render={<Link to='/status/404' />}>
+						<Button variant='outline' size='sm' render={<Link to='/404' />}>
 							404
 						</Button>
-						<Button variant='outline' size='sm' render={<Link to='/status/500' />}>
+						<Button variant='outline' size='sm' render={<Link to='/500' />}>
 							500
 						</Button>
-						<Button variant='outline' size='sm' render={<Link to='/status/maintenance' />}>
+						<Button variant='outline' size='sm' render={<Link to='/maintenance' />}>
 							Maintenance
 						</Button>
-						<Button variant='outline' size='sm' render={<Link to='/status/coming-soon' />}>
+						<Button variant='outline' size='sm' render={<Link to='/coming-soon' />}>
 							Coming Soon
 						</Button>
-						<Button variant='outline' size='sm' render={<Link to='/status/success' />}>
+						<Button variant='outline' size='sm' render={<Link to='/success' />}>
 							Success
 						</Button>
-						<Button variant='outline' size='sm' render={<Link to='/status/offline' />}>
+						<Button variant='outline' size='sm' render={<Link to='/offline' />}>
 							Offline
 						</Button>
 					</div>

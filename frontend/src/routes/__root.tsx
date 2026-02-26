@@ -1,17 +1,17 @@
-import type { QueryClient } from '@tanstack/react-query'
-
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { ReactNode } from 'react'
 
 import { DefaultPending } from '@/components/status/DefaultPending'
 
-import appCss from '../globals.css?url'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import { Provider } from '../integrations/tanstack-query/root-provider'
 import AiDevtools from '../lib/ai-devtools'
 import StoreDevtools from '../lib/demo-store-devtools'
+
+import appCss from '../globals.css?url'
 
 interface MyRouterContext {
 	queryClient: QueryClient

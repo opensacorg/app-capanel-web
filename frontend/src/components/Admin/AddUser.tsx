@@ -67,7 +67,7 @@ const AddUser = () => {
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: UserCreate) => UsersService.usersCreateUser({ requestBody: data }),
+		mutationFn: (data: UserCreate) => UsersService.usersCreateUser({ body: data }),
 		onSuccess: () => {
 			showSuccessToast('User created successfully')
 			form.reset()
@@ -118,7 +118,7 @@ const AddUser = () => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -141,7 +141,7 @@ const AddUser = () => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -165,7 +165,7 @@ const AddUser = () => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -189,7 +189,7 @@ const AddUser = () => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>

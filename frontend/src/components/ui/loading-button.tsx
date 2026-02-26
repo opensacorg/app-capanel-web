@@ -1,5 +1,4 @@
 import type { VariantProps } from 'class-variance-authority'
-
 import { forwardRef } from 'react'
 
 import { Button, type buttonVariants } from '@/components/ui/button'

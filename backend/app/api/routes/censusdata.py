@@ -5,10 +5,8 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.model.models import Message  # noqa
 from app.model.census_data import CensusData
-from app.model.item import Item
-from app.model.user import User
+from app.model.models import Message  # noqa
 
 router = APIRouter(prefix="/censusdata", tags=["censusdata"])
 

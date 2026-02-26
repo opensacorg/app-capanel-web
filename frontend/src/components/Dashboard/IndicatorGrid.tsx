@@ -1,17 +1,7 @@
+import type { IndicatorSummary } from '@/lib/client'
 import { INDICATOR_ORDER, type IndicatorCode } from '@/lib/constants/indicators'
 
 import { IndicatorCard, IndicatorCardSkeleton, type ColorKey } from './card/IndicatorCard'
-
-interface IndicatorSummary {
-	indicator: string
-	currstatus: number | null
-	priorstatus: number | null
-	change: number | null
-	statuslevel: number | null
-	changelevel: number | null
-	color: number | null
-	currdenom: number | null
-}
 
 interface IndicatorGridProps {
 	indicators: IndicatorSummary[]
@@ -55,6 +45,7 @@ export function IndicatorGrid({
 	const gridClasses = {
 		1: 'grid-cols-1',
 		2: 'grid-cols-1 sm:grid-cols-2',
+		4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
 		5: 'grid-cols-1 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
 	}
 

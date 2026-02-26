@@ -1,18 +1,19 @@
-import type { ApiError } from './client'
-
-function extractErrorMessage(err: ApiError): string {
+function extractErrorMessage(err: unknown): string {
 	if (err instanceof Error) {
 		return err.message
 	}
 
-	const errDetail = (err.body as any)?.detail
+	const errDetail =
+		(err as { detail?: unknown; body?: { detail?: unknown } })?.body?.detail ??
+		(err as { detail?: unknown })?.detail
 	if (Array.isArray(errDetail) && errDetail.length > 0) {
-		return errDetail[0].msg
+		const first = errDetail[0] as { msg?: string }
+		return first.msg ?? 'Something went wrong.'
 	}
-	return errDetail || 'Something went wrong.'
+	return typeof errDetail === 'string' ? errDetail : 'Something went wrong.'
 }
 
-export const handleError = function (this: (msg: string) => void, err: ApiError) {
+export const handleError = function (this: (msg: string) => void, err: unknown) {
 	const errorMessage = extractErrorMessage(err)
 	this(errorMessage)
 }

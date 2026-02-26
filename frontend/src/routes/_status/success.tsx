@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { CheckCircle2, Home, PartyPopper } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -30,7 +30,7 @@ function SuccessPage() {
 						<Home className='mr-2 size-4' />
 						Go Home
 					</Button>
-					<Button variant='outline' render={<Link to='/layout' />}>
+					<Button variant='outline' render={<Link to='/dashboard' />}>
 						Go to Dashboard
 					</Button>
 				</>
@@ -49,17 +49,17 @@ function SuccessPage() {
 					<p>What's next?</p>
 					<ul className='space-y-1'>
 						<li>
-							<Link to='/layout' className='text-primary hover:underline'>
+							<Link to='/dashboard' className='text-primary hover:underline'>
 								View your dashboard
 							</Link>
 						</li>
 						<li>
-							<Link to='/layout/settings' className='text-primary hover:underline'>
+							<Link to='/user/settings' className='text-primary hover:underline'>
 								Update your settings
 							</Link>
 						</li>
 						<li>
-							<Link to='/docs' className='text-primary hover:underline'>
+							<Link to='/demo/docs' className='text-primary hover:underline'>
 								Read the documentation
 							</Link>
 						</li>

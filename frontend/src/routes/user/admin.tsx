@@ -11,7 +11,13 @@ import useAuth from '@/lib/hooks/useAuth'
 
 function getUsersQueryOptions() {
 	return {
-		queryFn: () => UsersService.usersReadUsers({ skip: 0, limit: 100 }),
+		queryFn: async () => {
+			const response = await UsersService.usersReadUsers({ query: { skip: 0, limit: 100 } })
+			if (response.error || !response.data) {
+				throw response.error ?? new Error('Failed to fetch users')
+			}
+			return response.data
+		},
 		queryKey: ['users'],
 	}
 }
@@ -19,8 +25,8 @@ function getUsersQueryOptions() {
 export const Route = createFileRoute('/user/admin')({
 	component: Admin,
 	beforeLoad: async () => {
-		const user = await UsersService.usersReadUserMe()
-		if (!user.is_superuser) {
+		const response = await UsersService.usersReadUserMe({})
+		if (!response.data?.is_superuser) {
 			throw redirect({
 				to: '/',
 			})

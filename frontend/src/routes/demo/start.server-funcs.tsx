@@ -1,6 +1,7 @@
+import fs from 'node:fs'
+
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import fs from 'node:fs'
 import { useCallback, useState } from 'react'
 
 /*
@@ -52,7 +53,7 @@ export const Route = createFileRoute('/demo/start/server-funcs')({
 
 function Home() {
 	const router = useRouter()
-	let todos = Route.useLoaderData()
+	let todos = Route.useLoaderData() as Array<{ id: number; name: string }>
 
 	const [todo, setTodo] = useState('')
 

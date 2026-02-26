@@ -26,46 +26,46 @@ export const Route = createFileRoute('/_status/success-states')({
 })
 
 const successPages = [
-	{ name: 'General Success', icon: CheckCircle2, path: '/status/success', color: 'text-green-500' },
-	{ name: 'Welcome', icon: Sparkles, path: '/status/welcome', color: 'text-green-500' },
+	{ name: 'General Success', icon: CheckCircle2, path: '/success', color: 'text-green-500' },
+	{ name: 'Welcome', icon: Sparkles, path: '/welcome', color: 'text-green-500' },
 	{
 		name: 'Upgrade Success',
 		icon: Crown,
-		path: '/status/upgrade-success',
+		path: '/upgrade-success',
 		color: 'text-green-500',
 	},
 	{
 		name: 'Password Changed',
 		icon: KeyRound,
-		path: '/status/password-changed',
+		path: '/password-changed',
 		color: 'text-green-500',
 	},
-	{ name: 'Email Sent', icon: Mail, path: '/status/email-sent', color: 'text-green-500' },
-	{ name: '2FA Enabled', icon: Shield, path: '/status/2fa-enabled', color: 'text-green-500' },
+	{ name: 'Email Sent', icon: Mail, path: '/email-sent', color: 'text-green-500' },
+	{ name: '2FA Enabled', icon: Shield, path: '/2fa-enabled', color: 'text-green-500' },
 	{
 		name: 'Device Verified',
 		icon: Check,
-		path: '/status/device-verified',
+		path: '/device-verified',
 		color: 'text-green-500',
 	},
-	{ name: 'Export Ready', icon: FileDown, path: '/status/export-ready', color: 'text-green-500' },
+	{ name: 'Export Ready', icon: FileDown, path: '/export-ready', color: 'text-green-500' },
 	{
 		name: 'Import Complete',
 		icon: FileUp,
-		path: '/status/import-complete',
+		path: '/import-complete',
 		color: 'text-green-500',
 	},
 	{
 		name: 'Backup Complete',
 		icon: Database,
-		path: '/status/backup-complete',
+		path: '/backup-complete',
 		color: 'text-green-500',
 	},
-	{ name: 'API Key Created', icon: Key, path: '/status/api-key-created', color: 'text-green-500' },
+	{ name: 'API Key Created', icon: Key, path: '/api-key-created', color: 'text-green-500' },
 	{
 		name: 'Webhook Configured',
 		icon: Webhook,
-		path: '/status/webhook-configured',
+		path: '/webhook-configured',
 		color: 'text-green-500',
 	},
 ]
@@ -123,19 +123,19 @@ function SuccessStatesPage() {
 						<pre>{`// After successful form submission
 const handleSubmit = async (data) => {
   await api.createUser(data)
-  navigate({ to: '/status/success' })
+  navigate({ to: '/success' })
 }
 
 // After successful authentication action
 const handlePasswordChange = async () => {
   await api.changePassword(newPassword)
-  navigate({ to: '/status/password-changed' })
+  navigate({ to: '/password-changed' })
 }
 
 // After successful payment
 const handleUpgrade = async () => {
   await api.upgradePlan('pro')
-  navigate({ to: '/status/upgrade-success' })
+  navigate({ to: '/upgrade-success' })
 }`}</pre>
 					</div>
 					<div className='flex flex-wrap gap-2'>

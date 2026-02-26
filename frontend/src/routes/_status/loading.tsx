@@ -133,10 +133,10 @@ export const Route = createFileRoute('/my-route')({
 					<CardDescription>Click to see the loading states in action</CardDescription>
 				</CardHeader>
 				<CardContent className='flex flex-wrap gap-2'>
-					<Button variant='outline' onClick={() => (window.location.href = '/status/processing')}>
+					<Button variant='outline' onClick={() => (window.location.href = '/processing')}>
 						View Processing Page
 					</Button>
-					<Button variant='outline' onClick={() => (window.location.href = '/status/queued')}>
+					<Button variant='outline' onClick={() => (window.location.href = '/queued')}>
 						View Queued Page
 					</Button>
 				</CardContent>

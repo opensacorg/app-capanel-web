@@ -53,7 +53,8 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: FormData) => ItemsService.updateItem({ id: item.id, requestBody: data }),
+		mutationFn: (data: FormData) =>
+			ItemsService.itemsUpdateItem({ path: { id: item.id }, body: data }),
 		onSuccess: () => {
 			showSuccessToast('Item updated successfully')
 			setIsOpen(false)
@@ -102,7 +103,7 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>
@@ -125,7 +126,7 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
 									/>
 									{field.state.meta.isTouched && !field.state.meta.isValid && (
 										<FieldError>
-											{field.state.meta.errors.map((err) => err.message).join(', ')}
+											{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 										</FieldError>
 									)}
 								</Field>

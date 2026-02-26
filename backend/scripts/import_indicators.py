@@ -25,12 +25,11 @@ from pathlib import Path
 # Add the parent directory to the path so we can import app modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from importers.cde_parser import INDICATOR_FILES, CDEParser
+from importers.state_parser import STATE_FILES, StateParser
 from sqlmodel import Session
 
 from app.core.database import engine
-from importers.cde_parser import CDEParser, INDICATOR_FILES
-from importers.state_parser import StateParser, STATE_FILES
-
 
 INDICATORS = ["ELA", "MATH", "SCI", "CHRONIC", "SUSP", "GRAD", "ELPI", "CCI"]
 

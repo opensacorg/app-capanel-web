@@ -28,7 +28,7 @@ function RouteComponent() {
 						{strapiArticles.map((article) => (
 							<Link
 								key={article.id}
-								to='/home/strapi/$articleId'
+								to='/demo/strapi/$articleId'
 								params={{ articleId: article.documentId }}
 								className='block'
 							>

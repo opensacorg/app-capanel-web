@@ -1,5 +1,6 @@
 import {
 	type ColumnDef,
+	type FilterFn,
 	flexRender,
 	getCoreRowModel,
 	getPaginationRowModel,
@@ -30,9 +31,12 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+	const fuzzyFilter: FilterFn<TData> = () => true
+
 	const table = useReactTable({
 		data,
 		columns,
+		filterFns: { fuzzy: fuzzyFilter },
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 	})

@@ -29,7 +29,7 @@ const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
 	const { showSuccessToast, showErrorToast } = useCustomToast()
 
 	const mutation = useMutation({
-		mutationFn: () => ItemsService.deleteItem({ id }),
+		mutationFn: () => ItemsService.itemsDeleteItem({ path: { id } }),
 		onSuccess: () => {
 			showSuccessToast('The item was deleted successfully')
 			setIsOpen(false)

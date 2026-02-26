@@ -1,8 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 
-import type { UserPublic } from '@/lib/client'
-
 import { Badge } from '@/components/ui/badge'
+import type { UserPublic } from '@/lib/client'
 import { cn } from '@/lib/utils'
 
 import { UserActionsMenu } from './UserActionsMenu'

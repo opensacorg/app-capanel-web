@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AlertOctagon, Bug, Home, RefreshCcw } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import {
 	Accordion,
 	AccordionContent,
@@ -51,7 +51,7 @@ function GenericErrorPage() {
 					</AlertDescription>
 				</Alert>
 
-				<Accordion type='single' collapsible>
+				<Accordion>
 					<AccordionItem value='details'>
 						<AccordionTrigger className='text-sm'>Technical Details</AccordionTrigger>
 						<AccordionContent>

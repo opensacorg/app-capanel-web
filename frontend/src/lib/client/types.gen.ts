@@ -45,14 +45,6 @@ export type AcademicIndicatorCreate = {
 	 */
 	studentgroup: string
 	/**
-	 * Currdenom
-	 */
-	currdenom?: number | null
-	/**
-	 * Currstatus
-	 */
-	currstatus?: number | null
-	/**
 	 * Priordenom
 	 */
 	priordenom?: number | null
@@ -81,10 +73,6 @@ export type AcademicIndicatorCreate = {
 	 */
 	box?: number | null
 	/**
-	 * Currnsizemet
-	 */
-	currnsizemet?: string | null
-	/**
 	 * Priornsizemet
 	 */
 	priornsizemet?: string | null
@@ -100,30 +88,6 @@ export type AcademicIndicatorCreate = {
 	 * Pairshare Method
 	 */
 	pairshare_method?: string | null
-	/**
-	 * Currprate Enrolled
-	 */
-	currprate_enrolled?: number | null
-	/**
-	 * Currprate Tested
-	 */
-	currprate_tested?: number | null
-	/**
-	 * Currprate
-	 */
-	currprate?: number | null
-	/**
-	 * Currnumprloss
-	 */
-	currnumprloss?: number | null
-	/**
-	 * Currdenom Withoutprloss
-	 */
-	currdenom_withoutprloss?: number | null
-	/**
-	 * Currstatus Withoutprloss
-	 */
-	currstatus_withoutprloss?: number | null
 	/**
 	 * Priorprate Enrolled
 	 */
@@ -157,10 +121,6 @@ export type AcademicIndicatorCreate = {
 	 */
 	reportingyear: string
 	/**
-	 * Currnumer
-	 */
-	currnumer?: number | null
-	/**
 	 * Priornumer
 	 */
 	priornumer?: number | null
@@ -168,10 +128,6 @@ export type AcademicIndicatorCreate = {
 	 * Smalldenom
 	 */
 	smalldenom?: string | null
-	/**
-	 * Certifyflag
-	 */
-	certifyflag?: string | null
 	/**
 	 * Priorcertifyflag
 	 */
@@ -188,38 +144,6 @@ export type AcademicIndicatorCreate = {
 	 * Fiveyrnumer
 	 */
 	fiveyrnumer?: number | null
-	/**
-	 * Currprogressed
-	 */
-	currprogressed?: number | null
-	/**
-	 * Currmaintainpl4
-	 */
-	currmaintainpl4?: number | null
-	/**
-	 * Currmaintainoth
-	 */
-	currmaintainoth?: number | null
-	/**
-	 * Currdeclined
-	 */
-	currdeclined?: number | null
-	/**
-	 * Currprogressed Alternate
-	 */
-	currprogressed_alternate?: number | null
-	/**
-	 * Currmaintainpl3 Alternate
-	 */
-	currmaintainpl3_alternate?: number | null
-	/**
-	 * Currnotprognotmain Alternate
-	 */
-	currnotprognotmain_alternate?: number | null
-	/**
-	 * Curr95
-	 */
-	curr95?: number | null
 	/**
 	 * Priorprogressed
 	 */
@@ -299,14 +223,6 @@ export type AcademicIndicatorPublic = {
 	 */
 	studentgroup: string
 	/**
-	 * Currdenom
-	 */
-	currdenom?: number | null
-	/**
-	 * Currstatus
-	 */
-	currstatus?: number | null
-	/**
 	 * Priordenom
 	 */
 	priordenom?: number | null
@@ -335,10 +251,6 @@ export type AcademicIndicatorPublic = {
 	 */
 	box?: number | null
 	/**
-	 * Currnsizemet
-	 */
-	currnsizemet?: string | null
-	/**
 	 * Priornsizemet
 	 */
 	priornsizemet?: string | null
@@ -354,30 +266,6 @@ export type AcademicIndicatorPublic = {
 	 * Pairshare Method
 	 */
 	pairshare_method?: string | null
-	/**
-	 * Currprate Enrolled
-	 */
-	currprate_enrolled?: number | null
-	/**
-	 * Currprate Tested
-	 */
-	currprate_tested?: number | null
-	/**
-	 * Currprate
-	 */
-	currprate?: number | null
-	/**
-	 * Currnumprloss
-	 */
-	currnumprloss?: number | null
-	/**
-	 * Currdenom Withoutprloss
-	 */
-	currdenom_withoutprloss?: number | null
-	/**
-	 * Currstatus Withoutprloss
-	 */
-	currstatus_withoutprloss?: number | null
 	/**
 	 * Priorprate Enrolled
 	 */
@@ -411,10 +299,6 @@ export type AcademicIndicatorPublic = {
 	 */
 	reportingyear: string
 	/**
-	 * Currnumer
-	 */
-	currnumer?: number | null
-	/**
 	 * Priornumer
 	 */
 	priornumer?: number | null
@@ -422,10 +306,6 @@ export type AcademicIndicatorPublic = {
 	 * Smalldenom
 	 */
 	smalldenom?: string | null
-	/**
-	 * Certifyflag
-	 */
-	certifyflag?: string | null
 	/**
 	 * Priorcertifyflag
 	 */
@@ -442,38 +322,6 @@ export type AcademicIndicatorPublic = {
 	 * Fiveyrnumer
 	 */
 	fiveyrnumer?: number | null
-	/**
-	 * Currprogressed
-	 */
-	currprogressed?: number | null
-	/**
-	 * Currmaintainpl4
-	 */
-	currmaintainpl4?: number | null
-	/**
-	 * Currmaintainoth
-	 */
-	currmaintainoth?: number | null
-	/**
-	 * Currdeclined
-	 */
-	currdeclined?: number | null
-	/**
-	 * Currprogressed Alternate
-	 */
-	currprogressed_alternate?: number | null
-	/**
-	 * Currmaintainpl3 Alternate
-	 */
-	currmaintainpl3_alternate?: number | null
-	/**
-	 * Currnotprognotmain Alternate
-	 */
-	currnotprognotmain_alternate?: number | null
-	/**
-	 * Curr95
-	 */
-	curr95?: number | null
 	/**
 	 * Priorprogressed
 	 */
@@ -561,14 +409,6 @@ export type AcademicIndicatorUpdate = {
 	 */
 	studentgroup?: string | null
 	/**
-	 * Currdenom
-	 */
-	currdenom?: number | null
-	/**
-	 * Currstatus
-	 */
-	currstatus?: number | null
-	/**
 	 * Priordenom
 	 */
 	priordenom?: number | null
@@ -597,10 +437,6 @@ export type AcademicIndicatorUpdate = {
 	 */
 	box?: number | null
 	/**
-	 * Currnsizemet
-	 */
-	currnsizemet?: string | null
-	/**
 	 * Priornsizemet
 	 */
 	priornsizemet?: string | null
@@ -616,30 +452,6 @@ export type AcademicIndicatorUpdate = {
 	 * Pairshare Method
 	 */
 	pairshare_method?: string | null
-	/**
-	 * Currprate Enrolled
-	 */
-	currprate_enrolled?: number | null
-	/**
-	 * Currprate Tested
-	 */
-	currprate_tested?: number | null
-	/**
-	 * Currprate
-	 */
-	currprate?: number | null
-	/**
-	 * Currnumprloss
-	 */
-	currnumprloss?: number | null
-	/**
-	 * Currdenom Withoutprloss
-	 */
-	currdenom_withoutprloss?: number | null
-	/**
-	 * Currstatus Withoutprloss
-	 */
-	currstatus_withoutprloss?: number | null
 	/**
 	 * Priorprate Enrolled
 	 */

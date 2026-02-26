@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, Check, Crown, PartyPopper, Sparkles } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -25,7 +25,7 @@ function UpgradeSuccessPage() {
 			title='Upgrade Successful!'
 			description='Welcome to Pro! Your new features are now active.'
 			footer={
-				<Button render={<Link to='/layout' />}>
+				<Button render={<Link to='/dashboard' />}>
 					Explore New Features
 					<ArrowRight className='ml-2 size-4' />
 				</Button>

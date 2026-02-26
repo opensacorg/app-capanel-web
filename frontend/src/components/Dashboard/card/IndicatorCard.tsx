@@ -1,20 +1,10 @@
 import { Gauge } from '@/components/ui/gauge'
+import type { IndicatorSummary } from '@/lib/client'
 import { COLOR_LEVELS, type IndicatorCode, INDICATORS } from '@/lib/constants/indicators'
 import { useEquityReport } from '@/lib/hooks/useDashboardData'
 import { cn } from '@/lib/utils'
 
 export type ColorKey = 'red' | 'orange' | 'yellow' | 'green' | 'blue'
-
-interface IndicatorSummary {
-	indicator: string
-	currstatus: number | null
-	priorstatus: number | null
-	change: number | null
-	statuslevel: number | null
-	changelevel: number | null
-	color: number | null
-	currdenom: number | null
-}
 
 interface IndicatorCardProps {
 	indicator: IndicatorSummary
@@ -112,9 +102,7 @@ export function IndicatorCard({
 			role='button'
 			aria-label={`${config.shortLabel} indicator`}
 		>
-			<button type='button' className='font-semibold'>
-				{config.shortLabel}
-			</button>
+			<div className='font-semibold'>{config.shortLabel}</div>
 			<Gauge value={performanceLevel} size={compact ? 120 : 140} />
 			{total > 0 && (
 				<div className='flex justify-center gap-1'>
@@ -143,7 +131,7 @@ export function IndicatorCard({
 
 export function IndicatorCardSkeleton({ compact = false }: { compact?: boolean }) {
 	return (
-		<div size={compact ? 'sm' : 'default'}>
+		<div>
 			<div className='flex flex-col items-center gap-2'>
 				<div className='h-4 w-16 animate-pulse rounded bg-black/10' />
 				<div

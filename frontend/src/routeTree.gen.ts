@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatusRouteImport } from './routes/_status'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserIndexRouteImport } from './routes/user/index'
+import { Route as ReportIndexRouteImport } from './routes/report/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as Dashboard2IndexRouteImport } from './routes/dashboard2/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
@@ -122,6 +123,11 @@ const IndexRoute = IndexRouteImport.update({
 const UserIndexRoute = UserIndexRouteImport.update({
   id: '/user/',
   path: '/user/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIndexRoute = ReportIndexRouteImport.update({
+  id: '/report/',
+  path: '/report/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoIndexRoute = DemoIndexRouteImport.update({
@@ -691,6 +697,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard2/': typeof Dashboard2IndexRoute
   '/demo/': typeof DemoIndexRoute
+  '/report/': typeof ReportIndexRoute
   '/user/': typeof UserIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -791,6 +798,7 @@ export interface FileRoutesByTo {
   '/user/settings': typeof UserSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard2': typeof Dashboard2IndexRoute
+  '/report': typeof ReportIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -893,6 +901,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard2/': typeof Dashboard2IndexRoute
   '/demo/': typeof DemoIndexRoute
+  '/report/': typeof ReportIndexRoute
   '/user/': typeof UserIndexRoute
   '/demo/api/mcp-todos': typeof DemoApiMcpTodosRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -996,6 +1005,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard2/'
     | '/demo/'
+    | '/report/'
     | '/user/'
     | '/demo/api/mcp-todos'
     | '/demo/api/names'
@@ -1096,6 +1106,7 @@ export interface FileRouteTypes {
     | '/user/settings'
     | '/dashboard'
     | '/dashboard2'
+    | '/report'
     | '/demo/api/mcp-todos'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -1197,6 +1208,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard2/'
     | '/demo/'
+    | '/report/'
     | '/user/'
     | '/demo/api/mcp-todos'
     | '/demo/api/names'
@@ -1249,6 +1261,7 @@ export interface RootRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   Dashboard2IndexRoute: typeof Dashboard2IndexRoute
   DemoIndexRoute: typeof DemoIndexRoute
+  ReportIndexRoute: typeof ReportIndexRoute
   UserIndexRoute: typeof UserIndexRoute
   DemoApiMcpTodosRoute: typeof DemoApiMcpTodosRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
@@ -1292,6 +1305,13 @@ declare module '@tanstack/react-router' {
       path: '/user'
       fullPath: '/user/'
       preLoaderRoute: typeof UserIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report/': {
+      id: '/report/'
+      path: '/report'
+      fullPath: '/report/'
+      preLoaderRoute: typeof ReportIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/': {
@@ -2117,6 +2137,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   Dashboard2IndexRoute: Dashboard2IndexRoute,
   DemoIndexRoute: DemoIndexRoute,
+  ReportIndexRoute: ReportIndexRoute,
   UserIndexRoute: UserIndexRoute,
   DemoApiMcpTodosRoute: DemoApiMcpTodosRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,

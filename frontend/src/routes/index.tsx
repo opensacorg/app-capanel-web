@@ -35,7 +35,7 @@ function RouteComponent() {
 								<span className='block mb-2 text-foreground'>
 									Search for a school or district to view performance data.
 								</span>
-								<Button asChild variant='outline'></Button>
+								<Button render={<Link to='/dashboard'>Search now</Link>} variant='outline' />
 							</li>
 
 							{/* Item 3: Ghost/Tertiary Action */}
@@ -43,9 +43,7 @@ function RouteComponent() {
 								<span className='block mb-2 text-foreground'>
 									Personalize the dashboard by uploading custom CSV data.
 								</span>
-								<Button asChild variant='secondary'>
-									<Link to='/dashboard'>Upload CSV file</Link>
-								</Button>
+								<Button render={<Link to='/dashboard'>Upload CSV file</Link>} variant='secondary' />
 							</li>
 						</ol>
 					</div>
