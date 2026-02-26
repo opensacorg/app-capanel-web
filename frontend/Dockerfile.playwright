@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y unzip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm install -g pnpm@10.30.2
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /app/
 
@@ -13,7 +13,7 @@ COPY frontend/package.json /app/frontend/
 
 WORKDIR /app/frontend
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --prod=false
 
 COPY ./frontend /app/frontend
 

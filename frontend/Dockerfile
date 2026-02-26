@@ -1,7 +1,7 @@
 # Stage 0, "build-stage", based on Node, to build and compile the frontend
-FROM node:22-alpine AS build-stage
+FROM node:25-alpine AS build-stage
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm install -g pnpm@10.30.2
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY frontend/package.json /app/frontend/
 
 WORKDIR /app/frontend
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --prod=false
 
 COPY ./frontend /app/frontend
 ARG VITE_API_URL

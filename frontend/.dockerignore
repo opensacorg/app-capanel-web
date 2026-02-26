@@ -1,2 +1,14 @@
 node_modules
 dist
+dist-ssr
+.tanstack
+.vinxi
+.nitro
+.output
+.cache
+test-results
+playwright-report
+blob-report
+playwright/.cache
+.env
+*.log

@@ -1,11 +1,14 @@
 import secrets
 import warnings
 from typing import Annotated, Any, Literal
+from urllib.parse import quote_plus
 
 from pydantic import (
+    AliasChoices,
     AnyUrl,
     BeforeValidator,
     EmailStr,
+    Field,
     HttpUrl,
     PostgresDsn,
     computed_field,
@@ -53,15 +56,44 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str
     SENTRY_DSN: HttpUrl | None = None
-    POSTGRES_SERVER: str
-    POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = ""
+    DATABASE_URL: str | None = None
+    CLOUD_SQL_INSTANCE_CONNECTION_NAME: str | None = None
+    POSTGRES_SERVER: str = Field(
+        validation_alias=AliasChoices("POSTGRES_SERVER", "DATABASE_HOST")
+    )
+    POSTGRES_PORT: int = Field(
+        default=5432, validation_alias=AliasChoices("POSTGRES_PORT", "DATABASE_PORT")
+    )
+    POSTGRES_USER: str = Field(
+        validation_alias=AliasChoices("POSTGRES_USER", "DATABASE_USERNAME")
+    )
+    POSTGRES_PASSWORD: str = Field(
+        default="",
+        validation_alias=AliasChoices("POSTGRES_PASSWORD", "DATABASE_PASSWORD"),
+    )
+    POSTGRES_DB: str = Field(
+        default="", validation_alias=AliasChoices("POSTGRES_DB", "DATABASE_NAME")
+    )
 
     @computed_field  # type: ignore[prop-decorator]
     @property
-    def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+
+        encoded_user = quote_plus(self.POSTGRES_USER)
+        encoded_password = quote_plus(self.POSTGRES_PASSWORD)
+
+        if self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+            database = self.POSTGRES_DB.lstrip("/")
+            socket_dir = quote_plus(
+                f"/cloudsql/{self.CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
+            )
+            return (
+                f"postgresql+psycopg://{encoded_user}:{encoded_password}"
+                f"@/{database}?host={socket_dir}&port={self.POSTGRES_PORT}"
+            )
+
         return PostgresDsn.build(
             scheme="postgresql+psycopg",
             username=self.POSTGRES_USER,
@@ -69,7 +101,7 @@ class Settings(BaseSettings):
             host=self.POSTGRES_SERVER,
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
-        )
+        ).unicode_string()
 
     SMTP_TLS: bool = True
     SMTP_SSL: bool = False

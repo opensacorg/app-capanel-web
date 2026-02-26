@@ -5,7 +5,6 @@ import {
 	ChevronRight,
 	ClipboardType,
 	Database,
-	Globe,
 	Home,
 	ImageIcon,
 	Languages,

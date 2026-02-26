@@ -6,16 +6,16 @@ Supports both CDE Excel files and state assessment TXT files.
 
 Usage:
     # Import a single indicator from CDE Excel file
-    python scripts/import_indicators.py --indicator ELA --path ~/Desktop/resources/cde/eladownload2025.xlsx
+    python app/scripts/import_indicators.py --indicator ELA --path ~/Downloads/resources/cde/eladownload2025.xlsx
 
     # Import all indicators from a CDE directory
-    python scripts/import_indicators.py --source cde --path ~/Desktop/resources/cde/
+    python app/scripts/import_indicators.py --source cde --path ~/Downloads/resources/cde/
 
     # Import from state assessment files
-    python scripts/import_indicators.py --source state --indicator ELA --path ~/Desktop/resources/california-state/sb_ca2025_all_csv_ela_v1.txt
+    python app/scripts/import_indicators.py --source state --indicator ELA --path ~/Desktop/resources/california-state/sb_ca2025_all_csv_ela_v1.txt
 
     # List available indicators
-    python scripts/import_indicators.py --list
+    python app/scripts/import_indicators.py --list
 """
 
 import argparse

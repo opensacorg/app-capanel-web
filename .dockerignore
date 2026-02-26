@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+**/node_modules
+.venv
+**/.venv
+
+# Build outputs
+**/dist
+**/dist-ssr
+**/.tanstack
+**/.vinxi
+**/.nitro
+**/.output
+**/.cache
+
+# Test artifacts
+**/test-results
+**/playwright-report
+**/blob-report
+**/playwright/.cache
+
+# Local metadata and logs
+.git
+.gitignore
+.vscode
+.idea
+*.log
+.env

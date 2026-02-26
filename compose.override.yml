@@ -55,6 +55,14 @@ services:
     ports:
       - "8080:8080"
 
+  prestart:
+    environment:
+      - IMPORT_ELA_DATA_FILE=${IMPORT_ELA_DATA_FILE-/app/backend/resources/cde-2025/eladownload2025.xlsx}
+      - IMPORT_INDICATORS_SOURCE=${IMPORT_INDICATORS_SOURCE-cde}
+      - IMPORT_INDICATORS_PATH=${IMPORT_INDICATORS_PATH-/app/backend/resources/cde-2024}
+    volumes:
+      - ${IMPORT_RESOURCES_HOST_PATH:-C:/Users/nateb/Downloads/resources}:/app/backend/resources:ro
+
   backend:
     restart: "no"
     ports:
@@ -102,7 +110,6 @@ services:
       dockerfile: frontend/Dockerfile
       args:
         - VITE_API_URL=http://localhost:8000
-        - VITE_STRAPI_URL=http://localhost:1337
         - NODE_ENV=development
 
   playwright:
@@ -123,51 +130,12 @@ services:
       - MAILCATCHER_HOST=http://mailcatcher:1080
       # For the reports when run locally
       - PLAYWRIGHT_HTML_HOST=0.0.0.0
-      - CI=${CI}
+      - CI=${CI:-}
     volumes:
       - ./frontend/blob-report:/app/frontend/blob-report
       - ./frontend/test-results:/app/frontend/test-results
     ports:
       - 9323:9323
-
-  strapi:
-    restart: "no"
-    ports:
-      - "1337:1337"
-    build:
-      context: .
-      dockerfile: strapi/Dockerfile
-    command: pnpm develop
-    develop:
-      watch:
-        - path: ./strapi/src
-          action: sync
-          target: /app/src
-        - path: ./strapi/config
-          action: sync
-          target: /app/config
-        - path: ./strapi/package.json
-          action: rebuild
-    volumes:
-      - ./strapi/src:/app/src
-      - ./strapi/config:/app/config
-      - ./strapi/public/uploads:/app/public/uploads
-    environment:
-      - HOST=0.0.0.0
-      - PORT=1337
-      - PUBLIC_URL=http://localhost:1337
-      - APP_KEYS=${STRAPI_APP_KEYS:-key1,key2,key3,key4}
-      - API_TOKEN_SALT=${STRAPI_API_TOKEN_SALT:-defaultsalt}
-      - ADMIN_JWT_SECRET=${STRAPI_ADMIN_JWT_SECRET:-defaultadminjwtsecret}
-      - TRANSFER_TOKEN_SALT=${STRAPI_TRANSFER_TOKEN_SALT:-defaulttransfersalt}
-      - JWT_SECRET=${STRAPI_JWT_SECRET:-defaultjwtsecret}
-      - DATABASE_CLIENT=postgres
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_NAME=${STRAPI_DATABASE_NAME:-app2}
-      - DATABASE_USERNAME=${POSTGRES_USER}
-      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
-      - DATABASE_SSL=false
 
 networks:
   traefik-public:

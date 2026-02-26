@@ -5,7 +5,7 @@ Import California Dashboard ELA Academic Indicator data from Excel file.
 Usage:
     cd backend
     source ../.venv/bin/activate
-    python scripts/import_ela_data.py ~/Desktop/resources/eladownload2025.xlsx
+    python scripts/import_ela_data.py ~/Downloads/resources/eladownload2025.xlsx
 """
 
 import sys
