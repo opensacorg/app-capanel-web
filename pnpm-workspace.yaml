@@ -1,6 +1,5 @@
 packages:
   - frontend
-  - strapi
 
 onlyBuiltDependencies:
   - '@swc/core'

@@ -2,13 +2,10 @@
   "name": "fastapi-full-stack-template",
   "private": true,
   "workspaces": [
-    "frontend",
-    "strapi"
+    "frontend"
   ],
   "scripts": {
     "dev": "pnpm --filter frontend dev",
-    "dev:strapi": "pnpm --filter strapi develop",
-    "build:strapi": "pnpm --filter strapi build",
     "lint": "pnpm --filter frontend lint",
     "test": "pnpm --filter frontend test",
     "test:ui": "pnpm --filter frontend test:ui"

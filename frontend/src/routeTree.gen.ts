@@ -23,7 +23,6 @@ import { Route as UserLayoutRouteImport } from './routes/user/_layout'
 import { Route as PrivatePrivateRouteImport } from './routes/private/_private'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
-import { Route as DemoStrapiRouteImport } from './routes/demo/strapi'
 import { Route as DemoStoreRouteImport } from './routes/demo/store'
 import { Route as DemoMcpTodosRouteImport } from './routes/demo/mcp-todos'
 import { Route as DemoI18nRouteImport } from './routes/demo/i18n'
@@ -92,7 +91,6 @@ import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-pass
 import { Route as AuthRecoverPasswordRouteImport } from './routes/_auth/recover-password'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DemoGuitarsIndexRouteImport } from './routes/demo/guitars/index'
-import { Route as DemoStrapiArticleIdRouteImport } from './routes/demo/strapi_.$articleId'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoGuitarsGuitarIdRouteImport } from './routes/demo/guitars/$guitarId'
@@ -178,11 +176,6 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
 const DemoTableRoute = DemoTableRouteImport.update({
   id: '/demo/table',
   path: '/demo/table',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStrapiRoute = DemoStrapiRouteImport.update({
-  id: '/demo/strapi',
-  path: '/demo/strapi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStoreRoute = DemoStoreRouteImport.update({
@@ -526,11 +519,6 @@ const DemoGuitarsIndexRoute = DemoGuitarsIndexRouteImport.update({
   path: '/demo/guitars/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStrapiArticleIdRoute = DemoStrapiArticleIdRouteImport.update({
-  id: '/demo/strapi_/$articleId',
-  path: '/demo/strapi/$articleId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
   id: '/demo/start/server-funcs',
   path: '/demo/start/server-funcs',
@@ -686,7 +674,6 @@ export interface FileRoutesByFullPath {
   '/demo/i18n': typeof DemoI18nRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/store': typeof DemoStoreRoute
-  '/demo/strapi': typeof DemoStrapiRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/private': typeof PrivatePrivateRoute
@@ -707,7 +694,6 @@ export interface FileRoutesByFullPath {
   '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/demo/strapi/$articleId': typeof DemoStrapiArticleIdRoute
   '/demo/guitars/': typeof DemoGuitarsIndexRoute
   '/demo/api/ai/chat': typeof DemoApiAiChatRoute
   '/demo/api/ai/image': typeof DemoApiAiImageRoute
@@ -788,7 +774,6 @@ export interface FileRoutesByTo {
   '/demo/i18n': typeof DemoI18nRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/store': typeof DemoStoreRoute
-  '/demo/strapi': typeof DemoStrapiRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/private': typeof PrivatePrivateRoute
@@ -807,7 +792,6 @@ export interface FileRoutesByTo {
   '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/demo/strapi/$articleId': typeof DemoStrapiArticleIdRoute
   '/demo/guitars': typeof DemoGuitarsIndexRoute
   '/demo/api/ai/chat': typeof DemoApiAiChatRoute
   '/demo/api/ai/image': typeof DemoApiAiImageRoute
@@ -890,7 +874,6 @@ export interface FileRoutesById {
   '/demo/i18n': typeof DemoI18nRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/store': typeof DemoStoreRoute
-  '/demo/strapi': typeof DemoStrapiRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/private/_private': typeof PrivatePrivateRoute
@@ -911,7 +894,6 @@ export interface FileRoutesById {
   '/demo/guitars/$guitarId': typeof DemoGuitarsGuitarIdRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/demo/strapi_/$articleId': typeof DemoStrapiArticleIdRoute
   '/demo/guitars/': typeof DemoGuitarsIndexRoute
   '/demo/api/ai/chat': typeof DemoApiAiChatRoute
   '/demo/api/ai/image': typeof DemoApiAiImageRoute
@@ -994,7 +976,6 @@ export interface FileRouteTypes {
     | '/demo/i18n'
     | '/demo/mcp-todos'
     | '/demo/store'
-    | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/private'
@@ -1015,7 +996,6 @@ export interface FileRouteTypes {
     | '/demo/guitars/$guitarId'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
-    | '/demo/strapi/$articleId'
     | '/demo/guitars/'
     | '/demo/api/ai/chat'
     | '/demo/api/ai/image'
@@ -1096,7 +1076,6 @@ export interface FileRouteTypes {
     | '/demo/i18n'
     | '/demo/mcp-todos'
     | '/demo/store'
-    | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/private'
@@ -1115,7 +1094,6 @@ export interface FileRouteTypes {
     | '/demo/guitars/$guitarId'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
-    | '/demo/strapi/$articleId'
     | '/demo/guitars'
     | '/demo/api/ai/chat'
     | '/demo/api/ai/image'
@@ -1197,7 +1175,6 @@ export interface FileRouteTypes {
     | '/demo/i18n'
     | '/demo/mcp-todos'
     | '/demo/store'
-    | '/demo/strapi'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/private/_private'
@@ -1218,7 +1195,6 @@ export interface FileRouteTypes {
     | '/demo/guitars/$guitarId'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
-    | '/demo/strapi_/$articleId'
     | '/demo/guitars/'
     | '/demo/api/ai/chat'
     | '/demo/api/ai/image'
@@ -1250,7 +1226,6 @@ export interface RootRouteChildren {
   DemoI18nRoute: typeof DemoI18nRoute
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
   DemoStoreRoute: typeof DemoStoreRoute
-  DemoStrapiRoute: typeof DemoStrapiRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   PrivatePrivateRoute: typeof PrivatePrivateRoute
@@ -1271,7 +1246,6 @@ export interface RootRouteChildren {
   DemoGuitarsGuitarIdRoute: typeof DemoGuitarsGuitarIdRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-  DemoStrapiArticleIdRoute: typeof DemoStrapiArticleIdRoute
   DemoGuitarsIndexRoute: typeof DemoGuitarsIndexRoute
   DemoApiAiChatRoute: typeof DemoApiAiChatRoute
   DemoApiAiImageRoute: typeof DemoApiAiImageRoute
@@ -1382,13 +1356,6 @@ declare module '@tanstack/react-router' {
       path: '/demo/table'
       fullPath: '/demo/table'
       preLoaderRoute: typeof DemoTableRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/strapi': {
-      id: '/demo/strapi'
-      path: '/demo/strapi'
-      fullPath: '/demo/strapi'
-      preLoaderRoute: typeof DemoStrapiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/store': {
@@ -1867,13 +1834,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoGuitarsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/strapi_/$articleId': {
-      id: '/demo/strapi_/$articleId'
-      path: '/demo/strapi/$articleId'
-      fullPath: '/demo/strapi/$articleId'
-      preLoaderRoute: typeof DemoStrapiArticleIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/demo/start/server-funcs': {
       id: '/demo/start/server-funcs'
       path: '/demo/start/server-funcs'
@@ -2126,7 +2086,6 @@ const rootRouteChildren: RootRouteChildren = {
   DemoI18nRoute: DemoI18nRoute,
   DemoMcpTodosRoute: DemoMcpTodosRoute,
   DemoStoreRoute: DemoStoreRoute,
-  DemoStrapiRoute: DemoStrapiRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   PrivatePrivateRoute: PrivatePrivateRoute,
@@ -2147,7 +2106,6 @@ const rootRouteChildren: RootRouteChildren = {
   DemoGuitarsGuitarIdRoute: DemoGuitarsGuitarIdRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
-  DemoStrapiArticleIdRoute: DemoStrapiArticleIdRoute,
   DemoGuitarsIndexRoute: DemoGuitarsIndexRoute,
   DemoApiAiChatRoute: DemoApiAiChatRoute,
   DemoApiAiImageRoute: DemoApiAiImageRoute,
