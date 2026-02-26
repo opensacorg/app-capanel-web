@@ -1,39 +1,21 @@
-gcloud run deploy capanel-backend --project ca-panel-001 --region us-west1 --image "us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/capanel-backend:$(gcloud artifacts docker tags list us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/capanel-backend --sort-by=~create_time --limit=1 --format='value(tag)')" --service-account capanel-runner@ca-panel-001.iam.gserviceaccount.com --add-cloudsql-instances ca-panel-001:us-west1:capanel-pg --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=capanel,DATABASE_NAME=capanel,DATABASE_USERNAME=capanel_app,DATABASE_HOST=127.0.0.1,CLOUD_SQL_INSTANCE_CONNECTION_NAME=ca-panel-001:us-west1:capanel-pg,FIRST_SUPERUSER=you@example.com" --set-secrets "DATABASE_PASSWORD=capanel-db-password:latest,FIRST_SUPERUSER_PASSWORD=capanel-first-superuser-password:latest,SECRET_KEY=capanel-secret-key:latest" --port 8000
-TOKEN=$(gcloud auth print-identity-token --audiences=https://capanel-backend-5418848943.us-west1.run.app); curl -H "Authorization: Bearer $TOKEN" https://capanel-backend-5418848943.us-west1.run.app/
-TOKEN=$(gcloud auth print-identity-token --impersonate-service-account=capanel-runner@ca-panel-001.iam.gserviceaccount.com --audiences=https://capanel-backend-5418848943.us-west1.run.app); curl -i -H "Authorization: Bearer $TOKEN" https://capanel-backend-5418848943.us-west1.run.app/api/v1
-$TOKEN = gcloud auth print-identity-token --impersonate-service-account=capanel-runner@ca-panel-001.iam.gserviceaccount.com --audiences=https://capanel-backend-5418848943.us-west1.run.app; curl.exe -i -H "Authorization: Bearer $TOKEN" https://capanel-backend-5418848943.us-west1.run.app/api/v1
-gcloud iam service-accounts add-iam-policy-binding capanel-runner@ca-panel-001.iam.gserviceaccount.com --member="user:n.bass@innovateforcalifornia.com" --role="roles/iam.serviceAccountTokenCreator" --project ca-panel-001
-$TOKEN = gcloud auth print-identity-token --impersonate-service-account=capanel-runner@ca-panel-001.iam.gserviceaccount.com --audiences=https://capanel-backend-5418848943.us-west1.run.app; curl.exe -i -H "Authorization: Bearer $TOKEN" https://capanel-backend-5418848943.us-west1.run.app/api/v1
-# 1) Inspect effective org policies on the project
-gcloud resource-manager org-policies describe constraints/iam.allowedPolicyMemberDomains --effective --project=ca-panel-001
-gcloud resource-manager org-policies describe constraints/run.managed.requireInvokerIam --effective --project=ca-panel-001
 
-# 2) Get project number (used in policy names)
-$PROJECT_NUMBER = gcloud projects describe ca-panel-001 --format="value(projectNumber)"
 
-# 3) Disable "Require authentication for Cloud Run invocations" at project level
-@"
-name: projects/$PROJECT_NUMBER/policies/run.managed.requireInvokerIam
-spec:
-  rules:
-  - enforce: false
-"@ | Set-Content .\run-require-invokeriam-false.yaml
 
-gcloud resource-manager org-policies set-policy .\run-require-invokeriam-false.yaml --project=ca-panel-001
+the core issue is a networking/connectivity failure between your application and your Cloud SQL instance. Specifically, the Cloud SQL Auth Proxy (or the built-in connector) is timing out while trying to
+  reach the database.
 
-# 4) Override domain-restricted-sharing for this project (allow public principals like allUsers)
-@"
-name: projects/$PROJECT_NUMBER/policies/iam.allowedPolicyMemberDomains
-spec:
-  inheritFromParent: false
-  rules:
-  - allowAll: true
-"@ | Set-Content .\iam-allow-allusers.yaml
+  Here is a breakdown of what is happening and how to fix it:
+  1. The "Smoking Gun" Error
 
-gcloud resource-manager org-policies set-policy .\iam-allow-allusers.yaml --project=ca-panel-001
+      dial error: failed to dial ... dial tcp 10.126.0.3:3307: i/o timeout
+      failed to connect to instance: SFEClient is nil
 
-# 5) Make Cloud Run service public without allUsers IAM binding
-gcloud run services update capanel-backend --project ca-panel-001 --region us-west1 --no-invoker-iam-check
+  This indicates that your application environment (likely Cloud Run, GKE, or a Compute Engine VM) is attempting to connect to the Cloud SQL instance, but the request is being dropped or blocked before it
+  even reaches the database. The i/o timeout means the network path is "black-holed." Fixes
+  A. Missing VPC Connector (If using Private IP)
 
-# (Alternative after policy allows allUsers)
-gcloud run services add-iam-policy-binding capanel-backend --project ca-panel-001 --region us-west1 --member="allUsers" --role="roles/run.invoker"
+  If your Cloud SQL instance is configured with Private IP only and your application is on Cloud Run, you must use a Serverless VPC Access connector.
+
+      The Fix: Ensure your Cloud Run service is configured to use a VPC connector that resides in the same region and VPC as your database.  error when i run gcloud run jobs execute capanel-backend-init
+
+use region us-west1 and the existing vpc
