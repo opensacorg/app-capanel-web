@@ -11,6 +11,7 @@ from app.core.utils import get_datetime_utc
 if TYPE_CHECKING:
     from app.model.item import Item
 
+
 class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
