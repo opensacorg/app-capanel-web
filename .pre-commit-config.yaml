@@ -20,8 +20,8 @@ repos:
   - repo: local
     hooks:
       - id: local-biome-check
-        name: biome check
-        entry: npm run lint
+        name: Oxlint fix
+        entry: pnpm run lint:fix
         language: system
         types: [text]
         files: ^frontend/

@@ -1,32 +1,30 @@
-FROM node:22-slim AS frontend-builder
+# ── Stage 1: Build the frontend ──────────────────────────────────────
+FROM node:25-alpine AS frontend-build
+
+RUN npm install -g pnpm@10.30.3
 
 WORKDIR /app
 
-RUN corepack enable
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY frontend/package.json ./frontend/
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /app/
-COPY frontend/package.json /app/frontend/package.json
+COPY ./frontend ./frontend
 
-RUN pnpm install --frozen-lockfile
-
-COPY frontend /app/frontend
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 
 RUN pnpm --filter frontend build
 
-
+# ── Stage 2: Python backend + frontend assets ───────────────────────
 FROM python:3.14-slim
 
 ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Required by the backend healthcheck in compose files.
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl \
-    && rm -rf /var/lib/apt/lists/*
 
 # Install uv
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
-COPY --from=ghcr.io/astral-sh/uv:0.10.6 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.9.26 /uv /uvx /bin/
 
 # Compile bytecode
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#compiling-bytecode
@@ -36,7 +34,7 @@ ENV UV_COMPILE_BYTECODE=1
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#caching
 ENV UV_LINK_MODE=copy
 
-WORKDIR /app
+WORKDIR /app/
 
 # Place executables in the environment at the front of the path
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#using-the-environment
@@ -54,7 +52,9 @@ COPY ./backend/scripts /app/backend/scripts
 COPY ./backend/pyproject.toml ./backend/alembic.ini /app/backend/
 
 COPY ./backend/app /app/backend/app
-COPY --from=frontend-builder /app/frontend/dist /app/backend/app/frontend_dist
+
+# Copy built frontend assets into the location main.py expects
+COPY --from=frontend-build /app/frontend/dist /app/backend/app/frontend_dist
 
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
@@ -63,8 +63,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --package app
 
-WORKDIR /app/backend
+WORKDIR /app/backend/
 
-EXPOSE 8000
-
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers ${UVICORN_WORKERS:-4}"]
+CMD ["fastapi", "run", "--workers", "4", "app/main.py"]

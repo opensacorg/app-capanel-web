@@ -29,7 +29,7 @@ function ForbiddenPage() {
 						<Home className='mr-2 size-4' />
 						Go Home
 					</Button>
-					<Button variant='outline' render={<Link to='/demo/docs' />}>
+					<Button variant='outline' render={<Link to='/' />}>
 						Contact Support
 					</Button>
 				</>

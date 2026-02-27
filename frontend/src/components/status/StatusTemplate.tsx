@@ -63,7 +63,7 @@ export function StatusTemplate({
 									Documentation
 								</a>
 								<Separator orientation='vertical' className='h-4' />
-								<Link to='/demo/docs' className='hover:text-foreground transition-colors'>
+								<Link to='/' className='hover:text-foreground transition-colors'>
 									Support
 								</Link>
 							</div>

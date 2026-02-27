@@ -13,6 +13,8 @@ import { handleError } from '@/lib/client-utils.ts'
 import useCustomToast from './useCustomToast'
 
 const isLoggedIn = () => {
+	// Check if we are in a browser environment. Can be removed if we enable server side rendering.
+	if (typeof window === 'undefined') return false
 	return localStorage.getItem('access_token') !== null
 }
 

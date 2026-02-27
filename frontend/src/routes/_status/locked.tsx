@@ -25,7 +25,7 @@ function LockedPage() {
 			description='Your account has been temporarily locked.'
 			footer={
 				<>
-					<Button render={<Link to='/demo/docs' />}>
+					<Button render={<Link to='/' />}>
 						<Mail className='mr-2 size-4' />
 						Contact Support
 					</Button>

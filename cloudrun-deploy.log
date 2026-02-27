@@ -1,3 +1,0 @@
-WARNING: Could not setup log file in C:\Users\nateb\AppData\Roaming\gcloud\logs, (PermissionError: [Errno 13] Permission denied: 'C:\\Users\\nateb\\AppData\\Roaming\\gcloud\\logs\\2026.02.26\\01.38.19.307084.log'.
-The configuration directory may not be writable. To learn more, see https://cloud.google.com/sdk/docs/configurations#creating_a_configuration
-ERROR: (gcloud.run.deploy) Unable to create private file [C:\Users\nateb\AppData\Roaming\gcloud\credentials.db]: [WinError 5] Access is denied: 'C:\\Users\\nateb\\AppData\\Roaming\\gcloud\\credentials.db'

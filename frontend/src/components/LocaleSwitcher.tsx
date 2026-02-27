@@ -25,6 +25,7 @@ export default function ParaglideLocaleSwitcher() {
 						key={locale}
 						onClick={() => setLocale(locale)}
 						aria-pressed={locale === currentLocale}
+						type='button'
 						style={{
 							cursor: 'pointer',
 							padding: '0.35rem 0.75rem',

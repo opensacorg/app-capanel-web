@@ -1,0 +1,22 @@
+# Ignore ALL dependency folders anywhere they appear
+**/node_modules/
+**/.venv/
+**/venv/
+
+# Ignore cache and IDE configs
+**/.idea/
+**/.vscode/
+**/.ruff_cache/
+**/.mypy_cache/
+**/.tanstack/
+
+# Ignore build and test outputs
+**/dist/
+**/blob-report/
+**/test-results/
+**/htmlcov/
+**/screenshots/
+
+# Ignore Git
+.git/
+.github/

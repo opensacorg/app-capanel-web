@@ -4,6 +4,7 @@ import sentry_sdk
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.routing import APIRoute
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
@@ -36,8 +37,16 @@ if settings.all_cors_origins:
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-frontend_dist = Path(__file__).parent / "frontend_dist"
+frontend_dist = Path(__file__).parent / "frontend_dist" / "client"
+# TanStack Start with prerendering uses _shell.html, Vite uses index.html
 frontend_index = frontend_dist / "index.html"
+if not frontend_index.exists():
+    frontend_index = frontend_dist / "_shell.html"
+
+# Serve static assets optimally (checks to avoid crashing if dist isn't built locally)
+assets_dir = frontend_dist / "assets"
+if assets_dir.exists():
+    app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
 
 
 @app.get("/{full_path:path}", include_in_schema=False)

@@ -54,7 +54,7 @@ export function useAudioRecorder() {
 					formData.append('audio', new File([audioBlob], 'recording.webm', { type: 'audio/webm' }))
 					formData.append('model', 'whisper-1')
 
-					const response = await fetch('/demo/api/transcription', {
+					const response = await fetch('/', {
 						method: 'POST',
 						body: formData,
 					})

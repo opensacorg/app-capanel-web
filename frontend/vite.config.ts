@@ -9,7 +9,14 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'
 
 const apiTarget = process.env.VITE_API_URL || 'http://localhost:8000'
 
+/**
+ * base: './' is required for relative paths in single-container deployment
+ */
 const config = defineConfig({
+	base: './',
+	build: {
+		outDir: 'dist',
+	},
 	resolve: {
 		alias: {
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -31,7 +38,13 @@ const config = defineConfig({
 		tailwindcss(),
 		tanstackStart({
 			spa: {
-				enabled: true,
+				prerender: {
+					enabled: true,
+					// 2. Add a delay to allow the Nitro server to boot in the container
+					// This prevents the "fetch failed" immediately upon starting
+					retryCount: 10,
+					retryDelay: 3000,
+				},
 			},
 		}),
 		react({

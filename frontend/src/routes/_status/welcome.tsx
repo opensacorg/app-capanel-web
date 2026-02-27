@@ -86,7 +86,7 @@ function WelcomePage() {
 						</CardHeader>
 						<CardContent>
 							<CardDescription className='text-xs'>
-								<Link to='/demo/docs' className='text-primary hover:underline'>
+								<Link to='/' className='text-primary hover:underline'>
 									Learn how to get the most out of FastAPI Cloud
 								</Link>
 							</CardDescription>

@@ -59,7 +59,7 @@ function SuccessPage() {
 							</Link>
 						</li>
 						<li>
-							<Link to='/demo/docs' className='text-primary hover:underline'>
+							<Link to='/' className='text-primary hover:underline'>
 								Read the documentation
 							</Link>
 						</li>
