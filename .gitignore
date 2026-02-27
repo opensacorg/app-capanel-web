@@ -9,3 +9,4 @@ node_modules/
 nohup.out
 .env
 .gcloud/
+cloud-run.env
