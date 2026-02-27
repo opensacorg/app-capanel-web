@@ -35,3 +35,23 @@ services:
             - app/frontend_dist
         - path: ./backend/pyproject.toml
           action: rebuild
+
+  frontend:
+    ports:
+      - "5173:5173"
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      target: build-stage
+    command: pnpm --filter frontend dev --host
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    develop:
+      watch:
+        - path: ./frontend
+          action: sync
+          target: /app/frontend
+          ignore:
+            - node_modules
+            - dist

@@ -1,0 +1,27 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: capanel-service
+  labels:
+    cloud.googleapis.com/location: us-west1
+spec:
+  template:
+    spec:
+      containers:
+      - name: frontend
+        image: us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+      - name: backend
+        image: us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/backend:latest
+        env:
+        - name: PORT
+          value: "8000"
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi

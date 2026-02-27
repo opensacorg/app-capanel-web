@@ -1,6 +1,29 @@
 steps:
+# Build Frontend
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/capanel-backend:latest', '-f', 'backend/Dockerfile', '.']
+  args: ['build', '-t', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest', '-f', 'frontend/Dockerfile', '.']
   env:
   - 'DOCKER_BUILDKIT=1'
-images: ['us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/capanel-backend:latest']
+
+# Build Backend
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/backend:latest', '-f', 'backend/Dockerfile', '.']
+  env:
+  - 'DOCKER_BUILDKIT=1'
+
+# Push Frontend
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest']
+
+# Push Backend
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/backend:latest']
+
+# Deploy as a single multi-container service
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'services', 'replace', 'service.yaml']
+
+images:
+- 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest'
+- 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/backend:latest'

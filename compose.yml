@@ -91,6 +91,14 @@ services:
       - IMPORT_INDICATORS_PATH=${IMPORT_INDICATORS_PATH-/app/backend/resources/cde}
       - IMPORT_INDICATORS_INDICATOR=${IMPORT_INDICATORS_INDICATOR-}
       - IMPORT_INDICATORS_BATCH_SIZE=${IMPORT_INDICATORS_BATCH_SIZE-1000}
+  
+  frontend:
+    image: appcap-frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    networks:
+      - default
 
 volumes:
   app-db-data:

@@ -36,30 +36,3 @@ if settings.all_cors_origins:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
-
-frontend_dist = Path(__file__).parent / "frontend_dist" / "client"
-# TanStack Start with prerendering uses _shell.html, Vite uses index.html
-frontend_index = frontend_dist / "index.html"
-if not frontend_index.exists():
-    frontend_index = frontend_dist / "_shell.html"
-
-# Serve static assets optimally (checks to avoid crashing if dist isn't built locally)
-assets_dir = frontend_dist / "assets"
-if assets_dir.exists():
-    app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
-
-
-@app.get("/{full_path:path}", include_in_schema=False)
-async def serve_frontend(full_path: str):
-    if not frontend_index.exists():
-        raise HTTPException(status_code=404, detail="Frontend not deployed")
-
-    candidate = (frontend_dist / full_path).resolve()
-    if (
-        full_path
-        and candidate.is_file()
-        and frontend_dist.resolve() in candidate.parents
-    ):
-        return FileResponse(candidate)
-
-    return FileResponse(frontend_index)
