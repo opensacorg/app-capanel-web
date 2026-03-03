@@ -11,7 +11,7 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 from sqlmodel import Session
 
 # Add the parent directory to the path so we can import app modules
@@ -207,7 +207,9 @@ class BaseIndicatorParser(ABC):
 
         return record_data
 
-    def parse_cci_details(self, row: pd.Series, columns: list[str]) -> dict[str, Any]:
+    def parse_cci_details(
+        self, row: pd.Series, columns: list[str]
+    ) -> dict[str, Any] | None:
         """Parse CCI-specific breakdown fields into a JSON object.
 
         Args:

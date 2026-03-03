@@ -1,8 +1,8 @@
 import uuid
-from typing import Any
+from typing import Any, cast
 
 from fastapi import APIRouter, HTTPException, Query
-from sqlmodel import func, select
+from sqlmodel import col, func, select
 
 from app.api.deps import CurrentUser, SessionDep
 from app.model.academic_indicator import (
@@ -65,7 +65,7 @@ def read_academic_indicators(
 
     count = session.exec(count_statement).one()
     statement = (
-        statement.order_by(AcademicIndicator.created_at.desc())
+        statement.order_by(col(AcademicIndicator.created_at).desc())
         .offset(skip)
         .limit(limit)
     )
@@ -88,7 +88,7 @@ def get_dashboard_data(
         select(AcademicIndicator)
         .where(AcademicIndicator.cds == q)
         .where(AcademicIndicator.studentgroup == "ALL")
-        .order_by(AcademicIndicator.reportingyear.desc())
+        .order_by(col(AcademicIndicator.reportingyear).desc())
         .limit(1)
     )
     indicator = session.exec(statement).first()
@@ -191,10 +191,10 @@ def get_dashboard_summary(
                     priorstatus=ind.priorstatus,
                     is_mean_scale_score=is_mean_scale,
                 )
-                statuslevel = color_data["statuslevel"]
-                changelevel = color_data["changelevel"]
-                color = color_data["color"]
-                change = color_data["change"]
+                statuslevel = cast(int | None, color_data["statuslevel"])
+                changelevel = cast(int | None, color_data["changelevel"])
+                color = cast(int | None, color_data["color"])
+                change = cast(float | None, color_data["change"])
 
             indicator_summaries.append(
                 IndicatorSummary(

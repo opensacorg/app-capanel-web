@@ -42,7 +42,7 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
-      target: build-stage
+      target: builder
     command: pnpm --filter frontend dev --host
     volumes:
       - ./frontend:/app/frontend

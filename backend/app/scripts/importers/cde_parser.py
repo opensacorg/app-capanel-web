@@ -9,7 +9,7 @@ import sys
 from collections.abc import Generator
 from pathlib import Path
 
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 from sqlmodel import Session
 
 from .base import BaseIndicatorParser
@@ -22,7 +22,7 @@ from app.model.academic_indicator import AcademicIndicator
 class CDEParser(BaseIndicatorParser):
     """Parser for CDE Excel download files."""
 
-    def __init__(self, indicator: str):
+    def __init__(self, indicator: str) -> None:
         """Initialize parser for a specific indicator.
 
         Args:
@@ -122,42 +122,42 @@ class CDEParser(BaseIndicatorParser):
 
 # Indicator-specific parser classes for convenience
 class ELAParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("ELA")
 
 
 class MATHParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("MATH")
 
 
 class SCIParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("SCI")
 
 
 class CHRONICParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("CHRONIC")
 
 
 class SUSPParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("SUSP")
 
 
 class GRADParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("GRAD")
 
 
 class ELPIParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("ELPI")
 
 
 class CCIParser(CDEParser):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("CCI")
 
 

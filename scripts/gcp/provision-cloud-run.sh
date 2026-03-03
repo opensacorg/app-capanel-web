@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Load config from cloud-run.env
+# shellcheck source=cloud-run.env
+source "${SCRIPT_DIR}/cloud-run.env"
+
 : "${GCP_PROJECT_ID:?Set GCP_PROJECT_ID}"
 : "${GCP_REGION:?Set GCP_REGION, for example us-central1}"
 : "${GCP_AR_REPOSITORY:?Set GCP_AR_REPOSITORY}"

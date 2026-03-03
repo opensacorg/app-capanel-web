@@ -1,30 +1,68 @@
-# Stage 1: Build the frontend
-FROM node:25-alpine AS build-stage
-
+# Stage 1: Dependencies (Cached heavily)
+FROM node:25-alpine AS deps
 RUN npm install -g pnpm@10.30.3
-
 WORKDIR /app
 
+# Only copy files needed for install to protect the cache
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY frontend/package.json ./frontend/
 
-# Install dependencies using cache
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm install --frozen-lockfile
+# Use the pnpm store cache mount for faster re-installs
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-COPY ./frontend ./frontend
+# Stage 2: Builder
+FROM node:25-alpine AS builder
+RUN npm install -g pnpm@10.30.3
+WORKDIR /app
 
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
+# Copy node_modules from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
+COPY . .
 
+# Speed up build by disabling telemetry/unnecessary logs
+ENV NODE_ENV=production
+ARG VITE_API_URL=""
+ENV VITE_API_URL=${VITE_API_URL}
 RUN pnpm --filter frontend build
 
-# Stage 2: Serve with Nginx
-FROM nginx:stable-alpine
+# Stage 3: Runner (The tiny final image)
+FROM nginx:stable-alpine-slim 
 
-COPY --from=build-stage /app/frontend/dist /usr/share/nginx/html
+# Use alpine-slim to shave off another ~20MB
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 8080
+# Security: Run as non-root user (Best practice for Cloud Run)
+RUN touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/run/nginx.pid /usr/share/nginx/html /var/cache/nginx /var/log/nginx /etc/nginx/conf.d
+USER nginx
 
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
+
+
+# FROM node:25-alpine AS build-stage
+
+# RUN npm install -g pnpm@10.30.3
+
+# WORKDIR /app
+
+# COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+# COPY frontend/package.json ./frontend/
+# RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+# COPY frontend ./frontend
+# ARG VITE_API_URL
+# # Handled in Python code at runtime? This would force a rebuild of the image for different environments (prod, stage, dev)
+# # ENV VITE_API_URL=$VITE_API_URL
+# RUN pnpm --filter frontend build
+
+# FROM nginx:stable-alpine
+
+# COPY --from=build-stage /app/frontend/dist /usr/share/nginx/html
+# COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+# COPY frontend/nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
+
+# # EXPOSE 8080
+
+# CMD ["nginx", "-g", "daemon off;"]

@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from app.core.tests_pre_start import init, logger
+from app.core.tests_pre_start import init, logger  # type: ignore
 from sqlmodel import select
 
 

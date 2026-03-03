@@ -10,6 +10,7 @@ spec:
       annotations:
         run.googleapis.com/cloudsql-instances: ca-panel-001:us-west1:capanel-pg
     spec:
+      serviceAccountName: capanel-runner@ca-panel-001.iam.gserviceaccount.com
       containers:
       - name: frontend
         image: us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest
@@ -29,17 +30,29 @@ spec:
         - name: PROJECT_NAME
           value: "California Accountability Panel"
         - name: SECRET_KEY
-          value: "O6lM5GlFK2Uqjj+QDSxXN8jO2XXVNWip"
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-secret-key
         - name: FIRST_SUPERUSER
-          value: "admin@innovateforcalifornia.com"
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-superuser-email
         - name: FIRST_SUPERUSER_PASSWORD
-          value: "jO1ytU+RRa8+mg=="
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-superuser-password
         - name: POSTGRES_SERVER
           value: "localhost"
         - name: POSTGRES_USER
           value: "capanel_app"
         - name: POSTGRES_PASSWORD
-          value: "DgQ1ACgfl/zaXA=="
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-postgres-password
         - name: POSTGRES_DB
           value: "capanel"
         - name: CLOUD_SQL_INSTANCE_CONNECTION_NAME

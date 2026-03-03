@@ -22,7 +22,7 @@ steps:
 # Deploy as a single multi-container service
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'services', 'replace', 'service.yaml']
+  args: ['run', 'services', 'replace', 'service.yaml', '--region', 'us-west1']
 
 images:
 - 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest'

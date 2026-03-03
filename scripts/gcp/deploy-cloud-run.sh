@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Load config from cloud-run.env
+# shellcheck source=cloud-run.env
+source "${SCRIPT_DIR}/cloud-run.env"
+
 # Required inputs
 : "${GCP_PROJECT_ID:?Set GCP_PROJECT_ID}"
 : "${GCP_REGION:?Set GCP_REGION, for example us-central1}"
@@ -14,10 +20,8 @@ set -euo pipefail
 : "${CLOUD_SQL_INSTANCE:?Set CLOUD_SQL_INSTANCE}"
 : "${CLOUD_SQL_DB:?Set CLOUD_SQL_DB}"
 : "${CLOUD_SQL_USER:?Set CLOUD_SQL_USER}"
-: "${CLOUD_SQL_PASSWORD:?Set CLOUD_SQL_PASSWORD}"
-: "${SECRET_KEY:?Set SECRET_KEY}"
-: "${FIRST_SUPERUSER:?Set FIRST_SUPERUSER}"
-: "${FIRST_SUPERUSER_PASSWORD:?Set FIRST_SUPERUSER_PASSWORD}"
+# Sensitive values (SECRET_KEY, FIRST_SUPERUSER, FIRST_SUPERUSER_PASSWORD,
+# CLOUD_SQL_PASSWORD) are pulled from Secret Manager at runtime — see create-secrets.sh.
 
 TAG="${TAG:-$(git rev-parse --short HEAD)}"
 API_V1_STR="${API_V1_STR:-/api/v1}"
@@ -47,6 +51,15 @@ gcloud services enable \
   cloudbuild.googleapis.com \
   sqladmin.googleapis.com \
   storage.googleapis.com
+
+# Ensure the resources bucket exists and is in the correct region
+IMPORT_GCS_BUCKET=$(echo "${IMPORT_GCS_URI}" | sed -E 's|^gs://([^/]+).*|\1|')
+if ! gcloud storage buckets describe "gs://${IMPORT_GCS_BUCKET}" >/dev/null 2>&1; then
+  echo "Creating bucket gs://${IMPORT_GCS_BUCKET} in ${GCP_REGION}"
+  gcloud storage buckets create "gs://${IMPORT_GCS_BUCKET}" \
+    --location="${GCP_REGION}" \
+    --uniform-bucket-level-access
+fi
 
 if [[ "${SYNC_LOCAL_IMPORTS_TO_BUCKET,,}" == "true" ]]; then
   if [[ -d "${IMPORT_RESOURCES_LOCAL_PATH}" ]]; then
@@ -82,7 +95,8 @@ gcloud run deploy "${BACKEND_SERVICE}" \
   --subnet "${VPC_SUBNET}" \
   --vpc-egress private-ranges-only \
   --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
-  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_PASSWORD=${CLOUD_SQL_PASSWORD},SECRET_KEY=${SECRET_KEY},FIRST_SUPERUSER=${FIRST_SUPERUSER},FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD},RUN_DATA_IMPORTS=${RUN_DATA_IMPORTS},IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}"
+  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=${RUN_DATA_IMPORTS},IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}" \
+  --set-secrets "POSTGRES_PASSWORD=capanel-postgres-password:latest,SECRET_KEY=capanel-secret-key:latest,FIRST_SUPERUSER=capanel-superuser-email:latest,FIRST_SUPERUSER_PASSWORD=capanel-superuser-password:latest"
 
 echo "Deploying backend init job ${BACKEND_INIT_JOB}"
 gcloud run jobs deploy "${BACKEND_INIT_JOB}" \
@@ -95,7 +109,8 @@ gcloud run jobs deploy "${BACKEND_INIT_JOB}" \
   --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
   --command python \
   --args app/scripts/initial_data.py \
-  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_PASSWORD=${CLOUD_SQL_PASSWORD},SECRET_KEY=${SECRET_KEY},FIRST_SUPERUSER=${FIRST_SUPERUSER},FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD},RUN_DATA_IMPORTS=false,IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}"
+  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=false,IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}" \
+  --set-secrets "POSTGRES_PASSWORD=capanel-postgres-password:latest,SECRET_KEY=capanel-secret-key:latest,FIRST_SUPERUSER=capanel-superuser-email:latest,FIRST_SUPERUSER_PASSWORD=capanel-superuser-password:latest"
 
 echo "Granting ${RUN_SERVICE_ACCOUNT_EMAIL} permission to run ${BACKEND_INIT_JOB}"
 gcloud run jobs add-iam-policy-binding "${BACKEND_INIT_JOB}" \

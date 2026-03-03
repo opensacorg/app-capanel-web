@@ -9,8 +9,9 @@ indicators.
 import sys
 from collections.abc import Generator
 from pathlib import Path
+from typing import Any
 
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 from sqlmodel import Session
 
 from .base import BaseIndicatorParser
@@ -78,7 +79,9 @@ class StateParser(BaseIndicatorParser):
         school = str(school_code or "").zfill(7)
         return f"{county}{district}{school}"
 
-    def parse_row_state(self, row: pd.Series, columns: list[str]) -> dict | None:
+    def parse_row_state(
+        self, row: pd.Series, columns: list[str]
+    ) -> dict[str, Any] | None:
         """Parse a row from state assessment file.
 
         Args:

@@ -11,7 +11,7 @@ Usage:
 import sys
 from pathlib import Path
 
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 from sqlmodel import Session
 
 # Add the parent directory to the path so we can import app modules
@@ -62,7 +62,10 @@ COLUMN_MAPPING = {
 }
 
 
-def clean_value(value, field_type: str = "str"):
+from typing import Any
+
+
+def clean_value(value: Any, field_type: str = "str") -> Any:
     """Clean a value for database insertion."""
     if pd.isna(value) or value == "" or value == "*":
         return None
@@ -81,7 +84,7 @@ def clean_value(value, field_type: str = "str"):
         return str(value).strip() if value else None
 
 
-def import_ela_data(file_path: str, batch_size: int = 1000):
+def import_ela_data(file_path: str, batch_size: int = 1000) -> None:
     """Import ELA data from Excel file into the database."""
     print(f"Reading Excel file: {file_path}")
     df = pd.read_excel(file_path)

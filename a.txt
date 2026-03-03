@@ -1,0 +1,13 @@
+Trajectory ID: b6a99008-5598-4844-aa03-19a18e8443cd
+Error: HTTP 500 Internal Server Error
+Sherlog: 
+TraceID: 0x760520b495788426
+Headers: {"Alt-Svc":["h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"],"Content-Length":["109"],"Content-Type":["text/event-stream"],"Date":["Tue, 03 Mar 2026 02:48:03 GMT"],"Server":["ESF"],"Server-Timing":["gfet4t7; dur=10337"],"Vary":["Origin","X-Origin","Referer"],"X-Cloudaicompanion-Trace-Id":["760520b495788426"],"X-Content-Type-Options":["nosniff"],"X-Frame-Options":["SAMEORIGIN"],"X-Xss-Protection":["0"]}
+
+{
+  "error": {
+    "code": 500,
+    "message": "Internal error encountered.",
+    "status": "INTERNAL"
+  }
+}

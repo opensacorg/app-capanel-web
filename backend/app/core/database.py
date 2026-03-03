@@ -1,4 +1,4 @@
-from sqlmodel import Session, SQLModel, create_engine, select
+from sqlmodel import Session, create_engine, select
 
 from app.core.config import settings
 from app.model.user import User, UserCreate

@@ -25,8 +25,8 @@ from pathlib import Path
 # Add the parent directory to the path so we can import app modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from importers.cde_parser import INDICATOR_FILES, CDEParser
-from importers.state_parser import STATE_FILES, StateParser
+from importers.cde_parser import INDICATOR_FILES, CDEParser  # type: ignore
+from importers.state_parser import STATE_FILES, StateParser  # type: ignore
 from sqlmodel import Session
 
 from app.core.database import engine
@@ -63,7 +63,7 @@ def import_single_file(
         count = parser.import_to_session(session, records, batch_size)
 
     print(f"Successfully imported {count} records for {indicator}")
-    return count
+    return int(count)
 
 
 def import_cde_directory(dir_path: Path, batch_size: int = 1000) -> dict[str, int]:
@@ -136,7 +136,7 @@ def import_state_directory(
     return results
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Import California Dashboard indicator data",
         formatter_class=argparse.RawDescriptionHelpFormatter,

@@ -10,8 +10,5 @@
     "lint": "pnpm --filter frontend lint",
     "test": "pnpm --filter frontend test",
     "test:ui": "pnpm --filter frontend test:ui"
-  },
-  "dependencies": {
-    "@faker-js/faker": "^10.3.0"
   }
 }
