@@ -35,11 +35,18 @@ IMPORT_RESOURCES_LOCAL_PATH="${IMPORT_RESOURCES_LOCAL_PATH:-$HOME/Downloads/reso
 SYNC_LOCAL_IMPORTS_TO_BUCKET="${SYNC_LOCAL_IMPORTS_TO_BUCKET:-true}"
 BACKEND_INIT_JOB="${BACKEND_INIT_JOB:-${BACKEND_SERVICE}-init}"
 INIT_TRIGGER_FUNCTION_NAME="${INIT_TRIGGER_FUNCTION_NAME:-${BACKEND_SERVICE}-init-trigger}"
+ENVIRONMENT="${ENVIRONMENT:-production}"
 
 BACKEND_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_AR_REPOSITORY}/${BACKEND_SERVICE}:${TAG}"
 FRONTEND_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_AR_REPOSITORY}/${FRONTEND_SERVICE}:${TAG}"
 
 echo "Using project=${GCP_PROJECT_ID}, region=${GCP_REGION}, tag=${TAG}"
+
+if [[ "${ENVIRONMENT}" != "production" ]]; then
+  echo "Refusing deploy: ENVIRONMENT must be production for Cloud Run deploys."
+  echo "Current value: ${ENVIRONMENT}"
+  exit 1
+fi
 
 gcloud config set project "${GCP_PROJECT_ID}"
 
@@ -95,8 +102,23 @@ gcloud run deploy "${BACKEND_SERVICE}" \
   --subnet "${VPC_SUBNET}" \
   --vpc-egress private-ranges-only \
   --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
-  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=${RUN_DATA_IMPORTS},IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}" \
+  --set-env-vars "ENVIRONMENT=${ENVIRONMENT},PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=${RUN_DATA_IMPORTS},IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}" \
   --set-secrets "POSTGRES_PASSWORD=capanel-postgres-password:latest,SECRET_KEY=capanel-secret-key:latest,FIRST_SUPERUSER=capanel-superuser-email:latest,FIRST_SUPERUSER_PASSWORD=capanel-superuser-password:latest"
+
+DEPLOYED_BACKEND_ENVIRONMENT="$(
+  gcloud run services describe "${BACKEND_SERVICE}" \
+    --region "${GCP_REGION}" \
+    --flatten="spec.template.spec.containers[].env[]" \
+    --format="csv[no-heading](spec.template.spec.containers.env.name,spec.template.spec.containers.env.value)" \
+    | awk -F, '$1=="ENVIRONMENT"{print $2; exit}'
+)"
+if [[ "${DEPLOYED_BACKEND_ENVIRONMENT}" != "production" ]]; then
+  echo "Backend service ENVIRONMENT verification failed."
+  echo "Expected: production"
+  echo "Actual: ${DEPLOYED_BACKEND_ENVIRONMENT:-<unset>}"
+  exit 1
+fi
+echo "Verified backend ENVIRONMENT=${DEPLOYED_BACKEND_ENVIRONMENT}"
 
 echo "Deploying backend init job ${BACKEND_INIT_JOB}"
 gcloud run jobs deploy "${BACKEND_INIT_JOB}" \
@@ -109,7 +131,7 @@ gcloud run jobs deploy "${BACKEND_INIT_JOB}" \
   --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
   --command python \
   --args app/scripts/initial_data.py \
-  --set-env-vars "ENVIRONMENT=production,PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=false,IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}" \
+  --set-env-vars "ENVIRONMENT=${ENVIRONMENT},PROJECT_NAME=${PROJECT_NAME},API_V1_STR=${API_V1_STR},BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS},CLOUD_SQL_INSTANCE_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME},POSTGRES_DB=${CLOUD_SQL_DB},POSTGRES_USER=${CLOUD_SQL_USER},POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=false,IMPORT_GCS_URI=${IMPORT_GCS_URI},IMPORT_RESOURCES_LOCAL_PATH=${IMPORT_RESOURCES_LOCAL_PATH}" \
   --set-secrets "POSTGRES_PASSWORD=capanel-postgres-password:latest,SECRET_KEY=capanel-secret-key:latest,FIRST_SUPERUSER=capanel-superuser-email:latest,FIRST_SUPERUSER_PASSWORD=capanel-superuser-password:latest"
 
 echo "Granting ${RUN_SERVICE_ACCOUNT_EMAIL} permission to run ${BACKEND_INIT_JOB}"
