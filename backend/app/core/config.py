@@ -1,16 +1,14 @@
+import os
 import secrets
 import warnings
 from typing import Annotated, Any, Literal
 from urllib.parse import quote_plus
 
 from pydantic import (
-    AliasChoices,
     AnyUrl,
     BeforeValidator,
     EmailStr,
-    Field,
     HttpUrl,
-    PostgresDsn,
     computed_field,
     model_validator,
 )
@@ -54,54 +52,22 @@ class Settings(BaseSettings):
             self.FRONTEND_HOST
         ]
 
-    PROJECT_NAME: str
+    PROJECT_NAME: str = "California Accountability Panel"
     SENTRY_DSN: HttpUrl | None = None
     DATABASE_URL: str | None = None
+    POSTGRES_SERVER: str | None = None
+    POSTGRES_PORT: int = 5432
+    POSTGRES_USER: str | None = None
+    POSTGRES_PASSWORD: str | None = None
+    POSTGRES_DB: str | None = None
     CLOUD_SQL_INSTANCE_CONNECTION_NAME: str | None = None
-    POSTGRES_SERVER: str = Field(
-        validation_alias=AliasChoices("POSTGRES_SERVER", "DATABASE_HOST")
-    )
-    POSTGRES_PORT: int = Field(
-        default=5432, validation_alias=AliasChoices("POSTGRES_PORT", "DATABASE_PORT")
-    )
-    POSTGRES_USER: str = Field(
-        validation_alias=AliasChoices("POSTGRES_USER", "DATABASE_USERNAME")
-    )
-    POSTGRES_PASSWORD: str = Field(
-        default="",
-        validation_alias=AliasChoices("POSTGRES_PASSWORD", "DATABASE_PASSWORD"),
-    )
-    POSTGRES_DB: str = Field(
-        default="", validation_alias=AliasChoices("POSTGRES_DB", "DATABASE_NAME")
-    )
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        if self.DATABASE_URL:
-            return self.DATABASE_URL
-
-        encoded_user = quote_plus(self.POSTGRES_USER)
-        encoded_password = quote_plus(self.POSTGRES_PASSWORD)
-
-        if self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
-            database = self.POSTGRES_DB.lstrip("/")
-            socket_dir = quote_plus(
-                f"/cloudsql/{self.CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
-            )
-            return (
-                f"postgresql+psycopg://{encoded_user}:{encoded_password}"
-                f"@/{database}?host={socket_dir}&port={self.POSTGRES_PORT}"
-            )
-
-        return PostgresDsn.build(
-            scheme="postgresql+psycopg",
-            username=self.POSTGRES_USER,
-            password=self.POSTGRES_PASSWORD,
-            host=self.POSTGRES_SERVER,
-            port=self.POSTGRES_PORT,
-            path=self.POSTGRES_DB,
-        ).unicode_string()
+        if not self.DATABASE_URL:
+            raise ValueError("DATABASE_URL is not configured")
+        return self.DATABASE_URL
 
     SMTP_TLS: bool = True
     SMTP_SSL: bool = False
@@ -125,9 +91,9 @@ class Settings(BaseSettings):
     def emails_enabled(self) -> bool:
         return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
-    EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
+    FIRST_SUPERUSER: EmailStr = "admin@example.com"  # type: ignore
+    FIRST_SUPERUSER_PASSWORD: str = "changethis"
 
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         """
@@ -146,12 +112,48 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
         self._check_default_secret("SECRET_KEY", self.SECRET_KEY)
-        self._check_default_secret("POSTGRES_PASSWORD", self.POSTGRES_PASSWORD)
         self._check_default_secret(
             "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
         )
 
         return self
+
+    @model_validator(mode="after")
+    def _enforce_cloud_run_environment(self) -> Self:
+        if os.getenv("K_SERVICE") and self.ENVIRONMENT != "production":
+            raise ValueError(
+                'ENVIRONMENT must be "production" when running on Cloud Run.'
+            )
+        return self
+
+    @model_validator(mode="after")
+    def _populate_database_url(self) -> Self:
+        if self.DATABASE_URL:
+            return self
+
+        if self.POSTGRES_USER and self.POSTGRES_PASSWORD and self.POSTGRES_DB:
+            encoded_password = quote_plus(self.POSTGRES_PASSWORD)
+            if self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+                self.DATABASE_URL = (
+                    "postgresql+psycopg://"
+                    f"{self.POSTGRES_USER}:{encoded_password}"
+                    f"@/{self.POSTGRES_DB}"
+                    f"?host=/cloudsql/{self.CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
+                )
+                return self
+
+            if self.POSTGRES_SERVER:
+                self.DATABASE_URL = (
+                    "postgresql+psycopg://"
+                    f"{self.POSTGRES_USER}:{encoded_password}"
+                    f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+                )
+                return self
+
+        raise ValueError(
+            "DATABASE_URL is required, or set POSTGRES_USER/POSTGRES_PASSWORD/"
+            "POSTGRES_DB and CLOUD_SQL_INSTANCE_CONNECTION_NAME for Cloud Run."
+        )
 
 
 settings = Settings()  # type: ignore

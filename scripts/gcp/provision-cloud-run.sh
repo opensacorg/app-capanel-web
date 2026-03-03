@@ -3,10 +3,33 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ENV_FILE="${1:-}"
 
-# Load config from cloud-run.env
-# shellcheck source=cloud-run.env
-source "${SCRIPT_DIR}/cloud-run.env"
+resolve_env_file() {
+  if [[ -n "${ENV_FILE}" ]]; then
+    if [[ -f "${ENV_FILE}" ]]; then
+      printf '%s\n' "${ENV_FILE}"
+      return 0
+    fi
+    echo "Environment file not found: ${ENV_FILE}" >&2
+    exit 1
+  fi
+
+  local candidate_repo_env="${SCRIPT_DIR}/../../.env"
+  if [[ -f "${candidate_repo_env}" ]]; then
+    printf '%s\n' "${candidate_repo_env}"
+    return 0
+  fi
+
+  echo "Environment file not found. Checked: ${candidate_repo_env}" >&2
+  echo "Pass an env file path as the first argument or create .env in the repo root." >&2
+  exit 1
+}
+
+# Load config from .env (or explicit env file path arg)
+ENV_PATH="$(resolve_env_file)"
+echo "Loading environment from ${ENV_PATH}"
+source "${ENV_PATH}"
 
 : "${GCP_PROJECT_ID:?Set GCP_PROJECT_ID}"
 : "${GCP_REGION:?Set GCP_REGION, for example us-central1}"
@@ -34,6 +57,7 @@ gcloud services enable \
   artifactregistry.googleapis.com \
   cloudbuild.googleapis.com \
   sqladmin.googleapis.com \
+  secretmanager.googleapis.com \
   storage.googleapis.com \
   servicenetworking.googleapis.com \
   compute.googleapis.com

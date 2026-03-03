@@ -3,7 +3,7 @@ FROM python:3.14-slim
 ENV PYTHONUNBUFFERED=1
 
 # Install uv
-COPY --from=ghcr.io/astral-sh/uv:0.9.26 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.10.7 /uv /uvx /bin/
 
 # Compile bytecode
 ENV UV_COMPILE_BYTECODE=1
@@ -36,4 +36,4 @@ WORKDIR /app/backend/
 
 EXPOSE 8000
 
-CMD ["fastapi", "run", "--workers", "4", "--port", "8000", "app/main.py"]
+CMD ["sh", "-c", "fastapi run --workers ${WEB_CONCURRENCY:-2} --port ${PORT:-8000} app/main.py"]

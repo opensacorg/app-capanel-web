@@ -13,8 +13,10 @@ const apiTarget = process.env.VITE_API_URL || 'http://localhost:8000'
  * base: './' is required for relative paths in single-container deployment
  * Add a delay to allow the Nitro server to boot in the container. This prevents the "fetch failed" immediately upon starting
  */
-const config = defineConfig({
-	base: './',
+const config = defineConfig(({ command }) => ({
+	// Keep relative assets for production container builds, but use root base
+	// in dev so Vite's React refresh runtime is loaded correctly on routed URLs.
+	base: command === 'serve' ? '/' : './',
 	build: {
 		outDir: 'dist',
 	},
@@ -26,6 +28,22 @@ const config = defineConfig({
 	server: {
 		proxy: {
 			'/api': {
+				target: apiTarget,
+				changeOrigin: true,
+			},
+			'/docs': {
+				target: apiTarget,
+				changeOrigin: true,
+			},
+			'/docs/oauth2-redirect': {
+				target: apiTarget,
+				changeOrigin: true,
+			},
+			'/redoc': {
+				target: apiTarget,
+				changeOrigin: true,
+			},
+			'/openapi.json': {
 				target: apiTarget,
 				changeOrigin: true,
 			},
@@ -44,6 +62,6 @@ const config = defineConfig({
 			},
 		}),
 	],
-})
+}))
 
 export default config

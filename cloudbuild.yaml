@@ -1,29 +1,52 @@
 steps:
 # Build Frontend
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest', '-f', 'frontend/Dockerfile', '.']
+  args:
+  - 'build'
+  - '-t'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/frontend:${BUILD_ID}'
+  - '-f'
+  - 'frontend/Dockerfile'
+  - '.'
   env:
   - 'DOCKER_BUILDKIT=1'
 
 # Build Backend
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/backend:latest', '-f', 'backend/Dockerfile', '.']
+  args:
+  - 'build'
+  - '-t'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/backend:${BUILD_ID}'
+  - '-f'
+  - 'backend/Dockerfile'
+  - '.'
   env:
   - 'DOCKER_BUILDKIT=1'
 
-# Push Frontend
+# Push Frontend (must happen before deploy step)
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest']
+  args:
+  - 'push'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/frontend:${BUILD_ID}'
 
-# Push Backend
+# Push Backend (must happen before deploy step)
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/backend:latest']
+  args:
+  - 'push'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/backend:${BUILD_ID}'
 
-# Deploy as a single multi-container service
+# Render service manifest with immutable image tags and deploy
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args: ['run', 'services', 'replace', 'service.yaml', '--region', 'us-west1']
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    set -euo pipefail
+    FRONTEND_IMAGE="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/frontend:${BUILD_ID}"
+    BACKEND_IMAGE="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/backend:${BUILD_ID}"
+    sed "s|__FRONTEND_IMAGE__|$${FRONTEND_IMAGE}|g; s|__BACKEND_IMAGE__|$${BACKEND_IMAGE}|g" service.cloudbuild.yaml > /workspace/service.rendered.yaml
+    gcloud run services replace /workspace/service.rendered.yaml --region "${_REGION}"
 
-images:
-- 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/frontend:latest'
-- 'us-west1-docker.pkg.dev/ca-panel-001/capanel-repo/backend:latest'
+substitutions:
+  _REGION: 'us-west1'
+  _REPOSITORY: 'capanel-repo'

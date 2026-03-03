@@ -137,12 +137,12 @@ DATABASE_URL=postgresql+psycopg://USER:PASSWORD@/DB?host=/cloudsql/PROJECT:REGIO
 
 ## Deploy to Google Cloud Run
 
-1. Copy `scripts/gcp/cloud-run.env.example` to `scripts/gcp/cloud-run.env` and edit values.
+1. Set Cloud Run values in your repo `.env` file.
 2. Load env vars and run:
 
 ```bash
 set -a
-source scripts/gcp/cloud-run.env
+source .env
 set +a
 bash scripts/gcp/provision-cloud-run.sh
 bash scripts/gcp/deploy-cloud-run.sh

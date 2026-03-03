@@ -20,11 +20,11 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
 COPY . .
 
-# Speed up build by disabling telemetry/unnecessary logs
-ENV NODE_ENV=production
 ARG VITE_API_URL=""
 ENV VITE_API_URL=${VITE_API_URL}
-RUN pnpm --filter frontend build
+# Use production mode only for the static build step so the `builder` target
+# can still run `vite dev` correctly in local docker-compose override.
+RUN NODE_ENV=production pnpm --filter frontend build
 
 # Stage 3: Runner (The tiny final image)
 FROM nginx:stable-alpine-slim 

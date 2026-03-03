@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [string]$EnvFile,
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$ScriptArgs
 )
@@ -33,6 +34,35 @@ function Import-EnvFile {
     }
 }
 
+function Resolve-EnvFilePath {
+    param([string]$PreferredPath)
+
+    $candidatePaths = @()
+    if (-not [string]::IsNullOrWhiteSpace($PreferredPath)) {
+        $candidatePaths += $PreferredPath
+    }
+    else {
+        $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+        $candidatePaths += (Join-Path $repoRoot ".env")
+    }
+
+    foreach ($candidatePath in $candidatePaths) {
+        if ([string]::IsNullOrWhiteSpace($candidatePath)) {
+            continue
+        }
+
+        $resolvedPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($candidatePath)
+        if (Test-Path -LiteralPath $resolvedPath -PathType Leaf) {
+            return $resolvedPath
+        }
+    }
+
+    $checkedPaths = ($candidatePaths | ForEach-Object {
+            $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($_)
+        }) -join ", "
+    throw "Environment file not found. Checked: $checkedPaths. Pass -EnvFile <path> or create .env in the repo root."
+}
+
 function Require-Env {
     param([Parameter(Mandatory = $true)][string]$Name, [string]$Message = "")
     $value = [Environment]::GetEnvironmentVariable($Name)
@@ -64,7 +94,23 @@ function Test-CommandSuccess {
     return $LASTEXITCODE -eq 0
 }
 
-$envPath = Join-Path $PSScriptRoot "cloud-run.env"
+function New-EnvVarsFile {
+    param(
+        [Parameter(Mandatory = $true)][hashtable]$EnvVars
+    )
+
+    $tempPath = [System.IO.Path]::GetTempFileName()
+    $lines = foreach ($key in $EnvVars.Keys) {
+        $value = [string]$EnvVars[$key]
+        $escaped = $value.Replace("'", "''")
+        "{0}: '{1}'" -f $key, $escaped
+    }
+    Set-Content -Path $tempPath -Value ($lines -join "`n") -NoNewline -Encoding utf8
+    return $tempPath
+}
+
+$envPath = Resolve-EnvFilePath -PreferredPath $EnvFile
+Write-Host "Loading environment from $envPath"
 Import-EnvFile -Path $envPath
 
 Require-Env GCP_PROJECT_ID "Set GCP_PROJECT_ID"
@@ -97,20 +143,32 @@ $runServiceAccountEmail = "$($env:RUN_SERVICE_ACCOUNT)@$($env:GCP_PROJECT_ID).ia
 $runDataImports = if ($env:RUN_DATA_IMPORTS) { $env:RUN_DATA_IMPORTS } else { "false" }
 $importGcsUri = if ($env:IMPORT_GCS_URI) { $env:IMPORT_GCS_URI } else { "gs://ca-panel-001-resources/resources" }
 $importResourcesLocalPath = if ($env:IMPORT_RESOURCES_LOCAL_PATH) { $env:IMPORT_RESOURCES_LOCAL_PATH } else { "$HOME/Downloads/resources" }
-$syncLocalImportsToBucket = if ($env:SYNC_LOCAL_IMPORTS_TO_BUCKET) { $env:SYNC_LOCAL_IMPORTS_TO_BUCKET } else { "true" }
+$syncLocalImportsToBucket = if ($env:SYNC_LOCAL_IMPORTS_TO_BUCKET) { $env:SYNC_LOCAL_IMPORTS_TO_BUCKET } else { "false" }
 $backendInitJob = if ($env:BACKEND_INIT_JOB) { $env:BACKEND_INIT_JOB } else { "$($env:BACKEND_SERVICE)-init" }
 $initTriggerFunctionName = if ($env:INIT_TRIGGER_FUNCTION_NAME) { $env:INIT_TRIGGER_FUNCTION_NAME } else { "$($env:BACKEND_SERVICE)-init-trigger" }
-$environment = if ($env:ENVIRONMENT) { $env:ENVIRONMENT } else { "production" }
+$originalEnvironment = if ($env:ENVIRONMENT) { $env:ENVIRONMENT } else { "<unset>" }
+$environment = "production"
+$env:ENVIRONMENT = "production"
+$frontendHost = if ($env:FRONTEND_HOST_PRODUCTION) {
+    $env:FRONTEND_HOST_PRODUCTION
+}
+elseif ($environment -eq "production") {
+    "https://capanel-service-5418848943.us-west1.run.app"
+}
+elseif ($env:FRONTEND_HOST) {
+    $env:FRONTEND_HOST
+}
+else {
+    "http://localhost:5173"
+}
 
 $backendImage = "$($env:GCP_REGION)-docker.pkg.dev/$($env:GCP_PROJECT_ID)/$($env:GCP_AR_REPOSITORY)/$($env:BACKEND_SERVICE):$tag"
 $frontendImage = "$($env:GCP_REGION)-docker.pkg.dev/$($env:GCP_PROJECT_ID)/$($env:GCP_AR_REPOSITORY)/$($env:FRONTEND_SERVICE):$tag"
 
 Write-Host "Using project=$($env:GCP_PROJECT_ID), region=$($env:GCP_REGION), tag=$tag"
-
-if ($environment -ne "production") {
-    Write-Host "Refusing deploy: ENVIRONMENT must be production for Cloud Run deploys."
-    Write-Host "Current value: $environment"
-    exit 1
+Write-Host "Using FRONTEND_HOST=$frontendHost"
+if ($originalEnvironment -ne "production") {
+    Write-Host "Forcing ENVIRONMENT=production for Cloud Run deploy (was: $originalEnvironment)"
 }
 
 Invoke-Checked gcloud config set project $env:GCP_PROJECT_ID
@@ -130,16 +188,17 @@ if ($importGcsUri -notmatch "^gs://([^/]+)") {
 $importGcsBucket = $Matches[1]
 
 if (-not (Test-CommandSuccess gcloud storage buckets describe "gs://$importGcsBucket")) {
-    Write-Host "Creating bucket gs://$importGcsBucket in $($env:GCP_REGION)"
-    Invoke-Checked gcloud storage buckets create "gs://$importGcsBucket" `
-        "--location=$($env:GCP_REGION)" `
-        --uniform-bucket-level-access
+    throw "Bucket gs://$importGcsBucket was not found. This deploy expects an existing bucket (for example: gs://ca-panel-001-resources/resources)."
 }
 
 if ($syncLocalImportsToBucket.ToLowerInvariant() -eq "true") {
     if (Test-Path -Path $importResourcesLocalPath -PathType Container) {
-        Write-Host "Syncing local resources $importResourcesLocalPath -> $importGcsUri"
-        Invoke-Checked gcloud storage rsync $importResourcesLocalPath $importGcsUri --recursive
+        Write-Host "Merging local resources $importResourcesLocalPath -> $importGcsUri (new files only; no overwrite/delete)"
+        Invoke-Checked gcloud storage cp `
+            "--recursive" `
+            "--no-clobber" `
+            "$importResourcesLocalPath/*" `
+            $importGcsUri
     }
     else {
         Write-Host "Local resources path not found: $importResourcesLocalPath"
@@ -158,23 +217,66 @@ if (-not (Test-CommandSuccess gcloud artifacts repositories describe $env:GCP_AR
 }
 
 Write-Host "Building backend image $backendImage"
-Invoke-Checked gcloud builds submit --tag $backendImage --file backend/Dockerfile .
+$backendCloudBuildConfig = @'
+steps:
+  - name: gcr.io/cloud-builders/docker
+    env:
+      - DOCKER_BUILDKIT=1
+    args:
+      - build
+      - -f
+      - backend/Dockerfile
+      - -t
+      - ${_IMAGE}
+      - .
+images:
+  - ${_IMAGE}
+'@
+$tmpBackendBuildConfigPath = [System.IO.Path]::GetTempFileName()
+try {
+    Set-Content -Path $tmpBackendBuildConfigPath -Value $backendCloudBuildConfig -NoNewline
+    Invoke-Checked gcloud builds submit `
+        --substitutions "_IMAGE=$backendImage" `
+        --config $tmpBackendBuildConfigPath `
+        .
+}
+finally {
+    Remove-Item -Path $tmpBackendBuildConfigPath -ErrorAction SilentlyContinue
+}
 
 Write-Host "Deploying backend service $($env:BACKEND_SERVICE)"
-$backendSetEnvVars = "ENVIRONMENT=$environment,PROJECT_NAME=$projectName,API_V1_STR=$apiV1Str,BACKEND_CORS_ORIGINS=$backendCorsOrigins,CLOUD_SQL_INSTANCE_CONNECTION_NAME=$cloudSqlConnectionName,POSTGRES_DB=$($env:CLOUD_SQL_DB),POSTGRES_USER=$($env:CLOUD_SQL_USER),POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=$runDataImports,IMPORT_GCS_URI=$importGcsUri,IMPORT_RESOURCES_LOCAL_PATH=$importResourcesLocalPath"
+$backendEnvFile = New-EnvVarsFile -EnvVars @{
+    ENVIRONMENT                        = $environment
+    PROJECT_NAME                       = $projectName
+    API_V1_STR                         = $apiV1Str
+    BACKEND_CORS_ORIGINS               = $backendCorsOrigins
+    FRONTEND_HOST                      = $frontendHost
+    CLOUD_SQL_INSTANCE_CONNECTION_NAME = $cloudSqlConnectionName
+    POSTGRES_DB                        = $env:CLOUD_SQL_DB
+    POSTGRES_USER                      = $env:CLOUD_SQL_USER
+    POSTGRES_SERVER                    = "localhost"
+    RUN_DATA_IMPORTS                   = $runDataImports
+    IMPORT_GCS_URI                     = $importGcsUri
+    IMPORT_RESOURCES_LOCAL_PATH        = $importResourcesLocalPath
+}
 $backendSecrets = "POSTGRES_PASSWORD=capanel-postgres-password:latest,SECRET_KEY=capanel-secret-key:latest,FIRST_SUPERUSER=capanel-superuser-email:latest,FIRST_SUPERUSER_PASSWORD=capanel-superuser-password:latest"
-Invoke-Checked gcloud run deploy $env:BACKEND_SERVICE `
-    --image $backendImage `
-    "--region=$($env:GCP_REGION)" `
-    --platform managed `
-    --allow-unauthenticated `
-    "--service-account=$runServiceAccountEmail" `
-    "--network=$($env:VPC_NETWORK)" `
-    "--subnet=$($env:VPC_SUBNET)" `
-    --vpc-egress private-ranges-only `
-    "--add-cloudsql-instances=$cloudSqlConnectionName" `
-    "--set-env-vars=$backendSetEnvVars" `
-    "--set-secrets=$backendSecrets"
+try {
+    Invoke-Checked gcloud run deploy $env:BACKEND_SERVICE `
+        --image $backendImage `
+        "--region=$($env:GCP_REGION)" `
+        --platform managed `
+        --allow-unauthenticated `
+        "--service-account=$runServiceAccountEmail" `
+        "--network=$($env:VPC_NETWORK)" `
+        "--subnet=$($env:VPC_SUBNET)" `
+        --vpc-egress private-ranges-only `
+        "--add-cloudsql-instances=$cloudSqlConnectionName" `
+        "--env-vars-file=$backendEnvFile" `
+        "--set-secrets=$backendSecrets"
+}
+finally {
+    Remove-Item -Path $backendEnvFile -ErrorAction SilentlyContinue
+}
 
 $backendEnvRows = @(
     & gcloud run services describe $env:BACKEND_SERVICE `
@@ -208,19 +310,37 @@ if ($deployedBackendEnvironment -ne "production") {
 Write-Host "Verified backend ENVIRONMENT=$deployedBackendEnvironment"
 
 Write-Host "Deploying backend init job $backendInitJob"
-$jobSetEnvVars = "ENVIRONMENT=$environment,PROJECT_NAME=$projectName,API_V1_STR=$apiV1Str,BACKEND_CORS_ORIGINS=$backendCorsOrigins,CLOUD_SQL_INSTANCE_CONNECTION_NAME=$cloudSqlConnectionName,POSTGRES_DB=$($env:CLOUD_SQL_DB),POSTGRES_USER=$($env:CLOUD_SQL_USER),POSTGRES_SERVER=localhost,RUN_DATA_IMPORTS=false,IMPORT_GCS_URI=$importGcsUri,IMPORT_RESOURCES_LOCAL_PATH=$importResourcesLocalPath"
-Invoke-Checked gcloud run jobs deploy $backendInitJob `
-    --image $backendImage `
-    "--region=$($env:GCP_REGION)" `
-    "--service-account=$runServiceAccountEmail" `
-    "--network=$($env:VPC_NETWORK)" `
-    "--subnet=$($env:VPC_SUBNET)" `
-    --vpc-egress private-ranges-only `
-    "--add-cloudsql-instances=$cloudSqlConnectionName" `
-    --command python `
-    --args app/scripts/initial_data.py `
-    "--set-env-vars=$jobSetEnvVars" `
-    "--set-secrets=$backendSecrets"
+$jobEnvFile = New-EnvVarsFile -EnvVars @{
+    ENVIRONMENT                        = $environment
+    PROJECT_NAME                       = $projectName
+    API_V1_STR                         = $apiV1Str
+    BACKEND_CORS_ORIGINS               = $backendCorsOrigins
+    FRONTEND_HOST                      = $frontendHost
+    CLOUD_SQL_INSTANCE_CONNECTION_NAME = $cloudSqlConnectionName
+    POSTGRES_DB                        = $env:CLOUD_SQL_DB
+    POSTGRES_USER                      = $env:CLOUD_SQL_USER
+    POSTGRES_SERVER                    = "localhost"
+    RUN_DATA_IMPORTS                   = "false"
+    IMPORT_GCS_URI                     = $importGcsUri
+    IMPORT_RESOURCES_LOCAL_PATH        = $importResourcesLocalPath
+}
+try {
+    Invoke-Checked gcloud run jobs deploy $backendInitJob `
+        --image $backendImage `
+        "--region=$($env:GCP_REGION)" `
+        "--service-account=$runServiceAccountEmail" `
+        "--network=$($env:VPC_NETWORK)" `
+        "--subnet=$($env:VPC_SUBNET)" `
+        --vpc-egress private-ranges-only `
+        "--set-cloudsql-instances=$cloudSqlConnectionName" `
+        --command python `
+        --args app/scripts/initial_data.py `
+        "--env-vars-file=$jobEnvFile" `
+        "--set-secrets=$backendSecrets"
+}
+finally {
+    Remove-Item -Path $jobEnvFile -ErrorAction SilentlyContinue
+}
 
 Write-Host "Granting $runServiceAccountEmail permission to run $backendInitJob"
 Invoke-Checked gcloud run jobs add-iam-policy-binding $backendInitJob `
@@ -251,6 +371,8 @@ Write-Host "Building frontend image $frontendImage with VITE_API_URL=$backendUrl
 $cloudBuildConfig = @'
 steps:
   - name: gcr.io/cloud-builders/docker
+    env:
+      - DOCKER_BUILDKIT=1
     args:
       - build
       - -f

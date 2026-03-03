@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [string]$EnvFile,
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$ScriptArgs
 )
@@ -44,6 +45,35 @@ function Require-Env {
     }
 }
 
+function Resolve-EnvFilePath {
+    param([string]$PreferredPath)
+
+    $candidatePaths = @()
+    if (-not [string]::IsNullOrWhiteSpace($PreferredPath)) {
+        $candidatePaths += $PreferredPath
+    }
+    else {
+        $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+        $candidatePaths += (Join-Path $repoRoot ".env")
+    }
+
+    foreach ($candidatePath in $candidatePaths) {
+        if ([string]::IsNullOrWhiteSpace($candidatePath)) {
+            continue
+        }
+
+        $resolvedPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($candidatePath)
+        if (Test-Path -LiteralPath $resolvedPath -PathType Leaf) {
+            return $resolvedPath
+        }
+    }
+
+    $checkedPaths = ($candidatePaths | ForEach-Object {
+            $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($_)
+        }) -join ", "
+    throw "Environment file not found. Checked: $checkedPaths. Pass -EnvFile <path> or create .env in the repo root."
+}
+
 function Invoke-Checked {
     param(
         [Parameter(Mandatory = $true)][string]$FilePath,
@@ -64,7 +94,8 @@ function Test-CommandSuccess {
     return $LASTEXITCODE -eq 0
 }
 
-$envPath = Join-Path $PSScriptRoot "cloud-run.env"
+$envPath = Resolve-EnvFilePath -PreferredPath $EnvFile
+Write-Host "Loading environment from $envPath"
 Import-EnvFile -Path $envPath
 
 Require-Env GCP_PROJECT_ID "Set GCP_PROJECT_ID"
@@ -93,6 +124,7 @@ Invoke-Checked gcloud services enable `
     artifactregistry.googleapis.com `
     cloudbuild.googleapis.com `
     sqladmin.googleapis.com `
+    secretmanager.googleapis.com `
     storage.googleapis.com `
     servicenetworking.googleapis.com `
     compute.googleapis.com
