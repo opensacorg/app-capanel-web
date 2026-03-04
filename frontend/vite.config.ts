@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 
-const apiTarget = process.env.VITE_API_URL || 'http://localhost:8000'
+const apiTarget = process.env.VITE_API_URL || 'http://localhost:9000'
 
 /**
  * base: './' is required for relative paths in single-container deployment

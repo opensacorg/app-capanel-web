@@ -150,7 +150,9 @@ bash scripts/gcp/deploy-cloud-run.sh
 
 Notes:
 
-- Backend service startup is configured to be Cloud Run compatible (`PORT`, usually `8080`).
+- Cloud Run deploy uses one service (`capanel-full`) with two containers:
+  - `frontend` (NGINX ingress on `8080`)
+  - `backend` sidecar (FastAPI on `8000`)
 - The `${BACKEND_SERVICE}-init` Cloud Run Job is deployed and never auto-executed during deploy.
 - The init job runs only `backend/app/scripts/initial_data.py`.
 - A manual HTTP Cloud Function `${INIT_TRIGGER_FUNCTION_NAME}` is deployed and can trigger the init job on demand.
@@ -162,8 +164,9 @@ Suggested Google Cloud resource names:
 - Cloud SQL instance: `capanel-pg` (PostgreSQL 18, private IP only, network `default`)
 - Cloud SQL database: `capanel`
 - Cloud SQL user: `capanel_app`
-- Cloud Run backend service: `capanel-backend`
-- Cloud Run frontend service: `capanel-frontend`
+- Cloud Run full service: `capanel-full`
+- Backend image name (Artifact Registry): `capanel-backend`
+- Frontend image name (Artifact Registry): `capanel-frontend`
 - Runtime service account: `capanel-runner@ca-panel-001.iam.gserviceaccount.com`
 - Private services IP range: `google-managed-services-default`
 

@@ -18,7 +18,8 @@ WORKDIR /app
 # Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
-COPY . .
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY frontend ./frontend
 
 ARG VITE_API_URL=""
 ENV VITE_API_URL=${VITE_API_URL}
@@ -40,29 +41,3 @@ USER nginx
 
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
-
-
-# FROM node:25-alpine AS build-stage
-
-# RUN npm install -g pnpm@10.30.3
-
-# WORKDIR /app
-
-# COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-# COPY frontend/package.json ./frontend/
-# RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-# COPY frontend ./frontend
-# ARG VITE_API_URL
-# # Handled in Python code at runtime? This would force a rebuild of the image for different environments (prod, stage, dev)
-# # ENV VITE_API_URL=$VITE_API_URL
-# RUN pnpm --filter frontend build
-
-# FROM nginx:stable-alpine
-
-# COPY --from=build-stage /app/frontend/dist /usr/share/nginx/html
-# COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
-# COPY frontend/nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
-
-# # EXPOSE 8080
-
-# CMD ["nginx", "-g", "daemon off;"]

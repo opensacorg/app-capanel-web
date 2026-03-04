@@ -42,7 +42,7 @@ function Resolve-EnvFilePath {
         $candidatePaths += $PreferredPath
     }
     else {
-        $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+        $repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
         $candidatePaths += (Join-Path $repoRoot ".env")
     }
 

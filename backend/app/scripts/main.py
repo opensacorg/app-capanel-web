@@ -7,6 +7,29 @@ import google.auth
 from google.auth.transport.requests import AuthorizedSession
 
 
+MODES = {
+    "full",
+    "initial_data",
+    "import_ela_data",
+    "import_indicators",
+    "both_imports",
+}
+
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.environ.get(name)
+    if raw is None or raw == "":
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        return default
+
+
+DEFAULT_STEP_TIMEOUT_SECONDS = _env_int("JOB_STEP_TIMEOUT_SECONDS", 7200)
+DEFAULT_POLL_INTERVAL_SECONDS = max(1, _env_int("JOB_POLL_INTERVAL_SECONDS", 10))
+
+
 def _response(status: int, payload: dict) -> tuple[str, int, dict]:
     return json.dumps(payload), status, {"Content-Type": "application/json"}
 
@@ -71,6 +94,8 @@ def _run_job_step(
     job_name: str,
     step_name: str,
     args: list[str],
+    step_timeout_seconds: int,
+    poll_interval_seconds: int,
 ) -> dict[str, Any]:
     endpoint = (
         "https://run.googleapis.com/v2/projects/"
@@ -94,7 +119,12 @@ def _run_job_step(
         msg = f"Missing operation name when running step '{step_name}'"
         raise RuntimeError(msg)
 
-    operation = _poll_operation(session, operation_name)
+    operation = _poll_operation(
+        session,
+        operation_name,
+        timeout_seconds=step_timeout_seconds,
+        poll_interval_seconds=poll_interval_seconds,
+    )
     operation_error = operation.get("error")
     if operation_error:
         msg = operation_error.get("message") or f"Step '{step_name}' failed"
@@ -105,7 +135,12 @@ def _run_job_step(
         msg = f"Missing execution name when running step '{step_name}'"
         raise RuntimeError(msg)
 
-    execution = _poll_execution(session, execution_name)
+    execution = _poll_execution(
+        session,
+        execution_name,
+        timeout_seconds=step_timeout_seconds,
+        poll_interval_seconds=poll_interval_seconds,
+    )
     return {
         "step": step_name,
         "args": args,
@@ -113,6 +148,100 @@ def _run_job_step(
         "succeeded": int(execution.get("succeededCount", 0)),
         "failed": int(execution.get("failedCount", 0)),
     }
+
+
+def _build_steps(
+    *,
+    mode: str,
+    gcs_uri: str,
+    resources_path: str,
+    ela_file: str,
+    ela_files: list[str],
+    indicators_source: str,
+    indicators_path: str,
+    batch_size: int,
+    indicator: str,
+    years: list[str],
+) -> list[dict[str, Any]]:
+    migrate_step = {
+        "name": "migrate",
+        "args": ["-m", "alembic", "upgrade", "head"],
+    }
+    initial_data_step = {
+        "name": "initial_data",
+        "args": ["app/scripts/initial_data.py"],
+    }
+    sync_step = {
+        "name": "sync_gcs_resources",
+        "args": [
+            "app/scripts/sync_gcs_resources.py",
+            "--uri",
+            gcs_uri,
+            "--dest",
+            resources_path,
+        ],
+    }
+    import_ela_step = {
+        "name": "import_ela_data",
+        "args": ["app/scripts/import_ela_data.py", ela_file],
+    }
+    import_indicators_step = {
+        "name": "import_indicators",
+        "args": [
+            "app/scripts/import_indicators.py",
+            "--source",
+            indicators_source,
+            "--path",
+            indicators_path,
+            "--batch-size",
+            str(batch_size),
+        ],
+    }
+    if indicator:
+        import_indicators_step["args"].extend(["--indicator", indicator])
+    if years:
+        import_indicators_step["args"].extend(["--years", ",".join(years)])
+
+    if mode == "initial_data":
+        return [migrate_step, initial_data_step]
+    if mode == "import_ela_data":
+        return [sync_step, import_ela_step]
+    if mode == "import_indicators":
+        return [sync_step, import_indicators_step]
+    if mode == "both_imports":
+        ela_steps = []
+        for i, current_ela_file in enumerate(ela_files):
+            ela_steps.append(
+                {
+                    "name": f"import_ela_data_{i + 1}",
+                    "args": ["app/scripts/import_ela_data.py", current_ela_file],
+                }
+            )
+        import_indicators_all_step = {
+            "name": "import_indicators_all_files",
+            "args": [
+                "app/scripts/import_indicators.py",
+                "--source",
+                indicators_source,
+                "--path",
+                indicators_path,
+                "--batch-size",
+                str(batch_size),
+                "--all-files",
+            ],
+        }
+        if indicator:
+            import_indicators_all_step["args"].extend(["--indicator", indicator])
+        if years:
+            import_indicators_all_step["args"].extend(["--years", ",".join(years)])
+        return [sync_step, *ela_steps, import_indicators_all_step]
+    return [
+        migrate_step,
+        initial_data_step,
+        sync_step,
+        import_ela_step,
+        import_indicators_step,
+    ]
 
 
 def trigger_backend_init(request):
@@ -135,6 +264,15 @@ def trigger_backend_init(request):
     request_json = request.get_json(silent=True) or {}
     if not isinstance(request_json, dict):
         return _response(400, {"error": "Request body must be a JSON object."})
+    mode = str(request_json.get("mode", "full")).strip()
+    if mode not in MODES:
+        return _response(
+            400,
+            {
+                "error": "Invalid mode.",
+                "allowed_modes": sorted(MODES),
+            },
+        )
     gcs_uri = str(
         request_json.get("gcs_uri", "gs://ca-panel-001-resources/resources")
     ).strip()
@@ -142,6 +280,24 @@ def trigger_backend_init(request):
     ela_file = str(
         request_json.get("ela_file", f"{resources_path}/cde/eladownload2025.xlsx")
     ).strip()
+    years_raw = request_json.get("years")
+    years: list[str]
+    if years_raw is None:
+        years = ["2024", "2025"]
+    elif isinstance(years_raw, list):
+        years = [str(y).strip() for y in years_raw if str(y).strip()]
+    else:
+        years = [y.strip() for y in str(years_raw).split(",") if y.strip()]
+
+    ela_files_raw = request_json.get("ela_files")
+    if isinstance(ela_files_raw, list):
+        ela_files = [str(p).strip() for p in ela_files_raw if str(p).strip()]
+    elif isinstance(ela_files_raw, str) and ela_files_raw.strip():
+        ela_files = [ela_files_raw.strip()]
+    else:
+        ela_files = [f"{resources_path}/cde/eladownload{year}.xlsx" for year in years]
+        if not ela_files:
+            ela_files = [ela_file]
     indicators_source = str(request_json.get("indicators_source", "cde")).strip()
     indicators_path = str(
         request_json.get("indicators_path", f"{resources_path}/cde")
@@ -152,6 +308,22 @@ def trigger_backend_init(request):
         return _response(400, {"error": "batch_size must be an integer."})
     if batch_size <= 0:
         return _response(400, {"error": "batch_size must be > 0."})
+    try:
+        step_timeout_seconds = int(
+            request_json.get("step_timeout_seconds", DEFAULT_STEP_TIMEOUT_SECONDS)
+        )
+    except (TypeError, ValueError):
+        return _response(400, {"error": "step_timeout_seconds must be an integer."})
+    if step_timeout_seconds <= 0:
+        return _response(400, {"error": "step_timeout_seconds must be > 0."})
+    try:
+        poll_interval_seconds = int(
+            request_json.get("poll_interval_seconds", DEFAULT_POLL_INTERVAL_SECONDS)
+        )
+    except (TypeError, ValueError):
+        return _response(400, {"error": "poll_interval_seconds must be an integer."})
+    if poll_interval_seconds <= 0:
+        return _response(400, {"error": "poll_interval_seconds must be > 0."})
     indicator = str(request_json.get("indicator", "")).strip()
 
     if not gcs_uri.startswith("gs://"):
@@ -162,44 +334,18 @@ def trigger_backend_init(request):
     )
     session = AuthorizedSession(credentials)
 
-    steps = [
-        {
-            "name": "migrate",
-            "args": ["-m", "alembic", "upgrade", "head"],
-        },
-        {
-            "name": "initial_data",
-            "args": ["app/scripts/initial_data.py"],
-        },
-        {
-            "name": "sync_gcs_resources",
-            "args": [
-                "app/scripts/sync_gcs_resources.py",
-                "--uri",
-                gcs_uri,
-                "--dest",
-                resources_path,
-            ],
-        },
-        {
-            "name": "import_ela_data",
-            "args": ["app/scripts/import_ela_data.py", ela_file],
-        },
-        {
-            "name": "import_indicators",
-            "args": [
-                "app/scripts/import_indicators.py",
-                "--source",
-                indicators_source,
-                "--path",
-                indicators_path,
-                "--batch-size",
-                str(batch_size),
-            ],
-        },
-    ]
-    if indicator:
-        steps[-1]["args"].extend(["--indicator", indicator])
+    steps = _build_steps(
+        mode=mode,
+        gcs_uri=gcs_uri,
+        resources_path=resources_path,
+        ela_file=ela_file,
+        ela_files=ela_files,
+        indicators_source=indicators_source,
+        indicators_path=indicators_path,
+        batch_size=batch_size,
+        indicator=indicator,
+        years=years,
+    )
 
     completed_steps: list[dict[str, Any]] = []
     for step in steps:
@@ -211,6 +357,8 @@ def trigger_backend_init(request):
                 job_name=job_name,
                 step_name=step["name"],
                 args=step["args"],
+                step_timeout_seconds=step_timeout_seconds,
+                poll_interval_seconds=poll_interval_seconds,
             )
             completed_steps.append(result)
         except Exception as exc:
@@ -229,8 +377,13 @@ def trigger_backend_init(request):
         200,
         {
             "job": job_name,
+            "mode": mode,
             "gcs_uri": gcs_uri,
             "resources_path": resources_path,
+            "years": years,
+            "ela_files": ela_files,
+            "step_timeout_seconds": step_timeout_seconds,
+            "poll_interval_seconds": poll_interval_seconds,
             "status": "completed",
             "steps": completed_steps,
         },

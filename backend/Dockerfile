@@ -36,4 +36,4 @@ WORKDIR /app/backend/
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "fastapi run --workers ${WEB_CONCURRENCY:-2} --port ${PORT:-8000} app/main.py"]
+CMD ["uv", "run", "--no-sync", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9000", "--proxy-headers"]

@@ -3,6 +3,8 @@ node_modules
 **/node_modules
 .venv
 **/.venv
+venv
+**/venv
 
 # Build outputs
 **/dist
@@ -18,6 +20,10 @@ node_modules
 **/playwright-report
 **/blob-report
 **/playwright/.cache
+**/.pytest_cache
+**/.coverage
+**/.coverage.*
+**/htmlcov
 
 # Local metadata and logs
 .git
@@ -26,3 +32,11 @@ node_modules
 .idea
 *.log
 .env
+
+# Python
+**/__pycache__
+**/*.py[cod]
+**/.mypy_cache
+**/.ruff_cache
+
+**/.claude

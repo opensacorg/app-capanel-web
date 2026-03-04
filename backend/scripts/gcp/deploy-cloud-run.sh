@@ -15,7 +15,7 @@ resolve_env_file() {
     exit 1
   fi
 
-  local candidate_repo_env="${SCRIPT_DIR}/../../.env"
+  local candidate_repo_env="${SCRIPT_DIR}/../../../.env"
   if [[ -f "${candidate_repo_env}" ]]; then
     printf '%s\n' "${candidate_repo_env}"
     return 0
@@ -30,6 +30,17 @@ resolve_env_file() {
 ENV_PATH="$(resolve_env_file)"
 echo "Loading environment from ${ENV_PATH}"
 source "${ENV_PATH}"
+
+cleanup_files=()
+register_cleanup_file() {
+  cleanup_files+=("$1")
+}
+cleanup_temp_files() {
+  for f in "${cleanup_files[@]}"; do
+    rm -f "${f}"
+  done
+}
+trap cleanup_temp_files EXIT
 
 # Required inputs
 : "${GCP_PROJECT_ID:?Set GCP_PROJECT_ID}"
@@ -49,18 +60,27 @@ source "${ENV_PATH}"
 TAG="${TAG:-$(git rev-parse --short HEAD)}"
 API_V1_STR="${API_V1_STR:-/api/v1}"
 PROJECT_NAME="${PROJECT_NAME:-California Accountability Panel}"
-BACKEND_CORS_ORIGINS="${BACKEND_CORS_ORIGINS:-https://localhost}"
+BACKEND_CORS_ORIGINS="${BACKEND_CORS_ORIGINS_PRODUCTION:-${BACKEND_CORS_ORIGINS:-https://localhost}}"
 CLOUD_SQL_CONNECTION_NAME="${GCP_PROJECT_ID}:${GCP_REGION}:${CLOUD_SQL_INSTANCE}"
 RUN_SERVICE_ACCOUNT_EMAIL="${RUN_SERVICE_ACCOUNT}@${GCP_PROJECT_ID}.iam.gserviceaccount.com"
 RUN_DATA_IMPORTS="${RUN_DATA_IMPORTS:-false}"
+RUN_STARTUP_DATA_IMPORTS="${RUN_STARTUP_DATA_IMPORTS:-false}"
 IMPORT_GCS_URI="${IMPORT_GCS_URI:-gs://ca-panel-001-resources/resources}"
 IMPORT_RESOURCES_LOCAL_PATH="${IMPORT_RESOURCES_LOCAL_PATH:-$HOME/Downloads/resources}"
 SYNC_LOCAL_IMPORTS_TO_BUCKET="${SYNC_LOCAL_IMPORTS_TO_BUCKET:-false}"
-BACKEND_INIT_JOB="${BACKEND_INIT_JOB:-${BACKEND_SERVICE}-init}"
-INIT_TRIGGER_FUNCTION_NAME="${INIT_TRIGGER_FUNCTION_NAME:-${BACKEND_SERVICE}-init-trigger}"
-ENVIRONMENT="${ENVIRONMENT:-production}"
+FULL_SERVICE="${FULL_SERVICE:-capanel-full}"
+BACKEND_INIT_JOB="${BACKEND_INIT_JOB:-${FULL_SERVICE}-init}"
+INIT_TRIGGER_FUNCTION_NAME="${INIT_TRIGGER_FUNCTION_NAME:-${FULL_SERVICE}-init-trigger}"
+BACKEND_INIT_JOB_TASK_TIMEOUT="${BACKEND_INIT_JOB_TASK_TIMEOUT:-7200s}"
+BACKEND_INIT_JOB_CPU="${BACKEND_INIT_JOB_CPU:-4}"
+BACKEND_INIT_JOB_MEMORY="${BACKEND_INIT_JOB_MEMORY:-8Gi}"
+INIT_TRIGGER_FUNCTION_TIMEOUT="${INIT_TRIGGER_FUNCTION_TIMEOUT:-3600s}"
+JOB_STEP_TIMEOUT_SECONDS="${JOB_STEP_TIMEOUT_SECONDS:-7200}"
+JOB_POLL_INTERVAL_SECONDS="${JOB_POLL_INTERVAL_SECONDS:-10}"
+ORIGINAL_ENVIRONMENT="${ENVIRONMENT:-<unset>}"
+ENVIRONMENT="production"
 if [[ "${ENVIRONMENT}" == "production" ]]; then
-  FRONTEND_HOST="${FRONTEND_HOST_PRODUCTION:-https://capanel-service-5418848943.us-west1.run.app}"
+  FRONTEND_HOST="${FRONTEND_HOST_PRODUCTION:-https://capanel-full-5418848943.us-west1.run.app}"
 else
   FRONTEND_HOST="${FRONTEND_HOST:-http://localhost:5173}"
 fi
@@ -70,11 +90,8 @@ FRONTEND_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_AR_REPOSITO
 
 echo "Using project=${GCP_PROJECT_ID}, region=${GCP_REGION}, tag=${TAG}"
 echo "Using FRONTEND_HOST=${FRONTEND_HOST}"
-
-if [[ "${ENVIRONMENT}" != "production" ]]; then
-  echo "Refusing deploy: ENVIRONMENT must be production for Cloud Run deploys."
-  echo "Current value: ${ENVIRONMENT}"
-  exit 1
+if [[ "${ORIGINAL_ENVIRONMENT}" != "production" ]]; then
+  echo "Forcing ENVIRONMENT=production for Cloud Run deploy (was: ${ORIGINAL_ENVIRONMENT})"
 fi
 
 gcloud config set project "${GCP_PROJECT_ID}"
@@ -117,9 +134,9 @@ if ! gcloud artifacts repositories describe "${GCP_AR_REPOSITORY}" \
 fi
 
 echo "Building backend image ${BACKEND_IMAGE}"
-gcloud builds submit \
-  --substitutions "_IMAGE=${BACKEND_IMAGE}" \
-  --config - . <<'YAML'
+BACKEND_BUILD_CONFIG="$(mktemp)"
+register_cleanup_file "${BACKEND_BUILD_CONFIG}"
+cat > "${BACKEND_BUILD_CONFIG}" <<'YAML'
 steps:
   - name: gcr.io/cloud-builders/docker
     env:
@@ -134,59 +151,20 @@ steps:
 images:
   - ${_IMAGE}
 YAML
+gcloud builds submit \
+  --substitutions "_IMAGE=${BACKEND_IMAGE}" \
+  --config "${BACKEND_BUILD_CONFIG}" \
+  .
 
-echo "Deploying backend service ${BACKEND_SERVICE}"
 yaml_escape() {
   printf '%s' "$1" | sed "s/'/''/g"
 }
 
-BACKEND_ENV_FILE="$(mktemp)"
-{
-  printf "ENVIRONMENT: '%s'\n" "$(yaml_escape "${ENVIRONMENT}")"
-  printf "PROJECT_NAME: '%s'\n" "$(yaml_escape "${PROJECT_NAME}")"
-  printf "API_V1_STR: '%s'\n" "$(yaml_escape "${API_V1_STR}")"
-  printf "BACKEND_CORS_ORIGINS: '%s'\n" "$(yaml_escape "${BACKEND_CORS_ORIGINS}")"
-  printf "FRONTEND_HOST: '%s'\n" "$(yaml_escape "${FRONTEND_HOST}")"
-  printf "CLOUD_SQL_INSTANCE_CONNECTION_NAME: '%s'\n" "$(yaml_escape "${CLOUD_SQL_CONNECTION_NAME}")"
-  printf "POSTGRES_DB: '%s'\n" "$(yaml_escape "${CLOUD_SQL_DB}")"
-  printf "POSTGRES_USER: '%s'\n" "$(yaml_escape "${CLOUD_SQL_USER}")"
-  printf "POSTGRES_SERVER: 'localhost'\n"
-  printf "RUN_DATA_IMPORTS: '%s'\n" "$(yaml_escape "${RUN_DATA_IMPORTS}")"
-  printf "IMPORT_GCS_URI: '%s'\n" "$(yaml_escape "${IMPORT_GCS_URI}")"
-  printf "IMPORT_RESOURCES_LOCAL_PATH: '%s'\n" "$(yaml_escape "${IMPORT_RESOURCES_LOCAL_PATH}")"
-} > "${BACKEND_ENV_FILE}"
-trap 'rm -f "${BACKEND_ENV_FILE}" "${JOB_ENV_FILE:-}"' EXIT
-
-gcloud run deploy "${BACKEND_SERVICE}" \
-  --image "${BACKEND_IMAGE}" \
-  --region "${GCP_REGION}" \
-  --platform managed \
-  --allow-unauthenticated \
-  --service-account "${RUN_SERVICE_ACCOUNT_EMAIL}" \
-  --network "${VPC_NETWORK}" \
-  --subnet "${VPC_SUBNET}" \
-  --vpc-egress private-ranges-only \
-  --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
-  --env-vars-file "${BACKEND_ENV_FILE}" \
-  --set-secrets "POSTGRES_PASSWORD=capanel-postgres-password:latest,SECRET_KEY=capanel-secret-key:latest,FIRST_SUPERUSER=capanel-superuser-email:latest,FIRST_SUPERUSER_PASSWORD=capanel-superuser-password:latest"
-
-DEPLOYED_BACKEND_ENVIRONMENT="$(
-  gcloud run services describe "${BACKEND_SERVICE}" \
-    --region "${GCP_REGION}" \
-    --flatten="spec.template.spec.containers[].env[]" \
-    --format="csv[no-heading](spec.template.spec.containers.env.name,spec.template.spec.containers.env.value)" \
-    | awk -F, '$1=="ENVIRONMENT"{print $2; exit}'
-)"
-if [[ "${DEPLOYED_BACKEND_ENVIRONMENT}" != "production" ]]; then
-  echo "Backend service ENVIRONMENT verification failed."
-  echo "Expected: production"
-  echo "Actual: ${DEPLOYED_BACKEND_ENVIRONMENT:-<unset>}"
-  exit 1
-fi
-echo "Verified backend ENVIRONMENT=${DEPLOYED_BACKEND_ENVIRONMENT}"
+echo "Preparing one-service deployment for ${FULL_SERVICE}"
 
 echo "Deploying backend init job ${BACKEND_INIT_JOB}"
 JOB_ENV_FILE="$(mktemp)"
+register_cleanup_file "${JOB_ENV_FILE}"
 {
   printf "ENVIRONMENT: '%s'\n" "$(yaml_escape "${ENVIRONMENT}")"
   printf "PROJECT_NAME: '%s'\n" "$(yaml_escape "${PROJECT_NAME}")"
@@ -198,6 +176,7 @@ JOB_ENV_FILE="$(mktemp)"
   printf "POSTGRES_USER: '%s'\n" "$(yaml_escape "${CLOUD_SQL_USER}")"
   printf "POSTGRES_SERVER: 'localhost'\n"
   printf "RUN_DATA_IMPORTS: 'false'\n"
+  printf "RUN_STARTUP_DATA_IMPORTS: 'false'\n"
   printf "IMPORT_GCS_URI: '%s'\n" "$(yaml_escape "${IMPORT_GCS_URI}")"
   printf "IMPORT_RESOURCES_LOCAL_PATH: '%s'\n" "$(yaml_escape "${IMPORT_RESOURCES_LOCAL_PATH}")"
 } > "${JOB_ENV_FILE}"
@@ -206,6 +185,9 @@ gcloud run jobs deploy "${BACKEND_INIT_JOB}" \
   --image "${BACKEND_IMAGE}" \
   --region "${GCP_REGION}" \
   --service-account "${RUN_SERVICE_ACCOUNT_EMAIL}" \
+  --task-timeout "${BACKEND_INIT_JOB_TASK_TIMEOUT}" \
+  --cpu "${BACKEND_INIT_JOB_CPU}" \
+  --memory "${BACKEND_INIT_JOB_MEMORY}" \
   --network "${VPC_NETWORK}" \
   --subnet "${VPC_SUBNET}" \
   --vpc-egress private-ranges-only \
@@ -226,24 +208,18 @@ gcloud functions deploy "${INIT_TRIGGER_FUNCTION_NAME}" \
   --gen2 \
   --runtime python312 \
   --region "${GCP_REGION}" \
-  --source scripts/gcp/functions/manual_backend_init \
+  --timeout "${INIT_TRIGGER_FUNCTION_TIMEOUT}" \
+  --source backend/scripts/gcp/functions/manual_backend_init \
   --entry-point trigger_backend_init \
   --trigger-http \
   --no-allow-unauthenticated \
   --service-account "${RUN_SERVICE_ACCOUNT_EMAIL}" \
-  --set-env-vars "GCP_PROJECT_ID=${GCP_PROJECT_ID},GCP_REGION=${GCP_REGION},BACKEND_INIT_JOB=${BACKEND_INIT_JOB}"
+  --set-env-vars "GCP_PROJECT_ID=${GCP_PROJECT_ID},GCP_REGION=${GCP_REGION},BACKEND_INIT_JOB=${BACKEND_INIT_JOB},JOB_STEP_TIMEOUT_SECONDS=${JOB_STEP_TIMEOUT_SECONDS},JOB_POLL_INTERVAL_SECONDS=${JOB_POLL_INTERVAL_SECONDS}"
 
-BACKEND_URL="$(
-  gcloud run services describe "${BACKEND_SERVICE}" \
-    --region "${GCP_REGION}" \
-    --format='value(status.url)'
-)"
-
-echo "Backend URL: ${BACKEND_URL}"
-echo "Building frontend image ${FRONTEND_IMAGE} with VITE_API_URL=${BACKEND_URL}"
-gcloud builds submit \
-  --substitutions "_IMAGE=${FRONTEND_IMAGE},_VITE_API_URL=${BACKEND_URL}" \
-  --config - . <<'YAML'
+echo "Building frontend image ${FRONTEND_IMAGE} with VITE_API_URL=${API_V1_STR}"
+FRONTEND_BUILD_CONFIG="$(mktemp)"
+register_cleanup_file "${FRONTEND_BUILD_CONFIG}"
+cat > "${FRONTEND_BUILD_CONFIG}" <<'YAML'
 steps:
   - name: gcr.io/cloud-builders/docker
     env:
@@ -260,21 +236,134 @@ steps:
 images:
   - ${_IMAGE}
 YAML
+gcloud builds submit \
+  --substitutions "_IMAGE=${FRONTEND_IMAGE},_VITE_API_URL=${API_V1_STR}" \
+  --config "${FRONTEND_BUILD_CONFIG}" \
+  .
 
-echo "Deploying frontend service ${FRONTEND_SERVICE}"
-gcloud run deploy "${FRONTEND_SERVICE}" \
-  --image "${FRONTEND_IMAGE}" \
+echo "Deploying combined Cloud Run service ${FULL_SERVICE}"
+SERVICE_RENDERED="$(mktemp)"
+register_cleanup_file "${SERVICE_RENDERED}"
+cat > "${SERVICE_RENDERED}" <<YAML
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ${FULL_SERVICE}
+  labels:
+    cloud.googleapis.com/location: ${GCP_REGION}
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/cloudsql-instances: ${CLOUD_SQL_CONNECTION_NAME}
+        run.googleapis.com/network-interfaces: '[{"network":"${VPC_NETWORK}","subnetwork":"${VPC_SUBNET}"}]'
+        run.googleapis.com/vpc-access-egress: private-ranges-only
+    spec:
+      serviceAccountName: ${RUN_SERVICE_ACCOUNT_EMAIL}
+      containers:
+      - name: frontend
+        image: ${FRONTEND_IMAGE}
+        ports:
+        - containerPort: 8080
+        startupProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          periodSeconds: 30
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+      - name: backend
+        image: ${BACKEND_IMAGE}
+        startupProbe:
+          httpGet:
+            path: /api/v1/utils/health-check/
+            port: 9000
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v1/utils/health-check/
+            port: 9000
+          periodSeconds: 30
+          timeoutSeconds: 5
+        env:
+        - name: ENVIRONMENT
+          value: "$(yaml_escape "${ENVIRONMENT}")"
+        - name: PROJECT_NAME
+          value: "$(yaml_escape "${PROJECT_NAME}")"
+        - name: API_V1_STR
+          value: "$(yaml_escape "${API_V1_STR}")"
+        - name: BACKEND_CORS_ORIGINS
+          value: "$(yaml_escape "${BACKEND_CORS_ORIGINS}")"
+        - name: FRONTEND_HOST
+          value: "$(yaml_escape "${FRONTEND_HOST}")"
+        - name: CLOUD_SQL_INSTANCE_CONNECTION_NAME
+          value: "$(yaml_escape "${CLOUD_SQL_CONNECTION_NAME}")"
+        - name: POSTGRES_SERVER
+          value: "localhost"
+        - name: POSTGRES_DB
+          value: "$(yaml_escape "${CLOUD_SQL_DB}")"
+        - name: POSTGRES_USER
+          value: "$(yaml_escape "${CLOUD_SQL_USER}")"
+        - name: RUN_DATA_IMPORTS
+          value: "$(yaml_escape "${RUN_DATA_IMPORTS}")"
+        - name: RUN_STARTUP_DATA_IMPORTS
+          value: "$(yaml_escape "${RUN_STARTUP_DATA_IMPORTS}")"
+        - name: IMPORT_GCS_URI
+          value: "$(yaml_escape "${IMPORT_GCS_URI}")"
+        - name: IMPORT_RESOURCES_LOCAL_PATH
+          value: "$(yaml_escape "${IMPORT_RESOURCES_LOCAL_PATH}")"
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-secret-key
+        - name: FIRST_SUPERUSER
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-superuser-email
+        - name: FIRST_SUPERUSER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-superuser-password
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-postgres-password
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+YAML
+
+gcloud run services replace "${SERVICE_RENDERED}" --region "${GCP_REGION}"
+gcloud run services add-iam-policy-binding "${FULL_SERVICE}" \
   --region "${GCP_REGION}" \
-  --platform managed \
-  --allow-unauthenticated
+  --member "allUsers" \
+  --role "roles/run.invoker" >/dev/null
 
-FRONTEND_URL="$(
-  gcloud run services describe "${FRONTEND_SERVICE}" \
+FULL_SERVICE_URL="$(
+  gcloud run services describe "${FULL_SERVICE}" \
     --region "${GCP_REGION}" \
     --format='value(status.url)'
 )"
-
-echo "Frontend URL: ${FRONTEND_URL}"
+echo "Full service URL: ${FULL_SERVICE_URL}"
 INIT_TRIGGER_FUNCTION_URL="$(
   gcloud functions describe "${INIT_TRIGGER_FUNCTION_NAME}" \
     --region "${GCP_REGION}" \

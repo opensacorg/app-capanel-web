@@ -34,6 +34,13 @@ from app.core.database import engine
 INDICATORS = ["ELA", "MATH", "SCI", "CHRONIC", "SUSP", "GRAD", "ELPI", "CCI"]
 
 
+def _matches_year_filter(file_path: Path, years: set[str] | None) -> bool:
+    if not years:
+        return True
+    name = file_path.name.lower()
+    return any(year in name for year in years)
+
+
 def import_single_file(
     file_path: Path, indicator: str, source: str = "cde", batch_size: int = 1000
 ) -> int:
@@ -66,7 +73,13 @@ def import_single_file(
     return int(count)
 
 
-def import_cde_directory(dir_path: Path, batch_size: int = 1000) -> dict[str, int]:
+def import_cde_directory(
+    dir_path: Path,
+    batch_size: int = 1000,
+    *,
+    all_files: bool = False,
+    years: set[str] | None = None,
+) -> dict[str, int]:
     """Import all CDE files from a directory.
 
     Args:
@@ -80,19 +93,21 @@ def import_cde_directory(dir_path: Path, batch_size: int = 1000) -> dict[str, in
 
     for indicator, pattern in INDICATOR_FILES.items():
         # Find matching files
-        files = list(dir_path.glob(pattern))
+        files = sorted(dir_path.glob(pattern))
+        files = [f for f in files if _matches_year_filter(f, years)]
         if not files:
             print(f"\nNo files found for {indicator} (pattern: {pattern})")
             continue
 
-        # Use the most recent file if multiple exist
-        file_path = sorted(files)[-1]
-        try:
-            count = import_single_file(file_path, indicator, "cde", batch_size)
-            results[indicator] = count
-        except Exception as e:
-            print(f"Error importing {indicator}: {e}")
-            results[indicator] = 0
+        selected_files = files if all_files else [files[-1]]
+        imported_count = 0
+        for file_path in selected_files:
+            try:
+                count = import_single_file(file_path, indicator, "cde", batch_size)
+                imported_count += count
+            except Exception as e:
+                print(f"Error importing {indicator} from {file_path.name}: {e}")
+        results[indicator] = imported_count
 
     return results
 
@@ -175,6 +190,15 @@ def main() -> None:
         action="store_true",
         help="List available indicators",
     )
+    parser.add_argument(
+        "--all-files",
+        action="store_true",
+        help="Import all matching files in a directory (default imports only latest).",
+    )
+    parser.add_argument(
+        "--years",
+        help="Comma-separated year filters for file names, e.g. 2024,2025.",
+    )
 
     args = parser.parse_args()
 
@@ -196,6 +220,10 @@ def main() -> None:
         print(f"Error: Path not found: {path}")
         sys.exit(1)
 
+    years_filter: set[str] | None = None
+    if args.years:
+        years_filter = {y.strip() for y in args.years.split(",") if y.strip()}
+
     if path.is_file():
         # Import single file
         if not args.indicator:
@@ -206,7 +234,12 @@ def main() -> None:
         # Import directory
         print(f"Importing from directory: {path}")
         if args.source == "cde":
-            results = import_cde_directory(path, args.batch_size)
+            results = import_cde_directory(
+                path,
+                args.batch_size,
+                all_files=args.all_files,
+                years=years_filter,
+            )
         else:
             indicators = [args.indicator] if args.indicator else None
             results = import_state_directory(path, indicators, args.batch_size)

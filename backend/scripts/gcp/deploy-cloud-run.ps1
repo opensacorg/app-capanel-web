@@ -42,7 +42,7 @@ function Resolve-EnvFilePath {
         $candidatePaths += $PreferredPath
     }
     else {
-        $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+        $repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
         $candidatePaths += (Join-Path $repoRoot ".env")
     }
 
@@ -141,11 +141,19 @@ $backendCorsOrigins = if ($env:BACKEND_CORS_ORIGINS) { $env:BACKEND_CORS_ORIGINS
 $cloudSqlConnectionName = "$($env:GCP_PROJECT_ID):$($env:GCP_REGION):$($env:CLOUD_SQL_INSTANCE)"
 $runServiceAccountEmail = "$($env:RUN_SERVICE_ACCOUNT)@$($env:GCP_PROJECT_ID).iam.gserviceaccount.com"
 $runDataImports = if ($env:RUN_DATA_IMPORTS) { $env:RUN_DATA_IMPORTS } else { "false" }
+$runStartupDataImports = if ($env:RUN_STARTUP_DATA_IMPORTS) { $env:RUN_STARTUP_DATA_IMPORTS } else { "false" }
 $importGcsUri = if ($env:IMPORT_GCS_URI) { $env:IMPORT_GCS_URI } else { "gs://ca-panel-001-resources/resources" }
 $importResourcesLocalPath = if ($env:IMPORT_RESOURCES_LOCAL_PATH) { $env:IMPORT_RESOURCES_LOCAL_PATH } else { "$HOME/Downloads/resources" }
 $syncLocalImportsToBucket = if ($env:SYNC_LOCAL_IMPORTS_TO_BUCKET) { $env:SYNC_LOCAL_IMPORTS_TO_BUCKET } else { "false" }
-$backendInitJob = if ($env:BACKEND_INIT_JOB) { $env:BACKEND_INIT_JOB } else { "$($env:BACKEND_SERVICE)-init" }
-$initTriggerFunctionName = if ($env:INIT_TRIGGER_FUNCTION_NAME) { $env:INIT_TRIGGER_FUNCTION_NAME } else { "$($env:BACKEND_SERVICE)-init-trigger" }
+$fullService = if ($env:FULL_SERVICE) { $env:FULL_SERVICE } else { "capanel-full" }
+$backendInitJob = if ($env:BACKEND_INIT_JOB) { $env:BACKEND_INIT_JOB } else { "$fullService-init" }
+$initTriggerFunctionName = if ($env:INIT_TRIGGER_FUNCTION_NAME) { $env:INIT_TRIGGER_FUNCTION_NAME } else { "$fullService-init-trigger" }
+$backendInitJobTaskTimeout = if ($env:BACKEND_INIT_JOB_TASK_TIMEOUT) { $env:BACKEND_INIT_JOB_TASK_TIMEOUT } else { "7200s" }
+$backendInitJobCpu = if ($env:BACKEND_INIT_JOB_CPU) { $env:BACKEND_INIT_JOB_CPU } else { "4" }
+$backendInitJobMemory = if ($env:BACKEND_INIT_JOB_MEMORY) { $env:BACKEND_INIT_JOB_MEMORY } else { "8Gi" }
+$initTriggerFunctionTimeout = if ($env:INIT_TRIGGER_FUNCTION_TIMEOUT) { $env:INIT_TRIGGER_FUNCTION_TIMEOUT } else { "3600s" }
+$jobStepTimeoutSeconds = if ($env:JOB_STEP_TIMEOUT_SECONDS) { $env:JOB_STEP_TIMEOUT_SECONDS } else { "7200" }
+$jobPollIntervalSeconds = if ($env:JOB_POLL_INTERVAL_SECONDS) { $env:JOB_POLL_INTERVAL_SECONDS } else { "10" }
 $originalEnvironment = if ($env:ENVIRONMENT) { $env:ENVIRONMENT } else { "<unset>" }
 $environment = "production"
 $env:ENVIRONMENT = "production"
@@ -153,7 +161,7 @@ $frontendHost = if ($env:FRONTEND_HOST_PRODUCTION) {
     $env:FRONTEND_HOST_PRODUCTION
 }
 elseif ($environment -eq "production") {
-    "https://capanel-service-5418848943.us-west1.run.app"
+    "https://capanel-full-5418848943.us-west1.run.app"
 }
 elseif ($env:FRONTEND_HOST) {
     $env:FRONTEND_HOST
@@ -244,70 +252,8 @@ finally {
     Remove-Item -Path $tmpBackendBuildConfigPath -ErrorAction SilentlyContinue
 }
 
-Write-Host "Deploying backend service $($env:BACKEND_SERVICE)"
-$backendEnvFile = New-EnvVarsFile -EnvVars @{
-    ENVIRONMENT                        = $environment
-    PROJECT_NAME                       = $projectName
-    API_V1_STR                         = $apiV1Str
-    BACKEND_CORS_ORIGINS               = $backendCorsOrigins
-    FRONTEND_HOST                      = $frontendHost
-    CLOUD_SQL_INSTANCE_CONNECTION_NAME = $cloudSqlConnectionName
-    POSTGRES_DB                        = $env:CLOUD_SQL_DB
-    POSTGRES_USER                      = $env:CLOUD_SQL_USER
-    POSTGRES_SERVER                    = "localhost"
-    RUN_DATA_IMPORTS                   = $runDataImports
-    IMPORT_GCS_URI                     = $importGcsUri
-    IMPORT_RESOURCES_LOCAL_PATH        = $importResourcesLocalPath
-}
+Write-Host "Preparing one-service deployment for $fullService"
 $backendSecrets = "POSTGRES_PASSWORD=capanel-postgres-password:latest,SECRET_KEY=capanel-secret-key:latest,FIRST_SUPERUSER=capanel-superuser-email:latest,FIRST_SUPERUSER_PASSWORD=capanel-superuser-password:latest"
-try {
-    Invoke-Checked gcloud run deploy $env:BACKEND_SERVICE `
-        --image $backendImage `
-        "--region=$($env:GCP_REGION)" `
-        --platform managed `
-        --allow-unauthenticated `
-        "--service-account=$runServiceAccountEmail" `
-        "--network=$($env:VPC_NETWORK)" `
-        "--subnet=$($env:VPC_SUBNET)" `
-        --vpc-egress private-ranges-only `
-        "--add-cloudsql-instances=$cloudSqlConnectionName" `
-        "--env-vars-file=$backendEnvFile" `
-        "--set-secrets=$backendSecrets"
-}
-finally {
-    Remove-Item -Path $backendEnvFile -ErrorAction SilentlyContinue
-}
-
-$backendEnvRows = @(
-    & gcloud run services describe $env:BACKEND_SERVICE `
-        "--region=$($env:GCP_REGION)" `
-        --flatten "spec.template.spec.containers[].env[]" `
-        --format "csv[no-heading](spec.template.spec.containers.env.name,spec.template.spec.containers.env.value)"
-)
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to verify deployed backend environment."
-}
-$deployedBackendEnvironment = ""
-foreach ($row in $backendEnvRows) {
-    $parts = $row -split ",", 2
-    if ($parts.Count -eq 2 -and $parts[0] -eq "ENVIRONMENT") {
-        $deployedBackendEnvironment = $parts[1]
-        break
-    }
-}
-
-if ($deployedBackendEnvironment -ne "production") {
-    Write-Host "Backend service ENVIRONMENT verification failed."
-    Write-Host "Expected: production"
-    if ([string]::IsNullOrWhiteSpace($deployedBackendEnvironment)) {
-        Write-Host "Actual: <unset>"
-    }
-    else {
-        Write-Host "Actual: $deployedBackendEnvironment"
-    }
-    exit 1
-}
-Write-Host "Verified backend ENVIRONMENT=$deployedBackendEnvironment"
 
 Write-Host "Deploying backend init job $backendInitJob"
 $jobEnvFile = New-EnvVarsFile -EnvVars @{
@@ -321,6 +267,7 @@ $jobEnvFile = New-EnvVarsFile -EnvVars @{
     POSTGRES_USER                      = $env:CLOUD_SQL_USER
     POSTGRES_SERVER                    = "localhost"
     RUN_DATA_IMPORTS                   = "false"
+    RUN_STARTUP_DATA_IMPORTS           = "false"
     IMPORT_GCS_URI                     = $importGcsUri
     IMPORT_RESOURCES_LOCAL_PATH        = $importResourcesLocalPath
 }
@@ -329,6 +276,9 @@ try {
         --image $backendImage `
         "--region=$($env:GCP_REGION)" `
         "--service-account=$runServiceAccountEmail" `
+        "--task-timeout=$backendInitJobTaskTimeout" `
+        "--cpu=$backendInitJobCpu" `
+        "--memory=$backendInitJobMemory" `
         "--network=$($env:VPC_NETWORK)" `
         "--subnet=$($env:VPC_SUBNET)" `
         --vpc-egress private-ranges-only `
@@ -353,21 +303,15 @@ Invoke-Checked gcloud functions deploy $initTriggerFunctionName `
     --gen2 `
     --runtime python312 `
     "--region=$($env:GCP_REGION)" `
-    --source scripts/gcp/functions/manual_backend_init `
+    "--timeout=$initTriggerFunctionTimeout" `
+    --source backend/scripts/gcp/functions/manual_backend_init `
     --entry-point trigger_backend_init `
     --trigger-http `
     --no-allow-unauthenticated `
     "--service-account=$runServiceAccountEmail" `
-    "--set-env-vars=GCP_PROJECT_ID=$($env:GCP_PROJECT_ID),GCP_REGION=$($env:GCP_REGION),BACKEND_INIT_JOB=$backendInitJob"
+    "--set-env-vars=GCP_PROJECT_ID=$($env:GCP_PROJECT_ID),GCP_REGION=$($env:GCP_REGION),BACKEND_INIT_JOB=$backendInitJob,JOB_STEP_TIMEOUT_SECONDS=$jobStepTimeoutSeconds,JOB_POLL_INTERVAL_SECONDS=$jobPollIntervalSeconds"
 
-$backendUrl = (& gcloud run services describe $env:BACKEND_SERVICE "--region=$($env:GCP_REGION)" --format "value(status.url)")
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to determine backend URL."
-}
-$backendUrl = ($backendUrl | Select-Object -First 1).Trim()
-
-Write-Host "Backend URL: $backendUrl"
-Write-Host "Building frontend image $frontendImage with VITE_API_URL=$backendUrl"
+Write-Host "Building frontend image $frontendImage with VITE_API_URL=$apiV1Str"
 $cloudBuildConfig = @'
 steps:
   - name: gcr.io/cloud-builders/docker
@@ -389,7 +333,7 @@ $tmpBuildConfigPath = [System.IO.Path]::GetTempFileName()
 try {
     Set-Content -Path $tmpBuildConfigPath -Value $cloudBuildConfig -NoNewline
     Invoke-Checked gcloud builds submit `
-        --substitutions "_IMAGE=$frontendImage,_VITE_API_URL=$backendUrl" `
+        --substitutions "_IMAGE=$frontendImage,_VITE_API_URL=$apiV1Str" `
         --config $tmpBuildConfigPath `
         .
 }
@@ -397,20 +341,145 @@ finally {
     Remove-Item -Path $tmpBuildConfigPath -ErrorAction SilentlyContinue
 }
 
-Write-Host "Deploying frontend service $($env:FRONTEND_SERVICE)"
-Invoke-Checked gcloud run deploy $env:FRONTEND_SERVICE `
-    --image $frontendImage `
-    "--region=$($env:GCP_REGION)" `
-    --platform managed `
-    --allow-unauthenticated
-
-$frontendUrl = (& gcloud run services describe $env:FRONTEND_SERVICE "--region=$($env:GCP_REGION)" --format "value(status.url)")
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to determine frontend URL."
+Write-Host "Deploying combined Cloud Run service $fullService"
+$serviceRenderedPath = [System.IO.Path]::GetTempFileName()
+$escapedEnvironment = $environment.Replace("'", "''")
+$escapedProjectName = $projectName.Replace("'", "''")
+$escapedApiV1Str = $apiV1Str.Replace("'", "''")
+$escapedBackendCorsOrigins = $backendCorsOrigins.Replace("'", "''")
+$escapedFrontendHost = $frontendHost.Replace("'", "''")
+$escapedCloudSqlConnectionName = $cloudSqlConnectionName.Replace("'", "''")
+$escapedCloudSqlDb = $env:CLOUD_SQL_DB.Replace("'", "''")
+$escapedCloudSqlUser = $env:CLOUD_SQL_USER.Replace("'", "''")
+$escapedRunDataImports = $runDataImports.Replace("'", "''")
+$escapedRunStartupDataImports = $runStartupDataImports.Replace("'", "''")
+$escapedImportGcsUri = $importGcsUri.Replace("'", "''")
+$escapedImportResourcesLocalPath = $importResourcesLocalPath.Replace("'", "''")
+$serviceYaml = @"
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: $fullService
+  labels:
+    cloud.googleapis.com/location: $($env:GCP_REGION)
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/cloudsql-instances: $cloudSqlConnectionName
+        run.googleapis.com/network-interfaces: '[{"network":"$($env:VPC_NETWORK)","subnetwork":"$($env:VPC_SUBNET)"}]'
+        run.googleapis.com/vpc-access-egress: private-ranges-only
+    spec:
+      serviceAccountName: $runServiceAccountEmail
+      containers:
+      - name: frontend
+        image: $frontendImage
+        ports:
+        - containerPort: 8080
+        startupProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          periodSeconds: 30
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+      - name: backend
+        image: $backendImage
+        startupProbe:
+          httpGet:
+            path: /api/v1/utils/health-check/
+            port: 9000
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v1/utils/health-check/
+            port: 9000
+          periodSeconds: 30
+          timeoutSeconds: 5
+        env:
+        - name: ENVIRONMENT
+          value: '$escapedEnvironment'
+        - name: PROJECT_NAME
+          value: '$escapedProjectName'
+        - name: API_V1_STR
+          value: '$escapedApiV1Str'
+        - name: BACKEND_CORS_ORIGINS
+          value: '$escapedBackendCorsOrigins'
+        - name: FRONTEND_HOST
+          value: '$escapedFrontendHost'
+        - name: CLOUD_SQL_INSTANCE_CONNECTION_NAME
+          value: '$escapedCloudSqlConnectionName'
+        - name: POSTGRES_SERVER
+          value: 'localhost'
+        - name: POSTGRES_DB
+          value: '$escapedCloudSqlDb'
+        - name: POSTGRES_USER
+          value: '$escapedCloudSqlUser'
+        - name: RUN_DATA_IMPORTS
+          value: '$escapedRunDataImports'
+        - name: RUN_STARTUP_DATA_IMPORTS
+          value: '$escapedRunStartupDataImports'
+        - name: IMPORT_GCS_URI
+          value: '$escapedImportGcsUri'
+        - name: IMPORT_RESOURCES_LOCAL_PATH
+          value: '$escapedImportResourcesLocalPath'
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-secret-key
+        - name: FIRST_SUPERUSER
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-superuser-email
+        - name: FIRST_SUPERUSER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-superuser-password
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: capanel-postgres-password
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+"@
+try {
+    Set-Content -Path $serviceRenderedPath -Value $serviceYaml -NoNewline -Encoding utf8
+    Invoke-Checked gcloud run services replace $serviceRenderedPath "--region=$($env:GCP_REGION)"
+    Invoke-Checked gcloud run services add-iam-policy-binding $fullService `
+        "--region=$($env:GCP_REGION)" `
+        "--member=allUsers" `
+        --role roles/run.invoker
 }
-$frontendUrl = ($frontendUrl | Select-Object -First 1).Trim()
+finally {
+    Remove-Item -Path $serviceRenderedPath -ErrorAction SilentlyContinue
+}
 
-Write-Host "Frontend URL: $frontendUrl"
+$fullServiceUrl = (& gcloud run services describe $fullService "--region=$($env:GCP_REGION)" --format "value(status.url)")
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to determine combined service URL."
+}
+$fullServiceUrl = ($fullServiceUrl | Select-Object -First 1).Trim()
+Write-Host "Full service URL: $fullServiceUrl"
 $initTriggerFunctionUrl = (& gcloud functions describe $initTriggerFunctionName "--region=$($env:GCP_REGION)" --gen2 --format "value(serviceConfig.uri)")
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to determine init trigger function URL."

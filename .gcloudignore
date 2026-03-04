@@ -2,12 +2,15 @@
 **/node_modules/
 **/.venv/
 **/venv/
+**/__pycache__/
+**/*.py[cod]
 
 # Ignore cache and IDE configs
 **/.idea/
 **/.vscode/
 **/.ruff_cache/
 **/.mypy_cache/
+**/.pytest_cache/
 **/.tanstack/
 
 # Ignore build and test outputs
@@ -15,8 +18,18 @@
 **/blob-report/
 **/test-results/
 **/htmlcov/
+**/.coverage
+**/.coverage.*
 **/screenshots/
+**/.cache/
 
 # Ignore Git
 .git/
 .github/
+
+# Local-only development files
+.claude/
+.vscode/
+.idea/
+compose*.yml
+tmp_*.txt
