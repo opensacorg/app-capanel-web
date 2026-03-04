@@ -101,11 +101,21 @@ uv run --env-file .env backend/app/main.py
 uses local Postgres from `.env`:
 
 ```env
+DB_CONNECTION_MODE=auto
 POSTGRES_SERVER=localhost
 POSTGRES_PORT=5432
 POSTGRES_DB=capanel_f65b
 POSTGRES_USER=nateb
 POSTGRES_PASSWORD=...
+```
+
+`DB_CONNECTION_MODE=auto` selects local Postgres in `ENVIRONMENT=local`/`staging` when `POSTGRES_SERVER` is set, and prefers Cloud SQL in `ENVIRONMENT=production` when `CLOUD_SQL_INSTANCE_CONNECTION_NAME` is set.
+You can force behavior with:
+
+```env
+DB_CONNECTION_MODE=local
+# or
+DB_CONNECTION_MODE=cloudsql
 ```
 
 ### Local development (Docker + local Postgres container)

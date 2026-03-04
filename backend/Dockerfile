@@ -36,4 +36,4 @@ WORKDIR /app/backend/
 
 EXPOSE 8000
 
-CMD ["uv", "run", "--no-sync", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9000", "--proxy-headers"]
+CMD ["uv", "run", "fastapi", "run"]

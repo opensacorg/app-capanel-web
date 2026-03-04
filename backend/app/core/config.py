@@ -54,6 +54,7 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "California Accountability Panel"
     SENTRY_DSN: HttpUrl | None = None
+    DB_CONNECTION_MODE: Literal["auto", "local", "cloudsql"] = "auto"
     DATABASE_URL: str | None = None
     POSTGRES_SERVER: str | None = None
     POSTGRES_PORT: int = 5432
@@ -131,28 +132,67 @@ class Settings(BaseSettings):
         if self.DATABASE_URL:
             return self
 
-        if self.POSTGRES_USER and self.POSTGRES_PASSWORD and self.POSTGRES_DB:
-            encoded_password = quote_plus(self.POSTGRES_PASSWORD)
-            if self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
-                self.DATABASE_URL = (
-                    "postgresql+psycopg://"
-                    f"{self.POSTGRES_USER}:{encoded_password}"
-                    f"@/{self.POSTGRES_DB}"
-                    f"?host=/cloudsql/{self.CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
-                )
-                return self
+        if not (self.POSTGRES_USER and self.POSTGRES_PASSWORD and self.POSTGRES_DB):
+            raise ValueError(
+                "DATABASE_URL is required, or set POSTGRES_USER/POSTGRES_PASSWORD/"
+                "POSTGRES_DB and either POSTGRES_SERVER (local/tcp) or "
+                "CLOUD_SQL_INSTANCE_CONNECTION_NAME (Cloud SQL socket)."
+            )
 
-            if self.POSTGRES_SERVER:
-                self.DATABASE_URL = (
-                    "postgresql+psycopg://"
-                    f"{self.POSTGRES_USER}:{encoded_password}"
-                    f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        encoded_password = quote_plus(self.POSTGRES_PASSWORD)
+
+        def _build_local_postgres_url() -> str:
+            if not self.POSTGRES_SERVER:
+                raise ValueError(
+                    "DB_CONNECTION_MODE=local requires POSTGRES_SERVER to be set."
                 )
-                return self
+            return (
+                "postgresql+psycopg://"
+                f"{self.POSTGRES_USER}:{encoded_password}"
+                f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            )
+
+        def _build_cloudsql_url() -> str:
+            if not self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+                raise ValueError(
+                    "DB_CONNECTION_MODE=cloudsql requires "
+                    "CLOUD_SQL_INSTANCE_CONNECTION_NAME to be set."
+                )
+            return (
+                "postgresql+psycopg://"
+                f"{self.POSTGRES_USER}:{encoded_password}"
+                f"@/{self.POSTGRES_DB}"
+                f"?host=/cloudsql/{self.CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
+            )
+
+        if self.DB_CONNECTION_MODE == "local":
+            self.DATABASE_URL = _build_local_postgres_url()
+            return self
+
+        if self.DB_CONNECTION_MODE == "cloudsql":
+            self.DATABASE_URL = _build_cloudsql_url()
+            return self
+
+        # Auto mode:
+        # - production prefers Cloud SQL when configured
+        # - local/staging prefer direct Postgres TCP when configured
+        # - fallback to whichever option is available
+        if self.ENVIRONMENT == "production" and self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+            self.DATABASE_URL = _build_cloudsql_url()
+            return self
+
+        if self.POSTGRES_SERVER:
+            self.DATABASE_URL = _build_local_postgres_url()
+            return self
+
+        if self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+            self.DATABASE_URL = _build_cloudsql_url()
+            return self
 
         raise ValueError(
-            "DATABASE_URL is required, or set POSTGRES_USER/POSTGRES_PASSWORD/"
-            "POSTGRES_DB and CLOUD_SQL_INSTANCE_CONNECTION_NAME for Cloud Run."
+            "Could not resolve database connection in DB_CONNECTION_MODE=auto. "
+            "Set POSTGRES_SERVER for local/tcp or set "
+            "CLOUD_SQL_INSTANCE_CONNECTION_NAME for Cloud SQL."
         )
 
 

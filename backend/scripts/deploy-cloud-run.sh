@@ -15,7 +15,7 @@ resolve_env_file() {
     exit 1
   fi
 
-  local candidate_repo_env="${SCRIPT_DIR}/../../../.env"
+  local candidate_repo_env="${SCRIPT_DIR}/../../.env"
   if [[ -f "${candidate_repo_env}" ]]; then
     printf '%s\n' "${candidate_repo_env}"
     return 0
@@ -288,7 +288,7 @@ spec:
         startupProbe:
           httpGet:
             path: /api/v1/utils/health-check/
-            port: 9000
+            port: 8000
           initialDelaySeconds: 0
           periodSeconds: 10
           timeoutSeconds: 5
@@ -296,7 +296,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /api/v1/utils/health-check/
-            port: 9000
+            port: 8000
           periodSeconds: 30
           timeoutSeconds: 5
         env:
