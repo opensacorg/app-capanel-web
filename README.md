@@ -32,6 +32,7 @@ The minimum required environment variables are:
 
 ```env
 SECRET_KEY=changethis
+FIRST_SUPERUSER=admin@example.com
 FIRST_SUPERUSER_PASSWORD=changethis
 POSTGRES_PASSWORD=changethis
 ```
@@ -78,7 +79,13 @@ Copy the content and use that as password / secret key. And run that again to ge
 
 ### Cloud hosting providers
 
-Cloud Run + Cloud SQL support is available through `scripts/gcp/deploy-cloud-run.sh`.
+Cloud Run + Cloud SQL support is available through `backend/app/scripts/deploy_cloud_run.py`.
+Runtime secrets for Cloud Run are sourced from GCP Secret Manager:
+
+- `capanel-secret-key` -> `SECRET_KEY`
+- `capanel-postgres-password` -> `POSTGRES_PASSWORD`
+
+`FIRST_SUPERUSER` and `FIRST_SUPERUSER_PASSWORD` stay local `.env` values for local development and are not managed in Secret Manager.
 
 For Cloud Run, deploy now supports syncing local resources from `~/Downloads/resources` to GCS before image deploy:
 
@@ -136,7 +143,7 @@ Backend supports Cloud SQL via either:
 CLOUD_SQL_INSTANCE_CONNECTION_NAME=ca-panel-001:us-west1:capanel-pg
 POSTGRES_DB=capanel
 POSTGRES_USER=capanel_app
-POSTGRES_PASSWORD=...
+# POSTGRES_PASSWORD is injected at runtime from Secret Manager in Cloud Run
 ```
 
 or:
@@ -147,15 +154,21 @@ DATABASE_URL=postgresql+psycopg://USER:PASSWORD@/DB?host=/cloudsql/PROJECT:REGIO
 
 ## Deploy to Google Cloud Run
 
-1. Set Cloud Run values in your repo `.env` file.
-2. Load env vars and run:
+1. Set Cloud Run values in your local `.env` file.
+2. Create/update runtime secrets in Secret Manager:
+
+```bash
+python backend/app/scripts/create_secrets.py
+```
+
+3. Load env vars and run:
 
 ```bash
 set -a
 source .env
 set +a
-bash scripts/gcp/provision-cloud-run.sh
-bash scripts/gcp/deploy-cloud-run.sh
+python backend/app/scripts/provision_cloud_run.py
+python backend/app/scripts/deploy_cloud_run.py
 ```
 
 Notes:

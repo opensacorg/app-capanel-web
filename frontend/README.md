@@ -36,7 +36,7 @@ Done, you have a frontend-less (api-only) app. 🤓
 If you want, you can also remove the `FRONTEND` environment variables from:
 
 - `.env`
-- `./scripts/*.sh`
+- `backend/app/scripts/*.py`
 
 But it would be only to clean them up, leaving them won't really have any effect either way.
 
@@ -48,7 +48,7 @@ But it would be only to clean them up, leaving them won't really have any effect
 - From the top level project directory, run the script:
 
 ```bash
-bash ./scripts/generate-client.sh
+python backend/app/scripts/generate_client.py
 ```
 
 - Commit the changes.

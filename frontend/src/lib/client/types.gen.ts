@@ -953,6 +953,10 @@ export type UserPublic = {
 	 * Created At
 	 */
 	created_at?: string | null
+	/**
+	 * Force Password Reset
+	 */
+	force_password_reset?: boolean
 }
 
 /**
@@ -997,6 +1001,10 @@ export type UserUpdate = {
 	 * Password
 	 */
 	password?: string | null
+	/**
+	 * Force Password Reset
+	 */
+	force_password_reset?: boolean | null
 }
 
 /**

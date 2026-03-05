@@ -3,7 +3,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 MODES = {
     "full",
     "initial_data",

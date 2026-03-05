@@ -1,11 +1,12 @@
 import json
 import os
 import time
-from typing import Any
+from typing import Any, TypedDict, cast
 
-import google.auth
-from google.auth.transport.requests import AuthorizedSession
-
+import google.auth  # type: ignore[import-not-found]
+from google.auth.transport.requests import (  # type: ignore[import-not-found]
+    AuthorizedSession,
+)
 
 MODES = {
     "full",
@@ -14,6 +15,11 @@ MODES = {
     "import_indicators",
     "both_imports",
 }
+
+
+class Step(TypedDict):
+    name: str
+    args: list[str]
 
 
 def _normalize_indicators_source(source: str) -> str:
@@ -92,7 +98,7 @@ DEFAULT_STEP_TIMEOUT_SECONDS = _env_int("JOB_STEP_TIMEOUT_SECONDS", 7200)
 DEFAULT_POLL_INTERVAL_SECONDS = max(1, _env_int("JOB_POLL_INTERVAL_SECONDS", 10))
 
 
-def _response(status: int, payload: dict) -> tuple[str, int, dict]:
+def _response(status: int, payload: dict[str, Any]) -> tuple[str, int, dict[str, str]]:
     return json.dumps(payload), status, {"Content-Type": "application/json"}
 
 
@@ -109,7 +115,7 @@ def _poll_operation(
     while True:
         response = session.get(operation_url)
         response.raise_for_status()
-        payload = response.json()
+        payload = cast(dict[str, Any], response.json())
         if payload.get("done"):
             return payload
         if time.time() >= deadline:
@@ -130,7 +136,7 @@ def _poll_execution(
     while True:
         response = session.get(execution_url)
         response.raise_for_status()
-        execution = response.json()
+        execution = cast(dict[str, Any], response.json())
         conditions = execution.get("conditions", [])
         completed = next((c for c in conditions if c.get("type") == "Completed"), None)
         if completed and completed.get("status") == "True":
@@ -166,7 +172,7 @@ def _start_job(
     }
     run_response = session.post(endpoint, json=run_payload)
     run_response.raise_for_status()
-    operation_name = run_response.json().get("name")
+    operation_name = cast(dict[str, Any], run_response.json()).get("name")
     if not operation_name:
         raise RuntimeError("Missing operation name when running job")
     return str(operation_name)
@@ -220,7 +226,7 @@ def _build_pipeline_args(
     batch_size = int(request_json.get("batch_size", 1000))
     indicator = str(request_json.get("indicator", "")).strip()
 
-    args = [
+    args: list[str] = [
         "app/scripts/run_import_pipeline.py",
         "--mode",
         mode,
@@ -264,7 +270,7 @@ def _build_pipeline_args(
     return args, request_summary
 
 
-def trigger_backend_init(request):
+def trigger_backend_init(request: Any) -> tuple[str, int, dict[str, str]]:
     if request.method != "POST":
         return _response(405, {"error": "Method not allowed. Use POST."})
 

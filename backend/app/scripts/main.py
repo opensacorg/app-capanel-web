@@ -1,11 +1,12 @@
 import json
 import os
 import time
-from typing import Any
+from typing import Any, TypedDict, cast
 
-import google.auth
-from google.auth.transport.requests import AuthorizedSession
-
+import google.auth  # type: ignore[import-not-found]
+from google.auth.transport.requests import (  # type: ignore[import-not-found]
+    AuthorizedSession,
+)
 
 MODES = {
     "full",
@@ -14,6 +15,11 @@ MODES = {
     "import_indicators",
     "both_imports",
 }
+
+
+class Step(TypedDict):
+    name: str
+    args: list[str]
 
 
 def _env_int(name: str, default: int) -> int:
@@ -30,7 +36,7 @@ DEFAULT_STEP_TIMEOUT_SECONDS = _env_int("JOB_STEP_TIMEOUT_SECONDS", 7200)
 DEFAULT_POLL_INTERVAL_SECONDS = max(1, _env_int("JOB_POLL_INTERVAL_SECONDS", 10))
 
 
-def _response(status: int, payload: dict) -> tuple[str, int, dict]:
+def _response(status: int, payload: dict[str, Any]) -> tuple[str, int, dict[str, str]]:
     return json.dumps(payload), status, {"Content-Type": "application/json"}
 
 
@@ -47,7 +53,7 @@ def _poll_operation(
     while True:
         response = session.get(operation_url)
         response.raise_for_status()
-        payload = response.json()
+        payload = cast(dict[str, Any], response.json())
         if payload.get("done"):
             return payload
         if time.time() >= deadline:
@@ -69,7 +75,7 @@ def _poll_execution(
     while True:
         response = session.get(execution_url)
         response.raise_for_status()
-        execution = response.json()
+        execution = cast(dict[str, Any], response.json())
         conditions = execution.get("conditions", [])
         completed = next(
             (c for c in conditions if c.get("type") == "Completed"),
@@ -113,7 +119,7 @@ def _run_job_step(
 
     run_response = session.post(endpoint, json=run_payload)
     run_response.raise_for_status()
-    run_body = run_response.json()
+    run_body = cast(dict[str, Any], run_response.json())
     operation_name = run_body.get("name")
     if not operation_name:
         msg = f"Missing operation name when running step '{step_name}'"
@@ -162,16 +168,16 @@ def _build_steps(
     batch_size: int,
     indicator: str,
     years: list[str],
-) -> list[dict[str, Any]]:
-    migrate_step = {
+) -> list[Step]:
+    migrate_step: Step = {
         "name": "migrate",
         "args": ["-m", "alembic", "upgrade", "head"],
     }
-    initial_data_step = {
+    initial_data_step: Step = {
         "name": "initial_data",
         "args": ["app/scripts/initial_data.py"],
     }
-    sync_step = {
+    sync_step: Step = {
         "name": "sync_gcs_resources",
         "args": [
             "app/scripts/sync_gcs_resources.py",
@@ -181,11 +187,11 @@ def _build_steps(
             resources_path,
         ],
     }
-    import_ela_step = {
+    import_ela_step: Step = {
         "name": "import_ela_data",
         "args": ["app/scripts/import_ela_data.py", ela_file],
     }
-    import_indicators_step = {
+    import_indicators_step: Step = {
         "name": "import_indicators",
         "args": [
             "app/scripts/import_indicators.py",
@@ -209,7 +215,7 @@ def _build_steps(
     if mode == "import_indicators":
         return [sync_step, import_indicators_step]
     if mode == "both_imports":
-        ela_steps = []
+        ela_steps: list[Step] = []
         for i, current_ela_file in enumerate(ela_files):
             ela_steps.append(
                 {
@@ -217,7 +223,7 @@ def _build_steps(
                     "args": ["app/scripts/import_ela_data.py", current_ela_file],
                 }
             )
-        import_indicators_all_step = {
+        import_indicators_all_step: Step = {
             "name": "import_indicators_all_files",
             "args": [
                 "app/scripts/import_indicators.py",
@@ -244,7 +250,7 @@ def _build_steps(
     ]
 
 
-def trigger_backend_init(request):
+def trigger_backend_init(request: Any) -> tuple[str, int, dict[str, str]]:
     if request.method != "POST":
         return _response(405, {"error": "Method not allowed. Use POST."})
 

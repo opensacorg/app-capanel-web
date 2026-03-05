@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { TriangleAlert } from 'lucide-react'
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ChangePassword from '@/components/UserSettings/ChangePassword'
 import DeleteAccount from '@/components/UserSettings/DeleteAccount'
@@ -26,6 +28,7 @@ export const Route = createFileRoute('/user/settings')({
 function UserSettings() {
 	const { user: currentUser } = useAuth()
 	const finalTabs = currentUser?.is_superuser ? tabsConfig.slice(0, 3) : tabsConfig
+	const defaultTab = currentUser?.force_password_reset ? 'password' : 'my-profile'
 
 	if (!currentUser) {
 		return null
@@ -38,7 +41,18 @@ function UserSettings() {
 				<p className='text-muted-foreground'>Manage your account settings and preferences</p>
 			</div>
 
-			<Tabs defaultValue='my-profile'>
+			{currentUser.force_password_reset && (
+				<Alert>
+					<TriangleAlert className='size-4' />
+					<AlertTitle>Password Reset Required</AlertTitle>
+					<AlertDescription>
+						We detected your account may be affected by leaked credentials. Please update your
+						password now.
+					</AlertDescription>
+				</Alert>
+			)}
+
+			<Tabs defaultValue={defaultTab}>
 				<TabsList>
 					{finalTabs.map((tab) => (
 						<TabsTrigger key={tab.value} value={tab.value}>

@@ -17,6 +17,8 @@ from sqlmodel import Session
 # Add the parent directory to the path so we can import app modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from typing import Any
+
 from app.core.database import engine
 from app.model.academic_indicator import AcademicIndicator
 
@@ -60,9 +62,6 @@ COLUMN_MAPPING = {
     "indicator": "indicator",
     "reportingyear": "reportingyear",
 }
-
-
-from typing import Any
 
 
 def clean_value(value: Any, field_type: str = "str") -> Any:

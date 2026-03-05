@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
@@ -31,6 +31,7 @@ type FormData = z.infer<typeof formSchema>
 
 const ChangePassword = () => {
 	const { showSuccessToast, showErrorToast } = useCustomToast()
+	const queryClient = useQueryClient()
 
 	const form = useForm({
 		defaultValues: {
@@ -52,6 +53,7 @@ const ChangePassword = () => {
 		onSuccess: () => {
 			showSuccessToast('Password updated successfully')
 			form.reset()
+			queryClient.invalidateQueries({ queryKey: ['currentUser'] })
 		},
 		onError: handleError.bind(showErrorToast),
 	})
