@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 import tempfile
@@ -353,7 +354,7 @@ def deploy_trigger_function(cfg: DeployConfig) -> None:
             cfg.init_trigger_function_name,
             "--gen2",
             "--runtime",
-            "python312",
+            "python314",
             "--region",
             cfg.region,
             "--timeout",
@@ -375,6 +376,38 @@ def deploy_trigger_function(cfg: DeployConfig) -> None:
             f"JOB_POLL_INTERVAL_SECONDS={cfg.job_poll_interval_seconds}",
         ]
     )
+
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Build and deploy CAPanel Cloud Run resources. "
+            "Default deploys all resources."
+        )
+    )
+    parser.add_argument(
+        "env_file",
+        nargs="?",
+        help="Optional path to environment file (defaults to script resolution).",
+    )
+    mode_group = parser.add_mutually_exclusive_group()
+    mode_group.add_argument(
+        "--init-trigger-only",
+        action="store_true",
+        help=(
+            "Deploy only backend init resources "
+            "(backend image + init job + init trigger function)."
+        ),
+    )
+    mode_group.add_argument(
+        "--full-only",
+        action="store_true",
+        help=(
+            "Deploy only full service resources "
+            "(backend image + frontend image + combined Cloud Run service)."
+        ),
+    )
+    return parser.parse_args(argv)
 
 
 def build_frontend_image(cfg: DeployConfig) -> None:
@@ -527,7 +560,8 @@ def deploy_combined_service(cfg: DeployConfig) -> tuple[str, str]:
 
 
 def main() -> int:
-    env_path = resolve_env_file(__file__, sys.argv[1] if len(sys.argv) > 1 else None)
+    args = parse_args(sys.argv[1:])
+    env_path = resolve_env_file(__file__, args.env_file)
     print(f"Loading environment from {env_path}")
     load_env_file(env_path)
     defaults = load_gcp_defaults(__file__)
@@ -585,6 +619,48 @@ def main() -> int:
             ]
         )
 
+    deploy_init_only = args.init_trigger_only
+    deploy_full_only = args.full_only
+
+    if deploy_init_only:
+        print("Deploy mode: init-trigger-only")
+        build_backend_image(cfg)
+        deploy_init_job(cfg)
+        deploy_trigger_function(cfg)
+        function_url = run_command(
+            [
+                "gcloud",
+                "functions",
+                "describe",
+                cfg.init_trigger_function_name,
+                "--region",
+                cfg.region,
+                "--gen2",
+                "--format=value(serviceConfig.uri)",
+            ],
+            capture_output=True,
+        ).stdout.strip()
+        print(f"Manual init trigger URL: {function_url}")
+        print("Invoke with:")
+        print(
+            'curl -X POST -H "Authorization: Bearer '
+            '$(gcloud auth print-identity-token)" '
+            f'"{function_url}"'
+        )
+        print("Done.")
+        return 0
+
+    if deploy_full_only:
+        print("Deploy mode: full-only")
+        build_backend_image(cfg)
+        build_frontend_image(cfg)
+        full_service_url, function_url = deploy_combined_service(cfg)
+        print(f"Full service URL: {full_service_url}")
+        print(f"Manual init trigger URL (existing): {function_url}")
+        print("Done.")
+        return 0
+
+    print("Deploy mode: all")
     build_backend_image(cfg)
     deploy_init_job(cfg)
     deploy_trigger_function(cfg)

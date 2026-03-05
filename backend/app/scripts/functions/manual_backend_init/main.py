@@ -94,6 +94,29 @@ def _env_int(name: str, default: int) -> int:
         return default
 
 
+def _parse_bool(name: str, raw: Any, *, default: bool) -> bool:
+    if raw is None:
+        return default
+    if isinstance(raw, bool):
+        return raw
+    if isinstance(raw, str):
+        normalized = raw.strip().lower()
+        if normalized in {"1", "true", "t", "yes", "y", "on"}:
+            return True
+        if normalized in {"0", "false", "f", "no", "n", "off"}:
+            return False
+    if isinstance(raw, (int, float)):
+        return bool(raw)
+    raise ValueError(f"{name} must be a boolean.")
+
+
+def _parse_positive_int(name: str, raw: Any, *, default: int) -> int:
+    value = default if raw is None else int(raw)
+    if value <= 0:
+        raise ValueError(f"{name} must be > 0.")
+    return value
+
+
 DEFAULT_STEP_TIMEOUT_SECONDS = _env_int("JOB_STEP_TIMEOUT_SECONDS", 7200)
 DEFAULT_POLL_INTERVAL_SECONDS = max(1, _env_int("JOB_POLL_INTERVAL_SECONDS", 10))
 
@@ -197,6 +220,8 @@ def _build_pipeline_args(
         years = [str(y).strip() for y in years_raw if str(y).strip()]
     else:
         years = [y.strip() for y in str(years_raw).split(",") if y.strip()]
+    if not years:
+        years = ["2024", "2025"]
 
     default_ela_year = years[-1] if years else "2025"
     default_ela_file = (
@@ -223,7 +248,9 @@ def _build_pipeline_args(
         source=indicators_source,
         indicators_path=indicators_path,
     )
-    batch_size = int(request_json.get("batch_size", 1000))
+    batch_size = _parse_positive_int(
+        "batch_size", request_json.get("batch_size"), default=1000
+    )
     indicator = str(request_json.get("indicator", "")).strip()
 
     args: list[str] = [
@@ -297,21 +324,24 @@ def trigger_backend_init(request: Any) -> tuple[str, int, dict[str, str]]:
     except Exception as exc:
         return _response(400, {"error": f"Invalid request: {exc}"})
 
-    wait_for_completion = bool(request_json.get("wait_for_completion", False))
     try:
-        step_timeout_seconds = int(
-            request_json.get("step_timeout_seconds", DEFAULT_STEP_TIMEOUT_SECONDS)
+        wait_for_completion = _parse_bool(
+            "wait_for_completion",
+            request_json.get("wait_for_completion"),
+            default=False,
         )
-        poll_interval_seconds = int(
-            request_json.get("poll_interval_seconds", DEFAULT_POLL_INTERVAL_SECONDS)
+        step_timeout_seconds = _parse_positive_int(
+            "step_timeout_seconds",
+            request_json.get("step_timeout_seconds"),
+            default=DEFAULT_STEP_TIMEOUT_SECONDS,
         )
-    except (TypeError, ValueError):
-        return _response(
-            400,
-            {
-                "error": "step_timeout_seconds and poll_interval_seconds must be integers.",
-            },
+        poll_interval_seconds = _parse_positive_int(
+            "poll_interval_seconds",
+            request_json.get("poll_interval_seconds"),
+            default=DEFAULT_POLL_INTERVAL_SECONDS,
         )
+    except ValueError as exc:
+        return _response(400, {"error": str(exc)})
 
     credentials, _ = google.auth.default(
         scopes=["https://www.googleapis.com/auth/cloud-platform"]

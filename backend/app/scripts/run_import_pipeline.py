@@ -187,7 +187,7 @@ def main() -> None:
                 cmd.extend(["--years", ",".join(years)])
             run_step(cmd, f"import_indicators_{index}")
 
-    if args.mode == "both_imports":
+    if args.mode in {"both_imports", "full"}:
         existing_ela_files = [p for p in ela_files if Path(p).exists()]
         if not existing_ela_files:
             raise FileNotFoundError(
