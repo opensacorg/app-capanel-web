@@ -55,7 +55,7 @@ def _env_bool(name: str, default: bool) -> bool:
 
 
 def _sync_resources(gcs_uri: str, destination: Path) -> int:
-    from app.scripts.sync_gcs_resources import (
+    from app.scripts.gcp.sync_gcs_resources import (
         download_objects,
         get_access_token,
         list_objects,
@@ -99,7 +99,7 @@ def _run_data_import_pipeline() -> None:
         )
         return
 
-    from app.scripts.import_ela_data import import_ela_data
+    from app.scripts.cde.import_ela_data import import_ela_data
 
     ela_batch_size = int(os.getenv("IMPORT_ELA_BATCH_SIZE", "1000"))
     ela_files_env = os.getenv("IMPORT_ELA_FILES", "").strip()
@@ -138,7 +138,7 @@ def _run_data_import_pipeline() -> None:
 
     command = [
         sys.executable,
-        "app/scripts/import_indicators.py",
+        "app/scripts/cde/import_indicators.py",
         "--source",
         source,
         "--path",

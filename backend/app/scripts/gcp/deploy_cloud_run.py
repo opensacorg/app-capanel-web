@@ -7,7 +7,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
-from app.scripts.script_utils import (
+from app.scripts.gcp.gcp_utils import (
     GcpDefaults,
     ScriptError,
     compute_paths,

@@ -252,9 +252,11 @@ def _build_pipeline_args(
         "batch_size", request_json.get("batch_size"), default=1000
     )
     indicator = str(request_json.get("indicator", "")).strip()
+    overwrite = _parse_bool("overwrite", request_json.get("overwrite"), default=False)
+    skip_sync = _parse_bool("skip_sync", request_json.get("skip_sync"), default=False)
 
     args: list[str] = [
-        "app/scripts/run_import_pipeline.py",
+        "app/scripts/cde/run_import_pipeline.py",
         "--mode",
         mode,
         "--gcs-uri",
@@ -274,6 +276,10 @@ def _build_pipeline_args(
         "--batch-size",
         str(batch_size),
     ]
+    if overwrite:
+        args.append("--overwrite")
+    if skip_sync:
+        args.append("--skip-sync")
     if ela_files:
         args.extend(["--ela-files", ",".join(ela_files)])
     if indicator:
@@ -290,6 +296,8 @@ def _build_pipeline_args(
         "indicators_path": indicators_path,
         "indicators_paths": indicators_paths,
         "batch_size": batch_size,
+        "overwrite": overwrite,
+        "skip_sync": skip_sync,
     }
     if indicator:
         request_summary["indicator"] = indicator

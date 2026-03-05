@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from app.scripts.script_utils import (
+from app.scripts.gcp.gcp_utils import (
     ScriptError,
     env_required,
     load_env_file,

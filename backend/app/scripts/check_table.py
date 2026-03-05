@@ -1,7 +1,7 @@
 from sqlalchemy import Engine
 from sqlmodel import text
 
-from app.scripts.script_utils import load_repo_env_if_present
+from app.scripts.gcp.gcp_utils import load_repo_env_if_present
 
 load_repo_env_if_present(__file__, scope="check_table")
 

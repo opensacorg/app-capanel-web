@@ -3,6 +3,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+BACKEND_DIR = Path(__file__).resolve().parents[3]
+
 MODES = {
     "full",
     "initial_data",
@@ -105,7 +107,7 @@ def _discover_ela_files(resources_path: str, years: list[str]) -> list[str]:
 
 def run_step(args: list[str], label: str) -> None:
     print(f"[pipeline] starting {label}: {' '.join(args)}", flush=True)
-    subprocess.run([sys.executable, *args], check=True)
+    subprocess.run([sys.executable, *args], check=True, cwd=BACKEND_DIR)
     print(f"[pipeline] finished {label}", flush=True)
 
 
@@ -124,6 +126,16 @@ def main() -> None:
     parser.add_argument("--indicators-paths", default="")
     parser.add_argument("--batch-size", type=int, default=1000)
     parser.add_argument("--indicator", default="")
+    parser.add_argument(
+        "--skip-sync",
+        action="store_true",
+        help="Skip GCS sync and use only local resources already present at --resources-path.",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite existing category rows (indicator + reporting year).",
+    )
     args = parser.parse_args()
 
     if args.batch_size <= 0:
@@ -154,10 +166,13 @@ def main() -> None:
         run_step(["-m", "alembic", "upgrade", "head"], "migrate")
         run_step(["app/scripts/initial_data.py"], "initial_data")
 
-    if args.mode in {"full", "import_ela_data", "import_indicators", "both_imports"}:
+    if (
+        not args.skip_sync
+        and args.mode in {"full", "import_ela_data", "import_indicators", "both_imports"}
+    ):
         run_step(
             [
-                "app/scripts/sync_gcs_resources.py",
+                "app/scripts/gcp/sync_gcs_resources.py",
                 "--uri",
                 args.gcs_uri,
                 "--dest",
@@ -165,15 +180,25 @@ def main() -> None:
             ],
             "sync_gcs_resources",
         )
+    elif args.skip_sync:
+        print("[pipeline] skipping sync_gcs_resources (--skip-sync enabled)", flush=True)
 
     if args.mode == "import_ela_data":
         chosen_ela_file = next((p for p in ela_files if Path(p).exists()), ela_file)
-        run_step(["app/scripts/import_ela_data.py", chosen_ela_file], "import_ela_data")
+        cmd = [
+            "app/scripts/cde/import_ela_data.py",
+            chosen_ela_file,
+            "--batch-size",
+            str(args.batch_size),
+        ]
+        if args.overwrite:
+            cmd.append("--overwrite")
+        run_step(cmd, "import_ela_data")
 
     if args.mode == "import_indicators":
         for index, indicator_path in enumerate(indicator_paths, start=1):
             cmd = [
-                "app/scripts/import_indicators.py",
+                "app/scripts/cde/import_indicators.py",
                 "--source",
                 indicators_source,
                 "--path",
@@ -181,6 +206,8 @@ def main() -> None:
                 "--batch-size",
                 str(args.batch_size),
             ]
+            if args.overwrite:
+                cmd.append("--overwrite")
             if args.indicator:
                 cmd.extend(["--indicator", args.indicator])
             if years:
@@ -195,13 +222,18 @@ def main() -> None:
                 f"Tried: {ela_files}"
             )
         for index, current_ela_file in enumerate(existing_ela_files, start=1):
-            run_step(
-                ["app/scripts/import_ela_data.py", current_ela_file],
-                f"import_ela_data_{index}",
-            )
+            cmd = [
+                "app/scripts/cde/import_ela_data.py",
+                current_ela_file,
+                "--batch-size",
+                str(args.batch_size),
+            ]
+            if args.overwrite:
+                cmd.append("--overwrite")
+            run_step(cmd, f"import_ela_data_{index}")
         for index, indicator_path in enumerate(indicator_paths, start=1):
             cmd = [
-                "app/scripts/import_indicators.py",
+                "app/scripts/cde/import_indicators.py",
                 "--source",
                 indicators_source,
                 "--path",
@@ -210,6 +242,8 @@ def main() -> None:
                 str(args.batch_size),
                 "--all-files",
             ]
+            if args.overwrite:
+                cmd.append("--overwrite")
             if args.indicator:
                 cmd.extend(["--indicator", args.indicator])
             if years:

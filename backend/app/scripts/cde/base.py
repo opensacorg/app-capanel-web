@@ -26,6 +26,11 @@ class BaseIndicatorParser(ABC):
     INDICATOR: str = ""
     BATCH_SIZE: int = 1000
 
+    # Maps raw indicator values from source files to canonical names.
+    INDICATOR_NORMALIZE: dict[str, str] = {
+        "CHRO": "CHRONIC",
+    }
+
     # Common fields across all indicators
     COMMON_MAPPING = {
         "cds": "cds",
@@ -202,6 +207,10 @@ class BaseIndicatorParser(ABC):
             record_data["rtype"] = "S"
         if not record_data.get("indicator"):
             record_data["indicator"] = self.INDICATOR
+        else:
+            record_data["indicator"] = self.INDICATOR_NORMALIZE.get(
+                record_data["indicator"], record_data["indicator"]
+            )
         if not record_data.get("reportingyear"):
             record_data["reportingyear"] = "2025"
 

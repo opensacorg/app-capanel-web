@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-from app.scripts.script_utils import ScriptError, env_required, yaml_escape
+from app.scripts.gcp.gcp_utils import ScriptError, env_required, yaml_escape
 
 
 @dataclass(frozen=True)

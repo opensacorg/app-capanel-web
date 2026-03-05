@@ -38,9 +38,22 @@ class GcpDefaults:
 
 
 def compute_paths(current_file: str) -> ScriptPaths:
-    script_dir = Path(current_file).resolve().parent
-    backend_dir = script_dir.parents[1]
-    repo_dir = script_dir.parents[2]
+    resolved_file = Path(current_file).resolve()
+    script_dir = resolved_file.parent
+
+    backend_dir: Path | None = None
+    for candidate in resolved_file.parents:
+        if candidate.name != "backend":
+            continue
+        if (candidate / "app").is_dir():
+            backend_dir = candidate
+            break
+
+    if backend_dir is None:
+        # Fallback for unexpected layouts.
+        backend_dir = script_dir.parents[2]
+
+    repo_dir = backend_dir.parent
     return ScriptPaths(
         script_dir=script_dir, backend_dir=backend_dir, repo_dir=repo_dir
     )
