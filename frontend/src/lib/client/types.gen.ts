@@ -533,7 +533,7 @@ export type BodyLoginLoginAccessToken = {
 /**
  * DashboardAggregation
  *
- * Dashboard aggregation response model (legacy single-indicator)
+ * dashboard aggregation response model (legacy single-indicator)
  */
 export type DashboardAggregation = {
 	/**

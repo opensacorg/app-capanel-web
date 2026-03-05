@@ -3,8 +3,8 @@ import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
-import { DefaultError } from '@/components/status/DefaultError'
-import { DefaultNotFound } from '@/components/status/DefaultNotFound'
+import { DefaultError } from '@/components/layout/status/DefaultError'
+import { DefaultNotFound } from '@/components/layout/status/DefaultNotFound'
 
 import { ThemeProvider } from './components/theme-provider'
 
@@ -25,7 +25,9 @@ const normalizeApiBaseUrl = (value: string | undefined): string | undefined => {
 	return trimmed
 }
 
-const apiBaseUrl = normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL)
+const apiBaseUrl = normalizeApiBaseUrl(
+	import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL,
+)
 
 client.setConfig({
 	baseUrl: apiBaseUrl,

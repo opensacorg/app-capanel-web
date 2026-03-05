@@ -3,7 +3,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-import { DefaultPending } from '@/components/status/DefaultPending'
+import { DefaultPending } from '@/components/layout/status/DefaultPending'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import { Provider } from '../integrations/tanstack-query/root-provider'

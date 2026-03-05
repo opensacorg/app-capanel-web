@@ -28,54 +28,54 @@ const config = defineConfig(({ command, mode }) => {
 		env.VITE_DEV_PROXY_TARGET || normalizeApiBase(env.VITE_API_URL) || 'http://localhost:8000'
 
 	return {
-	// Keep relative assets for production container builds, but use root base
-	// in dev so Vite's React refresh runtime is loaded correctly on routed URLs.
-	base: command === 'serve' ? '/' : './',
-	build: {
-		outDir: 'dist',
-	},
-	resolve: {
-		alias: {
-			'@': fileURLToPath(new URL('./src', import.meta.url)),
+		// Keep relative assets for production container builds, but use root base
+		// in dev so Vite's React refresh runtime is loaded correctly on routed URLs.
+		base: command === 'serve' ? '/' : './',
+		build: {
+			outDir: 'dist',
 		},
-	},
-	server: {
-		proxy: {
-			'/api': {
-				target: apiTarget,
-				changeOrigin: true,
-			},
-			'/docs': {
-				target: apiTarget,
-				changeOrigin: true,
-			},
-			'/docs/oauth2-redirect': {
-				target: apiTarget,
-				changeOrigin: true,
-			},
-			'/redoc': {
-				target: apiTarget,
-				changeOrigin: true,
-			},
-			'/openapi.json': {
-				target: apiTarget,
-				changeOrigin: true,
+		resolve: {
+			alias: {
+				'@': fileURLToPath(new URL('./src', import.meta.url)),
 			},
 		},
-	},
-	plugins: [
-		devtools(),
-		viteTsConfigPaths({
-			projects: ['./tsconfig.json'],
-		}),
-		tailwindcss(),
-		tanstackRouter({ target: 'react', autoCodeSplitting: true }),
-		react({
-			babel: {
-				plugins: ['babel-plugin-react-compiler'],
+		server: {
+			proxy: {
+				'/api': {
+					target: apiTarget,
+					changeOrigin: true,
+				},
+				'/docs': {
+					target: apiTarget,
+					changeOrigin: true,
+				},
+				'/docs/oauth2-redirect': {
+					target: apiTarget,
+					changeOrigin: true,
+				},
+				'/redoc': {
+					target: apiTarget,
+					changeOrigin: true,
+				},
+				'/openapi.json': {
+					target: apiTarget,
+					changeOrigin: true,
+				},
 			},
-		}),
-	],
+		},
+		plugins: [
+			devtools(),
+			viteTsConfigPaths({
+				projects: ['./tsconfig.json'],
+			}),
+			tailwindcss(),
+			tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+			react({
+				babel: {
+					plugins: ['babel-plugin-react-compiler'],
+				},
+			}),
+		],
 	}
 })
 
