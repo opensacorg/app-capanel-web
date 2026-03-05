@@ -121,19 +121,19 @@ def print_env(values: dict[str, str]) -> None:
 def main() -> int:
     """
     # Only SECRET_KEY (uses secrets.token_urlsafe(32))
-    python3 backend/app/scripts/rotate_exposed_secrets.py --target secret-key
+    python3 backend/app/scripts/gcp/rotate_exposed_secrets.py --target secret-key
 
     # Only GCP-related passwords
-    python3 backend/app/scripts/rotate_exposed_secrets.py --target gcloud
+    python3 backend/app/scripts/gcp/rotate_exposed_secrets.py --target gcloud
 
     # Only local DB passwords
-    python3 backend/app/scripts/rotate_exposed_secrets.py --target local-db
+    python3 backend/app/scripts/gcp/rotate_exposed_secrets.py --target local-db
 
     # Everything exposed
-    python3 backend/app/scripts/rotate_exposed_secrets.py --target all
+    python3 backend/app/scripts/gcp/rotate_exposed_secrets.py --target all
 
     # Combined, JSON output
-    python3 backend/app/scripts/rotate_exposed_secrets.py --target gcloud --target local-db --target secret-key --format json
+    python3 backend/app/scripts/gcp/rotate_exposed_secrets.py --target gcloud --target local-db --target secret-key --format json
     """
     args = parse_args()
     try:

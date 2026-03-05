@@ -101,7 +101,7 @@ def _run_data_import_pipeline() -> None:
 
     from app.scripts.cde.import_ela_data import import_ela_data
 
-    ela_batch_size = int(os.getenv("IMPORT_ELA_BATCH_SIZE", "1000"))
+    ela_batch_size = int(os.getenv("IMPORT_ELA_BATCH_SIZE", "5000"))
     ela_files_env = os.getenv("IMPORT_ELA_FILES", "").strip()
     if ela_files_env:
         ela_files = [Path(p.strip()) for p in ela_files_env.split(",") if p.strip()]
@@ -125,7 +125,7 @@ def _run_data_import_pipeline() -> None:
     indicators_path = Path(
         os.getenv("IMPORT_INDICATORS_PATH", str(resources_dir / "cde"))
     ).expanduser()
-    batch_size = int(os.getenv("IMPORT_INDICATORS_BATCH_SIZE", "1000"))
+    batch_size = int(os.getenv("IMPORT_INDICATORS_BATCH_SIZE", "5000"))
     years_filter = _parse_years(os.getenv("IMPORT_INDICATORS_YEARS", "2024,2025"))
     indicator = os.getenv("IMPORT_INDICATORS_INDICATOR", "").strip().upper()
     indicators = [indicator] if indicator else None

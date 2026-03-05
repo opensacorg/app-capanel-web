@@ -21,6 +21,7 @@ Usage:
 import argparse
 import fnmatch
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 # Add the parent directory to the path so we can import app modules
@@ -156,7 +157,7 @@ def _print_categories_report(title: str, categories: list[ImportCategory]) -> No
 
 
 def import_single_file(
-    file_path: Path, indicator: str, source: str = "cde", batch_size: int = 1000
+    file_path: Path, indicator: str, source: str = "cde", batch_size: int = 5000
 ) -> int:
     """Import a single file.
 
@@ -190,6 +191,7 @@ def import_single_file(
 def import_cde_directory(
     dir_path: Path,
     batch_size: int = 1000,
+    workers: int = 4,
     *,
     all_files: bool = False,
     years: set[str] | None = None,
@@ -205,6 +207,7 @@ def import_cde_directory(
     """
     results = {}
 
+    jobs: list[tuple[str, Path]] = []
     for indicator, pattern in INDICATOR_FILES.items():
         # Find matching files
         files = sorted(dir_path.glob(pattern))
@@ -214,20 +217,38 @@ def import_cde_directory(
             continue
 
         selected_files = files if all_files else [files[-1]]
-        imported_count = 0
         for file_path in selected_files:
+            jobs.append((indicator, file_path))
+
+    if not jobs:
+        return results
+
+    imported_totals = {indicator: 0 for indicator in INDICATOR_FILES}
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as executor:
+        future_to_job = {
+            executor.submit(
+                import_single_file, file_path, indicator, "cde", batch_size
+            ): (indicator, file_path)
+            for indicator, file_path in jobs
+        }
+        for future in as_completed(future_to_job):
+            indicator, file_path = future_to_job[future]
             try:
-                count = import_single_file(file_path, indicator, "cde", batch_size)
-                imported_count += count
+                count = future.result()
+                imported_totals[indicator] = imported_totals.get(indicator, 0) + count
             except Exception as e:
                 print(f"Error importing {indicator} from {file_path.name}: {e}")
-        results[indicator] = imported_count
+
+    results.update({k: v for k, v in imported_totals.items() if v > 0})
 
     return results
 
 
 def import_state_directory(
-    dir_path: Path, indicators: list[str] | None = None, batch_size: int = 1000
+    dir_path: Path,
+    indicators: list[str] | None = None,
+    batch_size: int = 1000,
+    workers: int = 4,
 ) -> dict[str, int]:
     """Import state assessment files from a directory.
 
@@ -242,6 +263,7 @@ def import_state_directory(
     results = {}
     indicators = indicators or list(STATE_FILES.keys())
 
+    jobs: list[tuple[str, Path]] = []
     for indicator in indicators:
         if indicator not in STATE_FILES:
             print(f"\nNo state file pattern for {indicator}")
@@ -255,12 +277,22 @@ def import_state_directory(
 
         # Use the most recent file if multiple exist
         file_path = sorted(files)[-1]
-        try:
-            count = import_single_file(file_path, indicator, "state", batch_size)
-            results[indicator] = count
-        except Exception as e:
-            print(f"Error importing {indicator}: {e}")
-            results[indicator] = 0
+        jobs.append((indicator, file_path))
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as executor:
+        future_to_indicator = {
+            executor.submit(
+                import_single_file, file_path, indicator, "state", batch_size
+            ): indicator
+            for indicator, file_path in jobs
+        }
+        for future in as_completed(future_to_indicator):
+            indicator = future_to_indicator[future]
+            try:
+                results[indicator] = future.result()
+            except Exception as e:
+                print(f"Error importing {indicator}: {e}")
+                results[indicator] = 0
 
     return results
 
@@ -295,8 +327,14 @@ def main() -> None:
         "--batch-size",
         "-b",
         type=int,
-        default=1000,
-        help="Records per batch (default: 1000)",
+        default=5000,
+        help="Records per batch (default: 5000)",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="Thread workers for parallel file imports (default: 4).",
     )
     parser.add_argument(
         "--list",
@@ -389,6 +427,7 @@ def main() -> None:
     _print_categories_report("Import Plan", categories)
 
     total_imported = 0
+    to_import: list[ImportCategory] = []
     try:
         with Session(engine) as session:
             for category in categories:
@@ -410,17 +449,33 @@ def main() -> None:
                         reporting_year=category.reporting_year,
                     )
 
-                category.status = "running"
-                imported = import_single_file(
-                    file_path,
+                category.status = "queued"
+                category.message = "waiting for worker"
+                to_import.append(category)
+
+        with ThreadPoolExecutor(max_workers=max(1, args.workers)) as executor:
+            future_to_category = {
+                executor.submit(
+                    import_single_file,
+                    Path(category.path),
                     category.indicator,
                     args.source,
                     args.batch_size,
-                )
-                category.imported_rows = imported
-                category.status = "imported"
-                category.message = "completed"
-                total_imported += imported
+                ): category
+                for category in to_import
+            }
+            for future in as_completed(future_to_category):
+                category = future_to_category[future]
+                category.status = "running"
+                try:
+                    imported = future.result()
+                    category.imported_rows = imported
+                    category.status = "imported"
+                    category.message = "completed"
+                    total_imported += imported
+                except Exception as exc:
+                    category.status = "failed"
+                    category.message = str(exc)
     finally:
         _print_categories_report("Import Result", categories)
 

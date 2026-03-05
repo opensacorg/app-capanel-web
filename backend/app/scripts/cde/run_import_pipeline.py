@@ -7,6 +7,7 @@ BACKEND_DIR = Path(__file__).resolve().parents[3]
 
 MODES = {
     "full",
+    "migrate_only",
     "initial_data",
     "import_ela_data",
     "import_indicators",
@@ -124,7 +125,7 @@ def main() -> None:
     parser.add_argument("--indicators-source", default="cde")
     parser.add_argument("--indicators-path", default=None)
     parser.add_argument("--indicators-paths", default="")
-    parser.add_argument("--batch-size", type=int, default=1000)
+    parser.add_argument("--batch-size", type=int, default=5000)
     parser.add_argument("--indicator", default="")
     parser.add_argument(
         "--skip-sync",
@@ -162,8 +163,10 @@ def main() -> None:
         source=indicators_source,
     )
 
-    if args.mode in {"full", "initial_data"}:
+    if args.mode in {"full", "initial_data", "migrate_only"}:
         run_step(["-m", "alembic", "upgrade", "head"], "migrate")
+
+    if args.mode in {"full", "initial_data"}:
         run_step(["app/scripts/initial_data.py"], "initial_data")
 
     if (

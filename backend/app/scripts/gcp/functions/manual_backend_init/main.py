@@ -10,6 +10,7 @@ from google.auth.transport.requests import (  # type: ignore[import-not-found]
 
 MODES = {
     "full",
+    "migrate_only",
     "initial_data",
     "import_ela_data",
     "import_indicators",
@@ -201,12 +202,48 @@ def _start_job(
     return str(operation_name)
 
 
+# Modes that run alembic migrations (and possibly seed initial data) require
+# explicit confirmation to prevent accidental schema changes in production.
+_DESTRUCTIVE_MODES = {"full", "initial_data", "migrate_only"}
+
+
 def _build_pipeline_args(
     request_json: dict[str, Any],
 ) -> tuple[list[str], dict[str, Any]]:
     mode = str(request_json.get("mode", "both_imports")).strip()
     if mode not in MODES:
-        raise ValueError(f"Invalid mode: {mode}")
+        raise ValueError(f"Invalid mode: {mode}. Allowed: {sorted(MODES)}")
+
+    # Destructive modes (alembic + seed) require an explicit opt-in flag.
+    if mode in _DESTRUCTIVE_MODES:
+        confirm = _parse_bool(
+            "confirm_destructive",
+            request_json.get("confirm_destructive"),
+            default=False,
+        )
+        if not confirm:
+            raise ValueError(
+                f"mode='{mode}' runs database migrations. "
+                "Set \"confirm_destructive\": true to proceed."
+            )
+
+    # overwrite=true permanently replaces existing DB rows — require explicit opt-in.
+    overwrite_raw = request_json.get("overwrite")
+    if overwrite_raw is not None:
+        overwrite = _parse_bool("overwrite", overwrite_raw, default=False)
+        if overwrite:
+            confirm_overwrite = _parse_bool(
+                "confirm_overwrite",
+                request_json.get("confirm_overwrite"),
+                default=False,
+            )
+            if not confirm_overwrite:
+                raise ValueError(
+                    "overwrite=true will permanently replace existing DB rows. "
+                    "Set \"confirm_overwrite\": true to proceed."
+                )
+    else:
+        overwrite = False
 
     gcs_uri = str(
         request_json.get("gcs_uri", "gs://ca-panel-001-resources/resources")
@@ -249,10 +286,10 @@ def _build_pipeline_args(
         indicators_path=indicators_path,
     )
     batch_size = _parse_positive_int(
-        "batch_size", request_json.get("batch_size"), default=1000
+        "batch_size", request_json.get("batch_size"), default=5000
     )
     indicator = str(request_json.get("indicator", "")).strip()
-    overwrite = _parse_bool("overwrite", request_json.get("overwrite"), default=False)
+    # overwrite already parsed and validated above.
     skip_sync = _parse_bool("skip_sync", request_json.get("skip_sync"), default=False)
 
     args: list[str] = [
@@ -298,6 +335,9 @@ def _build_pipeline_args(
         "batch_size": batch_size,
         "overwrite": overwrite,
         "skip_sync": skip_sync,
+        # Echo confirmation flags so callers can audit what was acknowledged.
+        "confirm_destructive": mode in _DESTRUCTIVE_MODES,
+        "confirm_overwrite": overwrite,
     }
     if indicator:
         request_summary["indicator"] = indicator
