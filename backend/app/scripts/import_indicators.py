@@ -29,6 +29,10 @@ from importers.cde_parser import INDICATOR_FILES, CDEParser  # type: ignore
 from importers.state_parser import STATE_FILES, StateParser  # type: ignore
 from sqlmodel import Session
 
+from app.scripts.script_utils import load_repo_env_if_present
+
+load_repo_env_if_present(__file__, scope="import_indicators")
+
 from app.core.database import engine
 
 INDICATORS = ["ELA", "MATH", "SCI", "CHRONIC", "SUSP", "GRAD", "ELPI", "CCI"]

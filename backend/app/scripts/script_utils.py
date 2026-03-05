@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import shlex
+import shutil
 import subprocess
 from collections.abc import Mapping
 from dataclasses import dataclass
@@ -62,9 +63,14 @@ def run_command(
     capture_output: bool = False,
     input_text: str | None = None,
 ) -> subprocess.CompletedProcess[str]:
+    if not cmd:
+        msg = "run_command received an empty command list"
+        raise ScriptError(msg)
+
+    resolved_cmd = [resolve_executable(cmd[0]), *cmd[1:]]
     print(f"+ {shlex.join(cmd)}", flush=True)
     return subprocess.run(
-        cmd,
+        resolved_cmd,
         cwd=str(cwd) if cwd is not None else None,
         env=dict(env) if env is not None else None,
         check=check,
@@ -72,6 +78,49 @@ def run_command(
         capture_output=capture_output,
         input=input_text,
     )
+
+
+def resolve_executable(executable: str) -> str:
+    resolved = shutil.which(executable)
+    if resolved:
+        return resolved
+
+    if os.name == "nt":
+        # Some environments don't apply PATHEXT lookup consistently.
+        for suffix in (".cmd", ".bat", ".exe"):
+            resolved = shutil.which(f"{executable}{suffix}")
+            if resolved:
+                return resolved
+
+        if executable == "gcloud":
+            local_app_data = os.environ.get("LOCALAPPDATA")
+            candidates = [
+                Path(
+                    r"C:\Program Files\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd"
+                ),
+                Path(
+                    r"C:\Program Files (x86)\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd"
+                ),
+            ]
+            if local_app_data:
+                candidates.insert(
+                    0,
+                    Path(local_app_data)
+                    / "Google"
+                    / "Cloud SDK"
+                    / "google-cloud-sdk"
+                    / "bin"
+                    / "gcloud.cmd",
+                )
+            for candidate in candidates:
+                if candidate.is_file():
+                    return str(candidate)
+
+    msg = (
+        f"Executable not found: {executable}. "
+        f"Current PATH={os.environ.get('PATH', '')}"
+    )
+    raise ScriptError(msg)
 
 
 def strip_wrapping_quotes(raw: str) -> str:
@@ -104,6 +153,18 @@ def load_env_file(path: Path, *, override: bool = True) -> dict[str, str]:
         if override or key not in os.environ:
             os.environ[key] = value
     return values
+
+
+def load_repo_env_if_present(
+    current_file: str, *, override: bool = False, scope: str = "env"
+) -> Path | None:
+    repo_env = compute_paths(current_file).repo_dir / ".env"
+    if not repo_env.is_file():
+        log(scope, f"No repo .env found at {repo_env}; using existing environment.")
+        return None
+    load_env_file(repo_env, override=override)
+    log(scope, f"Loaded environment from {repo_env}")
+    return repo_env
 
 
 def resolve_env_file(current_file: str, explicit_env_file: str | None) -> Path:

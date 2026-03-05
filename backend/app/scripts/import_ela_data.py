@@ -19,6 +19,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from typing import Any
 
+from app.scripts.script_utils import load_repo_env_if_present
+
+load_repo_env_if_present(__file__, scope="import_ela_data")
+
 from app.core.database import engine
 from app.model.academic_indicator import AcademicIndicator
 

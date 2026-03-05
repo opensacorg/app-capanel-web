@@ -422,6 +422,7 @@ def build_frontend_image(cfg: DeployConfig) -> None:
 def deploy_combined_service(cfg: DeployConfig) -> tuple[str, str]:
     with tempfile.NamedTemporaryFile("w", delete=False) as tmp:
         rendered_path = Path(tmp.name)
+    render_script = Path(__file__).resolve().parent / "render_cloud_run_service.py"
 
     try:
         env = os.environ.copy()
@@ -450,10 +451,20 @@ def deploy_combined_service(cfg: DeployConfig) -> tuple[str, str]:
         )
 
         rendered = run_command(
-            ["python", "app/scripts/render_cloud_run_service.py"],
+            ["python", str(render_script)],
             env=env,
             capture_output=True,
+            check=False,
         )
+        if rendered.returncode != 0:
+            details = (rendered.stderr or rendered.stdout or "").strip()
+            msg = (
+                "Failed to render Cloud Run service YAML via "
+                f"{render_script} (exit {rendered.returncode})."
+            )
+            if details:
+                msg = f"{msg}\n{details}"
+            raise ScriptError(msg)
         rendered_path.write_text(rendered.stdout)
 
         run_command(

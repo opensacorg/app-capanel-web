@@ -1,6 +1,7 @@
 import os
 import secrets
 import warnings
+from pathlib import Path
 from typing import Annotated, Any, Literal
 from urllib.parse import quote_plus
 
@@ -31,7 +32,7 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file="../.env",
+        env_file=str(Path(__file__).resolve().parents[3] / ".env"),
         env_ignore_empty=True,
         extra="ignore",
     )

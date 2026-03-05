@@ -69,15 +69,30 @@ pnpm run openapi-ts
 
 Notice that everytime the backend changes (changing the OpenAPI schema), you should follow these steps again to update the frontend client.
 
-## Using a Remote API
+## API Configuration
 
-If you want to use a remote API, you can set the environment variable `VITE_API_URL` to the URL of the remote API. For example, you can set it in the `frontend/.env` file:
+By default, the app uses relative API routes (for example `/api/v1/...`). This is the recommended setup for:
+
+- Local dev with Vite proxy.
+- Production with an nginx sidecar proxying `/api` to FastAPI.
+
+Use `VITE_DEV_PROXY_TARGET` to control where the Vite dev server proxies `/api` requests:
 
 ```env
-VITE_API_URL=https://api.my-domain.example.com
+VITE_DEV_PROXY_TARGET=http://localhost:8000
 ```
 
-Then, when you run the frontend, it will use that URL as the base URL for the API.
+For a Dockerized frontend dev server, set it to the backend service name:
+
+```env
+VITE_DEV_PROXY_TARGET=http://backend:8000
+```
+
+If you need the browser to call a remote API directly (bypassing Vite/nginx proxy), set:
+
+```env
+VITE_API_BASE_URL=https://api.my-domain.example.com
+```
 
 ## Code Structure
 

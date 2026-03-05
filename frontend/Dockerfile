@@ -23,6 +23,8 @@ COPY frontend ./frontend
 
 ARG VITE_API_URL=""
 ENV VITE_API_URL=${VITE_API_URL}
+ARG VITE_API_BASE_URL=""
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 # Use production mode only for the static build step so the `builder` target
 # can still run `vite dev` correctly in local docker-compose override.
 RUN NODE_ENV=production pnpm --filter frontend build
