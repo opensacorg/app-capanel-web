@@ -219,6 +219,10 @@ def import_ela_data(
                         record_data[model_field] = clean_value(row[excel_col], "str")
 
             # Ensure required fields are present
+            # Handle statewide aggregate (rtype = 'X') where CDS might be missing/empty in Excel
+            if not record_data.get("cds") and record_data.get("rtype") == "X":
+                record_data["cds"] = "00000000000000"
+
             if not record_data.get("cds") or not record_data.get("studentgroup"):
                 skipped += 1
                 continue

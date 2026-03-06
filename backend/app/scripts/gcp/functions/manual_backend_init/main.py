@@ -50,29 +50,43 @@ def _discover_indicator_paths(
     base_path = base_path.rstrip("/") or base_path
     discovered: list[str] = []
 
+    def _get_year_folders(base: str, src: str) -> list[str]:
+        found: list[str] = []
+        if os.path.isdir(base):
+            try:
+                for entry in sorted(os.listdir(base)):
+                    child = os.path.join(base, entry)
+                    if not os.path.isdir(child):
+                        continue
+                    if any(_is_year_folder(entry, year, src) for year in years):
+                        found.append(child)
+            except OSError:
+                pass
+        return found
+
     # If a specific year folder is already provided, keep it.
     base_name = os.path.basename(base_path)
     if any(_is_year_folder(base_name, year, source) for year in years):
-        return [base_path]
+        discovered = [base_path]
+    elif os.path.isdir(base_path):
+        # Discover for primary source
+        discovered.extend(_get_year_folders(base_path, source))
 
-    # Scan immediate children when the base path exists.
-    if os.path.isdir(base_path):
-        try:
-            for entry in sorted(os.listdir(base_path)):
-                child = os.path.join(base_path, entry)
-                if not os.path.isdir(child):
-                    continue
-                if any(_is_year_folder(entry, year, source) for year in years):
-                    discovered.append(child)
-        except OSError:
-            pass
+        # If source is 'state', also discover 'cde' folders
+        if source == "state":
+            discovered.extend(_get_year_folders(base_path, "cde"))
 
     # If nothing was found, fallback to expected year-folder names under resources_path.
     if not discovered:
         root = resources_path.rstrip("/") or resources_path
-        prefix = "cde" if source == "cde" else "california-state"
-        for year in years:
-            discovered.append(f"{root}/{prefix}-{year}")
+        sources = [source]
+        if source == "state":
+            sources.append("cde")
+
+        for s in sources:
+            prefix = "cde" if s == "cde" else "california-state"
+            for year in years:
+                discovered.append(f"{root}/{prefix}-{year}")
 
     # Deduplicate while preserving order.
     deduped: list[str] = []
@@ -276,7 +290,7 @@ def _build_pipeline_args(
         ela_files = []
 
     indicators_source = _normalize_indicators_source(
-        str(request_json.get("indicators_source", "cde"))
+        str(request_json.get("indicators_source", "state"))
     )
     indicators_path = str(request_json.get("indicators_path", resources_path)).strip()
     indicators_paths = _discover_indicator_paths(

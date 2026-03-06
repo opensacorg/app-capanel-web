@@ -44,21 +44,37 @@ def _discover_indicator_paths(
     base_path = Path(base).expanduser()
     discovered: list[Path] = []
 
+    def _get_year_folders(dir_path: Path, src: str) -> list[Path]:
+        found: list[Path] = []
+        if dir_path.is_dir():
+            for child in sorted(dir_path.iterdir()):
+                if not child.is_dir():
+                    continue
+                if any(_is_year_folder(child.name, year, src) for year in years):
+                    found.append(child)
+        return found
+
     # If the input already points to a year folder, use it directly.
     if any(_is_year_folder(base_path.name, year, source) for year in years):
         discovered = [base_path]
     elif base_path.is_dir():
-        for child in sorted(base_path.iterdir()):
-            if not child.is_dir():
-                continue
-            if any(_is_year_folder(child.name, year, source) for year in years):
-                discovered.append(child)
+        # Discover for the primary source
+        discovered.extend(_get_year_folders(base_path, source))
+        
+        # If source is 'state', we also need 'cde' folders for indicators like CHRONIC
+        if source == "state":
+            discovered.extend(_get_year_folders(base_path, "cde"))
 
     if not discovered:
-        prefix = "cde" if source == "cde" else "california-state"
-        discovered = [
-            Path(resources_path).expanduser() / f"{prefix}-{year}" for year in years
-        ]
+        sources = [source]
+        if source == "state":
+            sources.append("cde")
+            
+        for s in sources:
+            prefix = "cde" if s == "cde" else "california-state"
+            discovered.extend([
+                Path(resources_path).expanduser() / f"{prefix}-{year}" for year in years
+            ])
 
     # Deduplicate while preserving order.
     result: list[str] = []
@@ -199,23 +215,29 @@ def main() -> None:
         run_step(cmd, "import_ela_data")
 
     if args.mode == "import_indicators":
-        for index, indicator_path in enumerate(indicator_paths, start=1):
-            cmd = [
-                "app/scripts/cde/import_indicators.py",
-                "--source",
-                indicators_source,
-                "--path",
-                indicator_path,
-                "--batch-size",
-                str(args.batch_size),
+        sources = ["state", "cde"] if indicators_source == "state" else [indicators_source]
+        for src in sources:
+            # Filter paths based on the source being imported
+            relevant_paths = [
+                p for p in indicator_paths if _is_year_folder(Path(p).name, "", src)
             ]
-            if args.overwrite:
-                cmd.append("--overwrite")
-            if args.indicator:
-                cmd.extend(["--indicator", args.indicator])
-            if years:
-                cmd.extend(["--years", ",".join(years)])
-            run_step(cmd, f"import_indicators_{index}")
+            for index, indicator_path in enumerate(relevant_paths, start=1):
+                cmd = [
+                    "app/scripts/cde/import_indicators.py",
+                    "--source",
+                    src,
+                    "--path",
+                    indicator_path,
+                    "--batch-size",
+                    str(args.batch_size),
+                ]
+                if args.overwrite:
+                    cmd.append("--overwrite")
+                if args.indicator:
+                    cmd.extend(["--indicator", args.indicator])
+                if years:
+                    cmd.extend(["--years", ",".join(years)])
+                run_step(cmd, f"import_indicators_{src}_{index}")
 
     if args.mode in {"both_imports", "full"}:
         existing_ela_files = [p for p in ela_files if Path(p).exists()]
@@ -234,24 +256,31 @@ def main() -> None:
             if args.overwrite:
                 cmd.append("--overwrite")
             run_step(cmd, f"import_ela_data_{index}")
-        for index, indicator_path in enumerate(indicator_paths, start=1):
-            cmd = [
-                "app/scripts/cde/import_indicators.py",
-                "--source",
-                indicators_source,
-                "--path",
-                indicator_path,
-                "--batch-size",
-                str(args.batch_size),
-                "--all-files",
+
+        sources = ["state", "cde"] if indicators_source == "state" else [indicators_source]
+        for src in sources:
+            # Filter paths based on the source being imported
+            relevant_paths = [
+                p for p in indicator_paths if _is_year_folder(Path(p).name, "", src)
             ]
-            if args.overwrite:
-                cmd.append("--overwrite")
-            if args.indicator:
-                cmd.extend(["--indicator", args.indicator])
-            if years:
-                cmd.extend(["--years", ",".join(years)])
-            run_step(cmd, f"import_indicators_all_files_{index}")
+            for index, indicator_path in enumerate(relevant_paths, start=1):
+                cmd = [
+                    "app/scripts/cde/import_indicators.py",
+                    "--source",
+                    src,
+                    "--path",
+                    indicator_path,
+                    "--batch-size",
+                    str(args.batch_size),
+                    "--all-files",
+                ]
+                if args.overwrite:
+                    cmd.append("--overwrite")
+                if args.indicator:
+                    cmd.extend(["--indicator", args.indicator])
+                if years:
+                    cmd.extend(["--years", ",".join(years)])
+                run_step(cmd, f"import_indicators_all_files_{src}_{index}")
 
     print("[pipeline] completed", flush=True)
 

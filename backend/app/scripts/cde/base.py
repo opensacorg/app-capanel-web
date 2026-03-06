@@ -191,6 +191,10 @@ class BaseIndicatorParser(ABC):
                     )
 
         # Ensure CDS code is padded to 14 characters
+        # Handle statewide aggregate (rtype = 'X') where CDS might be missing/empty in Excel
+        if not record_data.get("cds") and record_data.get("rtype") == "X":
+            record_data["cds"] = "00000000000000"
+
         if record_data.get("cds"):
             cds = str(record_data["cds"]).strip()
             # Remove any decimal points (e.g., "0.0" -> "0")
