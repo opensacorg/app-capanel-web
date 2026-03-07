@@ -33,10 +33,7 @@ def _get_token_from_adc() -> str:
         import google.auth
         import google.auth.transport.requests
     except ImportError as exc:
-        msg = (
-            "google-auth is not installed. "
-            "Run: pip install google-auth"
-        )
+        msg = "google-auth is not installed. Run: pip install google-auth"
         raise RuntimeError(msg) from exc
 
     credentials, _ = google.auth.default(

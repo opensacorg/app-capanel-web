@@ -60,7 +60,7 @@ def _discover_indicator_paths(
     elif base_path.is_dir():
         # Discover for the primary source
         discovered.extend(_get_year_folders(base_path, source))
-        
+
         # If source is 'state', we also need 'cde' folders for indicators like CHRONIC
         if source == "state":
             discovered.extend(_get_year_folders(base_path, "cde"))
@@ -69,12 +69,15 @@ def _discover_indicator_paths(
         sources = [source]
         if source == "state":
             sources.append("cde")
-            
+
         for s in sources:
             prefix = "cde" if s == "cde" else "california-state"
-            discovered.extend([
-                Path(resources_path).expanduser() / f"{prefix}-{year}" for year in years
-            ])
+            discovered.extend(
+                [
+                    Path(resources_path).expanduser() / f"{prefix}-{year}"
+                    for year in years
+                ]
+            )
 
     # Deduplicate while preserving order.
     result: list[str] = []
@@ -185,10 +188,12 @@ def main() -> None:
     if args.mode in {"full", "initial_data"}:
         run_step(["app/scripts/initial_data.py"], "initial_data")
 
-    if (
-        not args.skip_sync
-        and args.mode in {"full", "import_ela_data", "import_indicators", "both_imports"}
-    ):
+    if not args.skip_sync and args.mode in {
+        "full",
+        "import_ela_data",
+        "import_indicators",
+        "both_imports",
+    }:
         run_step(
             [
                 "app/scripts/gcp/sync_gcs_resources.py",
@@ -200,7 +205,9 @@ def main() -> None:
             "sync_gcs_resources",
         )
     elif args.skip_sync:
-        print("[pipeline] skipping sync_gcs_resources (--skip-sync enabled)", flush=True)
+        print(
+            "[pipeline] skipping sync_gcs_resources (--skip-sync enabled)", flush=True
+        )
 
     if args.mode == "import_ela_data":
         chosen_ela_file = next((p for p in ela_files if Path(p).exists()), ela_file)
@@ -215,7 +222,9 @@ def main() -> None:
         run_step(cmd, "import_ela_data")
 
     if args.mode == "import_indicators":
-        sources = ["state", "cde"] if indicators_source == "state" else [indicators_source]
+        sources = (
+            ["state", "cde"] if indicators_source == "state" else [indicators_source]
+        )
         for src in sources:
             # Filter paths based on the source being imported
             relevant_paths = [
@@ -257,7 +266,9 @@ def main() -> None:
                 cmd.append("--overwrite")
             run_step(cmd, f"import_ela_data_{index}")
 
-        sources = ["state", "cde"] if indicators_source == "state" else [indicators_source]
+        sources = (
+            ["state", "cde"] if indicators_source == "state" else [indicators_source]
+        )
         for src in sources:
             # Filter paths based on the source being imported
             relevant_paths = [

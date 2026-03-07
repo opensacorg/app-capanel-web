@@ -130,8 +130,7 @@ def resolve_executable(executable: str) -> str:
                     return str(candidate)
 
     msg = (
-        f"Executable not found: {executable}. "
-        f"Current PATH={os.environ.get('PATH', '')}"
+        f"Executable not found: {executable}. Current PATH={os.environ.get('PATH', '')}"
     )
     raise ScriptError(msg)
 

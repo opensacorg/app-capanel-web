@@ -238,7 +238,7 @@ def _build_pipeline_args(
         if not confirm:
             raise ValueError(
                 f"mode='{mode}' runs database migrations. "
-                "Set \"confirm_destructive\": true to proceed."
+                'Set "confirm_destructive": true to proceed.'
             )
 
     # overwrite=true permanently replaces existing DB rows — require explicit opt-in.
@@ -254,7 +254,7 @@ def _build_pipeline_args(
             if not confirm_overwrite:
                 raise ValueError(
                     "overwrite=true will permanently replace existing DB rows. "
-                    "Set \"confirm_overwrite\": true to proceed."
+                    'Set "confirm_overwrite": true to proceed.'
                 )
     else:
         overwrite = False

@@ -237,7 +237,7 @@ def _build_steps(
     if mode == "initial_data":
         return [migrate_step, initial_data_step]
     if mode == "import_ela_data":
-        return ([import_ela_step] if skip_sync else [sync_step, import_ela_step])
+        return [import_ela_step] if skip_sync else [sync_step, import_ela_step]
     if mode == "import_indicators":
         return (
             [import_indicators_step]
@@ -283,7 +283,12 @@ def _build_steps(
             return [*ela_steps, import_indicators_all_step]
         return [sync_step, *ela_steps, import_indicators_all_step]
     if skip_sync:
-        return [migrate_step, initial_data_step, import_ela_step, import_indicators_step]
+        return [
+            migrate_step,
+            initial_data_step,
+            import_ela_step,
+            import_indicators_step,
+        ]
     return [
         migrate_step,
         initial_data_step,

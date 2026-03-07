@@ -2,11 +2,10 @@ import logging
 
 from sqlmodel import Session
 
+from app.core.database import engine, init_db
 from app.scripts.gcp.gcp_utils import load_repo_env_if_present
 
 load_repo_env_if_present(__file__, scope="initial_data")
-
-from app.core.database import engine, init_db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

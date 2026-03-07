@@ -29,9 +29,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from sqlmodel import Session
 
-from app.scripts.cde.cde_parser import CDEParser, INDICATOR_FILES
-from app.scripts.cde.state_parser import STATE_FILES, StateParser
-from app.scripts.gcp.gcp_utils import load_repo_env_if_present
+from app.core.database import engine
+from app.scripts.cde.cde_parser import INDICATOR_FILES, CDEParser
 from app.scripts.cde.import_plan import (
     ImportCategory,
     count_existing_rows,
@@ -39,10 +38,11 @@ from app.scripts.cde.import_plan import (
     detect_reporting_year,
     render_ascii_table,
 )
+from app.scripts.cde.state_parser import STATE_FILES, StateParser
+from app.scripts.gcp.gcp_utils import load_repo_env_if_present
 
 load_repo_env_if_present(__file__, scope="import_indicators")
 
-from app.core.database import engine
 
 INDICATORS = ["ELA", "MATH", "SCI", "CHRONIC", "SUSP", "GRAD", "ELPI", "CCI"]
 
@@ -223,7 +223,7 @@ def import_cde_directory(
     if not jobs:
         return results
 
-    imported_totals = {indicator: 0 for indicator in INDICATOR_FILES}
+    imported_totals = dict.fromkeys(INDICATOR_FILES, 0)
     with ThreadPoolExecutor(max_workers=max(1, workers)) as executor:
         future_to_job = {
             executor.submit(
@@ -398,7 +398,9 @@ def main() -> None:
 
     if not categories and path.is_file():
         # Fallback for explicit file names that do not match known glob patterns.
-        resolved_indicator = args.indicator or _resolve_indicator_from_name(path, args.source)
+        resolved_indicator = args.indicator or _resolve_indicator_from_name(
+            path, args.source
+        )
         if not resolved_indicator:
             parser.error(
                 "--indicator is required when indicator cannot be inferred from filename"

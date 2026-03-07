@@ -19,7 +19,8 @@ from sqlmodel import Session
 # Add the parent directory to the path so we can import app modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.scripts.gcp.gcp_utils import load_repo_env_if_present
+from app.core.database import engine
+from app.model.academic_indicator import AcademicIndicator
 from app.scripts.cde.import_plan import (
     ImportCategory,
     count_existing_rows,
@@ -27,11 +28,9 @@ from app.scripts.cde.import_plan import (
     detect_reporting_year,
     render_ascii_table,
 )
+from app.scripts.gcp.gcp_utils import load_repo_env_if_present
 
 load_repo_env_if_present(__file__, scope="import_ela_data")
-
-from app.core.database import engine
-from app.model.academic_indicator import AcademicIndicator
 
 # Column mapping from Excel to model fields (lowercase)
 COLUMN_MAPPING = {
@@ -152,11 +151,15 @@ def import_ela_data(
 
     with Session(engine) as session:
         category.existing_rows = count_existing_rows(
-            session, indicator=category.indicator, reporting_year=category.reporting_year
+            session,
+            indicator=category.indicator,
+            reporting_year=category.reporting_year,
         )
 
-    category.action = "overwrite" if (category.existing_rows > 0 and overwrite) else (
-        "skip_existing" if category.existing_rows > 0 else "import"
+    category.action = (
+        "overwrite"
+        if (category.existing_rows > 0 and overwrite)
+        else ("skip_existing" if category.existing_rows > 0 else "import")
     )
     _print_report("ELA Import Plan", category)
 
