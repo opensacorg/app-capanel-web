@@ -30,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from sqlmodel import Session
 
 from app.core.database import engine
+from app.scripts.cde.base import BaseIndicatorParser
 from app.scripts.cde.cde_parser import INDICATOR_FILES, CDEParser
 from app.scripts.cde.import_plan import (
     ImportCategory,
@@ -170,6 +171,7 @@ def import_single_file(
     Returns:
         Number of records imported
     """
+    parser: BaseIndicatorParser
     if source == "cde":
         parser = CDEParser(indicator)
         parse_method = parser.parse_excel
@@ -205,7 +207,7 @@ def import_cde_directory(
     Returns:
         dict mapping indicator to record count
     """
-    results = {}
+    results: dict[str, int] = {}
 
     jobs: list[tuple[str, Path]] = []
     for indicator, pattern in INDICATOR_FILES.items():
@@ -260,7 +262,7 @@ def import_state_directory(
     Returns:
         dict mapping indicator to record count
     """
-    results = {}
+    results: dict[str, int] = {}
     indicators = indicators or list(STATE_FILES.keys())
 
     jobs: list[tuple[str, Path]] = []

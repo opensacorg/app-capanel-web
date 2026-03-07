@@ -40,7 +40,7 @@ def _get_token_from_adc() -> str:
         scopes=["https://www.googleapis.com/auth/devstorage.read_only"]
     )
     request = google.auth.transport.requests.Request()
-    credentials.refresh(request)
+    credentials.refresh(request)  # type: ignore[no-untyped-call]
     if not credentials.token:
         msg = "ADC did not return an access token."
         raise RuntimeError(msg)

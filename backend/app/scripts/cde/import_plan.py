@@ -52,8 +52,12 @@ def delete_category_rows(
 ) -> int:
     stmt = (
         delete(AcademicIndicator)
-        .where(AcademicIndicator.indicator == indicator)
-        .where(AcademicIndicator.reportingyear == reporting_year)
+        .where(
+            AcademicIndicator.indicator == indicator  # type: ignore[arg-type]
+        )
+        .where(
+            AcademicIndicator.reportingyear == reporting_year  # type: ignore[arg-type]
+        )
     )
     result = session.exec(stmt)
     session.commit()

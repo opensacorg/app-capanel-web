@@ -3,8 +3,8 @@ import os
 import time
 from typing import Any, TypedDict, cast
 
-import google.auth  # type: ignore[import-not-found]
-from google.auth.transport.requests import (  # type: ignore[import-not-found]
+import google.auth
+from google.auth.transport.requests import (
     AuthorizedSession,
 )
 
@@ -408,7 +408,7 @@ def trigger_backend_init(request: Any) -> tuple[str, int, dict[str, str]]:
     credentials, _ = google.auth.default(
         scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
-    session = AuthorizedSession(credentials)
+    session = AuthorizedSession(credentials)  # type: ignore[no-untyped-call]
 
     try:
         operation_name = _start_job(
