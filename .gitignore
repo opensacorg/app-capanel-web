@@ -56,4 +56,3 @@ app.egg-info/
 **/.coverage
 **/.coverage.*
 **/htmlcov/
-node_modules

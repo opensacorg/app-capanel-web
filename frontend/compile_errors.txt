@@ -1,0 +1,17 @@
+
+> frontend@0.0.2 compile C:\Users\nateb\Source\Repos\app-capanel-web\frontend
+> tsgo
+
+src/components/ui/chart.tsx(109,5): error TS2339: Property 'payload' does not exist on type 'Omit<Props<any, any>, PropertiesReadFromContext> & { active?: boolean | undefined; allowEscapeViewBox?: AllowInDimension | undefined; ... 24 more ...; wrapperStyle?: CSSProperties | undefined; } & ClassAttributes<...> & HTMLAttributes<...> & { ...; }'.
+src/components/ui/chart.tsx(114,5): error TS2339: Property 'label' does not exist on type 'Omit<Props<any, any>, PropertiesReadFromContext> & { active?: boolean | undefined; allowEscapeViewBox?: AllowInDimension | undefined; ... 24 more ...; wrapperStyle?: CSSProperties | undefined; } & ClassAttributes<...> & HTMLAttributes<...> & { ...; }'.
+src/components/ui/chart.tsx(245,40): error TS2339: Property 'payload' does not exist on type 'ClassAttributes<HTMLDivElement> & HTMLAttributes<HTMLDivElement> & Omit<Props, "payload" | "ref" | "verticalAlign"> & { ...; } & { ...; }'.
+src/routes/_status/import-complete.tsx(51,21): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+src/routes/_status/loading.tsx(69,24): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+src/routes/_status/maintenance.tsx(50,21): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+src/routes/_status/processing.tsx(48,21): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+src/routes/_status/queued.tsx(50,21): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+src/routes/_status/rate-limited.tsx(51,21): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+src/routes/_status/status.tsx(255,23): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+src/routes/_status/under-construction.tsx(45,21): error TS2747: 'ProgressValue' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '((formattedValue: string | null, value: number | null) => ReactNode) | null | undefined'.
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  frontend@0.0.2 compile: `tsgo`
+Exit status 2
