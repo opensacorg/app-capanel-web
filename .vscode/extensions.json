@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "biomejs.biome",
     "bradlc.vscode-tailwindcss",
     "ms-python.python",
     "mechatroner.rainbow-csv",
@@ -12,6 +11,7 @@
     "github.vscode-github-actions",
     "mjmlio.vscode-mjml",
     "ms-playwright.playwright",
-    "tombi-toml.tombi"
+    "tombi-toml.tombi",
+    "oxc.oxc-vscode"
   ]
 }
