@@ -4,6 +4,7 @@ import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { DefaultPending } from '@/components/layout/status/DefaultPending'
+import { ThemeProvider } from '@/components/theme-provider'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import { Provider } from '../integrations/tanstack-query/root-provider'
@@ -24,22 +25,24 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
 	const { queryClient } = Route.useRouteContext()
 	return (
-		<Provider queryClient={queryClient}>
-			<Outlet />
-			<TanStackDevtools
-				config={{
-					position: 'bottom-right',
-				}}
-				plugins={[
-					{
-						name: 'Tanstack Router',
-						render: <TanStackRouterDevtoolsPanel />,
-					},
-					TanStackQueryDevtools,
-					StoreDevtools,
-					AiDevtools,
-				]}
-			/>
-		</Provider>
+		<ThemeProvider>
+			<Provider queryClient={queryClient}>
+				<Outlet />
+				<TanStackDevtools
+					config={{
+						position: 'bottom-right',
+					}}
+					plugins={[
+						{
+							name: 'Tanstack Router',
+							render: <TanStackRouterDevtoolsPanel />,
+						},
+						TanStackQueryDevtools,
+						StoreDevtools,
+						AiDevtools,
+					]}
+				/>
+			</Provider>
+		</ThemeProvider>
 	)
 }

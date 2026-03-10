@@ -86,7 +86,7 @@ function DashboardPage() {
 						variant='outline'
 						size='sm'
 						onClick={() => router.history.back()}
-						className='gap-1 bg-white hover:bg-gray-100'
+						className={styles.backButton}
 					>
 						<ChevronLeft className='h-4 w-4' />
 						Go back
@@ -97,7 +97,7 @@ function DashboardPage() {
 							value={effectiveYear}
 							onValueChange={(val) => handleYearChange(val as ReportingYear)}
 						>
-							<SelectTrigger className='w-30 bg-white'>
+							<SelectTrigger className={styles.yearSelectTrigger}>
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
