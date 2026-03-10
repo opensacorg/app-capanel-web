@@ -24,6 +24,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 COPY ./backend/pyproject.toml ./backend/alembic.ini /app/backend/
 COPY ./backend/app /app/backend/app
+COPY ./backend/tests /app/backend/tests
 
 # Sync the project
 RUN --mount=type=cache,target=/root/.cache/uv \
