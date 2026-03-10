@@ -6,8 +6,8 @@ import { z } from 'zod'
 import type { ColorKey } from '@/components/dashboard/card/IndicatorCard'
 import { IndicatorDetailModal } from '@/components/dashboard/detail/IndicatorDetailModal'
 import { IndicatorGrid, IndicatorGridSkeleton } from '@/components/dashboard/IndicatorGrid'
-import NavbarD52 from '@/components/layout/navbar/NavbarD52'
 import { Button } from '@/components/ui/button'
+import NavbarD52 from '@/components/layout/navbar/NavbarD52'
 import {
 	Select,
 	SelectContent,
@@ -86,7 +86,7 @@ function DashboardPage() {
 						variant='outline'
 						size='sm'
 						onClick={() => router.history.back()}
-						className={styles.backButton}
+						className='gap-1 bg-white hover:bg-gray-100'
 					>
 						<ChevronLeft className='h-4 w-4' />
 						Go back
@@ -97,7 +97,7 @@ function DashboardPage() {
 							value={effectiveYear}
 							onValueChange={(val) => handleYearChange(val as ReportingYear)}
 						>
-							<SelectTrigger className={styles.yearSelectTrigger}>
+							<SelectTrigger className='w-30 bg-white'>
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>

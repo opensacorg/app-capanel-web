@@ -8,7 +8,7 @@ from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
 from app.core.utils import generate_password_reset_token
 from app.model.user import User, UserCreate
-from app.service.crud import create_user
+from app.service.crud import create_user  # type: ignore
 from tests.utils.user import user_authentication_headers
 from tests.utils.utils import random_email, random_lower_string
 
