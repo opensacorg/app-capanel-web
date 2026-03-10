@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, Search, SearchX } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'

@@ -2,14 +2,13 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link as RouterLink, redirect } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import type { BodyLoginLoginAccessToken as AccessToken } from '@/lib/client'
-
-import { AuthLayout } from '@/components/Common/AuthLayout'
+import { AuthLayout } from '@/components/common/AuthLayout'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Spinner } from '@/components/ui/spinner'
+import type { BodyLoginLoginAccessToken as AccessToken } from '@/lib/client'
 import useAuth, { isLoggedIn } from '@/lib/hooks/useAuth'
 
 const loginSchema = z.object({
@@ -83,7 +82,7 @@ function Login() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>
@@ -114,7 +113,7 @@ function Login() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>

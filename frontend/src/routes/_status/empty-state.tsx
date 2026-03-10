@@ -1,14 +1,14 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { FolderOpen, Home, Plus } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
 export const Route = createFileRoute('/_status/empty-state')({
 	component: EmptyStatePage,
 	head: () => ({
-		meta: [{ title: 'No Items Yet' }],
+		meta: [{ title: 'No items Yet' }],
 	}),
 })
 

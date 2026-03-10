@@ -1,11 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import {
 	ChefHat,
-	ChevronDown,
-	ChevronRight,
 	ClipboardType,
-	Database,
-	Globe,
 	Home,
 	ImageIcon,
 	Languages,
@@ -21,12 +17,11 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 
-import TanChatAIAssistant from './demo-AIAssistant.tsx'
 import ParaglideLocaleSwitcher from './LocaleSwitcher.tsx'
 
 export default function Header() {
 	const [isOpen, setIsOpen] = useState(false)
-	const [groupedExpanded, setGroupedExpanded] = useState<Record<string, boolean>>({})
+	const [groupedExpanded, _setGroupedExpanded] = useState<Record<string, boolean>>({})
 
 	return (
 		<>
@@ -35,6 +30,7 @@ export default function Header() {
 					onClick={() => setIsOpen(true)}
 					className='p-2 hover:bg-gray-700 rounded-lg transition-colors'
 					aria-label='Open menu'
+					type='button'
 				>
 					<Menu size={24} />
 				</button>
@@ -56,6 +52,7 @@ export default function Header() {
 						onClick={() => setIsOpen(false)}
 						className='p-2 hover:bg-gray-800 rounded-lg transition-colors'
 						aria-label='Close menu'
+						type='button'
 					>
 						<X size={24} />
 					</button>
@@ -78,7 +75,7 @@ export default function Header() {
 					{/* Demo Links Start */}
 
 					<Link
-						to='/demo/tanstack-query'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -91,7 +88,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/store'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -104,7 +101,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/table'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -117,7 +114,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/i18n'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -130,7 +127,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/mcp-todos'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -143,7 +140,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/form/simple'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -156,7 +153,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/form/address'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -169,20 +166,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/db-chat'
-						onClick={() => setIsOpen(false)}
-						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
-						activeProps={{
-							className:
-								'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-						}}
-					>
-						<Database size={20} />
-						<span className='font-medium'>DB Chat</span>
-					</Link>
-
-					<Link
-						to='/demo/ai-chat'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -195,7 +179,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/ai-image'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -208,7 +192,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/ai-structured'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -221,20 +205,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/strapi'
-						onClick={() => setIsOpen(false)}
-						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
-						activeProps={{
-							className:
-								'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-						}}
-					>
-						<Globe size={20} />
-						<span className='font-medium'>Strapi</span>
-					</Link>
-
-					<Link
-						to='/demo/start/server-funcs'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -247,7 +218,7 @@ export default function Header() {
 					</Link>
 
 					<Link
-						to='/demo/start/api-request'
+						to='/'
 						onClick={() => setIsOpen(false)}
 						className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 						activeProps={{
@@ -259,39 +230,10 @@ export default function Header() {
 						<span className='font-medium'>Start - API Request</span>
 					</Link>
 
-					<div className='flex flex-row justify-between'>
-						<Link
-							to='/demo/start/ssr'
-							onClick={() => setIsOpen(false)}
-							className='flex-1 flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
-							activeProps={{
-								className:
-									'flex-1 flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-							}}
-						>
-							<StickyNote size={20} />
-							<span className='font-medium'>Start - SSR Demos</span>
-						</Link>
-						<button
-							className='p-2 hover:bg-gray-800 rounded-lg transition-colors'
-							onClick={() =>
-								setGroupedExpanded((prev) => ({
-									...prev,
-									StartSSRDemo: !prev.StartSSRDemo,
-								}))
-							}
-						>
-							{groupedExpanded.StartSSRDemo ? (
-								<ChevronDown size={20} />
-							) : (
-								<ChevronRight size={20} />
-							)}
-						</button>
-					</div>
 					{groupedExpanded.StartSSRDemo && (
 						<div className='flex flex-col ml-4'>
 							<Link
-								to='/demo/start/ssr/spa-mode'
+								to='/'
 								onClick={() => setIsOpen(false)}
 								className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 								activeProps={{
@@ -304,7 +246,7 @@ export default function Header() {
 							</Link>
 
 							<Link
-								to='/demo/start/ssr/full-ssr'
+								to='/'
 								onClick={() => setIsOpen(false)}
 								className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 								activeProps={{
@@ -317,7 +259,7 @@ export default function Header() {
 							</Link>
 
 							<Link
-								to='/demo/start/ssr/data-only'
+								to='/'
 								onClick={() => setIsOpen(false)}
 								className='flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 								activeProps={{
@@ -336,8 +278,6 @@ export default function Header() {
 
 				<div className='p-4 border-t border-gray-700 bg-gray-800 flex flex-col gap-2'>
 					<ParaglideLocaleSwitcher />
-
-					<TanChatAIAssistant />
 				</div>
 			</aside>
 		</>

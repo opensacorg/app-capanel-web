@@ -1,7 +1,9 @@
 import { EventClient } from '@tanstack/devtools-event-client'
 import { useEffect, useState } from 'react'
 
-import { fullName, store } from './demo-store'
+import { store } from './demo-store'
+
+const getFullName = () => `${store.state.firstName} ${store.state.lastName}`
 
 type EventMap = {
 	'store-devtools:state': {
@@ -22,10 +24,10 @@ class StoreDevtoolsEventClient extends EventClient<EventMap> {
 const sdec = new StoreDevtoolsEventClient()
 
 store.subscribe(() => {
-	sdec.emit('state', {
+	sdec.emit('store-devtools:state', {
 		firstName: store.state.firstName,
 		lastName: store.state.lastName,
-		fullName: fullName.state,
+		fullName: getFullName(),
 	})
 })
 
@@ -33,11 +35,11 @@ function DevtoolPanel() {
 	const [state, setState] = useState<EventMap['store-devtools:state']>(() => ({
 		firstName: store.state.firstName,
 		lastName: store.state.lastName,
-		fullName: fullName.state,
+		fullName: getFullName(),
 	}))
 
 	useEffect(() => {
-		return sdec.on('state', (e) => setState(e.payload))
+		return sdec.on('store-devtools:state', (e) => setState(e.payload))
 	}, [])
 
 	return (

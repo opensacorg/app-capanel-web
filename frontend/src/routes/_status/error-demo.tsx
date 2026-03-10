@@ -17,98 +17,98 @@ const errorPages = [
 		code: '400',
 		name: 'Bad Request',
 		icon: AlertTriangle,
-		path: '/status/bad-request',
+		path: '/bad-request',
 		color: 'text-yellow-500',
 	},
 	{
 		code: '401',
 		name: 'Unauthorized',
 		icon: ShieldOff,
-		path: '/status/401',
+		path: '/401',
 		color: 'text-yellow-500',
 	},
 	{
 		code: '403',
 		name: 'Forbidden',
 		icon: ShieldOff,
-		path: '/status/403',
+		path: '/403',
 		color: 'text-destructive',
 	},
 	{
 		code: '404',
 		name: 'Not Found',
 		icon: FileQuestion,
-		path: '/status/404',
+		path: '/404',
 		color: 'text-destructive',
 	},
 	{
 		code: '408',
 		name: 'Timeout',
 		icon: AlertTriangle,
-		path: '/status/timeout',
+		path: '/timeout',
 		color: 'text-yellow-500',
 	},
 	{
 		code: '409',
 		name: 'Conflict',
 		icon: AlertTriangle,
-		path: '/status/conflict',
+		path: '/conflict',
 		color: 'text-yellow-500',
 	},
 	{
 		code: '410',
 		name: 'Gone',
 		icon: FileQuestion,
-		path: '/status/gone',
+		path: '/gone',
 		color: 'text-muted-foreground',
 	},
 	{
 		code: '415',
 		name: 'Unsupported Media',
 		icon: AlertTriangle,
-		path: '/status/unsupported-media',
+		path: '/unsupported-media',
 		color: 'text-destructive',
 	},
 	{
 		code: '423',
 		name: 'Locked',
 		icon: ShieldOff,
-		path: '/status/locked',
+		path: '/locked',
 		color: 'text-destructive',
 	},
 	{
 		code: '429',
 		name: 'Rate Limited',
 		icon: AlertTriangle,
-		path: '/status/rate-limited',
+		path: '/rate-limited',
 		color: 'text-yellow-500',
 	},
 	{
 		code: '500',
 		name: 'Server Error',
 		icon: AlertOctagon,
-		path: '/status/500',
+		path: '/500',
 		color: 'text-destructive',
 	},
 	{
 		code: '502',
 		name: 'Bad Gateway',
 		icon: Network,
-		path: '/status/bad-gateway',
+		path: '/bad-gateway',
 		color: 'text-destructive',
 	},
 	{
 		code: '503',
 		name: 'Unavailable',
 		icon: Network,
-		path: '/status/503',
+		path: '/503',
 		color: 'text-yellow-500',
 	},
 	{
 		code: '504',
 		name: 'Gateway Timeout',
 		icon: Network,
-		path: '/status/gateway-timeout',
+		path: '/gateway-timeout',
 		color: 'text-destructive',
 	},
 ]
@@ -165,8 +165,8 @@ function ErrorDemoPage() {
 				<CardContent className='space-y-4'>
 					<div className='rounded-lg bg-muted p-4 font-mono text-xs overflow-auto'>
 						<pre>{`// Router-level defaults (router.tsx)
-import DefaultError from "@/components/status/DefaultError"; 
-import DefaultCatchBoundary from "@/components/status/DefaultCatchBoundary"; const router = createRouter({
+import DefaultError from "@/components/DefaultError"; 
+import DefaultCatchBoundary from "@/components/DefaultCatchBoundary"; const router = createRouter({
   routeTree,
   defaultErrorComponent: ({ error, reset, info }) => (
     <DefaultError error={error} reset={reset} info={info} />
@@ -243,19 +243,19 @@ export const Route = createFileRoute('/my-route')({
 					<CardDescription>Application-specific error pages</CardDescription>
 				</CardHeader>
 				<CardContent className='flex flex-wrap gap-2'>
-					<Button variant='outline' size='sm' render={<Link to='/status/error' />}>
+					<Button variant='outline' size='sm' render={<Link to='/error' />}>
 						Generic Error
 					</Button>
-					<Button variant='outline' size='sm' render={<Link to='/status/offline' />}>
+					<Button variant='outline' size='sm' render={<Link to='/offline' />}>
 						Offline
 					</Button>
-					<Button variant='outline' size='sm' render={<Link to='/status/session-expired' />}>
+					<Button variant='outline' size='sm' render={<Link to='/session-expired' />}>
 						Session Expired
 					</Button>
-					<Button variant='outline' size='sm' render={<Link to='/status/payment-required' />}>
+					<Button variant='outline' size='sm' render={<Link to='/payment-required' />}>
 						Payment Required
 					</Button>
-					<Button variant='outline' size='sm' render={<Link to='/status/bandwidth-exceeded' />}>
+					<Button variant='outline' size='sm' render={<Link to='/bandwidth-exceeded' />}>
 						Bandwidth Exceeded
 					</Button>
 				</CardContent>

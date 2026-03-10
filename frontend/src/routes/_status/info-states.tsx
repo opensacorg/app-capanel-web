@@ -24,28 +24,28 @@ export const Route = createFileRoute('/_status/info-states')({
 })
 
 const infoPages = [
-	{ name: 'Coming Soon', icon: Rocket, path: '/status/coming-soon', color: 'text-blue-500' },
-	{ name: 'Maintenance', icon: Construction, path: '/status/maintenance', color: 'text-blue-500' },
+	{ name: 'Coming Soon', icon: Rocket, path: '/coming-soon', color: 'text-blue-500' },
+	{ name: 'Maintenance', icon: Construction, path: '/maintenance', color: 'text-blue-500' },
 	{
 		name: 'Under Construction',
 		icon: HardHat,
-		path: '/status/under-construction',
+		path: '/under-construction',
 		color: 'text-blue-500',
 	},
-	{ name: 'Verify Email', icon: Mail, path: '/status/verify-email', color: 'text-blue-500' },
-	{ name: 'Login Required', icon: Users, path: '/status/login-required', color: 'text-blue-500' },
-	{ name: '2FA Required', icon: Clock, path: '/status/2fa-required', color: 'text-blue-500' },
-	{ name: 'Team Invitation', icon: Users, path: '/status/invitation', color: 'text-blue-500' },
-	{ name: 'Processing', icon: Clock, path: '/status/processing', color: 'text-blue-500' },
-	{ name: 'Queued', icon: ListOrdered, path: '/status/queued', color: 'text-blue-500' },
+	{ name: 'Verify Email', icon: Mail, path: '/verify-email', color: 'text-blue-500' },
+	{ name: 'Login Required', icon: Users, path: '/login-required', color: 'text-blue-500' },
+	{ name: '2FA Required', icon: Clock, path: '/2fa-required', color: 'text-blue-500' },
+	{ name: 'Team Invitation', icon: Users, path: '/invitation', color: 'text-blue-500' },
+	{ name: 'Processing', icon: Clock, path: '/processing', color: 'text-blue-500' },
+	{ name: 'Queued', icon: ListOrdered, path: '/queued', color: 'text-blue-500' },
 	{
 		name: 'Empty State',
 		icon: FolderOpen,
-		path: '/status/empty-state',
+		path: '/empty-state',
 		color: 'text-muted-foreground',
 	},
-	{ name: 'No Results', icon: Search, path: '/status/no-results', color: 'text-muted-foreground' },
-	{ name: 'Cancelled', icon: Info, path: '/status/cancelled', color: 'text-muted-foreground' },
+	{ name: 'No Results', icon: Search, path: '/no-results', color: 'text-muted-foreground' },
+	{ name: 'Cancelled', icon: Info, path: '/cancelled', color: 'text-muted-foreground' },
 ]
 
 function InfoStatesPage() {
@@ -139,13 +139,13 @@ function InfoStatesPage() {
 					<CardDescription>Jump to related sections</CardDescription>
 				</CardHeader>
 				<CardContent className='flex flex-wrap gap-2'>
-					<Button variant='outline' size='sm' render={<Link to='/status/error-demo' />}>
+					<Button variant='outline' size='sm' render={<Link to='/error-demo' />}>
 						Error States
 					</Button>
-					<Button variant='outline' size='sm' render={<Link to='/status/success-states' />}>
+					<Button variant='outline' size='sm' render={<Link to='/success-states' />}>
 						Success States
 					</Button>
-					<Button variant='outline' size='sm' render={<Link to='/status/loading' />}>
+					<Button variant='outline' size='sm' render={<Link to='/loading' />}>
 						Loading States
 					</Button>
 					<Button variant='outline' size='sm' render={<Link to='/status' />}>

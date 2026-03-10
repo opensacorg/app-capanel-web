@@ -89,28 +89,6 @@ export const AcademicIndicatorCreateSchema = {
 			maxLength: 10,
 			title: 'Studentgroup',
 		},
-		currdenom: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdenom',
-		},
-		currstatus: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currstatus',
-		},
 		priordenom: {
 			anyOf: [
 				{
@@ -188,18 +166,6 @@ export const AcademicIndicatorCreateSchema = {
 			],
 			title: 'Box',
 		},
-		currnsizemet: {
-			anyOf: [
-				{
-					type: 'string',
-					maxLength: 10,
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnsizemet',
-		},
 		priornsizemet: {
 			anyOf: [
 				{
@@ -247,72 +213,6 @@ export const AcademicIndicatorCreateSchema = {
 				},
 			],
 			title: 'Pairshare Method',
-		},
-		currprate_enrolled: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate Enrolled',
-		},
-		currprate_tested: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate Tested',
-		},
-		currprate: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate',
-		},
-		currnumprloss: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnumprloss',
-		},
-		currdenom_withoutprloss: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdenom Withoutprloss',
-		},
-		currstatus_withoutprloss: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currstatus Withoutprloss',
 		},
 		priorprate_enrolled: {
 			anyOf: [
@@ -391,17 +291,6 @@ export const AcademicIndicatorCreateSchema = {
 			maxLength: 10,
 			title: 'Reportingyear',
 		},
-		currnumer: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnumer',
-		},
 		priornumer: {
 			anyOf: [
 				{
@@ -424,18 +313,6 @@ export const AcademicIndicatorCreateSchema = {
 				},
 			],
 			title: 'Smalldenom',
-		},
-		certifyflag: {
-			anyOf: [
-				{
-					type: 'string',
-					maxLength: 10,
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Certifyflag',
 		},
 		priorcertifyflag: {
 			anyOf: [
@@ -483,94 +360,6 @@ export const AcademicIndicatorCreateSchema = {
 				},
 			],
 			title: 'Fiveyrnumer',
-		},
-		currprogressed: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprogressed',
-		},
-		currmaintainpl4: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currmaintainpl4',
-		},
-		currmaintainoth: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currmaintainoth',
-		},
-		currdeclined: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdeclined',
-		},
-		currprogressed_alternate: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprogressed Alternate',
-		},
-		currmaintainpl3_alternate: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currmaintainpl3 Alternate',
-		},
-		currnotprognotmain_alternate: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnotprognotmain Alternate',
-		},
-		curr95: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Curr95',
 		},
 		priorprogressed: {
 			anyOf: [
@@ -766,28 +555,6 @@ export const AcademicIndicatorPublicSchema = {
 			maxLength: 10,
 			title: 'Studentgroup',
 		},
-		currdenom: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdenom',
-		},
-		currstatus: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currstatus',
-		},
 		priordenom: {
 			anyOf: [
 				{
@@ -865,18 +632,6 @@ export const AcademicIndicatorPublicSchema = {
 			],
 			title: 'Box',
 		},
-		currnsizemet: {
-			anyOf: [
-				{
-					type: 'string',
-					maxLength: 10,
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnsizemet',
-		},
 		priornsizemet: {
 			anyOf: [
 				{
@@ -924,72 +679,6 @@ export const AcademicIndicatorPublicSchema = {
 				},
 			],
 			title: 'Pairshare Method',
-		},
-		currprate_enrolled: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate Enrolled',
-		},
-		currprate_tested: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate Tested',
-		},
-		currprate: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate',
-		},
-		currnumprloss: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnumprloss',
-		},
-		currdenom_withoutprloss: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdenom Withoutprloss',
-		},
-		currstatus_withoutprloss: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currstatus Withoutprloss',
 		},
 		priorprate_enrolled: {
 			anyOf: [
@@ -1068,17 +757,6 @@ export const AcademicIndicatorPublicSchema = {
 			maxLength: 10,
 			title: 'Reportingyear',
 		},
-		currnumer: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnumer',
-		},
 		priornumer: {
 			anyOf: [
 				{
@@ -1101,18 +779,6 @@ export const AcademicIndicatorPublicSchema = {
 				},
 			],
 			title: 'Smalldenom',
-		},
-		certifyflag: {
-			anyOf: [
-				{
-					type: 'string',
-					maxLength: 10,
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Certifyflag',
 		},
 		priorcertifyflag: {
 			anyOf: [
@@ -1160,94 +826,6 @@ export const AcademicIndicatorPublicSchema = {
 				},
 			],
 			title: 'Fiveyrnumer',
-		},
-		currprogressed: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprogressed',
-		},
-		currmaintainpl4: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currmaintainpl4',
-		},
-		currmaintainoth: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currmaintainoth',
-		},
-		currdeclined: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdeclined',
-		},
-		currprogressed_alternate: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprogressed Alternate',
-		},
-		currmaintainpl3_alternate: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currmaintainpl3 Alternate',
-		},
-		currnotprognotmain_alternate: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnotprognotmain Alternate',
-		},
-		curr95: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Curr95',
 		},
 		priorprogressed: {
 			anyOf: [
@@ -1481,28 +1059,6 @@ export const AcademicIndicatorUpdateSchema = {
 			],
 			title: 'Studentgroup',
 		},
-		currdenom: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdenom',
-		},
-		currstatus: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currstatus',
-		},
 		priordenom: {
 			anyOf: [
 				{
@@ -1580,18 +1136,6 @@ export const AcademicIndicatorUpdateSchema = {
 			],
 			title: 'Box',
 		},
-		currnsizemet: {
-			anyOf: [
-				{
-					type: 'string',
-					maxLength: 10,
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnsizemet',
-		},
 		priornsizemet: {
 			anyOf: [
 				{
@@ -1639,72 +1183,6 @@ export const AcademicIndicatorUpdateSchema = {
 				},
 			],
 			title: 'Pairshare Method',
-		},
-		currprate_enrolled: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate Enrolled',
-		},
-		currprate_tested: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate Tested',
-		},
-		currprate: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currprate',
-		},
-		currnumprloss: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currnumprloss',
-		},
-		currdenom_withoutprloss: {
-			anyOf: [
-				{
-					type: 'integer',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currdenom Withoutprloss',
-		},
-		currstatus_withoutprloss: {
-			anyOf: [
-				{
-					type: 'number',
-				},
-				{
-					type: 'null',
-				},
-			],
-			title: 'Currstatus Withoutprloss',
 		},
 		priorprate_enrolled: {
 			anyOf: [
@@ -1998,7 +1476,7 @@ export const DashboardAggregationSchema = {
 	type: 'object',
 	required: ['cds', 'studentgroup', 'indicator', 'reportingyear'],
 	title: 'DashboardAggregation',
-	description: 'Dashboard aggregation response model (legacy single-indicator)',
+	description: 'dashboard aggregation response model (legacy single-indicator)',
 } as const
 
 export const DashboardSummaryResponseSchema = {

@@ -27,7 +27,7 @@ $ source .venv/bin/activate
 
 Make sure your editor is using the correct Python virtual environment, with the interpreter at `backend/.venv/bin/python`.
 
-Modify or add SQLModel models for data and SQL tables in `./backend/app/models.py`, API endpoints in `./backend/app/api/`, CRUD (Create, Read, Update, Delete) utils in `./backend/app/crud.py`.
+Modify or add SQLModel models for data and SQL tables in `./backend/app/model/models.py`, API endpoints in `./backend/app/api/`, CRUD (Create, Read, Update, Delete) utils in `./backend/app/service/crud.py`.
 
 ## VS Code
 
@@ -133,7 +133,7 @@ Make sure you create a "revision" of your models and that you "upgrade" your dat
 $ docker compose exec backend bash
 ```
 
-* Alembic is already configured to import your SQLModel models from `./backend/app/models.py`.
+* Alembic is already configured to import your SQLModel models from `./backend/app/model/models.py`.
 
 * After changing a model (for example, adding a column), inside the container, create a revision, e.g.:
 
@@ -149,24 +149,16 @@ $ alembic revision --autogenerate -m "Add column last_name to User model"
 $ alembic upgrade head
 ```
 
-If you don't want to use migrations at all, uncomment the lines in the file at `./backend/app/core/db.py` that end in:
+If you don't want to use migrations at all, uncomment the lines in the file at `./backend/app/core/database.py` that end in:
 
 ```python
 SQLModel.metadata.create_all(engine)
 ```
 
-and comment the line in the file `scripts/prestart.sh` that contains:
+and comment the line in the file `app/scripts/prestart.py` that contains:
 
 ```console
 $ alembic upgrade head
 ```
 
 If you don't want to start with the default models and want to remove them / modify them, from the beginning, without having any previous revision, you can remove the revision files (`.py` Python files) under `./backend/app/alembic/versions/`. And then create a first migration as described above.
-
-## Email Templates
-
-The email templates are in `./backend/app/email-templates/`. Here, there are two directories: `build` and `src`. The `src` directory contains the source files that are used to build the final email templates. The `build` directory contains the final email templates that are used by the application.
-
-Before continuing, ensure you have the [MJML extension](https://github.com/mjmlio/vscode-mjml) installed in your VS Code.
-
-Once you have the MJML extension installed, you can create a new email template in the `src` directory. After creating the new email template and with the `.mjml` file open in your editor, open the command palette with `Ctrl+Shift+P` and search for `MJML: Export to HTML`. This will convert the `.mjml` file to a `.html` file and now you can save it in the build directory.

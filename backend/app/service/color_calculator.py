@@ -187,7 +187,7 @@ CHANGE_CUTPOINTS = {
 # 5x5 color grids by indicator
 # Grid[status_level][change_level] = color (1=red, 2=orange, 3=yellow, 4=green, 5=blue)
 # Academic indicators (ELA, MATH, SCI) use the same grid pattern
-ACADEMIC_COLOR_GRID = {
+ACADEMIC_COLOR_GRID: dict[int, dict[int, int | None]] = {
     5: {5: 5, 4: 5, 3: 5, 2: 4, 1: 4},  # Very High status
     4: {5: 5, 4: 4, 3: 4, 2: 4, 1: 4},  # High status
     3: {5: 4, 4: 4, 3: 3, 2: 3, 1: 3},  # Medium status
@@ -196,7 +196,7 @@ ACADEMIC_COLOR_GRID = {
 }
 
 # Chronic Absenteeism grid (note: columns are reversed - decline is good)
-CHRONIC_COLOR_GRID = {
+CHRONIC_COLOR_GRID: dict[int, dict[int, int | None]] = {
     5: {5: 5, 4: 5, 3: 5, 2: 4, 1: 3},  # Very Low (best)
     4: {5: 5, 4: 4, 3: 4, 2: 3, 1: 2},  # Low
     3: {5: 4, 4: 4, 3: 3, 2: 2, 1: 2},  # Medium
@@ -205,7 +205,7 @@ CHRONIC_COLOR_GRID = {
 }
 
 # Graduation Rate grid
-GRAD_COLOR_GRID = {
+GRAD_COLOR_GRID: dict[int, dict[int, int | None]] = {
     5: {5: 5, 4: 5, 3: 5, 2: 5, 1: None},  # Very High - N/A for Dec Sig
     4: {5: 5, 4: 4, 3: 4, 2: 3, 1: 2},  # High
     3: {5: 4, 4: 4, 3: 3, 2: 2, 1: 2},  # Medium
@@ -214,7 +214,7 @@ GRAD_COLOR_GRID = {
 }
 
 # ELPI grid (increase is good)
-ELPI_COLOR_GRID = {
+ELPI_COLOR_GRID: dict[int, dict[int, int | None]] = {
     5: {5: 5, 4: 5, 3: 5, 2: 4, 1: 3},  # Very High
     4: {5: 5, 4: 4, 3: 4, 2: 3, 1: 2},  # High
     3: {5: 4, 4: 4, 3: 3, 2: 2, 1: 2},  # Medium
@@ -226,7 +226,7 @@ ELPI_COLOR_GRID = {
 CCI_COLOR_GRID = ELPI_COLOR_GRID
 
 # Map indicators to their color grids
-COLOR_GRIDS = {
+COLOR_GRIDS: dict[str, dict[int, dict[int, int | None]]] = {
     "ELA": ACADEMIC_COLOR_GRID,
     "ELA11": ACADEMIC_COLOR_GRID,
     "MATH": ACADEMIC_COLOR_GRID,
@@ -358,7 +358,7 @@ def calculate_all(
     priorstatus: float | None = None,
     is_mean_scale_score: bool = False,
     grade: str = "ALL",
-) -> dict:
+) -> dict[str, float | int | None]:
     """Calculate all color-related fields for an indicator.
 
     Args:

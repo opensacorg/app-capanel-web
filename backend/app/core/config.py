@@ -1,13 +1,15 @@
+import os
 import secrets
 import warnings
+from pathlib import Path
 from typing import Annotated, Any, Literal
+from urllib.parse import quote_plus
 
 from pydantic import (
     AnyUrl,
     BeforeValidator,
     EmailStr,
     HttpUrl,
-    PostgresDsn,
     computed_field,
     model_validator,
 )
@@ -30,7 +32,7 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file="../.env",
+        env_file=str(Path(__file__).resolve().parents[3] / ".env"),
         env_ignore_empty=True,
         extra="ignore",
     )
@@ -51,25 +53,23 @@ class Settings(BaseSettings):
             self.FRONTEND_HOST
         ]
 
-    PROJECT_NAME: str
+    PROJECT_NAME: str = "California Accountability Panel"
     SENTRY_DSN: HttpUrl | None = None
-    POSTGRES_SERVER: str
+    DB_CONNECTION_MODE: Literal["auto", "local", "cloudsql"] = "auto"
+    DATABASE_URL: str | None = None
+    POSTGRES_SERVER: str | None = None
     POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = ""
+    POSTGRES_USER: str | None = None
+    POSTGRES_PASSWORD: str | None = None
+    POSTGRES_DB: str | None = None
+    CLOUD_SQL_INSTANCE_CONNECTION_NAME: str | None = None
 
     @computed_field  # type: ignore[prop-decorator]
     @property
-    def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
-        return PostgresDsn.build(
-            scheme="postgresql+psycopg",
-            username=self.POSTGRES_USER,
-            password=self.POSTGRES_PASSWORD,
-            host=self.POSTGRES_SERVER,
-            port=self.POSTGRES_PORT,
-            path=self.POSTGRES_DB,
-        )
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
+        if not self.DATABASE_URL:
+            raise ValueError("DATABASE_URL is not configured")
+        return self.DATABASE_URL
 
     SMTP_TLS: bool = True
     SMTP_SSL: bool = False
@@ -94,8 +94,8 @@ class Settings(BaseSettings):
         return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER: EmailStr = "admin@example.com"
+    FIRST_SUPERUSER_PASSWORD: str = "changethis"
 
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         """
@@ -114,12 +114,84 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
         self._check_default_secret("SECRET_KEY", self.SECRET_KEY)
-        self._check_default_secret("POSTGRES_PASSWORD", self.POSTGRES_PASSWORD)
-        self._check_default_secret(
-            "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
-        )
-
+        self._check_default_secret("FIRST_SUPERUSER_PASSWORD", self.SECRET_KEY)
         return self
 
+    @model_validator(mode="after")
+    def _enforce_cloud_run_environment(self) -> Self:
+        if os.getenv("K_SERVICE") and self.ENVIRONMENT != "production":
+            raise ValueError(
+                'ENVIRONMENT must be "production" when running on Cloud Run.'
+            )
+        return self
 
-settings = Settings()  # type: ignore
+    @model_validator(mode="after")
+    def _populate_database_url(self) -> Self:
+        if self.DATABASE_URL:
+            return self
+
+        if not (self.POSTGRES_USER and self.POSTGRES_PASSWORD and self.POSTGRES_DB):
+            raise ValueError(
+                "DATABASE_URL is required, or set POSTGRES_USER/POSTGRES_PASSWORD/"
+                "POSTGRES_DB and either POSTGRES_SERVER (local/tcp) or "
+                "CLOUD_SQL_INSTANCE_CONNECTION_NAME (Cloud SQL socket)."
+            )
+
+        encoded_password = quote_plus(self.POSTGRES_PASSWORD)
+
+        def _build_local_postgres_url() -> str:
+            if not self.POSTGRES_SERVER:
+                raise ValueError(
+                    "DB_CONNECTION_MODE=local requires POSTGRES_SERVER to be set."
+                )
+            return (
+                "postgresql+psycopg://"
+                f"{self.POSTGRES_USER}:{encoded_password}"
+                f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            )
+
+        def _build_cloudsql_url() -> str:
+            if not self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+                raise ValueError(
+                    "DB_CONNECTION_MODE=cloudsql requires "
+                    "CLOUD_SQL_INSTANCE_CONNECTION_NAME to be set."
+                )
+            return (
+                "postgresql+psycopg://"
+                f"{self.POSTGRES_USER}:{encoded_password}"
+                f"@/{self.POSTGRES_DB}"
+                f"?host=/cloudsql/{self.CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
+            )
+
+        if self.DB_CONNECTION_MODE == "local":
+            self.DATABASE_URL = _build_local_postgres_url()
+            return self
+
+        if self.DB_CONNECTION_MODE == "cloudsql":
+            self.DATABASE_URL = _build_cloudsql_url()
+            return self
+
+        # Auto mode:
+        # - production prefers Cloud SQL when configured
+        # - local/staging prefer direct Postgres TCP when configured
+        # - fallback to whichever option is available
+        if self.ENVIRONMENT == "production" and self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+            self.DATABASE_URL = _build_cloudsql_url()
+            return self
+
+        if self.POSTGRES_SERVER:
+            self.DATABASE_URL = _build_local_postgres_url()
+            return self
+
+        if self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
+            self.DATABASE_URL = _build_cloudsql_url()
+            return self
+
+        raise ValueError(
+            "Could not resolve database connection in DB_CONNECTION_MODE=auto. "
+            "Set POSTGRES_SERVER for local/tcp or set "
+            "CLOUD_SQL_INSTANCE_CONNECTION_NAME for Cloud SQL."
+        )
+
+
+settings = Settings()

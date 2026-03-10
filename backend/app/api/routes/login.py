@@ -4,19 +4,26 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import col, select
 
-from app.service import crud
 from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
 from app.core import security
 from app.core.config import settings
-from app.model.models import Message, Token
-from app.model.user import UserUpdate, UserPublic, NewPassword
 from app.core.utils import (
     generate_password_reset_token,
     generate_reset_password_email,
     send_email,
     verify_password_reset_token,
 )
+from app.model.models import Message, Token
+from app.model.user import (
+    ForcePasswordResetRequest,
+    NewPassword,
+    User,
+    UserPublic,
+    UserUpdate,
+)
+from app.service import crud
 
 router = APIRouter(tags=["login"])
 
@@ -121,4 +128,48 @@ def recover_password_html_content(email: str, session: SessionDep) -> Any:
 
     return HTMLResponse(
         content=email_data.html_content, headers={"subject:": email_data.subject}
+    )
+
+
+@router.post(
+    "/login/force-password-reset",
+    dependencies=[Depends(get_current_active_superuser)],
+    response_model=Message,
+)
+def force_password_reset_for_users(
+    session: SessionDep, body: ForcePasswordResetRequest
+) -> Message:
+    """
+    Force password reset for a targeted list of users or all active users.
+    """
+    if not body.emails and not body.include_all_active_users:
+        raise HTTPException(
+            status_code=400,
+            detail="Provide emails or set include_all_active_users=true",
+        )
+
+    users_by_id: dict[str, User] = {}
+    if body.include_all_active_users:
+        active_users = session.exec(
+            select(User).where(col(User.is_active).is_(True))
+        ).all()
+        users_by_id.update({str(user.id): user for user in active_users})
+
+    if body.emails:
+        targeted_users = session.exec(
+            select(User).where(col(User.email).in_(body.emails))
+        ).all()
+        users_by_id.update({str(user.id): user for user in targeted_users})
+
+    flagged_count = 0
+    for user in users_by_id.values():
+        if user.force_password_reset:
+            continue
+        user.force_password_reset = True
+        session.add(user)
+        flagged_count += 1
+
+    session.commit()
+    return Message(
+        message=f"Forced password reset for {flagged_count} user(s) out of {len(users_by_id)} targeted account(s)"
     )

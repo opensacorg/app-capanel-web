@@ -1,6 +1,6 @@
 import uuid
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import Field, Session, SQLModel, col
 
 
 class CensusDataBase(SQLModel):
@@ -46,21 +46,18 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_school(
-        cls, session, school_code: str, reporting_category: str
-    ) -> dict:
+        cls, session: Session, school_code: str, reporting_category: str
+    ) -> dict[str, int | None]:
         """
         Return a dictionary with key 'total-students' that is either row.total_enr or None.
         0 is a valid value.
         If no row is found, return {'total-students': None}.
         """
-        row = (
-            session.query(cls)
-            .filter(
-                cls.school_code == school_code,
-                cls.reporting_category == reporting_category,
-            )
-            .first()
+        query = session.query(cls).filter(
+            col(cls.school_code) == school_code,
+            col(cls.reporting_category) == reporting_category,
         )
+        row = query.first()
         if row:
             return {"total-students": row.total_enr}
         else:
@@ -68,8 +65,8 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_school_by_grade(
-        cls, session, school_code: str, reporting_category: str
-    ) -> dict:
+        cls, session: Session, school_code: str, reporting_category: str
+    ) -> dict[str, list[int]]:
         """
         Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this row.
         If no row is found, return {'total_students_by_grade': []}.
@@ -77,8 +74,8 @@ class CensusData(CensusDataBase, table=True):
         found_row = (
             session.query(cls)
             .filter(
-                cls.school_code == school_code,
-                cls.reporting_category == reporting_category,
+                col(cls.school_code) == school_code,
+                col(cls.reporting_category) == reporting_category,
             )
             .first()
         )
@@ -106,8 +103,8 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_district(
-        cls, session, district_code: str, reporting_category: str
-    ) -> dict:
+        cls, session: Session, district_code: str, reporting_category: str
+    ) -> dict[str, int | None]:
         """
         Return a dictionary with key 'total-students' that is either row.total_enr or None.
         0 is a valid value.
@@ -116,8 +113,8 @@ class CensusData(CensusDataBase, table=True):
         row = (
             session.query(cls)
             .filter(
-                cls.district_code == district_code,
-                cls.reporting_category == reporting_category,
+                col(cls.district_code) == district_code,
+                col(cls.reporting_category) == reporting_category,
             )
             .first()
         )
@@ -128,8 +125,8 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_district_by_grade(
-        cls, session, district_code: str, reporting_category: str
-    ) -> dict:
+        cls, session: Session, district_code: str, reporting_category: str
+    ) -> dict[str, list[int]]:
         """
         Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this district.
         If no row is found, return {'total_students_by_grade': []}.
@@ -137,8 +134,8 @@ class CensusData(CensusDataBase, table=True):
         found_row = (
             session.query(cls)
             .filter(
-                cls.district_code == district_code,
-                cls.reporting_category == reporting_category,
+                col(cls.district_code) == district_code,
+                col(cls.reporting_category) == reporting_category,
             )
             .first()
         )
@@ -166,8 +163,8 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_county(
-        cls, session, county_code: str, reporting_category: str
-    ) -> dict:
+        cls, session: Session, county_code: str, reporting_category: str
+    ) -> dict[str, int | None]:
         """
         Return a dictionary with key 'total-students' that is either row.total_enr or None.
         0 is a valid value.
@@ -176,8 +173,8 @@ class CensusData(CensusDataBase, table=True):
         row = (
             session.query(cls)
             .filter(
-                cls.county_code == county_code,
-                cls.reporting_category == reporting_category,
+                col(cls.county_code) == county_code,
+                col(cls.reporting_category) == reporting_category,
             )
             .first()
         )
@@ -188,8 +185,8 @@ class CensusData(CensusDataBase, table=True):
 
     @classmethod
     def get_total_students_in_county_by_grade(
-        cls, session, county_code: str, reporting_category: str
-    ) -> dict:
+        cls, session: Session, county_code: str, reporting_category: str
+    ) -> dict[str, list[int]]:
         """
         Return a dictionary with key 'total_students_by_grade' and value as a list of student counts for grades TK through 12 for this county.
         If no row is found, return {'total_students_by_grade': []}.
@@ -197,8 +194,8 @@ class CensusData(CensusDataBase, table=True):
         found_row = (
             session.query(cls)
             .filter(
-                cls.county_code == county_code,
-                cls.reporting_category == reporting_category,
+                col(cls.county_code) == county_code,
+                col(cls.reporting_category) == reporting_category,
             )
             .first()
         )

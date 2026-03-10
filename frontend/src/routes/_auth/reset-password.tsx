@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, Link as RouterLink, redirect, useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { AuthLayout } from '@/components/Common/AuthLayout'
+import { AuthLayout } from '@/components/common/AuthLayout'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { PasswordInput } from '@/components/ui/password-input'
@@ -68,7 +68,7 @@ function ResetPassword() {
 
 	const mutation = useMutation({
 		mutationFn: (data: { new_password: string; token: string }) =>
-			LoginService.loginResetPassword({ requestBody: data }),
+			LoginService.loginResetPassword({ body: data }),
 		onSuccess: () => {
 			showSuccessToast('Password updated successfully')
 			form.reset()
@@ -108,7 +108,7 @@ function ResetPassword() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>
@@ -131,7 +131,7 @@ function ResetPassword() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>

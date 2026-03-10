@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, BookOpen, Rocket, Settings, Sparkles } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -26,7 +26,7 @@ function WelcomePage() {
 			title='Welcome to FastAPI Cloud!'
 			description='Your account has been successfully created.'
 			footer={
-				<Button render={<Link to='/layout' />}>
+				<Button render={<Link to='/dashboard' />}>
 					Get Started
 					<ArrowRight className='ml-2 size-4' />
 				</Button>
@@ -54,7 +54,7 @@ function WelcomePage() {
 						</CardHeader>
 						<CardContent>
 							<CardDescription className='text-xs'>
-								<Link to='/layout' className='text-primary hover:underline'>
+								<Link to='/dashboard' className='text-primary hover:underline'>
 									View your dashboard
 								</Link>
 							</CardDescription>
@@ -70,7 +70,7 @@ function WelcomePage() {
 						</CardHeader>
 						<CardContent>
 							<CardDescription className='text-xs'>
-								<Link to='/layout/settings' className='text-primary hover:underline'>
+								<Link to='/user/settings' className='text-primary hover:underline'>
 									Update your preferences
 								</Link>
 							</CardDescription>
@@ -86,7 +86,7 @@ function WelcomePage() {
 						</CardHeader>
 						<CardContent>
 							<CardDescription className='text-xs'>
-								<Link to='/docs' className='text-primary hover:underline'>
+								<Link to='/' className='text-primary hover:underline'>
 									Learn how to get the most out of FastAPI Cloud
 								</Link>
 							</CardDescription>

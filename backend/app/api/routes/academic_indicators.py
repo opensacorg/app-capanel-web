@@ -1,28 +1,28 @@
 import uuid
-from typing import Any
+from typing import Any, cast
 
 from fastapi import APIRouter, HTTPException, Query
-from sqlmodel import func, select
+from sqlmodel import col, func, select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.model.models import (
-    Message,
-)
-from app.model.dashboard import (
-    DashboardAggregation,
-    IndicatorSummary,
-    DashboardSummaryResponse,
-    EquityGroupSummary,
-    EquityReportResponse,
-)
 from app.model.academic_indicator import (
     AcademicIndicator,
     AcademicIndicatorCreate,
-    AcademicIndicatorUpdate,
     AcademicIndicatorPublic,
     AcademicIndicatorsPublic,
+    AcademicIndicatorUpdate,
 )
-from app.model.user import UserPublic, UserPreferencesUpdate
+from app.model.dashboard import (
+    DashboardAggregation,
+    DashboardSummaryResponse,
+    EquityGroupSummary,
+    EquityReportResponse,
+    IndicatorSummary,
+)
+from app.model.models import (
+    Message,
+)
+from app.model.user import UserPreferencesUpdate, UserPublic
 from app.service.color_calculator import calculate_all
 
 router = APIRouter(prefix="/academic-indicators", tags=["academic-indicators"])
@@ -31,7 +31,6 @@ router = APIRouter(prefix="/academic-indicators", tags=["academic-indicators"])
 @router.get("/", response_model=AcademicIndicatorsPublic)
 def read_academic_indicators(
     session: SessionDep,
-    current_user: CurrentUser,
     skip: int = 0,
     limit: int = 100,
     cds: str | None = Query(default=None, description="Filter by CDS code"),
@@ -66,7 +65,7 @@ def read_academic_indicators(
 
     count = session.exec(count_statement).one()
     statement = (
-        statement.order_by(AcademicIndicator.created_at.desc())
+        statement.order_by(col(AcademicIndicator.created_at).desc())
         .offset(skip)
         .limit(limit)
     )
@@ -89,7 +88,7 @@ def get_dashboard_data(
         select(AcademicIndicator)
         .where(AcademicIndicator.cds == q)
         .where(AcademicIndicator.studentgroup == "ALL")
-        .order_by(AcademicIndicator.reportingyear.desc())
+        .order_by(col(AcademicIndicator.reportingyear).desc())
         .limit(1)
     )
     indicator = session.exec(statement).first()
@@ -106,7 +105,7 @@ def get_dashboard_data(
         districtname=indicator.districtname,
         countyname=indicator.countyname,
         studentgroup=indicator.studentgroup,
-        currstatus=indicator.currstatus,
+        currstatus=_currstatus(indicator),
         priorstatus=indicator.priorstatus,
         change=indicator.change,
         statuslevel=indicator.statuslevel,
@@ -122,6 +121,14 @@ ALL_INDICATORS = ["ELA", "MATH", "SCI", "CHRONIC", "SUSP", "GRAD", "ELPI", "CCI"
 
 # Map color levels to color names
 COLOR_NAMES = {1: "red", 2: "orange", 3: "yellow", 4: "green", 5: "blue", 0: "none"}
+
+
+def _currstatus(indicator: AcademicIndicator) -> float | None:
+    return getattr(indicator, "currstatus", None)
+
+
+def _currdenom(indicator: AcademicIndicator) -> int | None:
+    return getattr(indicator, "currdenom", None)
 
 
 @router.get("/dashboard/summary", response_model=DashboardSummaryResponse)
@@ -164,40 +171,41 @@ def get_dashboard_summary(
     for code in ALL_INDICATORS:
         ind = indicators_by_code.get(code)
         if ind:
+            currstatus = _currstatus(ind)
+            currdenom = _currdenom(ind)
             # Calculate colors on-the-fly if missing (for legacy/state data)
             statuslevel = ind.statuslevel
             changelevel = ind.changelevel
             color = ind.color
             change = ind.change
 
-            if color is None and ind.currstatus is not None:
+            if color is None and currstatus is not None:
                 # State assessment data has Mean Scale Score - convert to DFS
                 is_mean_scale = (
                     code in ("ELA", "MATH")
-                    and ind.currstatus is not None
-                    and ind.currstatus > 1000  # Mean scale scores are ~2400-2700
+                    and currstatus > 1000  # Mean scale scores are ~2400-2700
                 )
                 color_data = calculate_all(
                     indicator=code,
-                    currstatus=ind.currstatus,
+                    currstatus=currstatus,
                     priorstatus=ind.priorstatus,
                     is_mean_scale_score=is_mean_scale,
                 )
-                statuslevel = color_data["statuslevel"]
-                changelevel = color_data["changelevel"]
-                color = color_data["color"]
-                change = color_data["change"]
+                statuslevel = cast(int | None, color_data["statuslevel"])
+                changelevel = cast(int | None, color_data["changelevel"])
+                color = cast(int | None, color_data["color"])
+                change = cast(float | None, color_data["change"])
 
             indicator_summaries.append(
                 IndicatorSummary(
                     indicator=code,
-                    currstatus=ind.currstatus,
+                    currstatus=currstatus,
                     priorstatus=ind.priorstatus,
                     change=change,
                     statuslevel=statuslevel,
                     changelevel=changelevel,
                     color=color,
-                    currdenom=ind.currdenom,
+                    currdenom=currdenom,
                 )
             )
         else:
@@ -259,7 +267,7 @@ def get_equity_report(
                 studentgroup=ind.studentgroup,
                 statuslevel=ind.statuslevel,
                 color=ind.color,
-                currdenom=ind.currdenom,
+                currdenom=_currdenom(ind),
             )
         )
 
@@ -292,7 +300,6 @@ def update_user_preferences(
 
 @router.get("/users/me/preferences/last-viewed-cds")
 def get_last_viewed_cds(
-    session: SessionDep,
     current_user: CurrentUser,
 ) -> dict[str, str | None]:
     """
@@ -302,9 +309,7 @@ def get_last_viewed_cds(
 
 
 @router.get("/{id}", response_model=AcademicIndicatorPublic)
-def read_academic_indicator(
-    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
-) -> Any:
+def read_academic_indicator(session: SessionDep, id: uuid.UUID) -> Any:
     """
     Get academic indicator by ID.
     """

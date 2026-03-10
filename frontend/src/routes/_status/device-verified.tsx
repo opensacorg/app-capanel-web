@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Check, Laptop, Monitor, Smartphone } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -24,7 +24,7 @@ function DeviceVerifiedPage() {
 			}
 			title='Device Verified'
 			description='This device has been added to your trusted devices.'
-			footer={<Button render={<Link to='/layout' />}>Continue to Dashboard</Button>}
+			footer={<Button render={<Link to='/dashboard' />}>Continue to Dashboard</Button>}
 		>
 			<div className='space-y-4'>
 				<div className='flex items-center justify-center gap-2'>
@@ -64,12 +64,7 @@ function DeviceVerifiedPage() {
 					</div>
 				</div>
 
-				<Button
-					variant='ghost'
-					size='sm'
-					className='w-full'
-					render={<Link to='/layout/settings' />}
-				>
+				<Button variant='ghost' size='sm' className='w-full' render={<Link to='/user/settings' />}>
 					Manage Devices
 				</Button>
 			</div>

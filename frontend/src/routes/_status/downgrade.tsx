@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AlertTriangle, ArrowDown, Check, Home, X } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -26,7 +26,7 @@ function DowngradePage() {
 			description='Your subscription has been downgraded to the Free plan.'
 			footer={
 				<>
-					<Button render={<Link to='/pricing' />}>Upgrade Again</Button>
+					<Button render={<Link to='/dashboard' />}>Upgrade Again</Button>
 					<Button variant='outline' render={<Link to='/' />}>
 						<Home className='mr-2 size-4' />
 						Go Home

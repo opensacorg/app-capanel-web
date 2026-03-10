@@ -21,6 +21,8 @@ dependencies = [
     "pwdlib[argon2,bcrypt]>=0.3.0",
     "pandas>=2.3.3",
     "openpyxl>=3.1.5",
+    "chardet<6.0.0,>=3.0.2",
+    "google-auth>=2.0.0",
 ]
 
 [dependency-groups]
@@ -61,6 +63,7 @@ ignore = [
     "B008",  # do not perform function calls in argument defaults
     "W191",  # indentation contains tabs
     "B904",  # Allow raising exceptions without from e, for HTTPException
+    "T201",  # Allow print statements
 ]
 
 [tool.ruff.lint.pyupgrade]

@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link as RouterLink, redirect } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { AuthLayout } from '@/components/Common/AuthLayout'
+import { AuthLayout } from '@/components/common/AuthLayout'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -91,7 +91,7 @@ function SignUp() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>
@@ -115,7 +115,7 @@ function SignUp() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>
@@ -138,7 +138,7 @@ function SignUp() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>
@@ -161,7 +161,7 @@ function SignUp() {
 								/>
 								{field.state.meta.isTouched && !field.state.meta.isValid && (
 									<FieldError>
-										{field.state.meta.errors.map((err) => err.message).join(', ')}
+										{field.state.meta.errors.map((err) => err?.message ?? '').join(', ')}
 									</FieldError>
 								)}
 							</Field>

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Home, ShieldOff } from 'lucide-react'
 
-import { StatusCard } from '@/components/status/StatusTemplate'
+import { StatusCard } from '@/components/StatusTemplate'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 
@@ -29,7 +29,7 @@ function ForbiddenPage() {
 						<Home className='mr-2 size-4' />
 						Go Home
 					</Button>
-					<Button variant='outline' render={<Link to='/support' />}>
+					<Button variant='outline' render={<Link to='/' />}>
 						Contact Support
 					</Button>
 				</>

@@ -20,10 +20,11 @@ export const Route = createFileRoute('/private/_private')({
 
 function PrivateLayout() {
 	const auth = useAuth()
+	const userLabel = auth.user?.full_name || auth.user?.email || 'User'
 	return (
 		<>
 			<div>
-				<p>Welcome, {auth.user}!</p>
+				<p>Welcome, {userLabel}!</p>
 				<Button onClick={() => auth.logout()}>Logout</Button>
 			</div>
 			<hr />

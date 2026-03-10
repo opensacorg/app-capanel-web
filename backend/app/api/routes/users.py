@@ -4,7 +4,6 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import col, delete, func, select
 
-from app.service import crud
 from app.api.deps import (
     CurrentUser,
     SessionDep,
@@ -12,21 +11,22 @@ from app.api.deps import (
 )
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
+from app.core.utils import generate_new_account_email, send_email
+from app.model.item import Item
 from app.model.models import (
     Message,
 )
-from app.model.item import Item
 from app.model.user import (
-    UserCreate,
-    UserRegister,
-    UserUpdate,
-    UserUpdateMe,
     UpdatePassword,
     User,
+    UserCreate,
     UserPublic,
+    UserRegister,
     UsersPublic,
+    UserUpdate,
+    UserUpdateMe,
 )
-from app.core.utils import generate_new_account_email, send_email
+from app.service import crud
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -44,7 +44,9 @@ def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     count_statement = select(func.count()).select_from(User)
     count = session.exec(count_statement).one()
 
-    statement = select(User).order_by(User.created_at.desc()).offset(skip).limit(limit)
+    statement = (
+        select(User).order_by(col(User.created_at).desc()).offset(skip).limit(limit)
+    )
     users = session.exec(statement).all()
 
     return UsersPublic(data=users, count=count)
@@ -115,6 +117,7 @@ def update_password_me(
         )
     hashed_password = get_password_hash(body.new_password)
     current_user.hashed_password = hashed_password
+    current_user.force_password_reset = False
     session.add(current_user)
     session.commit()
     return Message(message="Password updated successfully")
@@ -225,7 +228,7 @@ def delete_user(
             status_code=403, detail="Super users are not allowed to delete themselves"
         )
     statement = delete(Item).where(col(Item.owner_id) == user_id)
-    session.exec(statement)  # type: ignore
+    session.exec(statement)
     session.delete(user)
     session.commit()
     return Message(message="User deleted successfully")

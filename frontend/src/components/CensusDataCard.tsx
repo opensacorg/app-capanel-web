@@ -1,6 +1,6 @@
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, GraduationCap } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { FiMapPin, FiSchool, FiUsers } from 'react-icons/fi'
+import { FiMapPin, FiUsers } from 'react-icons/fi'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
@@ -155,7 +155,7 @@ function CensusDataCard({ censusDataId, showGradeBreakdown = false }: CensusData
 				<div className='flex justify-between items-start'>
 					<div className='flex flex-col gap-1 flex-1'>
 						<div className='flex items-center gap-2'>
-							<FiSchool className='h-5 w-5 text-blue-500' />
+							<GraduationCap className='h-5 w-5 text-blue-500' />
 							<h3 className='font-semibold text-lg line-clamp-2'>{data.school_name}</h3>
 						</div>
 						<div className='flex items-center gap-2 text-muted-foreground text-sm flex-wrap'>

@@ -1,4 +1,5 @@
 import { Progress as ProgressPrimitive } from '@base-ui/react/progress'
+import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -51,13 +52,23 @@ function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
 	)
 }
 
-function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
+function ProgressValue({
+	className,
+	children,
+	...props
+}: Omit<ProgressPrimitive.Value.Props, 'children'> & { children?: ReactNode }) {
 	return (
 		<ProgressPrimitive.Value
 			className={cn('text-muted-foreground ml-auto text-sm tabular-nums', className)}
 			data-slot='progress-value'
 			{...props}
-		/>
+		>
+			{typeof children === 'function'
+				? children
+				: children !== undefined
+					? () => children
+					: undefined}
+		</ProgressPrimitive.Value>
 	)
 }
 

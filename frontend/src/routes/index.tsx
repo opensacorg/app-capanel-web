@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button.tsx'
-import NavbarD52 from '@/components/ui/navbar/NavbarD52.tsx'
+import NavbarD52 from '@/components/layout/navbar/NavbarD52.tsx'
 
 export const Route = createFileRoute('/')({
 	component: RouteComponent,
@@ -35,7 +35,7 @@ function RouteComponent() {
 								<span className='block mb-2 text-foreground'>
 									Search for a school or district to view performance data.
 								</span>
-								<Button asChild variant='outline'></Button>
+								<Button render={<Link to='/dashboard'>Search now</Link>} variant='outline' />
 							</li>
 
 							{/* Item 3: Ghost/Tertiary Action */}
@@ -43,9 +43,7 @@ function RouteComponent() {
 								<span className='block mb-2 text-foreground'>
 									Personalize the dashboard by uploading custom CSV data.
 								</span>
-								<Button asChild variant='secondary'>
-									<Link to='/dashboard'>Upload CSV file</Link>
-								</Button>
+								<Button render={<Link to='/dashboard'>Upload CSV file</Link>} variant='secondary' />
 							</li>
 						</ol>
 					</div>
@@ -63,7 +61,7 @@ function RouteComponent() {
 								</a>{' '}
 								to identify strengths and areas for improvement to support student success.
 								<br />
-								<img src='/gauge-screenshot2.png' className='pt-4 pb-8' />
+								<img src='/gauge-screenshot2.png' alt='Accountability gauge graph' className='pt-4 pb-8' />
 							</li>
 							<li className='pl-2'>
 								Over 1,500 schools and districts (including alternative schools) are available. See

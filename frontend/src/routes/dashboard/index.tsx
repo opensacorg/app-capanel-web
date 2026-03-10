@@ -1,14 +1,13 @@
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { ChevronLeft } from 'lucide-react'
 import { Suspense, useCallback, useState } from 'react'
 import { z } from 'zod'
 
-import type { ColorKey } from '@/components/Dashboard/card/IndicatorCard'
-
-import { IndicatorDetailModal } from '@/components/Dashboard/detail/IndicatorDetailModal'
-import { IndicatorGrid, IndicatorGridSkeleton } from '@/components/Dashboard/IndicatorGrid'
+import type { ColorKey } from '@/components/dashboard/card/IndicatorCard'
+import { IndicatorDetailModal } from '@/components/dashboard/detail/IndicatorDetailModal'
+import { IndicatorGrid, IndicatorGridSkeleton } from '@/components/dashboard/IndicatorGrid'
 import { Button } from '@/components/ui/button'
-import NavbarD52 from '@/components/ui/navbar/NavbarD52'
+import NavbarD52 from '@/components/layout/navbar/NavbarD52'
 import {
 	Select,
 	SelectContent,
@@ -44,7 +43,7 @@ export const Route = createFileRoute('/dashboard/')({
 
 function DashboardPage() {
 	const { q, year: urlYear } = Route.useSearch()
-	const navigate = useNavigate()
+	const navigate = Route.useNavigate()
 	const router = useRouter()
 	const { cds: lastViewedCds } = useLastViewedSchool()
 
@@ -71,9 +70,10 @@ function DashboardPage() {
 
 	const handleYearChange = useCallback(
 		(year: ReportingYear) => {
-			navigate({ to: '/dashboard/', search: (prev) => ({ ...prev, year }) })
+			if (year === effectiveYear) return
+			navigate({ search: (prev) => ({ ...prev, year }) })
 		},
-		[navigate],
+		[effectiveYear, navigate],
 	)
 
 	return (
@@ -145,6 +145,8 @@ function DashboardContent({
 	onCloseModal: () => void
 }) {
 	const { data } = useDashboardSummarySuspense(cds, year)
+	const indicators = Array.isArray(data.indicators) ? data.indicators : []
+	const reportingYear = data.reportingyear || year
 
 	const entityName =
 		data.schoolname ||
@@ -152,7 +154,7 @@ function DashboardContent({
 		(cds === STATEWIDE_CDS ? 'California Statewide' : 'Unknown')
 
 	const indicatorData = selectedIndicator
-		? data.indicators.find((ind) => ind.indicator === selectedIndicator)
+		? indicators.find((ind) => ind.indicator === selectedIndicator)
 		: null
 
 	return (
@@ -168,14 +170,14 @@ function DashboardContent({
 						</p>
 					)}
 					<p className={styles.meta}>
-						{data.reportingyear} California School Dashboard
+						{reportingYear} California School Dashboard
 						{data.charter_flag === 'Y' && ' | Charter School'}
 					</p>
 				</div>
 
 				<div className={styles.gridSection}>
 					<IndicatorGrid
-						indicators={data.indicators}
+						indicators={indicators}
 						onIndicatorClick={onIndicatorClick}
 						onColorClick={onColorClick}
 						compact={true}
@@ -190,7 +192,7 @@ function DashboardContent({
 				onClose={onCloseModal}
 				cds={cds}
 				indicator={indicatorData || null}
-				reportingyear={data.reportingyear}
+				reportingyear={reportingYear}
 				selectedColor={selectedColor}
 			/>
 		</>

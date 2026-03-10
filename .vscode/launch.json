@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug FastAPI Project backend: Python Debugger",
+			"name": "FastAPI Project backend: Python Debugger",
 			"type": "debugpy",
 			"request": "launch",
 			"module": "uvicorn",
@@ -18,19 +18,12 @@
 			"envFile": "${workspaceFolder}/.env",
 		},
 		{
-			"type": "chrome",
-			"request": "launch",
-			"name": "Debug Frontend: Launch Chrome against http://localhost:5173",
-			"url": "http://localhost:5173",
-			"webRoot": "${workspaceFolder}/frontend"
-		},
-		{
-			"name": "Launch server",
+			"name": "Start frontend server",
 			"request": "launch",
 			"runtimeArgs": [
 				"dev"
 			],
-			"runtimeExecutable": "bun",
+			"runtimeExecutable": "pnpm",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
@@ -41,46 +34,21 @@
 		},
 		{
 			"type": "chrome",
-			"name": "browser",
 			"request": "launch",
-			"runtimeArgs": [
-				"--remote-debugging-port=9222"
-			],
+			"name": "Chrome",
 			"url": "http://localhost:5173",
-			"webRoot": "${workspaceFolder}",
-			"sourceMapPathOverrides": {
-				"/app/*": "${workspaceFolder}/*"
-			},
+			"webRoot": "${workspaceFolder}/frontend",
 			"presentation": {
-				"hidden": true
+				"hidden": true,
 			}
 		},
-		{
-			"name": "Launch Edge on Linux",
-			"type": "node",
-			"request": "launch",
-			"runtimeExecutable": "open",
-			"runtimeArgs": [
-				"http://localhost:5173/"
-			],
-			"presentation": {
-				"hidden": true
-			}
-		}
 	],
 	"compounds": [
 		{
-			"name": "Debug",
+			"name": "React frontend: Chrome",
 			"configurations": [
-				"Launch server",
-				"browser"
-			]
-		},
-		{
-			"name": "Run",
-			"configurations": [
-				"Launch server",
-				"Launch Edge on Linux"
+				"Start frontend server",
+				"Chrome"
 			]
 		}
 	]

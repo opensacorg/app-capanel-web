@@ -2,16 +2,22 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { Suspense } from 'react'
 
-import AddUser from '@/components/Admin/AddUser'
-import { columns, type UserTableData } from '@/components/Admin/columns'
-import { DataTable } from '@/components/Common/DataTable'
-import PendingUsers from '@/components/Pending/PendingUsers'
+import AddUser from '@/components/form/AddUser.tsx'
+import { columns, type UserTableData } from '@/components/admin/columns'
+import { DataTable } from '@/components/common/DataTable'
+import PendingUsers from '@/components/layout/pending/PendingUsers'
 import { type UserPublic, UsersService } from '@/lib/client'
 import useAuth from '@/lib/hooks/useAuth'
 
 function getUsersQueryOptions() {
 	return {
-		queryFn: () => UsersService.usersReadUsers({ skip: 0, limit: 100 }),
+		queryFn: async () => {
+			const response = await UsersService.usersReadUsers({ query: { skip: 0, limit: 100 } })
+			if (response.error || !response.data) {
+				throw response.error ?? new Error('Failed to fetch users')
+			}
+			return response.data
+		},
 		queryKey: ['users'],
 	}
 }
@@ -19,8 +25,8 @@ function getUsersQueryOptions() {
 export const Route = createFileRoute('/user/admin')({
 	component: Admin,
 	beforeLoad: async () => {
-		const user = await UsersService.usersReadUserMe()
-		if (!user.is_superuser) {
+		const response = await UsersService.usersReadUserMe({})
+		if (!response.data?.is_superuser) {
 			throw redirect({
 				to: '/',
 			})
@@ -29,7 +35,7 @@ export const Route = createFileRoute('/user/admin')({
 	head: () => ({
 		meta: [
 			{
-				title: 'Admin - FastAPI Cloud',
+				title: 'admin - FastAPI Cloud',
 			},
 		],
 	}),
