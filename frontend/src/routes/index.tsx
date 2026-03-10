@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button.tsx'
 import NavbarD52 from '@/components/layout/navbar/NavbarD52.tsx'
+import { Button } from '@/components/ui/button.tsx'
 
 export const Route = createFileRoute('/')({
 	component: RouteComponent,
@@ -61,7 +61,11 @@ function RouteComponent() {
 								</a>{' '}
 								to identify strengths and areas for improvement to support student success.
 								<br />
-								<img src='/gauge-screenshot2.png' alt='Accountability gauge graph' className='pt-4 pb-8' />
+								<img
+									src='/gauge-screenshot2.png'
+									alt='Accountability gauge graph'
+									className='pt-4 pb-8'
+								/>
 							</li>
 							<li className='pl-2'>
 								Over 1,500 schools and districts (including alternative schools) are available. See

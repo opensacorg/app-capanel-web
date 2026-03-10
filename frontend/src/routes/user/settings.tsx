@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { TriangleAlert } from 'lucide-react'
 
+import ChangePassword from '@/components/form/ChangePassword.tsx'
 import DeleteConfirmation from '@/components/form/DeleteConfirmation.tsx'
 import UserInformation from '@/components/form/UserInformation.tsx'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import ChangePassword from '@/components/form/ChangePassword.tsx'
 import useAuth from '@/lib/hooks/useAuth.ts'
 
 const tabsConfig = [

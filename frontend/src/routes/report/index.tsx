@@ -6,8 +6,8 @@ import { z } from 'zod'
 import type { ColorKey } from '@/components/dashboard/card/IndicatorCard'
 import { IndicatorDetailModal } from '@/components/dashboard/detail/IndicatorDetailModal'
 import { IndicatorGrid, IndicatorGridSkeleton } from '@/components/dashboard/IndicatorGrid'
-import { Button } from '@/components/ui/button'
 import NavbarD52 from '@/components/layout/navbar/NavbarD52'
+import { Button } from '@/components/ui/button'
 import {
 	Select,
 	SelectContent,

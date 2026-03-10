@@ -34,18 +34,18 @@ interface UserInfoProps {
 }
 
 export type Item = {
-  icon: LucideIcon
-  title: string
-  path: string
+	icon: LucideIcon
+	title: string
+	path: string
 }
 
 interface MainProps {
-  items: Item[]
+	items: Item[]
 }
 const baseItems: Item[] = [
-  { icon: Home, title: 'Dashboard', path: '/user/' },
-  { icon: Briefcase, title: 'Items', path: '/user/items' },
-  { icon: Settings, title: 'Settings', path: '/user/settings' },
+	{ icon: Home, title: 'Dashboard', path: '/user/' },
+	{ icon: Briefcase, title: 'Items', path: '/user/items' },
+	{ icon: Settings, title: 'Settings', path: '/user/settings' },
 ]
 
 export default function AppSidebar() {
@@ -72,19 +72,19 @@ export default function AppSidebar() {
 }
 
 function UserInfo({ fullName, email }: UserInfoProps) {
-  return (
-    <div className='flex items-center gap-2.5 w-full min-w-0'>
-      <Avatar className='size-8'>
-        <AvatarFallback className='bg-zinc-600 text-white'>
-          {getInitials(fullName || 'User')}
-        </AvatarFallback>
-      </Avatar>
-      <div className='flex flex-col items-start min-w-0'>
-        <p className='text-sm font-medium truncate w-full'>{fullName}</p>
-        <p className='text-xs text-muted-foreground truncate w-full'>{email}</p>
-      </div>
-    </div>
-  )
+	return (
+		<div className='flex items-center gap-2.5 w-full min-w-0'>
+			<Avatar className='size-8'>
+				<AvatarFallback className='bg-zinc-600 text-white'>
+					{getInitials(fullName || 'User')}
+				</AvatarFallback>
+			</Avatar>
+			<div className='flex flex-col items-start min-w-0'>
+				<p className='text-sm font-medium truncate w-full'>{fullName}</p>
+				<p className='text-xs text-muted-foreground truncate w-full'>{email}</p>
+			</div>
+		</div>
+	)
 }
 
 function User({ user }: { user: any }) {
