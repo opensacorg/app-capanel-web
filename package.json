@@ -1,5 +1,5 @@
 {
-  "name": "fastapi-full-stack-template",
+  "name": "California Accountability Panel",
   "private": true,
   "workspaces": [
     "frontend"
