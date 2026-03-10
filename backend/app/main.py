@@ -39,7 +39,7 @@ if settings.SENTRY_DSN and settings.ENVIRONMENT != "local":
 
 
 @asynccontextmanager
-async def lifespan() -> AsyncGenerator[None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # noqa: ARG001
     """Manage application startup and shutdown events.
 
     On startup the data-import pipeline is triggered (subject to
