@@ -1621,7 +1621,7 @@ export const DashboardAggregationSchema = {
 	type: 'object',
 	required: ['cds', 'studentgroup', 'indicator', 'reportingyear'],
 	title: 'DashboardAggregation',
-	description: 'dashboard aggregation response model (legacy single-indicator)',
+	description: 'Dashboard aggregation response model (legacy single-indicator)',
 } as const
 
 export const DashboardSummaryResponseSchema = {

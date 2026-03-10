@@ -1,5 +1,5 @@
 {
-  "name": "California Accountability Panel",
+  "name": "app-capanel-web",
   "private": true,
   "workspaces": [
     "frontend"

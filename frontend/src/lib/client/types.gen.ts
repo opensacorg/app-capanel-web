@@ -645,7 +645,7 @@ export type CensusData = {
 /**
  * DashboardAggregation
  *
- * dashboard aggregation response model (legacy single-indicator)
+ * Dashboard aggregation response model (legacy single-indicator)
  */
 export type DashboardAggregation = {
 	/**

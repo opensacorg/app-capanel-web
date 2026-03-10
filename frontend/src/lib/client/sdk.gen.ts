@@ -502,7 +502,7 @@ export class UtilsService {
 
 export class ItemsService {
 	/**
-	 * Read items
+	 * Read Items
 	 *
 	 * Retrieve items.
 	 */
@@ -782,7 +782,7 @@ export class AcademicIndicatorsService {
 	}
 
 	/**
-	 * Get dashboard Data
+	 * Get Dashboard Data
 	 *
 	 * Get aggregated dashboard data for a specific CDS code.
 	 * Returns the 'ALL' student group data for the most recent reporting year.
@@ -798,7 +798,7 @@ export class AcademicIndicatorsService {
 	}
 
 	/**
-	 * Get dashboard Summary
+	 * Get Dashboard Summary
 	 *
 	 * Get all indicator summaries for a school/district/state.
 	 *
