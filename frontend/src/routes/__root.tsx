@@ -8,7 +8,6 @@ import { ThemeProvider } from '@/components/theme-provider'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import { Provider } from '../integrations/tanstack-query/root-provider'
-import AiDevtools from '../lib/ai-devtools'
 import StoreDevtools from '../lib/demo-store-devtools'
 
 interface MyRouterContext {
@@ -39,7 +38,6 @@ function RootComponent() {
 						},
 						TanStackQueryDevtools,
 						StoreDevtools,
-						AiDevtools,
 					]}
 				/>
 			</Provider>
