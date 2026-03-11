@@ -76,7 +76,7 @@
 		"@hey-api/openapi-ts": "^0.94.0",
 		"@tanstack/devtools-event-client": "^0.4.1",
 		"@tanstack/devtools-vite": "^0.5.3",
-		"@tanstack/router-devtools": "^1.166.6",
+		"@tanstack/router-devtools": "^1.166.7",
 		"@tanstack/router-plugin": "^1.166.6",
 		"@types/node": "^25.4.0",
 		"@types/react": "^19.2.14",
