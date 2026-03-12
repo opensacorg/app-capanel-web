@@ -4,23 +4,38 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
+    open-pull-requests-limit: 0 # Set to 0 to disable version updates; security updates will still open PRs
+    groups:
+      github-actions:
+        patterns: ["*"]
     commit-message:
       prefix: ⬆
+
   # Python uv
   - package-ecosystem: uv
     directory: /backend
     schedule:
-      interval: daily
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      python-dependencies:
+        patterns: ["*"]
     commit-message:
       prefix: ⬆
+
   # npm
   - package-ecosystem: npm
     directory: /frontend
     schedule:
-      interval: daily
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      npm-dependencies:
+        patterns: ["*"]
     commit-message:
       prefix: ⬆
+
   # Docker
   - package-ecosystem: docker
     directories:
@@ -28,12 +43,19 @@ updates:
       - /frontend
     schedule:
       interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      docker-images:
+        patterns: ["*"]
     commit-message:
       prefix: ⬆
+
   # Docker Compose
   - package-ecosystem: docker-compose
     directory: /
     schedule:
       interval: weekly
-    commit-message:
-      prefix: ⬆
+    open-pull-requests-limit: 0
+    groups:
+      compose-config:
+        patterns: ["*"]
