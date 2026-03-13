@@ -1,6 +1,6 @@
 # The California Accountability Panel web application
 
-California Accountability Panel is a dashboard for viewing school standards. Contributions are welcome!
+California Accountability Panel is a dashboard for displaying key school performance metric. Contributions are welcome!
 
 > [!NOTE]
 > Learn about the project on the [documentation website](https://opensacorg.github.io/app-capanel-doc) (under development).
