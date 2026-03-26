@@ -1,6 +1,7 @@
+import { PlusSignIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
 
@@ -20,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { type ItemCreate, ItemsService } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
-import useCustomToast from '@/lib/hooks/useCustomToast'
+import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
 const formSchema = z.object({
 	title: z.string().min(1, { message: 'Title is required' }),
@@ -63,7 +64,7 @@ const AddItem = () => {
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger render={<Button className='my-4' />}>
-				<Plus className='mr-2' />
+				<HugeiconsIcon icon={PlusSignIcon} className='mr-2' />
 				Add Item
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-md'>

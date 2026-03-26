@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { Button } from '@/components/ui/button.tsx'
+import { Button } from '@/components/ui/button'
 import {
 	Dialog,
 	DialogClose,
@@ -10,12 +10,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog.tsx'
-import { Spinner } from '@/components/ui/spinner.tsx'
+} from '@/components/ui/dialog'
+import { Spinner } from '@/components/ui/spinner'
 import { UsersService } from '@/lib/client'
 import { handleError } from '@/lib/client-utils.ts'
-import useAuth from '@/lib/hooks/useAuth.ts'
-import useCustomToast from '@/lib/hooks/useCustomToast.ts'
+import useAuth from '@/routes/-hooks/hooks/useAuth.ts'
+import useCustomToast from '@/routes/-hooks/hooks/useCustomToast.ts'
 
 const DeleteConfirmation = () => {
 	const queryClient = useQueryClient()

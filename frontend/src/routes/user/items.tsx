@@ -1,14 +1,15 @@
+import { Search01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { Search } from 'lucide-react'
 import { Suspense, useMemo } from 'react'
 
 import { DataTable } from '@/components/common/DataTable'
+import PendingItems from '@/components/common/pending/PendingItems'
 import AddItem from '@/components/items/AddItem'
 import { createItemColumns } from '@/components/items/columns'
-import PendingItems from '@/components/layout/pending/PendingItems'
 import { ItemsService } from '@/lib/client'
-import useAuth from '@/lib/hooks/useAuth'
+import useAuth from '@/routes/-hooks/hooks/useAuth'
 
 function getItemsQueryOptions() {
 	return {
@@ -50,7 +51,7 @@ function ItemsTableContent() {
 		return (
 			<div className='flex flex-col items-center justify-center text-center py-12'>
 				<div className='rounded-full bg-muted p-4 mb-4'>
-					<Search className='h-8 w-8 text-muted-foreground' />
+					<HugeiconsIcon icon={Search01Icon} className='h-8 w-8 text-muted-foreground' />
 				</div>
 				<h3 className='text-lg font-semibold'>
 					{currentUser?.is_superuser

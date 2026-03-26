@@ -1,9 +1,10 @@
-import { Eye, EyeOff } from 'lucide-react'
+import { ViewIcon, ViewOffIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { forwardRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils.ts'
 
 export interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -28,9 +29,9 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
 					aria-label={showPassword ? 'Hide password' : 'Show password'}
 				>
 					{showPassword ? (
-						<EyeOff className='h-4 w-4 text-muted-foreground' />
+						<HugeiconsIcon icon={ViewOffIcon} className='h-4 w-4 text-muted-foreground' />
 					) : (
-						<Eye className='h-4 w-4 text-muted-foreground' />
+						<HugeiconsIcon icon={ViewIcon} className='h-4 w-4 text-muted-foreground' />
 					)}
 				</Button>
 			</div>

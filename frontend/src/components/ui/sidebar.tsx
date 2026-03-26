@@ -1,5 +1,3 @@
-'use client'
-
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 import { SidebarLeftIcon } from '@hugeicons/core-free-icons'
@@ -19,8 +17,8 @@ import {
 } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useIsMobile } from '@/lib/hooks/use-mobile'
 import { cn } from '@/lib/utils'
+import { useIsMobile } from '@/routes/-hooks/hooks/use-mobile'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -512,7 +510,12 @@ function SidebarMenuButton({
 		return comp
 	}
 
-	const tooltipContent = typeof tooltip === 'string' ? { children: tooltip } : tooltip
+	if (typeof tooltip === 'string') {
+		/* eslint-disable-next-line eslint/no-param-reassign */
+		tooltip = {
+			children: tooltip,
+		}
+	}
 
 	return (
 		<Tooltip>
@@ -521,7 +524,7 @@ function SidebarMenuButton({
 				side='right'
 				align='center'
 				hidden={state !== 'collapsed' || isMobile}
-				{...tooltipContent}
+				{...tooltip}
 			/>
 		</Tooltip>
 	)

@@ -1,15 +1,16 @@
+import { Menu01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { Link } from '@tanstack/react-router'
-import { FaBars } from 'react-icons/fa'
 
-import { buttonVariants } from '@/components/ui/button.tsx'
+import { buttonVariants } from '@/components/ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu.tsx'
-import useAuth from '@/lib/hooks/useAuth.ts'
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils.ts'
+import useAuth from '@/routes/-hooks/hooks/useAuth.ts'
 
 export default function MobileButton() {
 	const { user: currentUser, logout } = useAuth()
@@ -19,7 +20,7 @@ export default function MobileButton() {
 			<DropdownMenuTrigger
 				className={cn('min-[1180px]:hidden', buttonVariants({ variant: 'outline' }))}
 			>
-				<FaBars />
+				<HugeiconsIcon icon={Menu01Icon} />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/' />}>

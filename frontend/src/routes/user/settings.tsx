@@ -1,14 +1,15 @@
+import { AlertCircleIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { TriangleAlert } from 'lucide-react'
 
-import ChangePassword from '@/components/form/ChangePassword.tsx'
-import DeleteConfirmation from '@/components/form/DeleteConfirmation.tsx'
-import UserInformation from '@/components/form/UserInformation.tsx'
+import ChangePassword from '@/components/form/ChangePassword'
+import DeleteConfirmation from '@/components/form/DeleteConfirmation'
+import UserInformation from '@/components/form/UserInformation'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import useAuth from '@/lib/hooks/useAuth.ts'
+import useAuth from '@/routes/-hooks/hooks/useAuth.ts'
 
 const tabsConfig = [
 	{ value: 'my-profile', title: 'My profile', component: UserInformation },
@@ -62,7 +63,7 @@ function UserSettings() {
 
 			{currentUser.force_password_reset && (
 				<Alert variant='destructive'>
-					<TriangleAlert className='size-4' />
+					<HugeiconsIcon icon={AlertCircleIcon} className='size-4' />
 					<AlertTitle>Forced Password Reset Required</AlertTitle>
 					<AlertDescription>
 						Your account has <strong>force_password_reset</strong> enabled. Update your password now

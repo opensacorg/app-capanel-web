@@ -4,14 +4,14 @@ import { createFileRoute, Link as RouterLink, redirect, useNavigate } from '@tan
 import { z } from 'zod'
 
 import { AuthLayout } from '@/components/common/AuthLayout'
+import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
-import { PasswordInput } from '@/components/ui/password-input'
 import { Spinner } from '@/components/ui/spinner'
 import { LoginService } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
-import { isLoggedIn } from '@/lib/hooks/useAuth'
-import useCustomToast from '@/lib/hooks/useCustomToast'
+import { isLoggedIn } from '@/routes/-hooks/hooks/useAuth'
+import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
 const searchSchema = z.object({
 	token: z.coerce.string().catch(''),

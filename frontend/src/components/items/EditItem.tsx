@@ -1,6 +1,7 @@
+import { PencilEdit02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Pencil } from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
 
@@ -20,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { type ItemPublic, ItemsService } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
-import useCustomToast from '@/lib/hooks/useCustomToast'
+import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
 const formSchema = z.object({
 	title: z.string().min(1, { message: 'Title is required' }),
@@ -69,7 +70,7 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => setIsOpen(true)}>
-				<Pencil />
+				<HugeiconsIcon icon={PencilEdit02Icon} />
 				Edit Item
 			</DropdownMenuItem>
 			<DialogContent className='sm:max-w-md'>

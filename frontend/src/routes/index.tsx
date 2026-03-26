@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
-import NavbarD52 from '@/components/layout/navbar/NavbarD52.tsx'
-import { Button } from '@/components/ui/button.tsx'
+import NavbarD52 from '@/components/common/navbar/navbar-D52'
+import { Button } from '@/components/ui/button'
 
 import styles from './index.module.css'
 
@@ -136,7 +136,7 @@ function RouteComponent() {
 							</li>
 							<li className={styles.supportItem}>
 								Over 10,000 schools (including alternative schools) are available. See the support
-								list for details.
+								the support list for details.
 							</li>
 						</ul>
 					</div>

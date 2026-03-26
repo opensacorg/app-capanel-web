@@ -1,12 +1,16 @@
+import { Search01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { Link } from '@tanstack/react-router'
-import { FaMagnifyingGlass } from 'react-icons/fa6'
 
-import MobileButton from './MobileButton.tsx'
-import SearchBar from './SearchBar.tsx'
-import SettingsButton from './SettingsButton.tsx'
+import MobileButton from '../../button/MobileButton'
+import SettingsButton from '../../button/SettingsButton'
+import SearchBar from './SearchBar'
 
-import styles from './NavbarD52.module.css'
+import styles from './navbar-D52.module.css'
 
+/**
+ * The default navigation bar. It is sticky because it provides access to search and settings.
+ */
 export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 	return (
 		<div
@@ -23,7 +27,7 @@ export default function NavbarD52({ shadow = false }: { shadow?: boolean }) {
 				</div>
 				<div className={styles.right}>
 					<SearchBar />
-					<FaMagnifyingGlass className={styles.searchIcon} />
+					<HugeiconsIcon icon={Search01Icon} className={styles.searchIcon} />
 					<div className={styles.linksContainer}>
 						<Link
 							to='/'

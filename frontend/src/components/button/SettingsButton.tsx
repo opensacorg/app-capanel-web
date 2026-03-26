@@ -1,15 +1,16 @@
+import { Settings02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { Link } from '@tanstack/react-router'
-import { FaGear } from 'react-icons/fa6'
 
-import { buttonVariants } from '@/components/ui/button.tsx'
+import { buttonVariants } from '@/components/ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu.tsx'
-import useAuth from '@/lib/hooks/useAuth.ts'
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils.ts'
+import useAuth from '@/routes/-hooks/hooks/useAuth.ts'
 
 export default function SettingsButton() {
 	const { user: currentUser, logout } = useAuth()
@@ -18,7 +19,7 @@ export default function SettingsButton() {
 		<div className='ml-1'>
 			<DropdownMenu>
 				<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline' }))}>
-					<FaGear />
+					<HugeiconsIcon icon={Settings02Icon} />
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
 					{currentUser ? (

@@ -1,5 +1,6 @@
+import { Delete02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -16,7 +17,7 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
 import { ItemsService } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
-import useCustomToast from '@/lib/hooks/useCustomToast'
+import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
 interface DeleteItemProps {
 	id: string
@@ -53,7 +54,7 @@ const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
 				onSelect={(e) => e.preventDefault()}
 				onClick={() => setIsOpen(true)}
 			>
-				<Trash2 />
+				<HugeiconsIcon icon={Delete02Icon} />
 				Delete Item
 			</DropdownMenuItem>
 			<DialogContent className='sm:max-w-md'>
