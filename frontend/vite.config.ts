@@ -5,7 +5,6 @@ import { devtools } from '@tanstack/devtools-vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
 
 const trimTrailingSlash = (value: string): string => value.replace(/\/+$/, '')
 
@@ -20,7 +19,8 @@ const normalizeApiBase = (value: string | undefined): string | undefined => {
 
 /**
  * base: './' is required for relative paths in single-container deployment
- * Add a delay to allow the Nitro server to boot in the container. This prevents the "fetch failed" immediately upon starting
+ * Add a delay to allow the Nitro server to boot in the container. This prevents the "fetch failed" immediately upon starting.
+ * Keep relative assets for production container builds, but use root base in dev so Vite's React refresh runtime is loaded correctly on routed URLs.
  */
 const config = defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '')
@@ -28,13 +28,12 @@ const config = defineConfig(({ command, mode }) => {
 		env.VITE_DEV_PROXY_TARGET || normalizeApiBase(env.VITE_API_URL) || 'http://localhost:8000'
 
 	return {
-		// Keep relative assets for production container builds, but use root base
-		// in dev so Vite's React refresh runtime is loaded correctly on routed URLs.
 		base: command === 'serve' ? '/' : './',
 		build: {
 			outDir: 'dist',
 		},
 		resolve: {
+			tsconfigPaths: true,
 			alias: {
 				'@': fileURLToPath(new URL('./src', import.meta.url)),
 			},
@@ -65,12 +64,10 @@ const config = defineConfig(({ command, mode }) => {
 		},
 		plugins: [
 			devtools(),
-			viteTsConfigPaths({
-				projects: ['./tsconfig.json'],
-			}),
 			tailwindcss(),
 			tanstackRouter({ target: 'react', autoCodeSplitting: true }),
 			react({
+				// @ts-expect-error This is the official solution from the website.
 				babel: {
 					plugins: ['babel-plugin-react-compiler'],
 				},

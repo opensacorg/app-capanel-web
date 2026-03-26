@@ -1,6 +1,5 @@
 {
   "name": "app-capanel-web",
-  "private": true,
   "workspaces": [
     "frontend"
   ],
@@ -9,6 +8,8 @@
     "dev": "pnpm --filter frontend dev",
     "lint": "pnpm --filter frontend lint",
     "test": "pnpm --filter frontend test",
-    "test:ui": "pnpm --filter frontend test:ui"
+    "test:ui": "pnpm --filter frontend test:ui",
+    "compile": "pnpm --filter frontend compile",
+    "format": "pnpm --filter frontend format"
   }
 }

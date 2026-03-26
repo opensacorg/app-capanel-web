@@ -135,8 +135,8 @@ function RouteComponent() {
 								/>
 							</li>
 							<li className={styles.supportItem}>
-								Over 1,500 schools and districts (including alternative schools) are available. See
-								the support list for details.
+								Over 10,000 schools (including alternative schools) are available. See the support
+								list for details.
 							</li>
 						</ul>
 					</div>

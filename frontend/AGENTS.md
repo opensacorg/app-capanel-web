@@ -1,0 +1,1 @@
+Shadcn hooks are found in `src/routes/-hooks`
