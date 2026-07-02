@@ -1,6 +1,11 @@
 packages:
   - frontend
 
+allowBuilds:
+  esbuild: true
+  msw: true
+  protobufjs: true
+
 onlyBuiltDependencies:
   - '@swc/core'
   - core-js-pure
