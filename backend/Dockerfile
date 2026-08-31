@@ -22,9 +22,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-workspace --package app
 
+COPY ./backend/scripts /app/backend/scripts
 COPY ./backend/pyproject.toml ./backend/alembic.ini /app/backend/
 COPY ./backend/app /app/backend/app
-COPY ./backend/tests /app/backend/tests
+# COPY ./backend/tests /app/backend/tests
 
 # Sync the project
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -34,6 +35,5 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 WORKDIR /app/backend/
 
-EXPOSE 9000
+CMD ["fastapi", "run", "--workers", "4"]
 
-CMD ["uv", "run", "--no-sync", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9000", "--proxy-headers"]

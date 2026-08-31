@@ -1,42 +1,16 @@
-# Dependencies
-node_modules
-**/node_modules
-.venv
-**/.venv
-venv
-**/venv
-
-# Build outputs
-**/dist
-**/dist-ssr
-**/.tanstack
-**/.vinxi
-**/.nitro
-**/.output
-**/.cache
-
-# Test artifacts
-**/test-results
-**/playwright-report
-**/blob-report
-**/playwright/.cache
-**/.pytest_cache
-**/.coverage
-**/.coverage.*
-**/htmlcov
-
-# Local metadata and logs
 .git
-.gitignore
-.vscode
-.idea
-*.log
-.env
-
-# Python
 **/__pycache__
-**/*.py[cod]
-**/.mypy_cache
-**/.ruff_cache
+**/.venv
+backend/htmlcov
+frontend/blob-report
+frontend/dist
+frontend/node_modules
+frontend/playwright-report
+frontend/test-results
+node_modules
 
+**/.vscode
+**/.idea
 **/.claude
+**/.codex
+**/.junie
