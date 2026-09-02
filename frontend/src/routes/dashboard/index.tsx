@@ -1,243 +1,301 @@
-import { ArrowLeft01Icon, BookOpen01Icon, Calculator01Icon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { Suspense, useCallback, useState } from 'react'
+/**
+ * The assessment results report.
+ *
+ * Mirrors what the state publishes at caaspp-elpac.ets.org — pick an entity, a
+ * year, a grade and a student group, and see every test's achievement
+ * distribution — with the parts its own site makes you visit separately
+ * (reporting categories, results over time, every student group, every grade,
+ * and the schools inside a district) available on the same page.
+ *
+ * The selection lives in the URL, so any view of this report is a link.
+ */
+import { useQuery } from '@tanstack/react-query'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useMemo } from 'react'
 import { z } from 'zod'
 
 import NavbarD52 from '@/components/common/navbar/navbar-D52'
-import { IndicatorDetailModal } from '@/components/dashboard/detail/IndicatorDetailModal'
+import { AchievementLegend } from '@/components/results/AchievementBar'
+import { ChildEntityTable } from '@/components/results/ChildEntityTable'
+import { EntityPicker } from '@/components/results/EntityPicker'
+import { GradeTable } from '@/components/results/GradeTable'
+import { ReportFilters } from '@/components/results/ReportFilters'
+import { ResultCard } from '@/components/results/ResultCard'
+import { StudentGroupTable } from '@/components/results/StudentGroupTable'
+import { SubscorePanel } from '@/components/results/SubscorePanel'
+import { TrendChart } from '@/components/results/TrendChart'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import type { EntityPublic, SchoolType } from '@/lib/client'
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
-import type { IndicatorSummary } from '@/lib/client'
-import { STATEWIDE_CDS } from '@/lib/constants/indicators'
+	ALL_GRADES,
+	ALL_STUDENTS_GROUP,
+	catalogQuery,
+	entityQuery,
+	overviewQuery,
+	type ReportSelection,
+	STATEWIDE_CDS,
+} from '@/lib/services/assessments'
 import ScrollReset from '@/routes/-hooks/hooks/ScrollReset'
-import { useDashboardSummarySuspense } from '@/routes/-hooks/hooks/useDashboardData'
-import { useLastViewedSchool } from '@/routes/-hooks/hooks/useLastViewedSchool'
 
-import styles from './index.module.css'
-
-const AVAILABLE_YEARS = ['2025', '2024'] as const
-type ReportingYear = (typeof AVAILABLE_YEARS)[number]
-
+/**
+ * The router parses search values as JSON, so a CDS code or a grade that looks
+ * like a number comes back as one. Both are codes, not quantities — grade "03"
+ * must not become 3 — so they are coerced back to strings here.
+ */
 const searchSchema = z.object({
-	q: z.coerce.string().optional(),
-	year: z.coerce
-		.string()
-		.optional()
-		.transform((val) => {
-			if (val === '2024' || val === '2025') return val
-			return undefined
-		}),
+	cds: z.coerce.string().length(14).default(STATEWIDE_CDS),
+	year: z.coerce.number().int().optional(),
+	grade: z.coerce.string().max(2).default(ALL_GRADES),
+	studentGroup: z.coerce.number().int().default(ALL_STUDENTS_GROUP),
+	schoolType: z.enum(['all', 'charter', 'non-charter']).default('all'),
+	testId: z.coerce.number().int().optional(),
 })
 
 export const Route = createFileRoute('/dashboard/')({
-	component: DashboardPage,
 	validateSearch: searchSchema,
+	component: ResultsPage,
 })
 
-function DashboardPage() {
-	const { q, year: urlYear } = Route.useSearch()
-	const navigate = Route.useNavigate()
-	const router = useRouter()
-	const { cds: lastViewedCds } = useLastViewedSchool()
+function ResultsPage() {
+	const search = Route.useSearch()
+	const navigate = useNavigate({ from: Route.fullPath })
 
-	const effectiveCds = q || lastViewedCds || STATEWIDE_CDS
-	const effectiveYear: ReportingYear = urlYear || '2025'
+	const catalog = useQuery(catalogQuery(search.year))
+	const ancestry = useQuery(entityQuery(search.cds))
 
-	const handleYearChange = useCallback(
-		(year: ReportingYear) => {
-			if (year === effectiveYear) return
-			navigate({ search: (prev) => ({ ...prev, year }) })
-		},
-		[effectiveYear, navigate],
+	const year = search.year ?? catalog.data?.testYear
+	const selection: ReportSelection | undefined = year
+		? {
+				cds: search.cds,
+				year,
+				studentGroup: search.studentGroup,
+				grade: search.grade,
+				schoolType: search.schoolType as SchoolType,
+			}
+		: undefined
+
+	const overview = useQuery({
+		...overviewQuery(selection ?? ({} as ReportSelection)),
+		enabled: Boolean(selection),
+	})
+
+	const entity = ancestry.data?.entity
+	const isSchool = entity?.entityLevel === 'school'
+
+	const selectedTestId = useMemo(() => {
+		if (search.testId) return search.testId
+		return overview.data?.results[0]?.testId
+	}, [search.testId, overview.data])
+
+	const selectedAssessment = catalog.data?.assessments.find(
+		(assessment) => assessment.testId === selectedTestId,
 	)
 
+	/** Only offer grades the selected test actually reports. */
+	const grades = useMemo(() => {
+		if (!catalog.data) return []
+		const codes = new Set(
+			selectedAssessment?.grades ?? catalog.data.assessments.flatMap((item) => item.grades),
+		)
+		return catalog.data.grades.filter((grade) => codes.has(grade.code))
+	}, [catalog.data, selectedAssessment])
+
+	function update(next: Partial<z.infer<typeof searchSchema>>) {
+		void navigate({ search: (previous) => ({ ...previous, ...next }) })
+	}
+
+	function chooseEntity(next: EntityPublic) {
+		update({ cds: next.cdsCode })
+	}
+
+	if (catalog.isPending) {
+		return (
+			<>
+				<NavbarD52 />
+				<main className='mx-auto w-full max-w-6xl space-y-6 px-4 py-8'>
+					<Skeleton className='h-10 w-96' />
+					<Skeleton className='h-24 w-full' />
+					<Skeleton className='h-64 w-full' />
+				</main>
+			</>
+		)
+	}
+
+	if (catalog.error) {
+		return (
+			<>
+				<NavbarD52 />
+				<main className='mx-auto w-full max-w-6xl px-4 py-8'>
+					<Alert variant='destructive'>
+						<AlertTitle>No assessment data</AlertTitle>
+						<AlertDescription>
+							{catalog.error.message} Run the research file importer to load results.
+						</AlertDescription>
+					</Alert>
+				</main>
+			</>
+		)
+	}
+
 	return (
-		<div className={styles.page}>
+		<>
 			<ScrollReset />
-			<NavbarD52 shadow />
-			<div className={styles.container}>
-				<div className={styles.topBar}>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => router.history.back()}
-						className={styles.backButton}
-					>
-						<HugeiconsIcon icon={ArrowLeft01Icon} className='h-4 w-4' />
-						Go back
-					</Button>
-					<div className={styles.yearSelector}>
-						<span className={styles.yearLabel}>Reporting Year:</span>
-						<Select
-							value={effectiveYear}
-							onValueChange={(val) => handleYearChange(val as ReportingYear)}
-						>
-							<SelectTrigger className={styles.yearSelectTrigger}>
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								{AVAILABLE_YEARS.map((year) => (
-									<SelectItem key={year} value={year}>
-										{year}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+			<NavbarD52 />
+			<main className='mx-auto w-full max-w-6xl space-y-8 px-4 py-8'>
+				<header className='space-y-3'>
+					<div className='space-y-1'>
+						<h1 className='text-2xl font-semibold tracking-tight'>
+							{entity?.displayName ?? 'California'}
+						</h1>
+						<p className='text-sm text-muted-foreground'>
+							{ancestry.data?.ancestors.map((item) => item.displayName).join(' · ') ||
+								'Statewide results'}
+						</p>
 					</div>
-				</div>
-
-				<Suspense fallback={<DashboardSkeleton />}>
-					<DashboardContent cds={effectiveCds} year={effectiveYear} />
-				</Suspense>
-			</div>
-		</div>
-	)
-}
-
-function getTestName(testId: string) {
-	if (testId === '1') return { name: 'English Language Arts', icon: BookOpen01Icon }
-	if (testId === '2') return { name: 'Mathematics', icon: Calculator01Icon }
-	if (testId === '3' || testId === '4') return { name: 'Science (CAST)', icon: BookOpen01Icon }
-	return { name: `Test ${testId}`, icon: BookOpen01Icon }
-}
-
-function DashboardContent({ cds, year }: { cds: string; year: ReportingYear }) {
-	const { data } = useDashboardSummarySuspense(cds, year)
-	const indicators = Array.isArray(data.indicators) ? data.indicators : []
-	const reportingYear = data.test_year || year
-	const [selectedIndicator, setSelectedIndicator] = useState<IndicatorSummary | null>(null)
-
-	const entityName = cds === STATEWIDE_CDS ? 'California Statewide' : 'Dashboard'
-
-	return (
-		<div className={styles.content}>
-			<div className={styles.header}>
-				<h1>{entityName}</h1>
-				<p className={styles.meta}>{reportingYear} CAASPP Test Results</p>
-			</div>
-
-			<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6'>
-				{indicators.length === 0 ? (
-					<div className='col-span-full py-12 text-center text-muted-foreground bg-muted/20 rounded-lg border border-dashed'>
-						No CAASPP test data available for this selection.
+					<div className='flex flex-wrap items-center gap-2'>
+						<EntityPicker entity={entity} onSelect={chooseEntity} />
+						{search.cds !== STATEWIDE_CDS ? (
+							<Button variant='ghost' size='sm' onClick={() => update({ cds: STATEWIDE_CDS })}>
+								Back to statewide
+							</Button>
+						) : null}
+						{entity?.isCharter ? <Badge variant='outline'>Charter school</Badge> : null}
 					</div>
-				) : (
-					indicators.map((ind, i) => {
-						const testInfo = getTestName(ind.test_id || '')
-						const percentMet = ind.overall_met_and_above_pct
-							? parseFloat(ind.overall_met_and_above_pct)
-							: 0
+				</header>
 
-						return (
-							<Card
-								key={`${ind.test_id}-${i}`}
-								className='overflow-hidden border shadow-sm transition-all hover:shadow-md cursor-pointer hover:border-primary/50'
-								onClick={() => setSelectedIndicator(ind)}
-							>
-								<CardHeader className='bg-muted/30 pb-4 border-b'>
-									<CardTitle className='flex items-center gap-2 text-lg'>
-										<div className='p-2 bg-primary/10 rounded-md text-primary'>
-											<HugeiconsIcon icon={testInfo.icon} className='h-5 w-5' />
-										</div>
-										{testInfo.name}
-									</CardTitle>
-									<CardDescription>
-										Grade: {ind.grade === '13' ? 'All Grades' : ind.grade}
-									</CardDescription>
-								</CardHeader>
-								<CardContent className='pt-6'>
-									<div className='flex flex-col gap-6'>
-										<div className='flex justify-between items-end'>
-											<div>
-												<p className='text-sm font-medium text-muted-foreground mb-1'>
-													Standard Met or Exceeded
-												</p>
-												<div className='flex items-baseline gap-1'>
-													<span className='text-4xl font-bold tracking-tight text-foreground'>
-														{ind.overall_met_and_above_pct || '--'}%
-													</span>
-												</div>
-											</div>
-										</div>
-
-										<div className='w-full bg-secondary h-3 rounded-full overflow-hidden'>
-											<div
-												className='bg-primary h-full transition-all duration-500 ease-in-out'
-												style={{ width: `${percentMet}%` }}
-											/>
-										</div>
-
-										<div className='grid grid-cols-2 gap-4 pt-4 border-t'>
-											<div>
-												<p className='text-xs font-medium text-muted-foreground'>
-													Mean Scale Score
-												</p>
-												<p className='text-lg font-semibold'>
-													{ind.overall_mean_scale_score || '--'}
-												</p>
-											</div>
-											<div>
-												<p className='text-xs font-medium text-muted-foreground'>Students Tested</p>
-												<p className='text-lg font-semibold'>{ind.students_tested || '--'}</p>
-											</div>
-										</div>
-									</div>
-								</CardContent>
-							</Card>
-						)
-					})
-				)}
-			</div>
-
-			<IndicatorDetailModal
-				isOpen={!!selectedIndicator}
-				onClose={() => setSelectedIndicator(null)}
-				cds={cds}
-				indicator={selectedIndicator}
-				testYear={reportingYear}
-			/>
-		</div>
-	)
-}
-
-function DashboardSkeleton() {
-	return (
-		<div className={styles.content}>
-			<div className={styles.header}>
-				<div className={styles.skeleton} style={{ height: 32, width: 256 }} />
-				<div className={styles.skeleton} style={{ height: 16, width: 192, marginTop: 8 }} />
-				<div className={styles.skeleton} style={{ height: 16, width: 224, marginTop: 4 }} />
-			</div>
-			<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6'>
-				{[1, 2, 3].map((i) => (
-					<div
-						key={i}
-						className='h-[280px] rounded-xl bg-card border shadow-sm p-6 flex flex-col gap-4'
-					>
-						<div className={styles.skeleton} style={{ height: 28, width: 180 }} />
-						<div className={styles.skeleton} style={{ height: 16, width: 100 }} />
-						<div className='mt-auto flex flex-col gap-4'>
-							<div className={styles.skeleton} style={{ height: 40, width: 80 }} />
-							<div
-								className={styles.skeleton}
-								style={{ height: 12, width: '100%', borderRadius: 999 }}
+				{catalog.data ? (
+					<Card>
+						<CardContent className='pt-6'>
+							<ReportFilters
+								catalog={catalog.data}
+								grades={grades}
+								showSchoolType={!isSchool}
+								values={{
+									year: year ?? catalog.data.testYear,
+									grade: search.grade,
+									studentGroup: search.studentGroup,
+									schoolType: search.schoolType as SchoolType,
+								}}
+								onChange={update}
 							/>
-							<div className='flex justify-between mt-4'>
-								<div className={styles.skeleton} style={{ height: 32, width: 60 }} />
-								<div className={styles.skeleton} style={{ height: 32, width: 60 }} />
-							</div>
+						</CardContent>
+					</Card>
+				) : null}
+
+				{search.schoolType !== 'all' && !isSchool ? (
+					<Alert>
+						<AlertTitle>Recalculated figures</AlertTitle>
+						<AlertDescription>
+							The state publishes one aggregate covering every school, so charter-filtered results
+							are summed from the school rows underneath. Counts are exact; mean scale scores are
+							weighted by the number of tests with valid scores.
+						</AlertDescription>
+					</Alert>
+				) : null}
+
+				<section className='space-y-4'>
+					<h2 className='text-lg font-medium'>Results</h2>
+					{overview.isPending ? (
+						<div className='grid gap-4 md:grid-cols-2'>
+							<Skeleton className='h-80 w-full' />
+							<Skeleton className='h-80 w-full' />
 						</div>
-					</div>
-				))}
-			</div>
-		</div>
+					) : overview.error ? (
+						<Alert variant='destructive'>
+							<AlertDescription>{overview.error.message}</AlertDescription>
+						</Alert>
+					) : overview.data && overview.data.results.length > 0 ? (
+						<div className='grid gap-4 md:grid-cols-2'>
+							{overview.data.results.map((result) => (
+								<ResultCard
+									key={result.testId}
+									result={result}
+									assessment={catalog.data?.assessments.find(
+										(assessment) => assessment.testId === result.testId,
+									)}
+									comparisons={overview.data.comparisons}
+									selected={result.testId === selectedTestId}
+									onSelect={() => update({ testId: result.testId })}
+								/>
+							))}
+						</div>
+					) : (
+						<p className='text-sm text-muted-foreground'>
+							Nothing was reported for this combination of year, grade and student group.
+						</p>
+					)}
+				</section>
+
+				{selection && selectedTestId && selectedAssessment ? (
+					<section className='space-y-4'>
+						<div className='flex flex-wrap items-baseline justify-between gap-2'>
+							<h2 className='text-lg font-medium'>{selectedAssessment.name}</h2>
+							<AchievementLegend levels={selectedAssessment.levelScheme.levels} />
+						</div>
+						<Card>
+							<CardHeader className='pb-0'>
+								<CardTitle className='sr-only'>Detailed reports</CardTitle>
+							</CardHeader>
+							<CardContent className='pt-4'>
+								<Tabs defaultValue='categories'>
+									<TabsList className='mb-4 flex-wrap'>
+										<TabsTrigger value='categories'>Areas and domains</TabsTrigger>
+										<TabsTrigger value='trend'>Over time</TabsTrigger>
+										<TabsTrigger value='groups'>Student groups</TabsTrigger>
+										<TabsTrigger value='grades'>By grade</TabsTrigger>
+										{!isSchool ? (
+											<TabsTrigger value='inside'>Inside this entity</TabsTrigger>
+										) : null}
+									</TabsList>
+									<TabsContent value='categories'>
+										<SubscorePanel selection={selection} testId={selectedTestId} />
+									</TabsContent>
+									<TabsContent value='trend'>
+										<TrendChart selection={selection} testId={selectedTestId} />
+									</TabsContent>
+									<TabsContent value='groups'>
+										<StudentGroupTable selection={selection} testId={selectedTestId} />
+									</TabsContent>
+									<TabsContent value='grades'>
+										<GradeTable
+											selection={selection}
+											testId={selectedTestId}
+											onSelectGrade={(grade) => update({ grade })}
+										/>
+									</TabsContent>
+									{!isSchool ? (
+										<TabsContent value='inside'>
+											<ChildEntityTable
+												selection={selection}
+												testId={selectedTestId}
+												onSelectEntity={chooseEntity}
+											/>
+										</TabsContent>
+									) : null}
+								</Tabs>
+							</CardContent>
+						</Card>
+					</section>
+				) : null}
+
+				<footer className='border-t pt-4 text-xs text-muted-foreground'>
+					Source: California Department of Education research files, published at{' '}
+					<a
+						className='underline underline-offset-2'
+						href='https://caaspp-elpac.ets.org/caaspp/Default'
+						target='_blank'
+						rel='noreferrer'
+					>
+						caaspp-elpac.ets.org
+					</a>
+					. Results are withheld for any group of fewer than 11 students.
+				</footer>
+			</main>
+		</>
 	)
 }

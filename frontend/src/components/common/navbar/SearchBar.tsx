@@ -4,8 +4,8 @@ import {
 	MapsLocation01Icon,
 	School01Icon,
 	Search01Icon,
-	SparklesIcon,
 	Sorting05Icon,
+	SparklesIcon,
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useNavigate } from '@tanstack/react-router'
@@ -116,13 +116,8 @@ export default function SearchBar({
 }: SearchBarProps) {
 	const [open, setOpen] = React.useState(false)
 	const [query, setQuery] = React.useState('')
-	const [recentSearches, setRecentSearches] = React.useState<SearchResult[]>([])
+	const [recentSearches, setRecentSearches] = React.useState<SearchResult[]>(getRecentSearches)
 	const navigate = useNavigate()
-
-	// Load recent searches on mount
-	React.useEffect(() => {
-		setRecentSearches(getRecentSearches())
-	}, [open])
 
 	// Keyboard shortcut to open
 	React.useEffect(() => {
@@ -138,9 +133,12 @@ export default function SearchBar({
 
 	const handleSelect = (result: SearchResult) => {
 		addRecentSearch(result)
+		setRecentSearches((recent) =>
+			[result, ...recent.filter((item) => item.cds !== result.cds)].slice(0, MAX_RECENT),
+		)
 		setOpen(false)
 		setQuery('')
-		navigate({ to: '/dashboard', search: { q: result.cds } })
+		void navigate({ to: '/dashboard', search: { cds: result.cds } })
 	}
 
 	const handleClearRecent = (e: React.MouseEvent) => {

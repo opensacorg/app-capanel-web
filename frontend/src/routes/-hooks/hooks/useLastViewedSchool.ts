@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
-import { AcademicIndicatorsService } from '../../../lib/client'
+import {
+	usersGetUserPreferencesOptions,
+	usersGetUserPreferencesQueryKey,
+	usersUpdateUserPreferencesMutation,
+} from '../../../lib/client'
 import { STATEWIDE_CDS } from '../../../lib/constants/indicators'
 
 const LOCAL_STORAGE_KEY = 'lastViewedSchool'
@@ -37,37 +41,22 @@ export function useLastViewedSchool({ isAuthenticated = false }: UseLastViewedSc
 
 	// Server-side query for authenticated users
 	const serverQuery = useQuery({
-		queryKey: ['userPreferences', 'lastViewedCds'],
-		queryFn: async () => {
-			const response = await AcademicIndicatorsService.academicIndicatorsGetLastViewedCds()
-			if (response.error) {
-				throw new Error('Failed to fetch user preferences')
-			}
-			return response.data as { last_viewed_cds: string | null }
-		},
+		...usersGetUserPreferencesOptions(),
 		enabled: isAuthenticated,
 		staleTime: 5 * 60 * 1000, // 5 minutes
 	})
 
 	// Server-side mutation for authenticated users
 	const serverMutation = useMutation({
-		mutationFn: async (cds: string) => {
-			const response = await AcademicIndicatorsService.academicIndicatorsUpdateUserPreferences({
-				body: { last_viewed_cds: cds },
-			})
-			if (response.error) {
-				throw new Error('Failed to update user preferences')
-			}
-			return response.data
-		},
+		...usersUpdateUserPreferencesMutation(),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['userPreferences', 'lastViewedCds'] })
+			void queryClient.invalidateQueries({ queryKey: usersGetUserPreferencesQueryKey() })
 		},
 	})
 
 	// Determine the effective CDS code
 	const effectiveCds = isAuthenticated
-		? (serverQuery.data?.last_viewed_cds ?? localSchool?.cds ?? STATEWIDE_CDS)
+		? (serverQuery.data?.lastViewedCds ?? localSchool?.cds ?? STATEWIDE_CDS)
 		: (localSchool?.cds ?? STATEWIDE_CDS)
 
 	// Set last viewed school
@@ -83,24 +72,11 @@ export function useLastViewedSchool({ isAuthenticated = false }: UseLastViewedSc
 
 			// Also update server if authenticated
 			if (isAuthenticated) {
-				serverMutation.mutate(school.cds)
+				serverMutation.mutate({ body: { lastViewedCds: school.cds } })
 			}
 		},
 		[isAuthenticated, serverMutation],
 	)
-
-	// Sync localStorage to state on mount
-	useEffect(() => {
-		if (typeof window === 'undefined') return
-		try {
-			const stored = localStorage.getItem(LOCAL_STORAGE_KEY)
-			if (stored) {
-				setLocalSchool(JSON.parse(stored))
-			}
-		} catch {
-			// Ignore localStorage errors
-		}
-	}, [])
 
 	return {
 		cds: effectiveCds,

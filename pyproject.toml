@@ -1,35 +1,52 @@
-[dependency-groups]
-dev = [
-    "prek>=0.4.11,<1.0.0",
-    "typer>=0.26.1,<1.0.0",
-    "zizmor>=1.28.0",
-]
+# Workspace root. Every Python command is run from here:
+#
+#   uv run fastapi dev          # the API, reloading, on :8000
+#   uv run alembic upgrade head
+#   uv run pytest
+#   uv run ruff format; uv run ruff check --fix; uv run ty check
+#
+# The application itself lives in the `backend` member and is installed into
+# the root virtualenv as an editable package, so `app.*` imports resolve here
+# without a `cd`.
 
-github-actions = [
-    "smokeshow >=0.5.0",
-]
+[dependency-groups]
+dev = ["prek>=0.4.11,<1.0.0", "typer>=0.26.1,<1.0.0", "zizmor>=1.28.0"]
+
+github-actions = ["smokeshow >=0.5.0"]
 
 [tool.uv.workspace]
 members = ["backend"]
 
+# `fastapi dev` / `fastapi run` look for this in the pyproject.toml of the
+# directory they are invoked from. Without it the CLI falls back to scanning
+# the working directory for a `main.py`, finds none at the root, and exits with
+# "Could not find a default file to run".
+[tool.fastapi]
+entrypoint = "app.main:app"
+
+# pytest is run from the root too. Naming the path keeps the rootdir here
+# rather than wherever the first test file happens to live.
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+
 [tool.typos.files]
 extend-exclude = [
-    "img/",
-    "uv.lock",
-    "bun.lock",
-    "backend/coverage/",
-    "backend/htmlcov/",
-    "backend/app/frontend/",
-    "frontend/dist/",
-    "frontend/public/assets/images/",
+  "img/",
+  "uv.lock",
+  "pnpm-lock.yaml",
+  "backend/coverage/",
+  "backend/htmlcov/",
+  "frontend/dist/",
+  "frontend/public/assets/images/",
+  "frontend/src/lib/client/",
 ]
 
 [tool.typos.default]
 extend-ignore-re = [
-    # GitHub usernames in @mentions
-    "@[a-zA-Z0-9](?:-?[a-zA-Z0-9])*",
-    # Name of the package in the PR title
-    "Bump certifi ",
+  # GitHub usernames in @mentions
+  "@[a-zA-Z0-9](?:-?[a-zA-Z0-9])*",
+  # Name of the package in the PR title
+  "Bump certifi ",
 ]
 
 [tool.typos.default.extend-identifiers]

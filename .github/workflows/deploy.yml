@@ -1,37 +1,67 @@
-name: Deploy
+# Builds the front end on a GitHub runner and ships the compiled dist/ to the
+# EC2 instance. Nothing is built on the instance itself — a production Vite
+# build wants more memory than a t4g.small has spare.
+#
+# The backend is deployed separately by running ./deploy.sh on the instance,
+# which pulls the repository, rebuilds the image and restarts Compose.
+name: Deploy front end
 
 on:
   push:
     branches:
-      - master
-    paths-ignore:
-      - release-notes.md
+      - main
+    paths:
+      - frontend/**
+      - packages/**
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - .github/workflows/deploy.yml
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: false
+
 jobs:
-  deploy:
-    # Do not deploy in the main repository, only in user projects
-    if: github.repository_owner != 'fastapi'
-    runs-on: self-hosted
-    env:
-      DOMAIN: ${{ secrets.DOMAIN }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      FIRST_SUPERUSER: ${{ secrets.FIRST_SUPERUSER }}
-      FIRST_SUPERUSER_PASSWORD: ${{ secrets.FIRST_SUPERUSER_PASSWORD }}
-      SMTP_HOST: ${{ secrets.SMTP_HOST }}
-      SMTP_USER: ${{ secrets.SMTP_USER }}
-      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-      EMAILS_FROM_EMAIL: ${{ secrets.EMAILS_FROM_EMAIL }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - run: docker compose -f compose.yml -f compose.deploy.yml build
-      - run: docker compose -f compose.yml -f compose.deploy.yml run --rm backend bash scripts/prestart.sh
-      - run: docker compose -f compose.yml -f compose.deploy.yml up -d
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check
+        run: pnpm run compile
+
+      - name: Build
+        env:
+          # Caddy serves the front end and the API on one origin, so the client
+          # uses relative URLs. A build made for a different origin fails in the
+          # browser with no error on the server.
+          VITE_API_URL: ""
+          VITE_BASE_PATH: /
+        run: pnpm run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 7
+          if-no-files-found: error

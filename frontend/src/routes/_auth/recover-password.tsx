@@ -8,14 +8,13 @@ import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { LoginService } from '@/lib/client'
+import { loginRecoverPasswordMutation } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
+import { email } from '@/lib/forms'
 import { isLoggedIn } from '@/routes/-hooks/hooks/useAuth'
 import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
-const recoverSchema = z.object({
-	email: z.string().email({ message: 'Please enter a valid email address' }),
-})
+const recoverSchema = z.object({ email })
 
 type RecoverFormValues = z.infer<typeof recoverSchema>
 
@@ -43,14 +42,12 @@ function RecoverPassword() {
 		},
 		onSubmit: async ({ value }) => {
 			if (mutation.isPending) return
-			mutation.mutate(value)
+			mutation.mutate({ path: { email: value.email } })
 		},
 	})
 
 	const mutation = useMutation({
-		mutationFn: async (data: RecoverFormValues) => {
-			await LoginService.loginRecoverPassword({ path: { email: data.email } })
-		},
+		...loginRecoverPasswordMutation(),
 		onSuccess: () => {
 			showSuccessToast('Password recovery email sent successfully')
 			form.reset()
@@ -64,7 +61,7 @@ function RecoverPassword() {
 				onSubmit={(e) => {
 					e.preventDefault()
 					e.stopPropagation()
-					form.handleSubmit()
+					void form.handleSubmit()
 				}}
 				className='flex flex-col gap-6'
 			>

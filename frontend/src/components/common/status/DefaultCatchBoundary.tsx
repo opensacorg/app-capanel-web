@@ -1,11 +1,11 @@
 import {
 	Alert01Icon,
+	ArrowTurnBackwardIcon,
 	Home01Icon,
 	RefreshIcon,
-	ArrowTurnBackwardIcon,
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Link, type ErrorComponentProps, useRouter } from '@tanstack/react-router'
+import { type ErrorComponentProps, Link, useRouter } from '@tanstack/react-router'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -61,7 +61,7 @@ export function DefaultCatchBoundary({ error, reset, fullPage = true }: DefaultC
 		if (reset) {
 			reset()
 		} else {
-			router.invalidate()
+			void router.invalidate()
 		}
 	}
 

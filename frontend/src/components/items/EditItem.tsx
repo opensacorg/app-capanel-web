@@ -19,13 +19,17 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { type ItemPublic, ItemsService } from '@/lib/client'
+import {
+	type ItemPublic,
+	itemsReadItemsQueryKey,
+	itemsUpdateItemMutation,
+	zItemUpdate,
+} from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
 import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
-const formSchema = z.object({
-	title: z.string().min(1, { message: 'Title is required' }),
-	description: z.string().optional(),
+const formSchema = zItemUpdate.extend({
+	title: z.string().min(1, { error: 'Title is required' }).max(255),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -49,13 +53,12 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
 			onChange: formSchema,
 		},
 		onSubmit: async ({ value }) => {
-			mutation.mutate(value)
+			mutation.mutate({ body: value, path: { id: item.id } })
 		},
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: FormData) =>
-			ItemsService.itemsUpdateItem({ path: { id: item.id }, body: data }),
+		...itemsUpdateItemMutation(),
 		onSuccess: () => {
 			showSuccessToast('Item updated successfully')
 			setIsOpen(false)
@@ -63,7 +66,7 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
 		},
 		onError: handleError.bind(showErrorToast),
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['items'] })
+			void queryClient.invalidateQueries({ queryKey: itemsReadItemsQueryKey() })
 		},
 	})
 
@@ -78,7 +81,7 @@ const EditItem = ({ item, onSuccess }: EditItemProps) => {
 					onSubmit={(e) => {
 						e.preventDefault()
 						e.stopPropagation()
-						form.handleSubmit()
+						void form.handleSubmit()
 					}}
 				>
 					<DialogHeader>

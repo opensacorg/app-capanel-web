@@ -1,15 +1,30 @@
+# The single workspace definition for the repository. `frontend` and every
+# package under `packages/` are installed together by one `pnpm install` at the
+# root; there is deliberately no second pnpm-workspace.yaml or lockfile inside
+# `frontend`, because pnpm treats the nearest one as the workspace root and a
+# nested pair silently re-resolves the whole dependency tree whenever a command
+# is run from inside that directory.
 packages:
   - frontend
+  - packages/*
 
+# Packages permitted to run install scripts. pnpm exits non-zero when a
+# dependency with a build script is not named here, so every one has to be
+# listed: esbuild ships a platform binary, and sharp arrives with the Next.js
+# preview server behind `packages/react-email`.
 allowBuilds:
   esbuild: true
-  msw: true
-  protobufjs: true
+  sharp: true
 
-onlyBuiltDependencies:
-  - '@swc/core'
-  - core-js-pure
-  - esbuild
-  - msw
-  - protobufjs
-  - sharp
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@0.3.0
+  vite-plus: 0.3.0
+
+overrides:
+  vite: "catalog:"
+
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: "*"

@@ -9,9 +9,9 @@ import os
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
-import emails  # type: ignore
+import emails
 import jwt
 from jinja2 import Template
 from jwt.exceptions import InvalidTokenError
@@ -93,7 +93,7 @@ def render_email_template(*, template_name: str, context: dict[str, Any]) -> str
         The rendered HTML string.
     """
     template_str = (
-        Path(__file__).parent.parent / "email-templates" / template_name
+        Path(__file__).parent.parent / "email-templates" / "build" / template_name
     ).read_text()
     html_content = Template(template_str).render(context)
     return html_content
@@ -118,7 +118,7 @@ def send_email(
     message = emails.Message(
         subject=subject,
         html=html_content,
-        mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
+        mail_from=(settings.EMAILS_FROM_NAME, cast(str, settings.EMAILS_FROM_EMAIL)),
     )
     smtp_options: dict[str, Any] = {
         "host": settings.SMTP_HOST,

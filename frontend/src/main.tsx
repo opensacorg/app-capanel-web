@@ -1,4 +1,4 @@
-import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient } from '@tanstack/react-query'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
@@ -6,11 +6,7 @@ import ReactDOM from 'react-dom/client'
 import { DefaultError } from '@/components/common/status/DefaultError'
 import { DefaultNotFound } from '@/components/common/status/DefaultNotFound'
 
-import { ThemeProvider } from './components/theme-provider'
-
 import './globals.css'
-import { Toaster } from './components/ui/sonner'
-import * as TanstackQuery from './integrations/tanstack-query/root-provider'
 import { client } from './lib/client/client.gen'
 import { routeTree } from './routeTree.gen'
 
@@ -29,6 +25,15 @@ const apiBaseUrl = normalizeApiBaseUrl(
 	import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL,
 )
 
+/**
+ * Path the site is served from, so routing works under a GitHub Pages project
+ * path as well as at the root of a custom domain. A relative build (`base:
+ * './'`) carries no usable path, so the router falls back to the root.
+ */
+const routerBasepath = import.meta.env.BASE_URL.startsWith('/')
+	? trimTrailingSlash(import.meta.env.BASE_URL) || '/'
+	: '/'
+
 client.setConfig({
 	baseUrl: apiBaseUrl,
 	auth: async () => localStorage.getItem('access_token') || '',
@@ -42,18 +47,7 @@ client.interceptors.error.use((_error, response) => {
 	return _error
 })
 
-const handleApiError = () => {
-	// Error handling is now done via client interceptors above
-}
-const queryClient = new QueryClient({
-	queryCache: new QueryCache({
-		onError: handleApiError,
-	}),
-	mutationCache: new MutationCache({
-		onError: handleApiError,
-	}),
-})
-const queryContext = TanstackQuery.getContext()
+const queryClient = new QueryClient()
 
 /**
  * Detect if value is a JSON string (starts with { [ " or is a number/boolean)
@@ -61,9 +55,10 @@ const queryContext = TanstackQuery.getContext()
  */
 const router = createRouter({
 	routeTree,
+	basepath: routerBasepath,
 	scrollRestoration: true,
 	context: {
-		...queryContext,
+		queryClient,
 	},
 	defaultPreload: 'intent',
 	defaultPreloadStaleTime: 0,
@@ -105,11 +100,6 @@ declare module '@tanstack/react-router' {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
-			<QueryClientProvider client={queryClient}>
-				<RouterProvider router={router} />
-				<Toaster richColors closeButton />
-			</QueryClientProvider>
-		</ThemeProvider>
+		<RouterProvider router={router} />
 	</StrictMode>,
 )

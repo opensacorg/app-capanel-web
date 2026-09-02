@@ -1,12 +1,12 @@
-import { Heading as BaseHeading } from "@react-email/components"
+import { Heading as BaseHeading } from "@react-email/components";
 
-type HeadingProps = React.PropsWithChildren
+type HeadingProps = React.PropsWithChildren;
 
 export const Heading = ({ children }: HeadingProps) => (
   <BaseHeading as="h1" style={headingStyle}>
     {children}
   </BaseHeading>
-)
+);
 
 const headingStyle = {
   color: "#17212b",
@@ -15,4 +15,4 @@ const headingStyle = {
   letterSpacing: "-0.3px",
   lineHeight: "34px",
   margin: "0 0 20px",
-}
+};

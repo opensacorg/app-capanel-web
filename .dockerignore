@@ -1,16 +1,51 @@
+# The build context is the repository root. Everything the backend image needs
+# is pyproject.toml, uv.lock, alembic.ini and backend/app; the rest is either
+# secret, huge, or built somewhere else.
 .git
-**/__pycache__
-**/.venv
-backend/htmlcov
-frontend/blob-report
-frontend/dist
-frontend/node_modules
-frontend/playwright-report
-frontend/test-results
-node_modules
+.github
+.idea
+.vscode
+.claude
+.codex
+.junie
 
-**/.vscode
-**/.idea
-**/.claude
-**/.codex
-**/.junie
+# Secrets. Settings fall back to real environment variables when no .env is
+# present, which is how Compose supplies them.
+.env
+*.env
+!.env.example
+
+# The front end never enters an image — it is built off the instance and
+# rsynced to the host directory Caddy serves.
+frontend
+packages
+node_modules
+**/node_modules
+dist
+pnpm-lock.yaml
+pnpm-workspace.yaml
+package.json
+
+# Python build and test artefacts.
+**/__pycache__
+**/*.py[cod]
+**/.venv
+**/.ruff_cache
+**/.pytest_cache
+**/.mypy_cache
+**/.cache
+**/htmlcov
+**/.coverage
+**/.coverage.*
+backend/tests
+backend/docs
+backend/README.md
+
+# Deployment artefacts and local scratch.
+Caddyfile
+compose*.yaml
+compose*.yml
+deploy.sh
+screenshots
+openapi.json
+*.log

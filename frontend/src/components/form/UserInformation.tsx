@@ -7,15 +7,22 @@ import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { UsersService, type UserUpdateMe } from '@/lib/client'
+import {
+	usersReadUserMeQueryKey,
+	usersUpdateUserMeMutation,
+	type UserUpdateMe,
+	zUserUpdateMe,
+} from '@/lib/client'
 import { handleError } from '@/lib/client-utils.ts'
+import { email } from '@/lib/forms'
 import { cn } from '@/lib/utils.ts'
 import useAuth from '@/routes/-hooks/hooks/useAuth.ts'
 import useCustomToast from '@/routes/-hooks/hooks/useCustomToast.ts'
 
-const formSchema = z.object({
-	full_name: z.string().max(30).optional(),
-	email: z.string().email({ message: 'Invalid email address' }),
+const formSchema = zUserUpdateMe.extend({
+	// Deliberately tighter than the API's 255: this name has to fit the navbar.
+	fullName: z.string().max(30).optional(),
+	email,
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -28,7 +35,7 @@ const UserInformation = () => {
 
 	const form = useForm({
 		defaultValues: {
-			full_name: currentUser?.full_name ?? '',
+			fullName: currentUser?.fullName ?? '',
 			email: currentUser?.email ?? '',
 		} as FormData,
 		validators: {
@@ -37,14 +44,14 @@ const UserInformation = () => {
 		onSubmit: async ({ value }) => {
 			const updateData: UserUpdateMe = {}
 
-			if (value.full_name !== currentUser?.full_name) {
-				updateData.full_name = value.full_name
+			if (value.fullName !== currentUser?.fullName) {
+				updateData.fullName = value.fullName
 			}
 			if (value.email !== currentUser?.email) {
 				updateData.email = value.email
 			}
 
-			mutation.mutate(updateData)
+			mutation.mutate({ body: updateData })
 		},
 	})
 
@@ -53,14 +60,14 @@ const UserInformation = () => {
 	}
 
 	const mutation = useMutation({
-		mutationFn: (data: UserUpdateMe) => UsersService.usersUpdateUserMe({ body: data }),
+		...usersUpdateUserMeMutation(),
 		onSuccess: () => {
 			showSuccessToast('User updated successfully')
 			toggleEditMode()
 		},
 		onError: handleError.bind(showErrorToast),
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['currentUser'] })
+			void queryClient.invalidateQueries({ queryKey: usersReadUserMeQueryKey() })
 		},
 	})
 
@@ -76,11 +83,11 @@ const UserInformation = () => {
 				onSubmit={(e) => {
 					e.preventDefault()
 					e.stopPropagation()
-					form.handleSubmit()
+					void form.handleSubmit()
 				}}
 				className='flex flex-col gap-4'
 			>
-				<form.Field name='full_name'>
+				<form.Field name='fullName'>
 					{(field) =>
 						editMode ? (
 							<Field>

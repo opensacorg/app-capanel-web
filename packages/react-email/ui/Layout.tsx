@@ -9,20 +9,15 @@ import {
   Row,
   Section,
   Text,
-} from "@react-email/components"
+} from "@react-email/components";
 
 type LayoutProps = React.PropsWithChildren & {
-  title: string
-  project_name: string
-  preview?: string
-}
+  title: string;
+  project_name: string;
+  preview?: string;
+};
 
-export const Layout = ({
-  project_name,
-  title,
-  preview,
-  children,
-}: LayoutProps) => {
+export const Layout = ({ project_name, title, preview, children }: LayoutProps) => {
   return (
     <Html lang="en" dir="ltr">
       <Head>
@@ -42,8 +37,7 @@ export const Layout = ({
               <Hr style={footerRuleStyle} />
               <Section>
                 <Text style={footerStyle}>
-                  © {new Date().getFullYear()} {project_name}. All rights
-                  reserved.
+                  © {new Date().getFullYear()} {project_name}. All rights reserved.
                 </Text>
               </Section>
             </Column>
@@ -51,11 +45,10 @@ export const Layout = ({
         </Container>
       </Body>
     </Html>
-  )
-}
+  );
+};
 
-const fontFamily =
-  '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif'
+const fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
 
 const bodyStyle = {
   backgroundColor: "#f4f7f6",
@@ -63,7 +56,7 @@ const bodyStyle = {
   fontFamily,
   margin: "0",
   padding: "32px 12px",
-}
+};
 
 const containerStyle = {
   backgroundColor: "#ffffff",
@@ -73,18 +66,18 @@ const containerStyle = {
   margin: "0 auto",
   maxWidth: "560px",
   width: "100%",
-}
+};
 
 const contentStyle = {
   padding: "40px 36px 32px",
-}
+};
 
 const brandRuleStyle = {
   border: "0",
   borderTop: "3px solid #00897b",
   margin: "0 0 16px",
   width: "32px",
-}
+};
 
 const brandStyle = {
   color: "#334155",
@@ -94,18 +87,18 @@ const brandStyle = {
   lineHeight: "20px",
   margin: "0 0 32px",
   textTransform: "uppercase" as const,
-}
+};
 
 const footerRuleStyle = {
   border: "0",
   borderTop: "1px solid #dce7e5",
   margin: "36px 0 18px",
   width: "100%",
-}
+};
 
 const footerStyle = {
   color: "#64748b",
   fontSize: "12px",
   lineHeight: "20px",
   margin: "0",
-}
+};

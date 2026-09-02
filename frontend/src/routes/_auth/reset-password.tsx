@@ -8,8 +8,9 @@ import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
-import { LoginService } from '@/lib/client'
+import { loginResetPasswordMutation } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
+import { password, passwordConfirmation, passwordsMatch } from '@/lib/forms'
 import { isLoggedIn } from '@/routes/-hooks/hooks/useAuth'
 import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
@@ -19,16 +20,10 @@ const searchSchema = z.object({
 
 const resetSchema = z
 	.object({
-		new_password: z
-			.string()
-			.min(1, { message: 'Password is required' })
-			.min(8, { message: 'Password must be at least 8 characters' }),
-		confirm_password: z.string().min(1, { message: 'Password confirmation is required' }),
+		new_password: password,
+		confirm_password: passwordConfirmation,
 	})
-	.refine((data) => data.new_password === data.confirm_password, {
-		message: "The passwords don't match",
-		path: ['confirm_password'],
-	})
+	.refine((data) => data.new_password === data.confirm_password, passwordsMatch)
 
 type ResetFormValues = z.infer<typeof resetSchema>
 
@@ -62,17 +57,16 @@ function ResetPassword() {
 			onChange: resetSchema,
 		},
 		onSubmit: async ({ value }) => {
-			mutation.mutate({ new_password: value.new_password, token })
+			mutation.mutate({ body: { newPassword: value.new_password, token } })
 		},
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: { new_password: string; token: string }) =>
-			LoginService.loginResetPassword({ body: data }),
+		...loginResetPasswordMutation(),
 		onSuccess: () => {
 			showSuccessToast('Password updated successfully')
 			form.reset()
-			navigate({ to: '/login' })
+			void navigate({ to: '/login' })
 		},
 		onError: handleError.bind(showErrorToast),
 	})
@@ -83,7 +77,7 @@ function ResetPassword() {
 				onSubmit={(e) => {
 					e.preventDefault()
 					e.stopPropagation()
-					form.handleSubmit()
+					void form.handleSubmit()
 				}}
 				className='flex flex-col gap-6'
 			>

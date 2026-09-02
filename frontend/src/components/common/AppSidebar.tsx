@@ -49,6 +49,7 @@ export type Item = {
 interface MainProps {
 	items: Item[]
 }
+
 const baseItems: Item[] = [
 	{ icon: Home01Icon, title: 'Dashboard', path: '/user/' },
 	{ icon: Briefcase01Icon, title: 'Items', path: '/user/items' },
@@ -58,7 +59,7 @@ const baseItems: Item[] = [
 export default function AppSidebar() {
 	const { user: currentUser } = useAuth()
 
-	const items = currentUser?.is_superuser
+	const items = currentUser?.isSuperuser
 		? [...baseItems, { icon: UserGroupIcon, title: 'Admin', path: '/user/admin' }]
 		: baseItems
 
@@ -122,7 +123,7 @@ function User({ user }: { user: any }) {
 							/>
 						}
 					>
-						<UserInfo fullName={user?.full_name} email={user?.email} />
+						<UserInfo fullName={user?.fullName} email={user?.email} />
 						<HugeiconsIcon
 							icon={ScrollVerticalIcon}
 							className='ml-auto size-4 text-muted-foreground'
@@ -138,7 +139,7 @@ function User({ user }: { user: any }) {
 						sideOffset={4}
 					>
 						<DropdownMenuLabel className='p-0 font-normal'>
-							<UserInfo fullName={user?.full_name} email={user?.email} />
+							<UserInfo fullName={user?.fullName} email={user?.email} />
 						</DropdownMenuLabel>
 
 						<DropdownMenuSeparator />

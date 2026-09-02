@@ -1,12 +1,12 @@
-import { Button } from "@react-email/components"
+import { Button } from "@react-email/components";
 
-type ButtonProps = React.PropsWithChildren & { href: string }
+type ButtonProps = React.PropsWithChildren & { href: string };
 
 export const LinkButton = ({ children, href }: ButtonProps) => (
   <Button href={href} style={buttonStyle}>
     {children}
   </Button>
-)
+);
 
 const buttonStyle = {
   backgroundColor: "#00796b",
@@ -20,4 +20,4 @@ const buttonStyle = {
   padding: "13px 28px",
   textAlign: "center" as const,
   textDecoration: "none",
-}
+};

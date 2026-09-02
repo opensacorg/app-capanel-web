@@ -6,26 +6,23 @@ import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
-import { type UpdatePassword, UsersService } from '@/lib/client'
+import {
+	type UpdatePassword,
+	usersReadUserMeQueryKey,
+	usersUpdatePasswordMeMutation,
+	zUpdatePassword,
+} from '@/lib/client'
 import { handleError } from '@/lib/client-utils.ts'
+import { password, passwordConfirmation, passwordsMatch } from '@/lib/forms'
 import useCustomToast from '@/routes/-hooks/hooks/useCustomToast.ts'
 
-const formSchema = z
-	.object({
-		current_password: z
-			.string()
-			.min(1, { message: 'Password is required' })
-			.min(8, { message: 'Password must be at least 8 characters' }),
-		new_password: z
-			.string()
-			.min(1, { message: 'Password is required' })
-			.min(8, { message: 'Password must be at least 8 characters' }),
-		confirm_password: z.string().min(1, { message: 'Password confirmation is required' }),
+const formSchema = zUpdatePassword
+	.extend({
+		currentPassword: password,
+		newPassword: password,
+		confirm_password: passwordConfirmation,
 	})
-	.refine((data) => data.new_password === data.confirm_password, {
-		message: "The passwords don't match",
-		path: ['confirm_password'],
-	})
+	.refine((data) => data.newPassword === data.confirm_password, passwordsMatch)
 
 type FormData = z.infer<typeof formSchema>
 
@@ -35,8 +32,8 @@ const ChangePassword = () => {
 
 	const form = useForm({
 		defaultValues: {
-			current_password: '',
-			new_password: '',
+			currentPassword: '',
+			newPassword: '',
 			confirm_password: '',
 		} as FormData,
 		validators: {
@@ -44,16 +41,16 @@ const ChangePassword = () => {
 		},
 		onSubmit: async ({ value }) => {
 			const { confirm_password: _, ...submitData } = value
-			mutation.mutate(submitData as UpdatePassword)
+			mutation.mutate({ body: submitData as UpdatePassword })
 		},
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: UpdatePassword) => UsersService.usersUpdatePasswordMe({ body: data }),
+		...usersUpdatePasswordMeMutation(),
 		onSuccess: () => {
 			showSuccessToast('Password updated successfully')
 			form.reset()
-			queryClient.invalidateQueries({ queryKey: ['currentUser'] })
+			void queryClient.invalidateQueries({ queryKey: usersReadUserMeQueryKey() })
 		},
 		onError: handleError.bind(showErrorToast),
 	})
@@ -65,11 +62,11 @@ const ChangePassword = () => {
 				onSubmit={(e) => {
 					e.preventDefault()
 					e.stopPropagation()
-					form.handleSubmit()
+					void form.handleSubmit()
 				}}
 				className='flex flex-col gap-4'
 			>
-				<form.Field name='current_password'>
+				<form.Field name='currentPassword'>
 					{(field) => (
 						<Field>
 							<FieldLabel htmlFor={field.name}>Current Password</FieldLabel>
@@ -91,7 +88,7 @@ const ChangePassword = () => {
 					)}
 				</form.Field>
 
-				<form.Field name='new_password'>
+				<form.Field name='newPassword'>
 					{(field) => (
 						<Field>
 							<FieldLabel htmlFor={field.name}>New Password</FieldLabel>

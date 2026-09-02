@@ -6,16 +6,24 @@ export default defineConfig({
 	plugins: [
 		'@hey-api/typescript',
 		{
+			name: 'zod',
+			exportFromIndex: true,
+		},
+		{
 			name: '@hey-api/sdk',
 			operations: {
 				strategy: 'byTags',
 				containerName: '{{name}}Service',
 				nesting: 'operationId',
 			},
+			validator: true,
 		},
 		{
-			name: '@hey-api/schemas',
-			type: 'json',
+			name: '@tanstack/react-query',
+			queryOptions: true,
+			mutationOptions: true,
+			infiniteQueryOptions: true,
+			exportFromIndex: true,
 		},
 	],
 })

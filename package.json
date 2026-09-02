@@ -1,18 +1,27 @@
 {
   "name": "app-capanel-web",
-  "workspaces": [
-    "frontend",
-    "packages/*"
-  ],
+  "private": true,
   "scripts": {
-    "build": "pnpm --filter frontend build",
-    "dev": "pnpm --filter frontend dev",
-    "lint": "pnpm --filter frontend lint",
-    "test": "pnpm --filter frontend test",
-    "test:ui": "pnpm --filter frontend test:ui",
-    "compile": "pnpm --filter frontend compile",
-    "format": "pnpm --filter frontend format",
-    "email:dev": "bun run --filter emails dev",
-    "email:export": "bun run --filter emails export"
+    "dev": "vp -C frontend run dev",
+    "build": "vp -C frontend run build",
+    "preview": "vp -C frontend run preview",
+    "lint": "vp -C frontend run lint",
+    "format": "vp -C frontend run format",
+    "compile": "vp -C frontend run compile",
+    "generate-client": "uv run python backend/app/scripts/generate_client.py",
+    "email:dev": "vp -C packages/react-email run dev",
+    "email:export": "vp -C packages/react-email run export"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "0.99.0",
+    "typescript": "5.9.3",
+    "vite-plus": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.25.0",
+      "onFail": "download"
+    }
   }
 }

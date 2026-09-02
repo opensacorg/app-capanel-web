@@ -1,12 +1,12 @@
-import { Text } from "@react-email/components"
-import { Callout, Detail } from "../ui/Callout"
-import { Heading } from "../ui/Heading"
-import { Layout } from "../ui/Layout"
+import { Text } from "@react-email/components";
+import { Callout, Detail } from "../ui/Callout";
+import { Heading } from "../ui/Heading";
+import { Layout } from "../ui/Layout";
 
 type TestEmailProps = {
-  project_name: string
-  email: string
-}
+  project_name: string;
+  email: string;
+};
 
 export default function TestEmail({
   project_name = "{{ project_name }}",
@@ -21,8 +21,8 @@ export default function TestEmail({
       <Heading>Test email</Heading>
       <Text style={bodyTextStyle}>Hi,</Text>
       <Text style={bodyTextStyle}>
-        This is a test email from {project_name}. If you're reading it, email
-        delivery is configured correctly.
+        This is a test email from {project_name}. If you're reading it, email delivery is configured
+        correctly.
       </Text>
       <Callout>
         <Detail label="Sent to" value={email} />
@@ -31,7 +31,7 @@ export default function TestEmail({
         If you weren't expecting this email, you can safely ignore it.
       </Text>
     </Layout>
-  )
+  );
 }
 
 const bodyTextStyle = {
@@ -39,11 +39,11 @@ const bodyTextStyle = {
   fontSize: "15px",
   lineHeight: "26px",
   margin: "0 0 18px",
-}
+};
 
 const supportingTextStyle = {
   color: "#64748b",
   fontSize: "14px",
   lineHeight: "23px",
   margin: "0 0 16px",
-}
+};

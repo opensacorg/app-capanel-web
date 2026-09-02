@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 
 import NavbarD52 from '@/components/common/navbar/navbar-D52'
 import { Button } from '@/components/ui/button'
+import { assetUrl } from '@/lib/utils'
 
 import styles from './index.module.css'
 
@@ -129,13 +130,13 @@ function RouteComponent() {
 								to identify strengths and areas for improvement to support student success.
 								<br />
 								<img
-									src='/gauge-screenshot2.png'
+									src={assetUrl('/gauge-screenshot2.png')}
 									alt='Accountability gauge graph'
 									className={styles.gaugeScreenshot}
 								/>
 							</li>
 							<li className={styles.supportItem}>
-								Over 10,000 schools (including alternative schools) are available. See the support
+								Over 1,500 schools and districts (including alternative schools) are available. See
 								the support list for details.
 							</li>
 						</ul>

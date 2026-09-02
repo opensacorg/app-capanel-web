@@ -21,28 +21,30 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { type UserPublic, UsersService } from '@/lib/client'
+import {
+	type UserPublic,
+	usersReadUsersQueryKey,
+	usersUpdateUserMutation,
+	zUserUpdate,
+} from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
+import { email, password, passwordsMatch } from '@/lib/forms'
 import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
 
-const formSchema = z
-	.object({
-		email: z.string().email({ message: 'Invalid email address' }),
-		full_name: z.string().optional(),
-		password: z
-			.string()
-			.min(8, { message: 'Password must be at least 8 characters' })
-			.optional()
-			.or(z.literal('')),
+const formSchema = zUserUpdate
+	.extend({
+		email,
+		// Blank means "leave the password alone", so the 8-character floor only
+		// applies once the field has something in it.
+		password: password.optional().or(z.literal('')),
 		confirm_password: z.string().optional(),
-		is_superuser: z.boolean().optional(),
-		is_active: z.boolean().optional(),
-		force_password_reset: z.boolean().optional(),
+		// The checkboxes always send a value, so drop the spec's defaults and its
+		// nullable `forcePasswordReset`.
+		isActive: z.boolean().optional(),
+		isSuperuser: z.boolean().optional(),
+		forcePasswordReset: z.boolean().optional(),
 	})
-	.refine((data) => !data.password || data.password === data.confirm_password, {
-		message: "The passwords don't match",
-		path: ['confirm_password'],
-	})
+	.refine((data) => !data.password || data.password === data.confirm_password, passwordsMatch)
 
 type FormData = z.infer<typeof formSchema>
 
@@ -59,12 +61,12 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 	const form = useForm({
 		defaultValues: {
 			email: user.email,
-			full_name: user.full_name ?? '',
+			fullName: user.fullName ?? '',
 			password: '',
 			confirm_password: '',
-			is_superuser: user.is_superuser,
-			is_active: user.is_active,
-			force_password_reset: user.force_password_reset,
+			isSuperuser: user.isSuperuser,
+			isActive: user.isActive,
+			forcePasswordReset: user.forcePasswordReset ?? false,
 		} as FormData,
 		validators: {
 			onChange: formSchema,
@@ -72,13 +74,12 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 		onSubmit: async ({ value }) => {
 			const { confirm_password: _, password, ...rest } = value
 			const submitData = password ? { ...rest, password } : rest
-			mutation.mutate(submitData)
+			mutation.mutate({ body: submitData, path: { user_id: user.id } })
 		},
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: Partial<FormData>) =>
-			UsersService.usersUpdateUser({ path: { user_id: user.id }, body: data }),
+		...usersUpdateUserMutation(),
 		onSuccess: () => {
 			showSuccessToast('User updated successfully')
 			setIsOpen(false)
@@ -86,7 +87,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 		},
 		onError: handleError.bind(showErrorToast),
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['users'] })
+			void queryClient.invalidateQueries({ queryKey: usersReadUsersQueryKey() })
 		},
 	})
 
@@ -101,7 +102,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 					onSubmit={(e) => {
 						e.preventDefault()
 						e.stopPropagation()
-						form.handleSubmit()
+						void form.handleSubmit()
 					}}
 				>
 					<DialogHeader>
@@ -133,7 +134,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 							)}
 						</form.Field>
 
-						<form.Field name='full_name'>
+						<form.Field name='fullName'>
 							{(field) => (
 								<Field>
 									<FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
@@ -197,7 +198,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 							)}
 						</form.Field>
 
-						<form.Field name='is_superuser'>
+						<form.Field name='isSuperuser'>
 							{(field) => (
 								<Field className='flex items-center gap-3'>
 									<Checkbox
@@ -212,7 +213,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 							)}
 						</form.Field>
 
-						<form.Field name='is_active'>
+						<form.Field name='isActive'>
 							{(field) => (
 								<Field className='flex items-center gap-3'>
 									<Checkbox
@@ -227,7 +228,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
 							)}
 						</form.Field>
 
-						<form.Field name='force_password_reset'>
+						<form.Field name='forcePasswordReset'>
 							{(field) => (
 								<Field className='flex items-center gap-3'>
 									<Checkbox
