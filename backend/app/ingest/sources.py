@@ -385,13 +385,23 @@ def _parse_http_date(raw: str | None) -> datetime | None:
         return None
 
 
-def source_from_uri(uri: str) -> ResearchFileSource:
-    """Build a source from a path, an ``s3://`` prefix or an ``https://`` URL."""
+def source_from_uri(uri: str, *, encoding: str | None = None) -> ResearchFileSource:
+    """Build a source from a path, an ``s3://`` prefix or an ``https://`` URL.
+
+    ``encoding`` overrides each source's default.  It is what lets the
+    Dashboard families read a copy of their files out of a bucket or a
+    directory: those are published as UTF-8, while the research files the
+    other sources default to are code page 1252.
+    """
     parsed = urlparse(uri)
     if parsed.scheme == "s3":
-        return S3Source(parsed.netloc, parsed.path)
-    if parsed.scheme in {"http", "https"}:
-        return HttpSource(uri)
-    if parsed.scheme in {"", "file"}:
-        return LocalSource(parsed.path if parsed.scheme == "file" else uri)
-    raise ValueError(f"Unsupported research file source: {uri!r}")
+        source: ResearchFileSource = S3Source(parsed.netloc, parsed.path)
+    elif parsed.scheme in {"http", "https"}:
+        source = HttpSource(uri)
+    elif parsed.scheme in {"", "file"}:
+        source = LocalSource(parsed.path if parsed.scheme == "file" else uri)
+    else:
+        raise ValueError(f"Unsupported research file source: {uri!r}")
+    if encoding is not None:
+        source.encoding = encoding
+    return source

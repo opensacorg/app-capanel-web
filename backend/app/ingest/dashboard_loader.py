@@ -40,6 +40,7 @@ from app.ingest.dashboard_reference import seed_dashboard_reference
 from app.ingest.loader import _ENTITY_COLUMNS, _entity_row, _merge_entity
 from app.ingest.parser import EntityRecord, ParseError
 from app.ingest.sources import (
+    DASHBOARD_ENCODING,
     HttpSource,
     ResearchFileSource,
     SourceObject,
@@ -279,7 +280,7 @@ class DashboardImportRunner:
         years: Sequence[int] | None = None,
     ) -> RunOutcome:
         """Import every changed Dashboard file under ``source_uri``."""
-        source = source_from_uri(source_uri)
+        source = source_from_uri(source_uri, encoding=DASHBOARD_ENCODING)
         if isinstance(source, HttpSource) and years and not source.years:
             # An HTTP source generates its own candidates, so tell it which
             # years to ask for rather than probing every one.

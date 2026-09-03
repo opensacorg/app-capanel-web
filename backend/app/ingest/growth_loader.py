@@ -21,6 +21,7 @@ from app.ingest.parser import ParseError
 from app.ingest.run_bookkeeping import FileOutcome, RunBookkeeper, RunOutcome
 from app.ingest.sources import (
     DASHBOARD_BASE_URL,
+    DASHBOARD_ENCODING,
     HttpSource,
     ResearchFileSource,
     SourceObject,
@@ -212,7 +213,7 @@ class GrowthImportRunner:
         force: bool = False,
         years: Sequence[int] | None = None,
     ) -> RunOutcome:
-        source = source_from_uri(source_uri)
+        source = source_from_uri(source_uri, encoding=DASHBOARD_ENCODING)
         if isinstance(source, HttpSource):
             source.names = tuple(growth_file_names(years))
 
