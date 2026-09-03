@@ -24,6 +24,15 @@ members = ["backend"]
 [tool.fastapi]
 entrypoint = "app.main:app"
 
+# ruff is run from the root too, and picks its settings from the pyproject.toml
+# nearest each file. Anything under `backend/` gets that member's settings; this
+# is what everything else -- scripts and tooling at the root -- is checked with.
+# Without it those files fall back to ruff's default target version, which is
+# older than the interpreter the project actually runs, so 3.14 syntax would be
+# reported as an error outside `backend/`.
+[tool.ruff]
+target-version = "py314"
+
 # pytest is run from the root too. Naming the path keeps the rootdir here
 # rather than wherever the first test file happens to live.
 [tool.pytest.ini_options]
