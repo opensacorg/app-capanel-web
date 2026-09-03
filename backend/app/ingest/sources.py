@@ -47,6 +47,9 @@ FILE_ENCODING = "cp1252"
 
 # Extensions that can contain a research file.
 _DATA_SUFFIXES = frozenset({".txt", ".csv", ".dat", ".xlsx"})
+# The subset of those a delimited text reader can handle; a spreadsheet has to
+# go through a reader that understands the format.
+_TEXT_SUFFIXES = frozenset({".txt", ".csv", ".dat"})
 _ARCHIVE_SUFFIXES = frozenset({".zip", ".gz"})
 
 
@@ -85,6 +88,26 @@ class ResearchFileSource(Protocol):
         Needed by readers that seek -- a spreadsheet, for instance -- which a
         streamed HTTP or S3 response body cannot support.
         """
+
+
+def is_delimited_text(name: str) -> bool:
+    """Whether a file is one the delimited text readers can parse.
+
+    The Dashboard families are published as tab separated text, but the state
+    also publishes spreadsheets -- the Local Indicators are only available
+    that way -- and a bucket mirroring both has them side by side.  Handing a
+    spreadsheet to a text reader decodes the ZIP container as text, so the
+    importers use this to leave files that are not theirs alone.
+
+    An archive counts, since it unwraps to a single data member.
+    """
+    suffixes = [suffix.lower() for suffix in Path(name).suffixes]
+    if not suffixes:
+        return False
+    if suffixes[-1] in _ARCHIVE_SUFFIXES:
+        # ``eladownload2024.txt.gz`` -- the archive wraps a text file.
+        return len(suffixes) < 2 or suffixes[-2] in _TEXT_SUFFIXES
+    return suffixes[-1] in _TEXT_SUFFIXES
 
 
 def _is_candidate(name: str) -> bool:

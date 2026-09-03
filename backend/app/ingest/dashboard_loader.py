@@ -44,6 +44,7 @@ from app.ingest.sources import (
     HttpSource,
     ResearchFileSource,
     SourceObject,
+    is_delimited_text,
     source_from_uri,
 )
 from app.model.ingest import IngestFile, IngestRun, IngestStatus
@@ -258,6 +259,17 @@ def _parsed_rows(
             raise ParseError(f"line {index}: {error}") from error
 
 
+def is_dashboard_file(name: str) -> bool:
+    """Whether an object in a source is a Dashboard indicator file.
+
+    A source can hold more than one family -- a bucket mirroring a release has
+    the Local Indicator spreadsheets and the Growth Model file next to the
+    indicators -- so each importer recognises its own files rather than
+    attempting every object it is offered.
+    """
+    return is_delimited_text(name) and indicator_from_filename(name) is not None
+
+
 def year_from_filename(name: str) -> int | None:
     """Pull the reporting year out of ``chronicdownload2025.txt``."""
     digits = "".join(character for character in name if character.isdigit())
@@ -300,6 +312,12 @@ class DashboardImportRunner:
         )
         try:
             for obj in source.list_objects():
+                if not is_dashboard_file(obj.name):
+                    # A bucket holds the whole Dashboard release, spreadsheets
+                    # and other families included; those belong to their own
+                    # importers.
+                    logger.debug("skipping %s: not a Dashboard file", obj.name)
+                    continue
                 if only and not any(fragment in obj.name for fragment in only):
                     continue
                 file_year = year_from_filename(obj.name)

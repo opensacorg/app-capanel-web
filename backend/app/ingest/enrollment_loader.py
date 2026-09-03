@@ -27,6 +27,7 @@ from app.ingest.sources import (
     HttpSource,
     ResearchFileSource,
     SourceObject,
+    is_delimited_text,
     source_from_uri,
 )
 from app.ingest.staged_load import analyze, replace_years
@@ -179,6 +180,8 @@ class EnrollmentImportRunner:
         )
         try:
             for obj in source.list_objects():
+                if not is_delimited_text(obj.name):
+                    continue
                 if "censusenrollrates" not in obj.name.lower():
                     continue
                 year = year_from_filename(obj.name)
