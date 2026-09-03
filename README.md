@@ -30,6 +30,7 @@ Both stacks are workspaces rooted at the repository root, so **every command is 
 | `packages/react-email/`                  | React Email sources for the three transactional templates.                                   |
 | `alembic.ini`                            | Migration config. `script_location` uses `%(here)s`, so `alembic` works from the root.       |
 | `compose.yaml`, `Caddyfile`, `deploy.sh` | The single-instance Docker deployment.                                                       |
+| `bootstrap.sh`                           | One-time provisioning of the Amazon Linux 2023 instance.                                     |
 
 ## Getting started
 
@@ -109,12 +110,35 @@ The dashboard, growth and enrollment importers default to reading from
 
 ## Deployment
 
-The application deploys to a **single AWS EC2 instance running Docker Compose**: PostgreSQL, the FastAPI backend, and a
-Caddy container that terminates TLS, serves the compiled front end and reverse-proxies `/api`. The full specification —
-instance sizing, IAM, Parameter Store, SES, backups and costs — is in
+The application deploys to a **single AWS EC2 instance running Amazon Linux 2023 and Docker Compose**: PostgreSQL, the
+FastAPI backend, and a Caddy container that terminates TLS, serves the compiled front end and reverse-proxies `/api`. The
+full specification — instance sizing, IAM, Parameter Store, SES, backups and costs — is in
 [the AWS deployment guide](https://github.com/opensacorg/app-capanel-doc/blob/main/backend/docs/source/developer-guide/aws-deployment.md).
 
-The two halves deploy independently.
+**Provisioning.** `bootstrap.sh` runs once per instance, on the instance, as `ec2-user`. It installs Docker and the
+Compose v2 plugin from `dnf`, adds a swap file, and clones the repository into `/opt/capanel`. Copy it up and run it —
+nothing about it runs on your own machine:
+
+```bash
+scp -i <key.pem> bootstrap.sh ec2-user@<instance>:
+```
+
+```bash
+ssh -i <key.pem> ec2-user@<instance> 'bash bootstrap.sh'
+```
+
+`REPO` and `BRANCH` default to this repository's default branch. Deploying a fork, or a branch that is not merged yet,
+means naming it:
+
+```bash
+ssh -i <key.pem> ec2-user@<instance> \
+  'REPO=https://github.com/<you>/app-capanel-web.git BRANCH=<branch> bash bootstrap.sh'
+```
+
+Log out and back in afterwards to pick up the `docker` group. The AWS CLI that `deploy.sh` needs for Parameter Store is
+already in the AMI.
+
+The two halves then deploy independently.
 
 **Front end.** Built on your machine or in CI, never on the instance — a production build wants more memory than the
 instance has spare. Only the compiled output ships:
@@ -124,7 +148,7 @@ vp install && vp run build
 ```
 
 ```bash
-rsync -az --delete frontend/dist/ <instance>:/opt/capanel/dist/
+rsync -az --delete frontend/dist/ ec2-user@<instance>:/opt/capanel/dist/
 ```
 
 Caddy picks up new files immediately, so that is the whole front-end deploy: no rebuild, no restart, no downtime.
@@ -140,6 +164,14 @@ migrations as a one-off task, and restarts:
 
 ```bash
 cd /opt/capanel && ./deploy.sh
+```
+
+With no `SITE_ADDRESS` set it deploys as plain HTTP on port 80 and reads the instance's public DNS name from instance
+metadata, so the site is reachable at `http://ec2-….compute.amazonaws.com/` with no domain and no certificate. Let's
+Encrypt cannot issue for a name AWS owns, so TLS starts when there is a real hostname to give it:
+
+```bash
+SITE_ADDRESS=capanel.example.org ./deploy.sh
 ```
 
 Run imports as one-off containers rather than through the API's ingest endpoint, so the work gets its own process, exit
