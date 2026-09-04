@@ -170,6 +170,27 @@ export function describeChange(value: string | number | null | undefined, lowerI
 	}
 }
 
+/**
+ * The background a change reads against.
+ *
+ * "Up" is the good outcome for five indicators and the bad one for the other
+ * two, so direction cannot be left to the word alone — the same label means
+ * opposite things on the suspension card and the graduation card. These are
+ * this application's own tones rather than the five Dashboard hues, so a
+ * rising figure is never mistaken for a performance colour.
+ */
+export const CHANGE_TONES = {
+	good: 'bg-[var(--color-ca-dashboard-green)] text-white',
+	bad: 'bg-[var(--color-ca-dashboard-red)] text-white',
+	flat: 'bg-muted text-muted-foreground',
+	none: 'bg-muted text-muted-foreground',
+} as const
+
+/** A school year the way the state writes it: 2025 is 2024–25. */
+export function formatSchoolYear(year: number) {
+	return `${year - 1}\u2013${String(year).slice(2)}`
+}
+
 /** Render a status figure in the unit its indicator is measured in. */
 export function formatStatus(value: string | number | null | undefined, unit: string) {
 	const parsed = toNumber(value)

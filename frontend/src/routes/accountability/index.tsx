@@ -43,6 +43,7 @@ import {
 	type AccountabilitySelection,
 	ALL_STUDENTS,
 	dashboardCatalogQuery,
+	formatSchoolYear,
 	indicatorGroupsQuery,
 	indicatorsQuery,
 	STATEWIDE_CDS,
@@ -74,7 +75,16 @@ function AccountabilityPage() {
 	const catalog = useQuery(dashboardCatalogQuery(search.year))
 	const ancestry = useQuery(entityQuery(search.cds))
 
-	const year = search.year ?? catalog.data?.reportingYear
+	/**
+	 * A year the state never published cannot be shown. The projected year is
+	 * one of those: it is served beside the last published year rather than as
+	 * a year of its own, so a link that names it resolves to that year here,
+	 * the same way the API resolves it.
+	 */
+	const year =
+		search.year && catalog.data?.years.includes(search.year)
+			? search.year
+			: catalog.data?.reportingYear
 	const selection: AccountabilitySelection | undefined = year
 		? { cds: search.cds, year, studentGroup: search.studentGroup }
 		: undefined
@@ -103,7 +113,7 @@ function AccountabilityPage() {
 		() =>
 			(catalog.data?.years ?? []).map((item) => ({
 				value: String(item),
-				label: `${item - 1}\u2013${String(item).slice(2)}`,
+				label: formatSchoolYear(item),
 			})),
 		[catalog.data],
 	)
@@ -243,13 +253,16 @@ function AccountabilityPage() {
 					</CardContent>
 				</Card>
 
-				{indicators.data?.includesProjections ? (
+				{indicators.data?.projectionYear ? (
 					<Alert>
-						<AlertTitle>Some figures are projections</AlertTitle>
+						<AlertTitle>
+							Where {formatSchoolYear(indicators.data.projectionYear)} is heading
+						</AlertTitle>
 						<AlertDescription>
-							The state has not published the Dashboard for this year yet. Anything marked{' '}
-							<strong>Projected</strong> was worked out from the underlying data using the state's
-							published cut points, and may differ from the figure the state eventually publishes.
+							The state has not released that Dashboard yet, so it has no year of its own here.
+							Where this application can estimate it, the projected change sits beside the published
+							one as a second, grey figure. It was worked out from the underlying data using the
+							state's published cut points and may differ from what the state eventually publishes.
 						</AlertDescription>
 					</Alert>
 				) : null}
