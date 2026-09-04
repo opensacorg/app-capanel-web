@@ -8,6 +8,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
 
+import { TrendPlaceholder } from '@/components/accountability/Placeholders'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
 	type ChartConfig,
@@ -15,7 +16,6 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart'
-import { Skeleton } from '@/components/ui/skeleton'
 import { toNumber } from '@/lib/results'
 import {
 	type AccountabilitySelection,
@@ -39,7 +39,7 @@ export function IndicatorTrend({
 }) {
 	const { data, isPending, error } = useQuery(indicatorTrendQuery(selection, indicator))
 
-	if (isPending) return <Skeleton className='h-64 w-full' />
+	if (isPending) return <TrendPlaceholder />
 	if (error) return <p className='text-sm text-destructive'>{error.message}</p>
 	if (!data || data.points.length === 0) {
 		return <p className='text-sm text-muted-foreground'>No history has been reported.</p>

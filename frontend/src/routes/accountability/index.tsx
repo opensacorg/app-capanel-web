@@ -10,6 +10,16 @@
  * source at all — they come from the state's own Dashboard files.
  *
  * The selection lives in the URL, so any view of this report is a link.
+ *
+ * On loading. The catalogue endpoint is slow and everything else on the page
+ * used to wait behind it, so a cold visit spent a quarter of a minute looking
+ * at three grey rectangles. Two things changed. The catalogue now arrives as
+ * an assumption first (see `accountabilityShape`), which lets every other
+ * request leave immediately and lets this page draw its real structure — its
+ * indicator names, its filters, its tables, its prose — before a single figure
+ * is known. And a wait long enough to look broken now says why it is long,
+ * because the long case is a dataset being read for the first time, not a
+ * fault. What is never assumed is a measured value: those stay skeletons.
  */
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -20,8 +30,13 @@ import { CompositionPanel } from '@/components/accountability/CompositionPanel'
 import { GrowthPanel } from '@/components/accountability/GrowthPanel'
 import { IndicatorCard } from '@/components/accountability/IndicatorCard'
 import { IndicatorTrend } from '@/components/accountability/IndicatorTrend'
+import {
+	IndicatorGridPlaceholder,
+	StudentGroupTablePlaceholder,
+} from '@/components/accountability/Placeholders'
 import { StudentGroupBreakdown } from '@/components/accountability/StudentGroupBreakdown'
 import NavbarD52 from '@/components/common/navbar/navbar-D52'
+import { SlowLoadNotice } from '@/components/common/status/SlowLoadNotice'
 import { LocalMeasures } from '@/components/local-indicators/LocalMeasures'
 import { EntityPicker } from '@/components/results/EntityPicker'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -48,8 +63,10 @@ import {
 	indicatorsQuery,
 	STATEWIDE_CDS,
 } from '@/lib/services/accountability'
+import { assumedCatalog, assumedIndicator } from '@/lib/services/accountabilityShape'
 import { entityQuery } from '@/lib/services/assessments'
 import ScrollReset from '@/routes/-hooks/hooks/ScrollReset'
+import { useSlowLoad } from '@/routes/-hooks/hooks/useSlowLoad'
 
 /**
  * The router parses search values as JSON, so a CDS code that looks like a
@@ -76,66 +93,90 @@ function AccountabilityPage() {
 	const ancestry = useQuery(entityQuery(search.cds))
 
 	/**
+	 * Never undefined: the query carries a placeholder, and a catalogue that
+	 * failed outright still leaves the page a shape to draw. `assumed` is what
+	 * separates the two, and it gates everything that would read as a fact.
+	 */
+	const reference = catalog.data ?? assumedCatalog()
+	const assumed = catalog.isPlaceholderData || catalog.isError
+
+	/**
 	 * A year the state never published cannot be shown. The projected year is
 	 * one of those: it is served beside the last published year rather than as
 	 * a year of its own, so a link that names it resolves to that year here,
 	 * the same way the API resolves it.
+	 *
+	 * While the catalogue is only assumed there is no published list to check
+	 * against, so a year named in the URL is taken at its word — the URL is the
+	 * better evidence of the two. Once the real catalogue lands it is checked.
 	 */
 	const year =
-		search.year && catalog.data?.years.includes(search.year)
+		search.year && (assumed || reference.years.includes(search.year))
 			? search.year
-			: catalog.data?.reportingYear
-	const selection: AccountabilitySelection | undefined = year
-		? { cds: search.cds, year, studentGroup: search.studentGroup }
-		: undefined
+			: reference.reportingYear
+	const selection: AccountabilitySelection = {
+		cds: search.cds,
+		year,
+		studentGroup: search.studentGroup,
+	}
 
-	const indicators = useQuery({
-		...indicatorsQuery(selection ?? ({} as AccountabilitySelection)),
-		enabled: Boolean(selection),
-	})
+	const indicators = useQuery(indicatorsQuery(selection))
 
 	const entity = ancestry.data?.entity
 
+	/**
+	 * The API sorts results by the catalogue's own order, so the catalogue's
+	 * first indicator is the one that will be selected when they arrive. Naming
+	 * it now lets the breakdown below fetch alongside the grid rather than
+	 * after it; if the entity does not report it, the real results correct the
+	 * selection and the breakdown refetches.
+	 */
 	const selectedIndicator = useMemo(
-		() => search.indicator ?? indicators.data?.results[0]?.indicatorCode,
-		[search.indicator, indicators.data],
+		() =>
+			search.indicator ?? indicators.data?.results[0]?.indicatorCode ?? assumedIndicator(reference),
+		[search.indicator, indicators.data, reference],
 	)
 
-	const indicatorMeta = catalog.data?.indicators.find((item) => item.code === selectedIndicator)
+	const indicatorMeta = reference.indicators.find((item) => item.code === selectedIndicator)
 
 	const groups = useQuery({
-		...indicatorGroupsQuery(selection ?? ({} as AccountabilitySelection), selectedIndicator ?? ''),
-		enabled: Boolean(selection && selectedIndicator),
+		...indicatorGroupsQuery(selection, selectedIndicator ?? ''),
+		enabled: Boolean(selectedIndicator),
 	})
+
+	/**
+	 * One wait, graded, covering both slow endpoints — a reader experiences the
+	 * page filling in, not two requests. `isFetching` rather than `isPending`
+	 * so a refetch over stale data is graded too: on this page that refetch is
+	 * the recache, and it is exactly the case worth explaining.
+	 */
+	const loadStage = useSlowLoad(catalog.isFetching || indicators.isFetching || groups.isFetching)
 
 	/** Base UI needs the value-to-label mapping to render the closed trigger. */
 	const yearItems = useMemo(
 		() =>
-			(catalog.data?.years ?? []).map((item) => ({
+			reference.years.map((item) => ({
 				value: String(item),
 				label: formatSchoolYear(item),
 			})),
-		[catalog.data],
+		[reference],
 	)
 
 	const groupItems = useMemo(
 		() =>
-			(catalog.data?.studentGroups ?? []).map((group) => ({
+			reference.studentGroups.map((group) => ({
 				value: group.code,
 				label: group.name,
 			})),
-		[catalog.data],
+		[reference],
 	)
 
 	const groupNames = useMemo(
-		() =>
-			Object.fromEntries(
-				(catalog.data?.studentGroups ?? []).map((group) => [group.code, group.name]),
-			),
-		[catalog.data],
+		() => Object.fromEntries(reference.studentGroups.map((group) => [group.code, group.name])),
+		[reference],
 	)
 
-	const metaFor = (code: string) => catalog.data?.indicators.find((item) => item.code === code)
+	const metaFor = (code: string) => reference.indicators.find((item) => item.code === code)
 
 	/** The state publishes some measures alongside the seven without counting
 	 *  them; they must not sit in the same grid. */
@@ -154,20 +195,25 @@ function AccountabilityPage() {
 		update({ cds: next.cdsCode })
 	}
 
-	if (catalog.isPending) {
-		return (
-			<>
-				<NavbarD52 />
-				<main className='mx-auto w-full max-w-6xl space-y-6 px-4 py-8'>
-					<Skeleton className='h-10 w-96' />
-					<Skeleton className='h-24 w-full' />
-					<Skeleton className='h-64 w-full' />
-				</main>
-			</>
-		)
-	}
+	/**
+	 * Only the statewide code names itself without a lookup. Anything else has
+	 * to be fetched, so its heading is a skeleton rather than a guess — a wrong
+	 * school name is worse than no school name.
+	 */
+	const displayName = entity?.displayName ?? (search.cds === STATEWIDE_CDS ? 'California' : null)
+	const ancestorLine =
+		ancestry.data?.ancestors.map((item) => item.displayName).join(' · ') ||
+		(ancestry.data || search.cds === STATEWIDE_CDS ? 'Statewide accountability' : null)
 
-	if (catalog.error) {
+	/**
+	 * Both halves failing means the Dashboard files were never imported, which
+	 * is an operator's problem rather than a reader's — so it takes the whole
+	 * page and says what to run. A catalogue that fails on its own is reported
+	 * in place instead, and the report stands on the guess: waiting on the
+	 * slower of the two before deciding would flash this page and then replace
+	 * it, and a fresh install is the only case that wants it.
+	 */
+	if (catalog.isError && indicators.isError) {
 		return (
 			<>
 				<NavbarD52 />
@@ -191,14 +237,19 @@ function AccountabilityPage() {
 			<main className='mx-auto w-full max-w-6xl space-y-8 px-4 py-8'>
 				<header className='space-y-3'>
 					<div className='space-y-1'>
-						<h1 className='text-2xl font-semibold tracking-tight'>
-							{entity?.displayName ?? 'California'}
-						</h1>
-						<p className='text-sm text-muted-foreground'>
-							{ancestry.data?.ancestors.map((item) => item.displayName).join(' · ') ||
-								'Statewide accountability'}
-						</p>
+						{displayName ? (
+							<h1 className='text-2xl font-semibold tracking-tight'>{displayName}</h1>
+						) : (
+							<Skeleton className='h-8 w-80 max-w-full rounded-md' />
+						)}
+						{ancestorLine ? (
+							<p className='text-sm text-muted-foreground'>{ancestorLine}</p>
+						) : (
+							<Skeleton className='h-4 w-56 max-w-full rounded-md' />
+						)}
 					</div>
+					{/* Needs no data at all, so it is usable while everything else
+					    loads — a reader who landed on the wrong school can leave. */}
 					<div className='flex flex-wrap items-center gap-2'>
 						<EntityPicker entity={entity} onSelect={chooseEntity} />
 						{search.cds !== STATEWIDE_CDS ? (
@@ -210,13 +261,25 @@ function AccountabilityPage() {
 					</div>
 				</header>
 
+				<SlowLoadNotice stage={loadStage} subject='this accountability report' />
+
+				{catalog.error ? (
+					<Alert variant='destructive'>
+						<AlertTitle>The filters may be out of date</AlertTitle>
+						<AlertDescription>
+							{catalog.error.message} The years and student groups below are the ones this browser
+							last saw.
+						</AlertDescription>
+					</Alert>
+				) : null}
+
 				<Card>
 					<CardContent className='grid gap-4 pt-6 sm:grid-cols-2'>
 						<div className='space-y-1.5'>
 							<Label htmlFor='accountability-year'>Year</Label>
 							<Select
 								items={yearItems}
-								value={String(year ?? '')}
+								value={String(year)}
 								onValueChange={(value) => update({ year: Number(value) })}
 							>
 								<SelectTrigger id='accountability-year' className='w-full'>
@@ -268,12 +331,12 @@ function AccountabilityPage() {
 				) : null}
 
 				{indicators.isPending ? (
-					<Skeleton className='h-48 w-full' />
-				) : indicators.error ? (
+					<IndicatorGridPlaceholder indicators={reference.indicators} />
+				) : indicators.isError ? (
 					<Alert variant='destructive'>
 						<AlertDescription>{indicators.error.message}</AlertDescription>
 					</Alert>
-				) : indicators.data && indicators.data.results.length > 0 ? (
+				) : indicators.data.results.length > 0 ? (
 					<>
 						<section className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
 							{accountabilityResults.map((result) => (
@@ -334,44 +397,43 @@ function AccountabilityPage() {
 								</TabsList>
 								<TabsContent value='groups' className='pt-4'>
 									{groups.isPending ? (
-										<Skeleton className='h-64 w-full' />
-									) : groups.error ? (
+										<StudentGroupTablePlaceholder groups={reference.studentGroups} />
+									) : groups.isError ? (
 										<p className='text-sm text-destructive'>{groups.error.message}</p>
-									) : groups.data ? (
+									) : (
 										<StudentGroupBreakdown
 											report={groups.data}
 											unit={indicatorMeta.unit}
 											lowerIsBetter={indicatorMeta.lowerIsBetter}
 											groupNames={groupNames}
 										/>
-									) : null}
+									)}
 								</TabsContent>
 								<TabsContent value='trend' className='pt-4'>
-									{selection ? (
-										<IndicatorTrend
-											selection={selection}
-											indicator={selectedIndicator}
-											unit={indicatorMeta.unit}
-										/>
-									) : null}
+									<IndicatorTrend
+										selection={selection}
+										indicator={selectedIndicator}
+										unit={indicatorMeta.unit}
+									/>
 								</TabsContent>
 							</Tabs>
 						</CardContent>
 					</Card>
 				) : null}
 
-				{selection ? <CompositionPanel cds={selection.cds} year={selection.year} /> : null}
+				<CompositionPanel cds={selection.cds} year={selection.year} />
 
-				{selection ? (
-					<GrowthPanel
-						cds={selection.cds}
-						year={selection.year}
-						studentGroup={selection.studentGroup}
-					/>
-				) : null}
+				<GrowthPanel
+					cds={selection.cds}
+					year={selection.year}
+					studentGroup={selection.studentGroup}
+				/>
 
-				{selection ? <LocalMeasures cds={selection.cds} year={selection.year} /> : null}
+				<LocalMeasures cds={selection.cds} year={selection.year} />
 
+				{/* Needs nothing loaded, and is the part of the page most likely to
+				    answer the question a reader arrived with, so it is never held
+				    back behind a request. */}
 				<footer className='border-t pt-6 text-xs text-muted-foreground'>
 					<p>
 						Source: California Department of Education, California School Dashboard downloadable

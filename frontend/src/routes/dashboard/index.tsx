@@ -150,7 +150,7 @@ function ResultsPage() {
 				<header className='space-y-3'>
 					<div className='space-y-1'>
 						<h1 className='text-2xl font-semibold tracking-tight'>
-							{entity?.displayName ?? 'California'}
+							{entity?.displayName ?? 'State of California'}
 						</h1>
 						<p className='text-sm text-muted-foreground'>
 							{ancestry.data?.ancestors.map((item) => item.displayName).join(' · ') ||
