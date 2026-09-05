@@ -257,7 +257,7 @@ function AccountabilityPage() {
 	}
 
 	return (
-		<div>
+		<div className="bg-[#f3f4fa]">
 			<ScrollReset />
 			<NavbarD52 />
 			<div className='container max-w-7xl mx-auto px-4 py-8'>
