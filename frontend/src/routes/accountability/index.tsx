@@ -33,7 +33,7 @@ import { AnalyticsUpIcon, Download04Icon, GitCompareIcon } from '@hugeicons/core
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { z } from 'zod'
 
 import { CompositionPanel } from '@/components/accountability/CompositionPanel'
@@ -141,6 +141,22 @@ function AccountabilityPage() {
 	}
 
 	const indicators = useQuery(indicatorsQuery(selection))
+
+	/**
+	 * The two tab strips are one question asked twice, so they move together:
+	 * the grid's tab says which reading of the indicators is on screen, and the
+	 * panel below opens on whatever answers it. Indicators is a report over
+	 * time; At Risk is a question about who, so it opens the student groups.
+	 * Either strip can still be moved on its own afterwards — this sets the
+	 * panel, it does not lock it.
+	 */
+	const [view, setView] = useState('indicators')
+	const [panel, setPanel] = useState('trend')
+
+	function selectView(next: string) {
+		setView(next)
+		setPanel(next === 'at-risk' ? 'groups' : 'trend')
+	}
 
 	const entity = ancestry.data?.entity
 
@@ -256,6 +272,38 @@ function AccountabilityPage() {
 		)
 	}
 
+	/**
+	 * The grid of indicator cards, named once because both tabs draw it. "At
+	 * Risk" repeats "Indicators" verbatim until it has a filter of its own.
+	 */
+	const indicatorGrid = indicators.isPending ? (
+		<IndicatorGridPlaceholder indicators={reference.indicators} />
+	) : indicators.isError ? (
+		<Alert variant='destructive'>
+			<AlertDescription>{indicators.error.message}</AlertDescription>
+		</Alert>
+	) : indicators.data.results.length > 0 ? (
+		<section className={INDICATOR_GRID}>
+			{accountabilityResults.map((result) => (
+				<IndicatorCard
+					key={`${result.indicatorCode}-${result.studentGroupCode}`}
+					result={result}
+					unit={metaFor(result.indicatorCode)?.unit ?? 'percent'}
+					lowerIsBetter={metaFor(result.indicatorCode)?.lowerIsBetter ?? false}
+					selected={result.indicatorCode === selectedIndicator}
+					onSelect={(code) => update({ indicator: code })}
+				/>
+			))}
+		</section>
+	) : (
+		<Alert>
+			<AlertTitle>Nothing reported</AlertTitle>
+			<AlertDescription>
+				The state reports no indicators for this entity, year and student group.
+			</AlertDescription>
+		</Alert>
+	)
+
 	return (
 		<div className="bg-[#f3f4fa]">
 			<ScrollReset />
@@ -337,40 +385,21 @@ function AccountabilityPage() {
 					) : null}
 
 					{/* Indicator Cards */}
-					{indicators.isPending ? (
-						<IndicatorGridPlaceholder indicators={reference.indicators} />
-					) : indicators.isError ? (
-						<Alert variant='destructive'>
-							<AlertDescription>{indicators.error.message}</AlertDescription>
-						</Alert>
-					) : indicators.data.results.length > 0 ? (
-						<section className={INDICATOR_GRID}>
-							{accountabilityResults.map((result) => (
-								<IndicatorCard
-									key={`${result.indicatorCode}-${result.studentGroupCode}`}
-									result={result}
-									unit={metaFor(result.indicatorCode)?.unit ?? 'percent'}
-									lowerIsBetter={metaFor(result.indicatorCode)?.lowerIsBetter ?? false}
-									selected={result.indicatorCode === selectedIndicator}
-									onSelect={(code) => update({ indicator: code })}
-								/>
-							))}
-						</section>
-					) : (
-						<Alert>
-							<AlertTitle>Nothing reported</AlertTitle>
-							<AlertDescription>
-								The state reports no indicators for this entity, year and student group.
-							</AlertDescription>
-						</Alert>
-					)}
+					<Tabs value={view} onValueChange={(value) => selectView(String(value))}>
+						<TabsList>
+							<TabsTrigger value='indicators'>Indicators</TabsTrigger>
+							<TabsTrigger value='at-risk'>At Risk</TabsTrigger>
+						</TabsList>
+						<TabsContent value='indicators'>{indicatorGrid}</TabsContent>
+						<TabsContent value='at-risk'>{indicatorGrid}</TabsContent>
+					</Tabs>
 
 					{/* The selected indicator, examined — and the actions that would
 					    act on it. */}
 					<div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6'>
 						<Card className='border'>
 							{selectedIndicator && indicatorMeta ? (
-								<Tabs defaultValue='trend'>
+								<Tabs value={panel} onValueChange={(value) => setPanel(String(value))}>
 									<CardHeader>
 										<div className='flex flex-wrap items-center justify-between gap-3'>
 											<h2 className='text-lg font-semibold'>{indicatorMeta.name}</h2>
