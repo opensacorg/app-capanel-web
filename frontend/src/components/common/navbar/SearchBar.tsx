@@ -3,9 +3,10 @@
  *
  * Every report on this site is about one school, district or county, so the
  * choice of entity belongs where it is always reachable rather than repeated
- * on each page. The trigger doubles as the answer to "what am I looking at?":
- * it names the current entity and labels its level, and only falls back to the
- * "search…" prompt where nothing is selected yet — the home page.
+ * on each page. The trigger names the entity that was last chosen *here* and
+ * labels its level; an entity arrived at any other way — a link, a table row,
+ * a pasted URL — leaves the "search…" prompt in place, so the trigger reads as
+ * a record of what was searched rather than a second copy of the page heading.
  *
  * Selecting keeps you where you are. A reader comparing accountability reports
  * does not want to be dropped onto the assessment dashboard halfway through,
@@ -23,7 +24,7 @@ import {
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useRouterState, useSearch } from '@tanstack/react-router'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import * as React from 'react'
 
 import { Badge } from '@/components/ui/badge'
@@ -40,7 +41,7 @@ import {
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import type { EntityPublic } from '@/lib/client'
 import { useDebounce } from '@/lib/hooks/useDebounce'
-import { entityQuery, entitySearchQuery } from '@/lib/services/assessments'
+import { entitySearchQuery } from '@/lib/services/assessments'
 import { cn } from '@/lib/utils.ts'
 
 import styles from './SearchBar.module.css'
@@ -159,23 +160,12 @@ export default function SearchBar({
 	const [open, setOpen] = React.useState(false)
 	const [query, setQuery] = React.useState('')
 	const [recentSearches, setRecentSearches] = React.useState<RecentEntity[]>(getRecentSearches)
+	/** The last entity picked from this box; not whatever the route points at. */
+	const [picked, setPicked] = React.useState<RecentEntity | null>(null)
 	const debounced = useDebounce(query, 250)
 	const navigate = useNavigate()
 
-	/**
-	 * Not every route carries an entity — the home page does not — so the
-	 * search parameters are read loosely and the missing case is the one that
-	 * shows the prompt.
-	 */
-	const search = useSearch({ strict: false }) as { cds?: string }
 	const pathname = useRouterState({ select: (state) => state.location.pathname })
-	const selectedCds = typeof search.cds === 'string' ? search.cds : undefined
-
-	const { data: current } = useQuery({
-		...entityQuery(selectedCds ?? ''),
-		enabled: Boolean(selectedCds),
-	})
-	const selected = current?.entity
 
 	const { data: results, isFetching } = useQuery(entitySearchQuery(debounced))
 
@@ -212,6 +202,7 @@ export default function SearchBar({
 		)
 		setRecentSearches(updated)
 		storeRecentSearches(updated)
+		setPicked(entity)
 		setOpen(false)
 		setQuery('')
 		goTo(entity.cds)
@@ -230,13 +221,11 @@ export default function SearchBar({
 			{/* Trigger Button */}
 			<button type='button' onClick={() => setOpen(true)} className={cn(styles.trigger, className)}>
 				<HugeiconsIcon icon={Search01Icon} className='h-4 w-4 shrink-0' />
-				{selected ? (
+				{picked ? (
 					<>
-						<span className='flex-1 text-left truncate text-foreground'>
-							{selected.displayName}
-						</span>
+						<span className='flex-1 text-left truncate text-foreground'>{picked.label}</span>
 						<Badge variant='secondary' className='shrink-0'>
-							{LEVEL_LABEL[selected.entityLevel] ?? selected.entityLevel}
+							{LEVEL_LABEL[picked.level] ?? picked.level}
 						</Badge>
 					</>
 				) : (
