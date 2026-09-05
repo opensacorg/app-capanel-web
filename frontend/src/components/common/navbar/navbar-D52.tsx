@@ -22,8 +22,8 @@ export default function NavbarD52({shadow = false}: { shadow?: boolean }) {
                 <div className={styles.logoWrapper}>
                     <Link className={styles.logoLink} to='/'>
                         <img src={assetUrl('/assets/logo/logo.svg')} alt='Logo' className='h-10' />
-                        <span className='hidden md:block'>
-							<span className='font-bold'>California Accountability</span> Panel
+                        <span className='hidden md:block font-figtree font-semibold'>
+                            California <span className="italic">Dashboard</span>
 						</span>
                     </Link>
                 </div>

@@ -33,7 +33,7 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     env:
-      PROJECT_NAME: California Accountability Panel
+      PROJECT_NAME: California Dashboard
       SECRET_KEY: ci-only-not-a-real-secret
       FIRST_SUPERUSER: admin@example.org
       FIRST_SUPERUSER_PASSWORD: ci-only-not-a-real-password

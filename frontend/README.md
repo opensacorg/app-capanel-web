@@ -1,4 +1,4 @@
-# California Accountability Panel front-end documentation
+# California Dashboard front-end documentation
 
 The test suite for React components using Storybook, Vitest, and Playwright.
 

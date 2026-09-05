@@ -47,7 +47,7 @@ esac
 
 cat > .env <<ENV
 SITE_ADDRESS=${SITE_ADDRESS}
-PROJECT_NAME=California Accountability Panel
+PROJECT_NAME=California Dashboard
 POSTGRES_DB=capanel
 POSTGRES_USER=capanel
 POSTGRES_PASSWORD=$(param /capanel/postgres-password)

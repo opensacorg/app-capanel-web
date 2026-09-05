@@ -73,7 +73,7 @@ function RouteComponent() {
 			<div className={styles.container}>
 				<div className={styles.heroGrid}>
 					<div className={styles.introSection}>
-						<h1 className={styles.title}>California Accountability Panel</h1>
+						<h1 className={styles.title}>California Dashboard</h1>
 						<ol className={styles.actionList}>
 							<li className={styles.actionItem}>
 								<span className={styles.actionDescription}>Explore the dashboard.</span>

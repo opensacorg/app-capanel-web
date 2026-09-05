@@ -1,7 +1,7 @@
 [project]
 name = "app"
 version = "1.0.1"
-description = "FastAPI backend for the California Accountability Panel."
+description = "FastAPI backend for the California Dashboard."
 requires-python = ">=3.14,<4.0"
 dependencies = [
   "python-multipart==0.0.32",
