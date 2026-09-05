@@ -1,8 +1,8 @@
 /**
  * One indicator's result, the way the Dashboard shows it.
  *
- * The performance colour is carried by the bar across the top; the gauge that
- * reads it out sits elsewhere on the page, so the card does not name it twice.
+ * The performance colour is carried by the state's own gauge, because that is
+ * the picture a reader arrives already knowing how to read.
  *
  * The trend is a coloured pill rather than coloured text because "Up" is the
  * good outcome for five indicators and the bad one for the other two — a
@@ -12,13 +12,13 @@
 import { HelpCircleIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 
+import { IndicatorGauge } from '@/components/accountability/IndicatorGauge'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import type { IndicatorResult } from '@/lib/client'
 import {
 	CHANGE_TONES,
-	DASHBOARD_COLORS,
 	describeChange,
 	explainMissingColor,
 	formatSchoolYear,
@@ -39,7 +39,6 @@ export function IndicatorCard({
 	selected?: boolean
 	onSelect?: (indicatorCode: string) => void
 }) {
-	const swatch = result.color ? DASHBOARD_COLORS[result.color] : undefined
 	const change = describeChange(result.change, lowerIsBetter)
 	const missingColor = explainMissingColor(result)
 
@@ -72,16 +71,12 @@ export function IndicatorCard({
 			)}
 			onClick={onSelect ? () => onSelect(result.indicatorCode) : undefined}
 		>
-			{/* The colour bar carries the state's rating; the level names travel
-          with it in the gauge, so a reader who cannot see it loses nothing. */}
-			<div
-				aria-hidden
-				className='h-2 w-full'
-				style={{ backgroundColor: swatch?.token ?? 'var(--color-muted)' }}
-			/>
-			<CardContent className='space-y-3 pt-4'>
+			<CardContent className='space-y-3 '>
+				{/* The gauge carries the state's rating, and names it in its alt
+				    text, so a reader who cannot see it loses nothing. */}
+				<IndicatorGauge color={result.color} />
 				<div className='flex items-start justify-between gap-2'>
-					<h3 className='text-sm font-medium leading-tight'>
+					<h3 className='text-sm font-medium leading-tight text-center w-full'>
 						{result.indicatorName}
 						{groupNote ? (
 							// Which students an indicator covers qualifies its title, so
@@ -108,68 +103,68 @@ export function IndicatorCard({
 						</Badge>
 					) : null}
 				</div>
+				<div className='flex gap-4'>
+					<p className='text-2xl font-semibold tabular-nums'>
+						{formatStatus(result.currStatus, unit)}
+					</p>
 
-				<p className='text-2xl font-semibold tabular-nums'>
-					{formatStatus(result.currStatus, unit)}
-				</p>
-
-				<div className='flex flex-wrap items-center gap-1.5 text-xs'>
-					{changeReason ? (
-						// The pill already says there is no change to report; why the
-						// state drew no conclusion from that is the second sentence, and
-						// it belongs behind the first rather than under the card.
-						<Tooltip>
-							<TooltipTrigger
-								render={
-									<span
-										className={cn(
-											'cursor-help rounded-full px-2 py-0.5 font-medium tabular-nums',
-											CHANGE_TONES[change.direction],
-										)}
-									/>
-								}
+					<div className='flex flex-wrap items-center gap-1.5 text-xs'>
+						{changeReason ? (
+							// The pill already says there is no change to report; why the
+							// state drew no conclusion from that is the second sentence, and
+							// it belongs behind the first rather than under the card.
+							<Tooltip>
+								<TooltipTrigger
+									render={
+										<span
+											className={cn(
+												'cursor-help rounded-full px-2 py-0.5 font-medium tabular-nums',
+												CHANGE_TONES[change.direction],
+											)}
+										/>
+									}
+								>
+									{change.label}
+								</TooltipTrigger>
+								<TooltipContent className='max-w-72 items-start text-left'>
+									<span>{changeReason}</span>
+								</TooltipContent>
+							</Tooltip>
+						) : (
+							<span
+								className={cn(
+									'rounded-full px-2 py-0.5 font-medium tabular-nums',
+									CHANGE_TONES[change.direction],
+								)}
 							>
 								{change.label}
-							</TooltipTrigger>
-							<TooltipContent className='max-w-72 items-start text-left'>
-								<span>{changeReason}</span>
-							</TooltipContent>
-						</Tooltip>
-					) : (
-						<span
-							className={cn(
-								'rounded-full px-2 py-0.5 font-medium tabular-nums',
-								CHANGE_TONES[change.direction],
-							)}
-						>
-							{change.label}
-						</span>
-					)}
-					{projection && projected ? (
-						<Tooltip>
-							{/* Dashed and grey rather than red or green: this figure is
+							</span>
+						)}
+						{projection && projected ? (
+							<Tooltip>
+								{/* Dashed and grey rather than red or green: this figure is
 							    this application's estimate, not the state's judgement. */}
-							<TooltipTrigger
-								render={
-									<span className='cursor-help rounded-full border border-dashed border-muted-foreground/50 bg-muted px-2 py-0.5 font-medium tabular-nums text-muted-foreground' />
-								}
-							>
-								{projected.label}
-							</TooltipTrigger>
-							<TooltipContent className='max-w-72 items-start text-left'>
-								<span>
-									{formatSchoolYear(projection.reportingYear)}: this application's estimate, not a
-									state figure. It projects a {unit === 'percent' ? 'rate' : 'figure'} of{' '}
-									{formatStatus(projection.currStatus, unit)}
-									{projection.colorName ? `, in the ${projection.colorName} band` : ''}.{' '}
-									{projection.basis ??
-										'The state has not released the Dashboard for that year yet.'}
-								</span>
-							</TooltipContent>
-						</Tooltip>
-					) : null}
+								<TooltipTrigger
+									render={
+										<span className='cursor-help rounded-full border border-dashed border-muted-foreground/50 bg-muted px-2 py-0.5 font-medium tabular-nums text-muted-foreground' />
+									}
+								>
+									{projected.label}
+								</TooltipTrigger>
+								<TooltipContent className='max-w-72 items-start text-left'>
+									<span>
+										{formatSchoolYear(projection.reportingYear)}: this application's estimate, not a
+										state figure. It projects a {unit === 'percent' ? 'rate' : 'figure'} of{' '}
+										{formatStatus(projection.currStatus, unit)}
+										{projection.colorName ? `, in the ${projection.colorName} band` : ''}.{' '}
+										{projection.basis ??
+											'The state has not released the Dashboard for that year yet.'}
+									</span>
+								</TooltipContent>
+							</Tooltip>
+						) : null}
+					</div>
 				</div>
-
 				{missingColor && !changeReason ? (
 					<p className='text-xs text-muted-foreground'>{missingColor}</p>
 				) : null}

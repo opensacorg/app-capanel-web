@@ -15,6 +15,7 @@
  * that could read as a performance colour, no zeroes, no arrows. An assumed
  * layout is honest; an assumed figure would not be.
  */
+import { IndicatorGauge } from '@/components/accountability/IndicatorGauge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
@@ -37,19 +38,21 @@ import { assumedCatalog } from '@/lib/services/accountabilityShape'
  * thing this whole module exists to prevent.
  */
 export const INDICATOR_GRID =
-	'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
+	'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5'
 
 /**
  * One indicator card, named but unmeasured.
  *
- * The colour bar stays `muted` — the same neutral the real card uses when the
- * state assigned no colour — so nothing here can be mistaken for a rating.
+ * The gauge is the unrated one the real card falls back to — every colour, no
+ * needle — so nothing here can be mistaken for a rating, and the card's most
+ * conspicuous element is already at its final size and position. When the
+ * figures land, the needle gauge appears in the space this one is holding.
  */
 export function IndicatorCardPlaceholder({ name }: { name?: string }) {
 	return (
 		<Card className='relative overflow-hidden' aria-hidden>
-			<div className='h-2 w-full' style={{ backgroundColor: 'var(--color-muted)' }} />
 			<CardContent className='space-y-3 pt-4'>
+				<IndicatorGauge color={null} />
 				<div className='flex items-start justify-between gap-2'>
 					{name ? (
 						<h3 className='text-sm font-medium leading-tight text-muted-foreground'>{name}</h3>
