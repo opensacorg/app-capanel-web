@@ -7,11 +7,11 @@ delivery, JWT token generation/verification, and datetime helpers.
 import logging
 import os
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
-import emails  # type: ignore
+import emails
 import jwt
 from jinja2 import Template
 from jwt.exceptions import InvalidTokenError
@@ -118,7 +118,7 @@ def send_email(
     message = emails.Message(
         subject=subject,
         html=html_content,
-        mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
+        mail_from=(settings.EMAILS_FROM_NAME, cast(str, settings.EMAILS_FROM_EMAIL)),
     )
     smtp_options: dict[str, Any] = {
         "host": settings.SMTP_HOST,
@@ -227,7 +227,7 @@ def generate_password_reset_token(email: str) -> str:
         The encoded JWT string.
     """
     delta = timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     expires = now + delta
     exp = expires.timestamp()
     encoded_jwt = jwt.encode(
@@ -268,4 +268,4 @@ def get_datetime_utc() -> datetime:
     Returns:
         A timezone-aware :class:`datetime.datetime` in UTC.
     """
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)

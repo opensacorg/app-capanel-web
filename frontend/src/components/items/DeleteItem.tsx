@@ -1,5 +1,6 @@
+import { Delete02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
-import { ItemsService } from '@/lib/client'
+import { itemsDeleteItemMutation, itemsReadItemsQueryKey } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
 import useCustomToast from '@/lib/hooks/useCustomToast'
 
@@ -29,7 +30,7 @@ const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
 	const { showSuccessToast, showErrorToast } = useCustomToast()
 
 	const mutation = useMutation({
-		mutationFn: () => ItemsService.itemsDeleteItem({ path: { id } }),
+		...itemsDeleteItemMutation(),
 		onSuccess: () => {
 			showSuccessToast('The item was deleted successfully')
 			setIsOpen(false)
@@ -37,13 +38,13 @@ const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
 		},
 		onError: handleError.bind(showErrorToast),
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['items'] })
+			void queryClient.invalidateQueries({ queryKey: itemsReadItemsQueryKey() })
 		},
 	})
 
 	const handleDelete = (e: React.FormEvent) => {
 		e.preventDefault()
-		mutation.mutate()
+		mutation.mutate({ path: { id } })
 	}
 
 	return (
@@ -53,7 +54,7 @@ const DeleteItem = ({ id, onSuccess }: DeleteItemProps) => {
 				onSelect={(e) => e.preventDefault()}
 				onClick={() => setIsOpen(true)}
 			>
-				<Trash2 />
+				<HugeiconsIcon icon={Delete02Icon} />
 				Delete Item
 			</DropdownMenuItem>
 			<DialogContent className='sm:max-w-md'>

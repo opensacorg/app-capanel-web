@@ -1,5 +1,3 @@
-'use client'
-
 import { Menu as MenuPrimitive } from '@base-ui/react/menu'
 import { ArrowRight01Icon, Tick02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
@@ -15,8 +13,14 @@ function DropdownMenuPortal({ ...props }: MenuPrimitive.Portal.Props) {
 	return <MenuPrimitive.Portal data-slot='dropdown-menu-portal' {...props} />
 }
 
-function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
-	return <MenuPrimitive.Trigger data-slot='dropdown-menu-trigger' {...props} />
+function DropdownMenuTrigger({ nativeButton, ...props }: MenuPrimitive.Trigger.Props) {
+	return (
+		<MenuPrimitive.Trigger
+			data-slot='dropdown-menu-trigger'
+			nativeButton={nativeButton}
+			{...props}
+		/>
+	)
 }
 
 function DropdownMenuContent({
@@ -40,7 +44,7 @@ function DropdownMenuContent({
 				<MenuPrimitive.Popup
 					data-slot='dropdown-menu-content'
 					className={cn(
-						'z-50 max-h-(--available-height) w-(--anchor-width) min-w-48 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-2xl bg-popover p-1 text-popover-foreground shadow-2xl ring-1 ring-foreground/5 duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95',
+						'z-50 max-h-(--available-height) w-(--anchor-width) min-w-48 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-2xl bg-popover p-1 text-popover-foreground shadow-2xl ring-1 ring-foreground/5 duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95',
 						className,
 					)}
 					{...props}
@@ -75,6 +79,7 @@ function DropdownMenuItem({
 	className,
 	inset,
 	variant = 'default',
+	nativeButton,
 	...props
 }: MenuPrimitive.Item.Props & {
 	inset?: boolean
@@ -85,6 +90,7 @@ function DropdownMenuItem({
 			data-slot='dropdown-menu-item'
 			data-inset={inset}
 			data-variant={variant}
+			nativeButton={nativeButton ?? !props.render}
 			className={cn(
 				"group/dropdown-menu-item relative flex cursor-default items-center gap-2.5 rounded-xl px-3 py-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-9.5 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive",
 				className,
@@ -101,6 +107,7 @@ function DropdownMenuSub({ ...props }: MenuPrimitive.SubmenuRoot.Props) {
 function DropdownMenuSubTrigger({
 	className,
 	inset,
+	nativeButton,
 	children,
 	...props
 }: MenuPrimitive.SubmenuTrigger.Props & {
@@ -110,6 +117,7 @@ function DropdownMenuSubTrigger({
 		<MenuPrimitive.SubmenuTrigger
 			data-slot='dropdown-menu-sub-trigger'
 			data-inset={inset}
+			nativeButton={nativeButton}
 			className={cn(
 				"flex cursor-default items-center gap-2 rounded-xl px-3 py-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-9.5 data-popup-open:bg-accent data-popup-open:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className,
@@ -151,6 +159,7 @@ function DropdownMenuCheckboxItem({
 	children,
 	checked,
 	inset,
+	nativeButton,
 	...props
 }: MenuPrimitive.CheckboxItem.Props & {
 	inset?: boolean
@@ -159,6 +168,7 @@ function DropdownMenuCheckboxItem({
 		<MenuPrimitive.CheckboxItem
 			data-slot='dropdown-menu-checkbox-item'
 			data-inset={inset}
+			nativeButton={nativeButton ?? !props.render}
 			className={cn(
 				"relative flex cursor-default items-center gap-2.5 rounded-xl py-2 pr-8 pl-3 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-9.5 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className,
@@ -187,6 +197,7 @@ function DropdownMenuRadioItem({
 	className,
 	children,
 	inset,
+	nativeButton,
 	...props
 }: MenuPrimitive.RadioItem.Props & {
 	inset?: boolean
@@ -195,6 +206,7 @@ function DropdownMenuRadioItem({
 		<MenuPrimitive.RadioItem
 			data-slot='dropdown-menu-radio-item'
 			data-inset={inset}
+			nativeButton={nativeButton ?? !props.render}
 			className={cn(
 				"relative flex cursor-default items-center gap-2.5 rounded-xl py-2 pr-8 pl-3 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-9.5 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className,

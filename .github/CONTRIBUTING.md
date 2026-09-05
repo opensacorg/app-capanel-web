@@ -1,4 +1,4 @@
-# Contributing to the California Accountability Panel.
+# Contributing to the California Dashboard.
 
 ## Getting started
 
@@ -6,4 +6,4 @@ Check out the documentation website. https://github.com/opensacorg/app-capanel-d
 
 Useful links:
 
-- California Accountability Panel discussion https://github.com/opensacorg/app-capanel-doc/discussions
+- California Dashboard discussion https://github.com/opensacorg/app-capanel-doc/discussions

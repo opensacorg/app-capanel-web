@@ -1,43 +1,28 @@
 {
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "FastAPI Project backend: Python Debugger",
+      "name": "Debug FastAPI Project backend: Python Debugger",
       "type": "debugpy",
       "request": "launch",
-      "module": "fastapi",
-      "args": ["dev"],
+      "module": "uvicorn",
+      "args": [
+        "app.main:app",
+        "--reload"
+      ],
       "cwd": "${workspaceFolder}/backend",
       "jinja": true,
       "envFile": "${workspaceFolder}/.env"
     },
     {
-      "name": "Start frontend server",
-      "request": "launch",
-      "runtimeArgs": ["dev"],
-      "runtimeExecutable": "pnpm",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "node",
-      "presentation": {
-        "hidden": true
-      }
-    },
-    {
       "type": "chrome",
       "request": "launch",
-      "name": "Chrome",
+      "name": "Debug Frontend: Launch Chrome against http://localhost:5173",
       "url": "http://localhost:5173",
-      "webRoot": "${workspaceFolder}/frontend",
-      "presentation": {
-        "hidden": true
-      }
-    }
-  ],
-  "compounds": [
-    {
-      "name": "React frontend: Chrome",
-      "configurations": ["Start frontend server", "Chrome"]
+      "webRoot": "${workspaceFolder}/frontend"
     }
   ]
 }
-

@@ -1,0 +1,99 @@
+# Everything is run from the repository root: the backend is a uv workspace
+# member and the front end a pnpm workspace member, so neither job cd's.
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: capanel
+          POSTGRES_USER: capanel
+          POSTGRES_PASSWORD: capanel
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U capanel -d capanel"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PROJECT_NAME: California Dashboard
+      SECRET_KEY: ci-only-not-a-real-secret
+      FIRST_SUPERUSER: admin@example.org
+      FIRST_SUPERUSER_PASSWORD: ci-only-not-a-real-password
+      DATABASE_URL: postgresql://capanel:capanel@localhost:5432/capanel
+      RESEARCH_FILE_SOURCE_URI: ./resources
+      FASTAPI_ENV: development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6.4.3
+        with:
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --frozen
+
+      - name: Format
+        run: uv run ruff format --check
+
+      - name: Lint
+        run: uv run ruff check
+
+      - name: Type-check
+        run: uv run ty check
+
+      - name: Migrate
+        run: uv run alembic upgrade head
+
+      - name: Test
+        run: uv run pytest
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint:check
+
+      - name: Type-check
+        run: pnpm run compile
+
+      - name: Build
+        run: pnpm run build

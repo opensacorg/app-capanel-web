@@ -1,0 +1,102 @@
+name: capanel
+
+# The whole deployment: PostgreSQL, the FastAPI backend, and Caddy serving the
+# compiled front end and reverse-proxying /api. Sized for one t4g.small with
+# 2 GiB of RAM — see backend/docs/source/developer-guide/aws-deployment.md in
+# opensacorg/app-capanel-doc.
+#
+# Nothing here builds JavaScript. The front end is compiled on your machine or
+# in CI and rsynced into ./dist, which Caddy serves directly.
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      # PostgreSQL 18 moved PGDATA to a version-specific path
+      # (/var/lib/postgresql/18/docker), so the volume belongs at
+      # /var/lib/postgresql. Mounting the pre-18 /var/lib/postgresql/data here
+      # would leave the real data directory inside the container and lose the
+      # database whenever it is recreated.
+      - pgdata:/var/lib/postgresql
+    # Tuned for 2 GiB total, not for a dedicated database host.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - effective_cache_size=1GB
+      - -c
+      - work_mem=16MB
+      - -c
+      - maintenance_work_mem=256MB
+      - -c
+      - max_wal_size=4GB
+      - -c
+      - checkpoint_timeout=15min
+      - -c
+      - max_connections=40
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      # The repository root, because the uv workspace lock file lives there.
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # FASTAPI_ENV is deliberately unset. Its only accepted value is
+      # "development"; leaving it unset is what makes the application refuse to
+      # start on a "changethis" secret and keeps the dev-only routes off.
+      FASTAPI_ENV: ""
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      AWS_REGION: ${AWS_REGION:-us-west-2}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      # curl is not in the slim image; Python is.
+      test:
+        - CMD-SHELL
+        - python -c "import urllib.request as r; r.urlopen('http://localhost:8000/api/v1/utils/health-check/')"
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Stock Caddy. The front end is built elsewhere and rsynced into ./dist.
+  web:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # The compiled front end. On the instance this is ./dist, rsynced up from
+      # a machine that ran `vp run build`. Locally, point it at the build
+      # output with FRONTEND_DIST=./frontend/dist.
+      - ${FRONTEND_DIST:-./dist}:/srv:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # caddy_data must stay a named volume: it holds the issued certificates,
+      # and losing it on every deploy will get the domain rate-limited by
+      # Let's Encrypt.
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

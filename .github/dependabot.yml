@@ -1,3 +1,7 @@
+# Directories follow the workspace layout: uv.lock and pnpm-lock.yaml both live
+# at the repository root, and the only Dockerfile is backend/Dockerfile.
+# `cooldown` holds a release for a week before a PR is opened, which is what
+# zizmor's dependabot-cooldown audit asks for.
 version: 2
 updates:
   # GitHub Actions
@@ -5,6 +9,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 0 # Set to 0 to disable version updates; security updates will still open PRs
     groups:
       github-actions:
@@ -12,11 +18,13 @@ updates:
     commit-message:
       prefix: ⬆
 
-  # Python uv
+  # Python, resolved by uv across the workspace from the root lock file.
   - package-ecosystem: uv
-    directory: /backend
+    directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 0
     groups:
       python-dependencies:
@@ -24,11 +32,13 @@ updates:
     commit-message:
       prefix: ⬆
 
-  # npm
+  # JavaScript, resolved by pnpm across the workspace from the root lock file.
   - package-ecosystem: npm
-    directory: /frontend
+    directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 0
     groups:
       npm-dependencies:
@@ -36,13 +46,14 @@ updates:
     commit-message:
       prefix: ⬆
 
-  # Docker
+  # Base images in backend/Dockerfile. There is no frontend image: the front
+  # end is built off the instance and served by stock Caddy.
   - package-ecosystem: docker
-    directories:
-      - /backend
-      - /frontend
+    directory: /backend
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 0
     groups:
       docker-images:
@@ -50,12 +61,16 @@ updates:
     commit-message:
       prefix: ⬆
 
-  # Docker Compose
+  # Images pinned in compose.yaml.
   - package-ecosystem: docker-compose
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 0
     groups:
       compose-config:
         patterns: ["*"]
+    commit-message:
+      prefix: ⬆

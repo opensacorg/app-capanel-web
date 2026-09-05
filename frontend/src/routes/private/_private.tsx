@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button.tsx'
+import { Button } from '@/components/ui/button'
 import useAuth from '@/lib/hooks/useAuth.ts'
 
 export const Route = createFileRoute('/private/_private')({
@@ -20,7 +20,7 @@ export const Route = createFileRoute('/private/_private')({
 
 function PrivateLayout() {
 	const auth = useAuth()
-	const userLabel = auth.user?.full_name || auth.user?.email || 'User'
+	const userLabel = auth.user?.fullName || auth.user?.email || 'User'
 	return (
 		<>
 			<div>

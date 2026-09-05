@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-import { ComboBox } from '@/components/form/ComboBox.tsx'
+import { ComboBox } from '@/components/form/ComboBox'
 import { useDebounce } from '@/lib/hooks/useDebounce.ts'
 
 interface SchoolSummary {
@@ -99,7 +99,7 @@ export default function SearchHomepageForm() {
 				onSubmit={(e) => {
 					e.preventDefault()
 					e.stopPropagation()
-					form.handleSubmit()
+					void form.handleSubmit()
 				}}
 				className='flex items-center gap-4 pb-8'
 			>

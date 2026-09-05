@@ -1,11 +1,13 @@
+import { PlusSignIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
 
-import { Button } from '@/components/ui/button.tsx'
-import { Checkbox } from '@/components/ui/checkbox.tsx'
+import { PasswordInput } from '@/components/password-input'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
 	Dialog,
 	DialogClose,
@@ -15,31 +17,30 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog.tsx'
-import { Field, FieldError, FieldLabel } from '@/components/ui/field.tsx'
-import { Input } from '@/components/ui/input.tsx'
-import { PasswordInput } from '@/components/ui/password-input.tsx'
-import { Spinner } from '@/components/ui/spinner.tsx'
-import { type UserCreate, UsersService } from '@/lib/client'
+} from '@/components/ui/dialog'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/spinner'
+import {
+	type UserCreate,
+	usersCreateUserMutation,
+	usersReadUsersQueryKey,
+	zUserCreate,
+} from '@/lib/client'
 import { handleError } from '@/lib/client-utils.ts'
+import { email, password, passwordConfirmation, passwordsMatch } from '@/lib/forms'
 import useCustomToast from '@/lib/hooks/useCustomToast.ts'
 
-const formSchema = z
-	.object({
-		email: z.string().email({ message: 'Invalid email address' }),
-		full_name: z.string().optional(),
-		password: z
-			.string()
-			.min(1, { message: 'Password is required' })
-			.min(8, { message: 'Password must be at least 8 characters' }),
-		confirm_password: z.string().min(1, { message: 'Please confirm your password' }),
-		is_superuser: z.boolean(),
-		is_active: z.boolean(),
+const formSchema = zUserCreate
+	.extend({
+		email,
+		password,
+		confirm_password: passwordConfirmation,
+		// The checkboxes always send a value, so drop the spec's defaults.
+		isActive: z.boolean(),
+		isSuperuser: z.boolean(),
 	})
-	.refine((data) => data.password === data.confirm_password, {
-		message: "The passwords don't match",
-		path: ['confirm_password'],
-	})
+	.refine((data) => data.password === data.confirm_password, passwordsMatch)
 
 type FormData = z.infer<typeof formSchema>
 
@@ -51,23 +52,23 @@ const AddUser = () => {
 	const form = useForm({
 		defaultValues: {
 			email: '',
-			full_name: '',
+			fullName: '',
 			password: '',
 			confirm_password: '',
-			is_superuser: false,
-			is_active: false,
+			isSuperuser: false,
+			isActive: false,
 		} as FormData,
 		validators: {
 			onChange: formSchema,
 		},
 		onSubmit: async ({ value }) => {
 			const { confirm_password: _, ...submitData } = value
-			mutation.mutate(submitData as UserCreate)
+			mutation.mutate({ body: submitData as UserCreate })
 		},
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: UserCreate) => UsersService.usersCreateUser({ body: data }),
+		...usersCreateUserMutation(),
 		onSuccess: () => {
 			showSuccessToast('User created successfully')
 			form.reset()
@@ -75,14 +76,14 @@ const AddUser = () => {
 		},
 		onError: handleError.bind(showErrorToast),
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['users'] })
+			void queryClient.invalidateQueries({ queryKey: usersReadUsersQueryKey() })
 		},
 	})
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger render={<Button className='my-4' />}>
-				<Plus className='mr-2' />
+				<HugeiconsIcon icon={PlusSignIcon} className='mr-2' />
 				Add User
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-md'>
@@ -96,7 +97,7 @@ const AddUser = () => {
 					onSubmit={(e) => {
 						e.preventDefault()
 						e.stopPropagation()
-						form.handleSubmit()
+						void form.handleSubmit()
 					}}
 				>
 					<div className='grid gap-4 py-4'>
@@ -124,7 +125,7 @@ const AddUser = () => {
 							)}
 						</form.Field>
 
-						<form.Field name='full_name'>
+						<form.Field name='fullName'>
 							{(field) => (
 								<Field>
 									<FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
@@ -192,7 +193,7 @@ const AddUser = () => {
 							)}
 						</form.Field>
 
-						<form.Field name='is_superuser'>
+						<form.Field name='isSuperuser'>
 							{(field) => (
 								<Field className='flex items-center gap-3'>
 									<Checkbox
@@ -207,7 +208,7 @@ const AddUser = () => {
 							)}
 						</form.Field>
 
-						<form.Field name='is_active'>
+						<form.Field name='isActive'>
 							{(field) => (
 								<Field className='flex items-center gap-3'>
 									<Checkbox

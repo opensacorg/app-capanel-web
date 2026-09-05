@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { Button } from '@/components/ui/button.tsx'
+import { Button } from '@/components/ui/button'
 import {
 	Dialog,
 	DialogClose,
@@ -10,9 +10,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog.tsx'
-import { Spinner } from '@/components/ui/spinner.tsx'
-import { UsersService } from '@/lib/client'
+} from '@/components/ui/dialog'
+import { Spinner } from '@/components/ui/spinner'
+import { usersDeleteUserMeMutation, usersReadUserMeQueryKey } from '@/lib/client'
 import { handleError } from '@/lib/client-utils.ts'
 import useAuth from '@/lib/hooks/useAuth.ts'
 import useCustomToast from '@/lib/hooks/useCustomToast.ts'
@@ -23,20 +23,20 @@ const DeleteConfirmation = () => {
 	const { logout } = useAuth()
 
 	const mutation = useMutation({
-		mutationFn: () => UsersService.usersDeleteUserMe(),
+		...usersDeleteUserMeMutation(),
 		onSuccess: () => {
 			showSuccessToast('Your account has been successfully deleted')
 			logout()
 		},
 		onError: handleError.bind(showErrorToast),
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['currentUser'] })
+			void queryClient.invalidateQueries({ queryKey: usersReadUserMeQueryKey() })
 		},
 	})
 
 	const handleDelete = (e: React.FormEvent) => {
 		e.preventDefault()
-		mutation.mutate()
+		mutation.mutate({})
 	}
 
 	return (

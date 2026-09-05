@@ -1,0 +1,33 @@
+# Caddy terminates TLS, serves the compiled front end, and reverse-proxies the
+# API. One origin for both, so the browser never makes a cross-origin request
+# and CORS never applies.
+#
+# SITE_ADDRESS is the public hostname. Caddy obtains and renews a Let's Encrypt
+# certificate for it automatically, which is why port 80 must stay reachable
+# for the ACME challenge.
+#
+# Use `:80` for a plain-HTTP deployment with no domain, which is also the only
+# option on an EC2 public DNS name: AWS owns compute.amazonaws.com, so Let's
+# Encrypt will not issue a certificate for a name in it and pointing
+# SITE_ADDRESS at one leaves Caddy retrying ACME forever.
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+	handle /docs* {
+		reverse_proxy backend:8000
+	}
+	handle /redoc* {
+		reverse_proxy backend:8000
+	}
+
+	handle {
+		root * /srv
+		# Hand any unmatched path back to the client-side router, so a hard
+		# reload of a deep route serves the app instead of a 404.
+		try_files {path} /index.html
+		file_server
+	}
+}

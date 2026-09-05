@@ -1,210 +1,222 @@
-# The California Accountability Panel web application
+# The California Dashboard web application
 
-California Accountability Panel is a dashboard for viewing school standards. Contributions are welcome!
+California Dashboard is a dashboard for displaying key school performance metrics. Contributions are welcome!
 
 > [!NOTE]
-> Learn about the project on the [documentation website](https://opensacorg.github.io/app-capanel-doc) (under development).
+> Learn about the project on the [documentation website](https://opensacorg.github.io/app-capanel-doc) (under
+> development).
 
 ## Overview
 
 1. Search for a school or school district. ![Search](screenshots/dashboard-items.png)
-3. Explore test scores and standards. ![Dashboard](screenshots/dashboard.png)
-4. Get detailed breakdowns. ![Details](screenshots/docs.png)
+2. Explore test scores and standards. ![Dashboard](screenshots/dashboard.png)
+3. Get detailed breakdowns. ![Details](screenshots/docs.png)
 
 > [!NOTE]
-> Academic performance data for 2024 and 2025 can be downloaded in a zip file on Nate's google drive https://drive.google.com/drive/folders/1ifRu7gL8OVxN7oHKadEydS3e7c85ityr?usp=sharing.
+> Academic performance data for 2024 and 2025 can be downloaded in a zip file on Nate's google
+> drive https://drive.google.com/drive/folders/1ifRu7gL8OVxN7oHKadEydS3e7c85ityr?usp=sharing.
 
-## Contribute
+## Repository layout
 
-The easiest way to get started is to use the [Docker](https://www.docker.com/) container (under development). If you want to contribute to the project, it is recommended to install the PostgreSQL, Python and Node.js requirements and run each part separately. For help, see the [developer documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
+Both stacks are workspaces rooted at the repository root, so **every command is run from the root**. There is no
+`cd backend` or `cd frontend`.
 
-For support and to keep updated on news:
+| Path                                     | What it is                                                                                   |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `pyproject.toml`                         | uv workspace root. Declares the `backend` member and the `fastapi` entrypoint.               |
+| `pnpm-workspace.yaml`                    | pnpm workspace root. Declares `frontend` and `packages/*`.                                   |
+| `backend/`                               | The FastAPI application, installed into the root virtualenv as an editable workspace member. |
+| `frontend/`                              | The React front end, built with [vite-plus](https://vite.dev).                               |
+| `packages/react-email/`                  | React Email sources for the three transactional templates.                                   |
+| `alembic.ini`                            | Migration config. `script_location` uses `%(here)s`, so `alembic` works from the root.       |
+| `compose.yaml`, `Caddyfile`, `deploy.sh` | The single-instance Docker deployment.                                                       |
+| `bootstrap.sh`                           | One-time provisioning of the Amazon Linux 2023 instance.                                     |
 
-- Attend a virtual [Community Hack Night](https://www.meetup.com/opensacorg).
-- Join our [Slack channel (updated 2026-02-01)](https://join.slack.com/t/opensacorg/shared_invite/zt-3orx8kjdj-8gULmv2wuTHhAUxUt9SY8A).
-- Email us at info@opensac.org or info@innovateforcalifornia.org.
+## Getting started
 
-## Self-hosting with Docker
-
-All parts of the application can be started by running `docker compose up`. **Before the first run**, make sure to update the configs in the `.env` files to customize your configurations. For help, see [deployment documentation](https://app-capanel-web.readthedocs.io/en/latest/developer/).
-
-The minimum required environment variables are:
-
-```env
-SECRET_KEY=changethis
-FIRST_SUPERUSER=admin@example.com
-FIRST_SUPERUSER_PASSWORD=changethis
-POSTGRES_PASSWORD=changethis
-```
-
-View [all environment variables](https://app-capanel-web.readthedocs.io/en/latest/developer/#environment-variables).
-
-On first Docker startup, the `prestart` job now also attempts to import academic indicator data using:
-
-- `backend/app/scripts/import_ela_data.py`
-- `backend/app/scripts/import_indicators.py`
-
-For local development (`compose.override.yml`), mount or place files under `backend/resources/` (default expected folder: `backend/resources/cde`).
-
-Optional `.env` controls:
-
-```env
-RUN_DATA_IMPORTS=true
-IMPORT_ELA_DATA_FILE=/app/backend/resources/cde/eladownload2025.xlsx
-IMPORT_INDICATORS_SOURCE=cde
-IMPORT_INDICATORS_PATH=/app/backend/resources/cde
-IMPORT_INDICATORS_INDICATOR=
-IMPORT_INDICATORS_BATCH_SIZE=1000
-```
-
-Imports are skipped automatically if `academicindicator` already has rows, to avoid duplicate inserts on restart.
-
-Detached mode (`docker compose up -d`) does not stream container logs. To see live import progress from prestart (including heartbeat messages while files parse), run:
+Requirements: [uv](https://docs.astral.sh/uv/), [Vite+](https://viteplus.dev/)
+(`vp`, which drives the pinned pnpm 11 underneath), Python 3.14, and a PostgreSQL 18 you can reach.
 
 ```bash
-docker compose logs -f prestart
+cp .env.example .env   # then fill in DATABASE_URL, SECRET_KEY and the superuser
+uv sync
+vp install
 ```
 
-### Generate Secret Keys
+Create the schema:
 
-Some environment variables in the `.env` file have a default value of `changethis`.
+```bash
+uv run alembic upgrade head
+```
 
-You have to change them with a secret key, to generate secret keys you can run the following command:
+The first superuser is created on startup by `app/scripts/initial_data.py`, which the application runs from its lifespan
+hook; run it by hand with
+`uv run python backend/app/scripts/initial_data.py`.
+
+Then run the two halves in separate terminals:
+
+```bash
+uv run fastapi dev
+```
+
+```bash
+vp run dev
+```
+
+The API is on <http://localhost:8000> with interactive docs at `/docs`; the front end is on <http://localhost:5173> and
+proxies `/api`, `/docs` and
+`/redoc` to the backend, so the browser only ever talks to one origin.
+
+### Checks
+
+```bash
+uv run ruff format; uv run ruff check --fix; uv run ty check
+```
+
+```bash
+vp run lint
+```
+
+```bash
+uv run pytest
+```
+
+Install the git hooks that run all of the above with `uv run prek install`.
+
+### Regenerating the API client
+
+`frontend/src/lib/client` is generated from the live OpenAPI schema. After changing anything under `backend/app/api`:
+
+```bash
+vp run generate-client
+```
+
+### Loading data
+
+The importers read from a local directory or an `s3://` URI, set by
+`RESEARCH_FILE_SOURCE_URI`. They stream rather than buffer, and re-running one is safe: a file whose size and entity tag
+are unchanged is skipped.
+
+```bash
+uv run python backend/app/scripts/ingest_research_files.py
+uv run python backend/app/scripts/ingest_dashboard_files.py --year 2025
+uv run python backend/app/scripts/ingest_local_indicators.py --year 2025
+uv run python backend/app/scripts/ingest_growth.py
+uv run python backend/app/scripts/ingest_enrollment.py
+```
+
+The dashboard, growth and enrollment importers default to reading from
+`www3.cde.ca.gov` directly, so no local copy is needed for those.
+
+## Deployment
+
+The application deploys to a **single AWS EC2 instance running Amazon Linux 2023 and Docker Compose**: PostgreSQL, the
+FastAPI backend, and a Caddy container that terminates TLS, serves the compiled front end and reverse-proxies `/api`. The
+full specification — instance sizing, IAM, Parameter Store, SES, backups and costs — is in
+[the AWS deployment guide](https://github.com/opensacorg/app-capanel-doc/blob/main/backend/docs/source/developer-guide/aws-deployment.md).
+
+**Provisioning.** `bootstrap.sh` runs once per instance, on the instance, as `ec2-user`. It installs Docker and the
+Compose v2 plugin from `dnf`, adds a swap file, and clones the repository into `/opt/capanel`. Copy it up and run it —
+nothing about it runs on your own machine:
+
+```bash
+scp -i <key.pem> bootstrap.sh ec2-user@<instance>:
+```
+
+```bash
+ssh -i <key.pem> ec2-user@<instance> 'bash bootstrap.sh'
+```
+
+`REPO` and `BRANCH` default to this repository's default branch. Deploying a fork, or a branch that is not merged yet,
+means naming it:
+
+```bash
+ssh -i <key.pem> ec2-user@<instance> \
+  'REPO=https://github.com/<you>/app-capanel-web.git BRANCH=<branch> bash bootstrap.sh'
+```
+
+Log out and back in afterwards to pick up the `docker` group. The AWS CLI that `deploy.sh` needs for Parameter Store is
+already in the AMI.
+
+The two halves then deploy independently.
+
+**Front end.** Built on your machine or in CI, never on the instance — a production build wants more memory than the
+instance has spare. Only the compiled output ships:
+
+```bash
+vp install && vp run build
+```
+
+```bash
+rsync -az --delete frontend/dist/ ec2-user@<instance>:/opt/capanel/dist/
+```
+
+Caddy picks up new files immediately, so that is the whole front-end deploy: no rebuild, no restart, no downtime.
+`--delete` matters — without it an old hashed bundle can be served alongside a new `index.html`.
+
+> [!IMPORTANT]
+> Build with `VITE_API_URL` empty. Caddy serves the front end and the API on
+> one origin, so the client uses relative URLs and CORS never applies. A build
+> made for a different origin fails in the browser with no error on the server.
+
+**Backend.** On the instance, `./deploy.sh` materialises `.env` from SSM Parameter Store, rebuilds the image, runs
+migrations as a one-off task, and restarts:
+
+```bash
+cd /opt/capanel && ./deploy.sh
+```
+
+With no `SITE_ADDRESS` set it deploys as plain HTTP on port 80 and reads the instance's public DNS name from instance
+metadata, so the site is reachable at `http://ec2-….compute.amazonaws.com/` with no domain and no certificate. Let's
+Encrypt cannot issue for a name AWS owns, so TLS starts when there is a real hostname to give it:
+
+```bash
+SITE_ADDRESS=capanel.example.org ./deploy.sh
+```
+
+Run imports as one-off containers rather than through the API's ingest endpoint, so the work gets its own process, exit
+code and logs:
+
+```bash
+docker compose run --rm backend python backend/app/scripts/ingest_research_files.py
+```
+
+### Self-hosting elsewhere
+
+`compose.yaml` is self-contained. Copy `.env.example` to `.env`, set at least
+`SECRET_KEY`, `POSTGRES_PASSWORD`, `FIRST_SUPERUSER`,
+`FIRST_SUPERUSER_PASSWORD` and `SITE_ADDRESS`, put a built front end in
+`./dist`, and run `docker compose up -d`. Set `SITE_ADDRESS=:80` to serve plain HTTP without a domain; give it a real
+hostname and Caddy obtains a Let's Encrypt certificate on its own, which is why port 80 has to stay reachable.
+
+Generate each secret with:
 
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
-Copy the content and use that as password / secret key. And run that again to generate another secure key.
+## Contribute
 
-### Cloud hosting providers
+For support and to keep updated on news:
 
-Cloud Run + Cloud SQL support is available through `backend/app/scripts/deploy_cloud_run.py`.
-Runtime secrets for Cloud Run are sourced from GCP Secret Manager:
-
-- `capanel-secret-key` -> `SECRET_KEY`
-- `capanel-postgres-password` -> `POSTGRES_PASSWORD`
-
-`FIRST_SUPERUSER` and `FIRST_SUPERUSER_PASSWORD` stay local `.env` values for local development and are not managed in Secret Manager.
-
-For Cloud Run, deploy now supports syncing local resources from `~/Downloads/resources` to GCS before image deploy:
-
-```env
-IMPORT_RESOURCES_LOCAL_PATH=~/Downloads/resources
-IMPORT_GCS_URI=gs://ca-panel-001-resources/resources
-SYNC_LOCAL_IMPORTS_TO_BUCKET=true
-```
-
-## Database modes
-
-### Local development (manual backend run)
-
-By default, running:
-
-```bash
-uv run --env-file .env backend/app/main.py
-```
-
-uses local Postgres from `.env`:
-
-```env
-DB_CONNECTION_MODE=auto
-POSTGRES_SERVER=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=capanel_f65b
-POSTGRES_USER=nateb
-POSTGRES_PASSWORD=...
-```
-
-`DB_CONNECTION_MODE=auto` selects local Postgres in `ENVIRONMENT=local`/`staging` when `POSTGRES_SERVER` is set, and prefers Cloud SQL in `ENVIRONMENT=production` when `CLOUD_SQL_INSTANCE_CONNECTION_NAME` is set.
-You can force behavior with:
-
-```env
-DB_CONNECTION_MODE=local
-# or
-DB_CONNECTION_MODE=cloudsql
-```
-
-### Local development (Docker + local Postgres container)
-
-Use:
-
-```bash
-docker compose up --build
-```
-
-This starts the `db` Postgres container and configures backend services to use it.
-
-### Production (Cloud SQL for Postgres)
-
-Backend supports Cloud SQL via either:
-
-```env
-CLOUD_SQL_INSTANCE_CONNECTION_NAME=ca-panel-001:us-west1:capanel-pg
-POSTGRES_DB=capanel
-POSTGRES_USER=capanel_app
-# POSTGRES_PASSWORD is injected at runtime from Secret Manager in Cloud Run
-```
-
-or:
-
-```env
-DATABASE_URL=postgresql+psycopg://USER:PASSWORD@/DB?host=/cloudsql/PROJECT:REGION:INSTANCE
-```
-
-## Deploy to Google Cloud Run
-
-1. Set Cloud Run values in your local `.env` file.
-2. Create/update runtime secrets in Secret Manager:
-
-```bash
-python backend/app/scripts/create_secrets.py
-```
-
-3. Load env vars and run:
-
-```bash
-set -a
-source .env
-set +a
-python backend/app/scripts/provision_cloud_run.py
-python backend/app/scripts/deploy_cloud_run.py
-```
-
-Notes:
-
-- Cloud Run deploy uses one service (`capanel-full`) with two containers:
-  - `frontend` (NGINX ingress on `8080`)
-  - `backend` sidecar (FastAPI on `8000`)
-- The `${BACKEND_SERVICE}-init` Cloud Run Job is deployed and never auto-executed during deploy.
-- The init job runs only `backend/app/scripts/initial_data.py`.
-- A manual HTTP Cloud Function `${INIT_TRIGGER_FUNCTION_NAME}` is deployed and can trigger the init job on demand.
-- Ensure callers have `roles/cloudfunctions.invoker` on the trigger function.
-
-Suggested Google Cloud resource names:
-
-- Artifact Registry repository: `capanel-repo` (region: `us-west1`)
-- Cloud SQL instance: `capanel-pg` (PostgreSQL 18, private IP only, network `default`)
-- Cloud SQL database: `capanel`
-- Cloud SQL user: `capanel_app`
-- Cloud Run full service: `capanel-full`
-- Backend image name (Artifact Registry): `capanel-backend`
-- Frontend image name (Artifact Registry): `capanel-frontend`
-- Runtime service account: `capanel-runner@ca-panel-001.iam.gserviceaccount.com`
-- Private services IP range: `google-managed-services-default`
+- Attend a virtual [Community Hack Night](https://www.meetup.com/opensacorg).
+- Join
+  our [Slack channel (updated 2026-02-01)](https://join.slack.com/t/opensacorg/shared_invite/zt-3orx8kjdj-8gULmv2wuTHhAUxUt9SY8A).
+- Email us at info@opensac.org or info@innovateforcalifornia.org.
 
 ## Security
 
-We strive to make this application secure as possible. Some highlights include:
+We strive to make this application as secure as possible. Some highlights:
 
-- Hashed passwords.
-- Based on an actively maintained open-source project (full-stack-fastapi-postgres). We can mimic the versions of the pyproject dependencies and know when things need upgrading.
+- Passwords are hashed with argon2 via `pwdlib`.
+- The application refuses to start on a `changethis` secret unless
+  `FASTAPI_ENV=development`, which also gates the dev-only `/private` routes.
+- The deployment holds no long-lived credentials on disk: secrets come from SSM Parameter Store and AWS access uses the
+  instance role.
+- Based on an actively maintained open-source project (full-stack-fastapi-postgres), so dependency versions can be
+  tracked against a known-good baseline.
 
-### Security concerns
-
-The application does not enforce https by default. You can enable it by setting `SECURE_SSL_REDIRECT` to `True` in the `.env` file.
-
-See [Security.md](Security.md) for more information on reporting security vulnerabilities. For other security related topics see the [security documentation page](https://app-capanel-web.readthedocs.io/en/latest/security/). You can also email info@opensac.org.
+See [SECURITY.md](.github/SECURITY.md) for how to report a vulnerability, or email info@opensac.org.
 
 # Other resources
 

@@ -4,29 +4,16 @@ import { Suspense } from 'react'
 
 import { columns, type UserTableData } from '@/components/admin/columns'
 import { DataTable } from '@/components/common/DataTable'
-import AddUser from '@/components/form/AddUser.tsx'
-import PendingUsers from '@/components/layout/pending/PendingUsers'
-import { type UserPublic, UsersService } from '@/lib/client'
+import PendingUsers from '@/components/common/pending/PendingUsers'
+import AddUser from '@/components/form/AddUser'
+import { type UserPublic, usersReadUsersOptions, UsersService } from '@/lib/client'
 import useAuth from '@/lib/hooks/useAuth'
-
-function getUsersQueryOptions() {
-	return {
-		queryFn: async () => {
-			const response = await UsersService.usersReadUsers({ query: { skip: 0, limit: 100 } })
-			if (response.error || !response.data) {
-				throw response.error ?? new Error('Failed to fetch users')
-			}
-			return response.data
-		},
-		queryKey: ['users'],
-	}
-}
 
 export const Route = createFileRoute('/user/admin')({
 	component: Admin,
 	beforeLoad: async () => {
 		const response = await UsersService.usersReadUserMe({})
-		if (!response.data?.is_superuser) {
+		if (!response.data?.isSuperuser) {
 			throw redirect({
 				to: '/',
 			})
@@ -43,7 +30,9 @@ export const Route = createFileRoute('/user/admin')({
 
 function UsersTableContent() {
 	const { user: currentUser } = useAuth()
-	const { data: users } = useSuspenseQuery(getUsersQueryOptions())
+	const { data: users } = useSuspenseQuery(
+		usersReadUsersOptions({ query: { skip: 0, limit: 100 } }),
+	)
 
 	const tableData: UserTableData[] = users.data.map((user: UserPublic) => ({
 		...user,

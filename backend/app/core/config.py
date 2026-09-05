@@ -1,75 +1,114 @@
-import os
-import secrets
 import warnings
-from pathlib import Path
-from typing import Annotated, Any, Literal
-from urllib.parse import quote_plus
+from typing import Literal, Self
+from urllib.parse import urlsplit
 
 from pydantic import (
-    AnyUrl,
-    BeforeValidator,
     EmailStr,
     HttpUrl,
+    PostgresDsn,
     computed_field,
+    field_validator,
     model_validator,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing_extensions import Self
 
 
-def parse_cors(v: Any) -> list[str] | str:
-    if isinstance(v, str) and not v.startswith("["):
-        return [i.strip() for i in v.split(",") if i.strip()]
-    elif isinstance(v, list | str):
-        return v
-    raise ValueError(v)
+def _split_origins(value: str) -> list[str]:
+    """Split a comma-separated list of URLs into its entries.
+
+    The value is kept as a plain string rather than a list field because
+    ``pydantic-settings`` JSON-decodes a list-typed setting before any
+    validator runs, which rejects the comma-separated form a deployment
+    actually sets.
+
+    Args:
+        value: A comma-separated string, possibly empty.
+
+    Returns:
+        The individual entries, stripped of surrounding whitespace.
+    """
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _to_origin(url: str) -> str | None:
+    """Reduce a URL to the browser origin the ``Origin`` header will carry.
+
+    A browser sends only the scheme, host, and port, so any path has to be
+    dropped: ``https://opensacorg.github.io/app-capanel-web`` is a valid
+    :data:`Settings.FRONTEND_HOST` for building links into a GitHub Pages
+    project site, but the matching origin is ``https://opensacorg.github.io``.
+
+    Args:
+        url: A full URL, or a bare origin.
+
+    Returns:
+        The ``scheme://host[:port]`` origin, or ``None`` when *url* has no
+        scheme and host to take one from.
+    """
+    parts = urlsplit(url.strip())
+    if not parts.scheme or not parts.netloc:
+        return None
+    return f"{parts.scheme}://{parts.netloc}"
 
 
 class Settings(BaseSettings):
-    """
-    Use the top level .env file (one level above ./backend/).
-    Access not expires in 60 minutes * 24 hours * 8 days = 8 days
-    """
-
     model_config = SettingsConfigDict(
-        env_file=str(Path(__file__).resolve().parents[3] / ".env"),
+        env_file=".env",
         env_ignore_empty=True,
         extra="ignore",
     )
     API_V1_STR: str = "/api/v1"
-    SECRET_KEY: str = secrets.token_urlsafe(32)
+    SECRET_KEY: str
+    # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
+    # Public base URL of the front end, used to build links in emails.  It may
+    # include a path when the site is served from a sub-path, such as a GitHub
+    # Pages project site.
     FRONTEND_HOST: str = "http://localhost:5173"
-    ENVIRONMENT: Literal["local", "staging", "production"] = "local"
-
-    BACKEND_CORS_ORIGINS: Annotated[
-        list[AnyUrl] | str, BeforeValidator(parse_cors)
-    ] = []
+    # Extra browser origins allowed to call the API, beyond FRONTEND_HOST.  Set
+    # this when the same deployment is reachable under more than one origin,
+    # for example a Pages sub-domain and a custom domain.
+    BACKEND_CORS_ORIGINS: str = ""
+    FASTAPI_ENV: Literal["development"] | None = None
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def all_cors_origins(self) -> list[str]:
-        return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGINS] + [
-            self.FRONTEND_HOST
-        ]
+        """List every browser origin permitted to call the API.
 
-    PROJECT_NAME: str = "California Accountability Panel"
+        The front end and the API are deployed separately, so calls from the
+        browser are cross-origin and each allowed origin has to be named.
+        :data:`FRONTEND_HOST` is always included, reduced to its origin, and
+        :data:`BACKEND_CORS_ORIGINS` adds any others.
+
+        Returns:
+            The distinct origins, in the order they were configured.
+        """
+        origins: list[str] = []
+        for url in (self.FRONTEND_HOST, *_split_origins(self.BACKEND_CORS_ORIGINS)):
+            origin = _to_origin(url)
+            if origin is not None and origin not in origins:
+                origins.append(origin)
+        return origins
+
+    PROJECT_NAME: str
     SENTRY_DSN: HttpUrl | None = None
-    DB_CONNECTION_MODE: Literal["auto", "local", "cloudsql"] = "auto"
-    DATABASE_URL: str | None = None
-    POSTGRES_SERVER: str | None = None
-    POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str | None = None
-    POSTGRES_PASSWORD: str | None = None
-    POSTGRES_DB: str | None = None
-    CLOUD_SQL_INSTANCE_CONNECTION_NAME: str | None = None
+    DATABASE_URL: PostgresDsn
+    RESEARCH_FILE_SOURCE_URI: str
+    # Where the California School Dashboard indicator files are read from.
+    # Defaults to the state's own web server, so no local copy is needed.
+    DASHBOARD_FILE_SOURCE_URI: str = (
+        "https://www3.cde.ca.gov/researchfiles/cadashboard/"
+    )
 
-    @computed_field  # type: ignore[prop-decorator]
-    @property
-    def SQLALCHEMY_DATABASE_URI(self) -> str:
-        if not self.DATABASE_URL:
-            raise ValueError("DATABASE_URL is not configured")
-        return self.DATABASE_URL
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def _use_psycopg_driver(cls, value: str | PostgresDsn) -> str:
+        database_url = str(value)
+        for scheme in ("postgres://", "postgresql://"):
+            if database_url.startswith(scheme):
+                return database_url.replace(scheme, "postgresql+psycopg://", 1)
+        return database_url
 
     SMTP_TLS: bool = True
     SMTP_SSL: bool = False
@@ -94,19 +133,16 @@ class Settings(BaseSettings):
         return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr = "admin@example.com"
-    FIRST_SUPERUSER_PASSWORD: str = "changethis"
+    FIRST_SUPERUSER: EmailStr
+    FIRST_SUPERUSER_PASSWORD: str
 
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
-        """
-        Complain at startup if a secret is "changethis",
-        """
         if value == "changethis":
             message = (
                 f'The value of {var_name} is "changethis", '
                 "for security, please change it, at least for deployments."
             )
-            if self.ENVIRONMENT == "local":
+            if self.FASTAPI_ENV == "development":
                 warnings.warn(message, stacklevel=1)
             else:
                 raise ValueError(message)
@@ -114,84 +150,13 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
         self._check_default_secret("SECRET_KEY", self.SECRET_KEY)
-        self._check_default_secret("FIRST_SUPERUSER_PASSWORD", self.SECRET_KEY)
-        return self
-
-    @model_validator(mode="after")
-    def _enforce_cloud_run_environment(self) -> Self:
-        if os.getenv("K_SERVICE") and self.ENVIRONMENT != "production":
-            raise ValueError(
-                'ENVIRONMENT must be "production" when running on Cloud Run.'
-            )
-        return self
-
-    @model_validator(mode="after")
-    def _populate_database_url(self) -> Self:
-        if self.DATABASE_URL:
-            return self
-
-        if not (self.POSTGRES_USER and self.POSTGRES_PASSWORD and self.POSTGRES_DB):
-            raise ValueError(
-                "DATABASE_URL is required, or set POSTGRES_USER/POSTGRES_PASSWORD/"
-                "POSTGRES_DB and either POSTGRES_SERVER (local/tcp) or "
-                "CLOUD_SQL_INSTANCE_CONNECTION_NAME (Cloud SQL socket)."
-            )
-
-        encoded_password = quote_plus(self.POSTGRES_PASSWORD)
-
-        def _build_local_postgres_url() -> str:
-            if not self.POSTGRES_SERVER:
-                raise ValueError(
-                    "DB_CONNECTION_MODE=local requires POSTGRES_SERVER to be set."
-                )
-            return (
-                "postgresql+psycopg://"
-                f"{self.POSTGRES_USER}:{encoded_password}"
-                f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-            )
-
-        def _build_cloudsql_url() -> str:
-            if not self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
-                raise ValueError(
-                    "DB_CONNECTION_MODE=cloudsql requires "
-                    "CLOUD_SQL_INSTANCE_CONNECTION_NAME to be set."
-                )
-            return (
-                "postgresql+psycopg://"
-                f"{self.POSTGRES_USER}:{encoded_password}"
-                f"@/{self.POSTGRES_DB}"
-                f"?host=/cloudsql/{self.CLOUD_SQL_INSTANCE_CONNECTION_NAME}"
-            )
-
-        if self.DB_CONNECTION_MODE == "local":
-            self.DATABASE_URL = _build_local_postgres_url()
-            return self
-
-        if self.DB_CONNECTION_MODE == "cloudsql":
-            self.DATABASE_URL = _build_cloudsql_url()
-            return self
-
-        # Auto mode:
-        # - production prefers Cloud SQL when configured
-        # - local/staging prefer direct Postgres TCP when configured
-        # - fallback to whichever option is available
-        if self.ENVIRONMENT == "production" and self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
-            self.DATABASE_URL = _build_cloudsql_url()
-            return self
-
-        if self.POSTGRES_SERVER:
-            self.DATABASE_URL = _build_local_postgres_url()
-            return self
-
-        if self.CLOUD_SQL_INSTANCE_CONNECTION_NAME:
-            self.DATABASE_URL = _build_cloudsql_url()
-            return self
-
-        raise ValueError(
-            "Could not resolve database connection in DB_CONNECTION_MODE=auto. "
-            "Set POSTGRES_SERVER for local/tcp or set "
-            "CLOUD_SQL_INSTANCE_CONNECTION_NAME for Cloud SQL."
+        for host in self.DATABASE_URL.hosts():
+            self._check_default_secret("DATABASE_URL password", host["password"])
+        self._check_default_secret(
+            "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
         )
+
+        return self
 
 
 settings = Settings()

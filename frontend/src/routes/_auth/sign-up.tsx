@@ -3,27 +3,23 @@ import { createFileRoute, Link as RouterLink, redirect } from '@tanstack/react-r
 import { z } from 'zod'
 
 import { AuthLayout } from '@/components/common/AuthLayout'
+import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { PasswordInput } from '@/components/ui/password-input'
 import { Spinner } from '@/components/ui/spinner'
+import { zUserRegister } from '@/lib/client'
+import { email, password, passwordConfirmation, passwordsMatch } from '@/lib/forms'
 import useAuth, { isLoggedIn } from '@/lib/hooks/useAuth'
 
-const signupSchema = z
-	.object({
-		email: z.string().email({ message: 'Please enter a valid email address' }),
-		full_name: z.string().min(1, { message: 'Full Name is required' }),
-		password: z
-			.string()
-			.min(1, { message: 'Password is required' })
-			.min(8, { message: 'Password must be at least 8 characters' }),
-		confirm_password: z.string().min(1, { message: 'Password confirmation is required' }),
+const signupSchema = zUserRegister
+	.extend({
+		email,
+		fullName: z.string().min(1, { error: 'Full Name is required' }).max(255),
+		password,
+		confirm_password: passwordConfirmation,
 	})
-	.refine((data) => data.password === data.confirm_password, {
-		message: "The passwords don't match",
-		path: ['confirm_password'],
-	})
+	.refine((data) => data.password === data.confirm_password, passwordsMatch)
 
 type SignupFormValues = z.infer<typeof signupSchema>
 
@@ -45,7 +41,7 @@ function SignUp() {
 	const form = useForm({
 		defaultValues: {
 			email: '',
-			full_name: '',
+			fullName: '',
 			password: '',
 			confirm_password: '',
 		} as SignupFormValues,
@@ -55,7 +51,7 @@ function SignUp() {
 		onSubmit: async ({ value }) => {
 			if (signUpMutation.isPending) return
 			const { confirm_password: _, ...submitData } = value
-			signUpMutation.mutate(submitData)
+			signUpMutation.mutate({ body: submitData })
 		},
 	})
 
@@ -65,7 +61,7 @@ function SignUp() {
 				onSubmit={(e) => {
 					e.preventDefault()
 					e.stopPropagation()
-					form.handleSubmit()
+					void form.handleSubmit()
 				}}
 				className='flex flex-col gap-6'
 			>
@@ -74,7 +70,7 @@ function SignUp() {
 				</div>
 
 				<div className='grid gap-4'>
-					<form.Field name='full_name'>
+					<form.Field name='fullName'>
 						{(field) => (
 							<Field>
 								<FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
@@ -188,5 +184,3 @@ function SignUp() {
 		</AuthLayout>
 	)
 }
-
-export default SignUp

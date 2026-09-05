@@ -1,6 +1,7 @@
+import { PlusSignIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { z } from 'zod'
 
@@ -18,13 +19,17 @@ import {
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { type ItemCreate, ItemsService } from '@/lib/client'
+import {
+	type ItemCreate,
+	itemsCreateItemMutation,
+	itemsReadItemsQueryKey,
+	zItemCreate,
+} from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
 import useCustomToast from '@/lib/hooks/useCustomToast'
 
-const formSchema = z.object({
-	title: z.string().min(1, { message: 'Title is required' }),
-	description: z.string().optional(),
+const formSchema = zItemCreate.extend({
+	title: z.string().min(1, { error: 'Title is required' }).max(255),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -43,12 +48,12 @@ const AddItem = () => {
 			onChange: formSchema,
 		},
 		onSubmit: async ({ value }) => {
-			mutation.mutate(value as ItemCreate)
+			mutation.mutate({ body: value as ItemCreate })
 		},
 	})
 
 	const mutation = useMutation({
-		mutationFn: (data: ItemCreate) => ItemsService.itemsCreateItem({ body: data }),
+		...itemsCreateItemMutation(),
 		onSuccess: () => {
 			showSuccessToast('Item created successfully')
 			form.reset()
@@ -56,14 +61,14 @@ const AddItem = () => {
 		},
 		onError: handleError.bind(showErrorToast),
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ['items'] })
+			void queryClient.invalidateQueries({ queryKey: itemsReadItemsQueryKey() })
 		},
 	})
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger render={<Button className='my-4' />}>
-				<Plus className='mr-2' />
+				<HugeiconsIcon icon={PlusSignIcon} className='mr-2' />
 				Add Item
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-md'>
@@ -75,7 +80,7 @@ const AddItem = () => {
 					onSubmit={(e) => {
 						e.preventDefault()
 						e.stopPropagation()
-						form.handleSubmit()
+						void form.handleSubmit()
 					}}
 				>
 					<div className='grid gap-4 py-4'>

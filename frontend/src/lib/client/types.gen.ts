@@ -5,499 +5,57 @@ export type ClientOptions = {
 }
 
 /**
- * AcademicIndicatorCreate
+ * AssessmentPublic
+ *
+ * A test, described for one administration year.
  */
-export type AcademicIndicatorCreate = {
+export type AssessmentPublic = {
 	/**
-	 * Cds
+	 * Testid
 	 */
-	cds: string
+	testId: number
 	/**
-	 * Rtype
+	 * Code
 	 */
-	rtype: string
+	code: string
+	program: Program
 	/**
-	 * Schoolname
+	 * Testtype
 	 */
-	schoolname?: string | null
+	testType: string
 	/**
-	 * Districtname
+	 * Name
 	 */
-	districtname?: string | null
+	name: string
 	/**
-	 * Countyname
+	 * Shortname
 	 */
-	countyname?: string | null
+	shortName: string
 	/**
-	 * Charter Flag
+	 * Subject
 	 */
-	charter_flag?: string | null
+	subject: string
 	/**
-	 * Coe Flag
+	 * Isalternate
 	 */
-	coe_flag?: string | null
+	isAlternate: boolean
 	/**
-	 * Dass Flag
+	 * Sortorder
 	 */
-	dass_flag?: string | null
+	sortOrder: number
+	levelScheme: LevelSchemePublic
 	/**
-	 * Studentgroup
+	 * Subscores
 	 */
-	studentgroup: string
+	subscores: Array<SubscorePublic>
 	/**
-	 * Priordenom
+	 * Grades
 	 */
-	priordenom?: number | null
+	grades: Array<string>
 	/**
-	 * Priorstatus
+	 * Gradesnote
 	 */
-	priorstatus?: number | null
-	/**
-	 * Change
-	 */
-	change?: number | null
-	/**
-	 * Statuslevel
-	 */
-	statuslevel?: number | null
-	/**
-	 * Changelevel
-	 */
-	changelevel?: number | null
-	/**
-	 * Color
-	 */
-	color?: number | null
-	/**
-	 * Box
-	 */
-	box?: number | null
-	/**
-	 * Priornsizemet
-	 */
-	priornsizemet?: string | null
-	/**
-	 * Accountabilitymet
-	 */
-	accountabilitymet?: string | null
-	/**
-	 * Hscutpoints
-	 */
-	hscutpoints?: string | null
-	/**
-	 * Pairshare Method
-	 */
-	pairshare_method?: string | null
-	/**
-	 * Priorprate Enrolled
-	 */
-	priorprate_enrolled?: number | null
-	/**
-	 * Priorprate Tested
-	 */
-	priorprate_tested?: number | null
-	/**
-	 * Priorprate
-	 */
-	priorprate?: number | null
-	/**
-	 * Priornumprloss
-	 */
-	priornumprloss?: number | null
-	/**
-	 * Priordenom Withoutprloss
-	 */
-	priordenom_withoutprloss?: number | null
-	/**
-	 * Priorstatus Withoutprloss
-	 */
-	priorstatus_withoutprloss?: number | null
-	/**
-	 * Indicator
-	 */
-	indicator?: string
-	/**
-	 * Reportingyear
-	 */
-	reportingyear: string
-	/**
-	 * Priornumer
-	 */
-	priornumer?: number | null
-	/**
-	 * Smalldenom
-	 */
-	smalldenom?: string | null
-	/**
-	 * Priorcertifyflag
-	 */
-	priorcertifyflag?: string | null
-	/**
-	 * Dataerrorflag
-	 */
-	dataerrorflag?: string | null
-	/**
-	 * School Type
-	 */
-	school_type?: string | null
-	/**
-	 * Fiveyrnumer
-	 */
-	fiveyrnumer?: number | null
-	/**
-	 * Priorprogressed
-	 */
-	priorprogressed?: number | null
-	/**
-	 * Priormaintainpl4
-	 */
-	priormaintainpl4?: number | null
-	/**
-	 * Priormaintainoth
-	 */
-	priormaintainoth?: number | null
-	/**
-	 * Priordeclined
-	 */
-	priordeclined?: number | null
-	/**
-	 * Priorprogressed Alternate
-	 */
-	priorprogressed_alternate?: number | null
-	/**
-	 * Priormaintainpl3 Alternate
-	 */
-	priormaintainpl3_alternate?: number | null
-	/**
-	 * Priornotprognotmain Alternate
-	 */
-	priornotprognotmain_alternate?: number | null
-	/**
-	 * Prior95
-	 */
-	prior95?: number | null
-	/**
-	 * Studentgroup Pct
-	 */
-	studentgroup_pct?: number | null
-}
-
-/**
- * AcademicIndicatorPublic
- */
-export type AcademicIndicatorPublic = {
-	/**
-	 * Cds
-	 */
-	cds: string
-	/**
-	 * Rtype
-	 */
-	rtype: string
-	/**
-	 * Schoolname
-	 */
-	schoolname?: string | null
-	/**
-	 * Districtname
-	 */
-	districtname?: string | null
-	/**
-	 * Countyname
-	 */
-	countyname?: string | null
-	/**
-	 * Charter Flag
-	 */
-	charter_flag?: string | null
-	/**
-	 * Coe Flag
-	 */
-	coe_flag?: string | null
-	/**
-	 * Dass Flag
-	 */
-	dass_flag?: string | null
-	/**
-	 * Studentgroup
-	 */
-	studentgroup: string
-	/**
-	 * Priordenom
-	 */
-	priordenom?: number | null
-	/**
-	 * Priorstatus
-	 */
-	priorstatus?: number | null
-	/**
-	 * Change
-	 */
-	change?: number | null
-	/**
-	 * Statuslevel
-	 */
-	statuslevel?: number | null
-	/**
-	 * Changelevel
-	 */
-	changelevel?: number | null
-	/**
-	 * Color
-	 */
-	color?: number | null
-	/**
-	 * Box
-	 */
-	box?: number | null
-	/**
-	 * Priornsizemet
-	 */
-	priornsizemet?: string | null
-	/**
-	 * Accountabilitymet
-	 */
-	accountabilitymet?: string | null
-	/**
-	 * Hscutpoints
-	 */
-	hscutpoints?: string | null
-	/**
-	 * Pairshare Method
-	 */
-	pairshare_method?: string | null
-	/**
-	 * Priorprate Enrolled
-	 */
-	priorprate_enrolled?: number | null
-	/**
-	 * Priorprate Tested
-	 */
-	priorprate_tested?: number | null
-	/**
-	 * Priorprate
-	 */
-	priorprate?: number | null
-	/**
-	 * Priornumprloss
-	 */
-	priornumprloss?: number | null
-	/**
-	 * Priordenom Withoutprloss
-	 */
-	priordenom_withoutprloss?: number | null
-	/**
-	 * Priorstatus Withoutprloss
-	 */
-	priorstatus_withoutprloss?: number | null
-	/**
-	 * Indicator
-	 */
-	indicator?: string
-	/**
-	 * Reportingyear
-	 */
-	reportingyear: string
-	/**
-	 * Priornumer
-	 */
-	priornumer?: number | null
-	/**
-	 * Smalldenom
-	 */
-	smalldenom?: string | null
-	/**
-	 * Priorcertifyflag
-	 */
-	priorcertifyflag?: string | null
-	/**
-	 * Dataerrorflag
-	 */
-	dataerrorflag?: string | null
-	/**
-	 * School Type
-	 */
-	school_type?: string | null
-	/**
-	 * Fiveyrnumer
-	 */
-	fiveyrnumer?: number | null
-	/**
-	 * Priorprogressed
-	 */
-	priorprogressed?: number | null
-	/**
-	 * Priormaintainpl4
-	 */
-	priormaintainpl4?: number | null
-	/**
-	 * Priormaintainoth
-	 */
-	priormaintainoth?: number | null
-	/**
-	 * Priordeclined
-	 */
-	priordeclined?: number | null
-	/**
-	 * Priorprogressed Alternate
-	 */
-	priorprogressed_alternate?: number | null
-	/**
-	 * Priormaintainpl3 Alternate
-	 */
-	priormaintainpl3_alternate?: number | null
-	/**
-	 * Priornotprognotmain Alternate
-	 */
-	priornotprognotmain_alternate?: number | null
-	/**
-	 * Prior95
-	 */
-	prior95?: number | null
-	/**
-	 * Studentgroup Pct
-	 */
-	studentgroup_pct?: number | null
-	/**
-	 * Id
-	 */
-	id: string
-	/**
-	 * Created At
-	 */
-	created_at?: string | null
-}
-
-/**
- * AcademicIndicatorUpdate
- */
-export type AcademicIndicatorUpdate = {
-	/**
-	 * Cds
-	 */
-	cds?: string | null
-	/**
-	 * Rtype
-	 */
-	rtype?: string | null
-	/**
-	 * Schoolname
-	 */
-	schoolname?: string | null
-	/**
-	 * Districtname
-	 */
-	districtname?: string | null
-	/**
-	 * Countyname
-	 */
-	countyname?: string | null
-	/**
-	 * Charter Flag
-	 */
-	charter_flag?: string | null
-	/**
-	 * Coe Flag
-	 */
-	coe_flag?: string | null
-	/**
-	 * Dass Flag
-	 */
-	dass_flag?: string | null
-	/**
-	 * Studentgroup
-	 */
-	studentgroup?: string | null
-	/**
-	 * Priordenom
-	 */
-	priordenom?: number | null
-	/**
-	 * Priorstatus
-	 */
-	priorstatus?: number | null
-	/**
-	 * Change
-	 */
-	change?: number | null
-	/**
-	 * Statuslevel
-	 */
-	statuslevel?: number | null
-	/**
-	 * Changelevel
-	 */
-	changelevel?: number | null
-	/**
-	 * Color
-	 */
-	color?: number | null
-	/**
-	 * Box
-	 */
-	box?: number | null
-	/**
-	 * Priornsizemet
-	 */
-	priornsizemet?: string | null
-	/**
-	 * Accountabilitymet
-	 */
-	accountabilitymet?: string | null
-	/**
-	 * Hscutpoints
-	 */
-	hscutpoints?: string | null
-	/**
-	 * Pairshare Method
-	 */
-	pairshare_method?: string | null
-	/**
-	 * Priorprate Enrolled
-	 */
-	priorprate_enrolled?: number | null
-	/**
-	 * Priorprate Tested
-	 */
-	priorprate_tested?: number | null
-	/**
-	 * Priorprate
-	 */
-	priorprate?: number | null
-	/**
-	 * Priornumprloss
-	 */
-	priornumprloss?: number | null
-	/**
-	 * Priordenom Withoutprloss
-	 */
-	priordenom_withoutprloss?: number | null
-	/**
-	 * Priorstatus Withoutprloss
-	 */
-	priorstatus_withoutprloss?: number | null
-	/**
-	 * Indicator
-	 */
-	indicator?: string | null
-	/**
-	 * Reportingyear
-	 */
-	reportingyear?: string | null
-}
-
-/**
- * AcademicIndicatorsPublic
- */
-export type AcademicIndicatorsPublic = {
-	/**
-	 * Data
-	 */
-	data: Array<AcademicIndicatorPublic>
-	/**
-	 * Count
-	 */
-	count: number
+	gradesNote?: string | null
 }
 
 /**
@@ -531,269 +89,445 @@ export type BodyLoginLoginAccessToken = {
 }
 
 /**
- * CensusData
+ * Catalog
  *
- * A simple CensusData model following the same pattern as User.
+ * Everything a client needs to build the report controls.
+ */
+export type Catalog = {
+	/**
+	 * Testyear
+	 */
+	testYear: number
+	/**
+	 * Years
+	 */
+	years: Array<number>
+	/**
+	 * Assessments
+	 */
+	assessments: Array<AssessmentPublic>
+	/**
+	 * Studentgroups
+	 */
+	studentGroups: Array<StudentGroupPublic>
+	/**
+	 * Grades
+	 */
+	grades: Array<GradePublic>
+}
+
+/**
+ * CensusData
  */
 export type CensusData = {
 	/**
-	 * Academic Year
+	 * Academicyear
 	 */
-	academic_year: number
+	academicYear: number
 	/**
-	 * Aggregation Level
+	 * Aggregationlevel
 	 */
-	aggregation_level: string
+	aggregationLevel: string
 	/**
-	 * County Code
+	 * Cdscode
 	 */
-	county_code: string
-	/**
-	 * District Code
-	 */
-	district_code: string
-	/**
-	 * School Code
-	 */
-	school_code: string
-	/**
-	 * County Name
-	 */
-	county_name: string
-	/**
-	 * District Name
-	 */
-	district_name: string
-	/**
-	 * School Name
-	 */
-	school_name: string
+	cdsCode: string
 	/**
 	 * Charter
 	 */
-	charter: string
+	charter?: string | null
 	/**
-	 * Reporting Category
+	 * Reportingcategory
 	 */
-	reporting_category: string
+	reportingCategory: string
 	/**
-	 * Total Enr
+	 * Totalenr
 	 */
-	total_enr?: number
+	totalEnr?: number
 	/**
-	 * Gr Tk
+	 * Grtk
 	 */
-	gr_tk?: number
+	grTk?: number
 	/**
-	 * Gr Kn
+	 * Grkn
 	 */
-	gr_kn?: number
+	grKn?: number
 	/**
-	 * Gr 1
+	 * Gr1
 	 */
-	gr_1?: number
+	gr1?: number
 	/**
-	 * Gr 2
+	 * Gr2
 	 */
-	gr_2?: number
+	gr2?: number
 	/**
-	 * Gr 3
+	 * Gr3
 	 */
-	gr_3?: number
+	gr3?: number
 	/**
-	 * Gr 4
+	 * Gr4
 	 */
-	gr_4?: number
+	gr4?: number
 	/**
-	 * Gr 5
+	 * Gr5
 	 */
-	gr_5?: number
+	gr5?: number
 	/**
-	 * Gr 6
+	 * Gr6
 	 */
-	gr_6?: number
+	gr6?: number
 	/**
-	 * Gr 7
+	 * Gr7
 	 */
-	gr_7?: number
+	gr7?: number
 	/**
-	 * Gr 8
+	 * Gr8
 	 */
-	gr_8?: number
+	gr8?: number
 	/**
-	 * Gr 9
+	 * Gr9
 	 */
-	gr_9?: number
+	gr9?: number
 	/**
-	 * Gr 10
+	 * Gr10
 	 */
-	gr_10?: number
+	gr10?: number
 	/**
-	 * Gr 11
+	 * Gr11
 	 */
-	gr_11?: number
+	gr11?: number
 	/**
-	 * Gr 12
+	 * Gr12
 	 */
-	gr_12?: number
+	gr12?: number
 	/**
-	 * Census Data Id
+	 * Id
 	 */
-	census_data_id?: string
+	id?: string
 }
 
 /**
- * DashboardAggregation
+ * CharterFunding
  *
- * Dashboard aggregation response model (legacy single-indicator)
+ * How a charter school is funded, per the entity ``Type ID``.
  */
-export type DashboardAggregation = {
+export type CharterFunding = 'direct' | 'local'
+
+/**
+ * ChildEntityReport
+ */
+export type ChildEntityReport = {
+	entity: EntityPublic
 	/**
-	 * Cds
+	 * Testyear
 	 */
-	cds: string
+	testYear: number
 	/**
-	 * Schoolname
+	 * Testid
 	 */
-	schoolname?: string | null
+	testId: number
 	/**
-	 * Districtname
+	 * Studentgroupid
 	 */
-	districtname?: string | null
+	studentGroupId: number
 	/**
-	 * Countyname
+	 * Grade
 	 */
-	countyname?: string | null
+	grade: string
+	childLevel: EntityLevel
 	/**
-	 * Studentgroup
+	 * Count
 	 */
-	studentgroup: string
+	count: number
 	/**
-	 * Currstatus
+	 * Data
 	 */
-	currstatus?: number | null
-	/**
-	 * Priorstatus
-	 */
-	priorstatus?: number | null
-	/**
-	 * Change
-	 */
-	change?: number | null
-	/**
-	 * Statuslevel
-	 */
-	statuslevel?: number | null
-	/**
-	 * Changelevel
-	 */
-	changelevel?: number | null
-	/**
-	 * Color
-	 */
-	color?: number | null
-	/**
-	 * Indicator
-	 */
-	indicator: string
-	/**
-	 * Reportingyear
-	 */
-	reportingyear: string
+	data: Array<ChildEntityResult>
 }
 
 /**
- * DashboardSummaryResponse
+ * ChildEntityResult
  *
- * Response containing all indicators for a school/district/state.
+ * One county, district or school inside the requested entity.
  */
-export type DashboardSummaryResponse = {
+export type ChildEntityResult = {
+	entity: EntityPublic
 	/**
-	 * Cds
+	 * Studentstested
 	 */
-	cds: string
+	studentsTested?: number | null
 	/**
-	 * Rtype
+	 * Meanscalescore
 	 */
-	rtype: string
+	meanScaleScore?: string | null
 	/**
-	 * Schoolname
+	 * Metorabovepct
 	 */
-	schoolname?: string | null
+	metOrAbovePct?: string | null
 	/**
-	 * Districtname
+	 * Suppressed
 	 */
-	districtname?: string | null
-	/**
-	 * Countyname
-	 */
-	countyname?: string | null
-	/**
-	 * Charter Flag
-	 */
-	charter_flag?: string | null
+	suppressed?: boolean
+}
+
+/**
+ * ChildIndicatorReport
+ *
+ * The entities inside a district or county, ranked on one indicator.
+ */
+export type ChildIndicatorReport = {
+	entity: EntityPublic
 	/**
 	 * Reportingyear
 	 */
-	reportingyear: string
+	reportingYear: number
+	/**
+	 * Indicatorcode
+	 */
+	indicatorCode: string
+	/**
+	 * Studentgroupcode
+	 */
+	studentGroupCode: string
+	/**
+	 * Children
+	 */
+	children: Array<ChildIndicatorResult>
+	/**
+	 * Count
+	 */
+	count: number
+}
+
+/**
+ * ChildIndicatorResult
+ *
+ * One child entity's result, for ranking within a district or county.
+ */
+export type ChildIndicatorResult = {
+	entity: EntityPublic
+	result: IndicatorResult
+}
+
+/**
+ * CompareReport
+ *
+ * Side-by-side results for an explicit list of entities.
+ */
+export type CompareReport = {
+	/**
+	 * Testyear
+	 */
+	testYear: number
+	/**
+	 * Testid
+	 */
+	testId: number
+	/**
+	 * Studentgroupid
+	 */
+	studentGroupId: number
+	/**
+	 * Grade
+	 */
+	grade: string
+	/**
+	 * Entries
+	 */
+	entries: Array<EntityResults>
+}
+
+/**
+ * DashboardCatalog
+ *
+ * Everything needed to populate the accountability filters.
+ */
+export type DashboardCatalog = {
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
+	/**
+	 * Years
+	 */
+	years: Array<number>
 	/**
 	 * Indicators
 	 */
-	indicators: Array<IndicatorSummary>
+	indicators: Array<IndicatorPublic>
+	/**
+	 * Studentgroups
+	 */
+	studentGroups: Array<StudentGroupCodePublic>
+	/**
+	 * Colors
+	 */
+	colors?: {
+		[key: string]: string
+	}
 }
 
 /**
- * EquityGroupSummary
+ * EnrollmentGroupPublic
  *
- * Summary of a student group for the equity report.
+ * One student group's share of an entity's enrolment.
  */
-export type EquityGroupSummary = {
+export type EnrollmentGroupPublic = {
 	/**
-	 * Studentgroup
+	 * Studentgroupcode
 	 */
-	studentgroup: string
+	studentGroupCode: string
 	/**
-	 * Statuslevel
+	 * Name
 	 */
-	statuslevel?: number | null
+	name: string
 	/**
-	 * Color
+	 * Subgrouptotal
 	 */
-	color?: number | null
+	subgroupTotal?: number | null
 	/**
-	 * Currdenom
+	 * Rate
 	 */
-	currdenom?: number | null
+	rate?: string | null
 }
 
 /**
- * EquityReportResponse
+ * EnrollmentReport
  *
- * Response containing student group breakdown for an indicator.
+ * Who attends, on the state's Census Day count.
+ *
+ * Census Day is the first Wednesday in October, so this is a snapshot rather
+ * than an average over the year.  Groups overlap -- a student can be counted
+ * as Hispanic, an English learner and socioeconomically disadvantaged -- so
+ * the rates do not sum to 100.
  */
-export type EquityReportResponse = {
-	/**
-	 * Cds
-	 */
-	cds: string
-	/**
-	 * Indicator
-	 */
-	indicator: string
+export type EnrollmentReport = {
+	entity: EntityPublic
 	/**
 	 * Reportingyear
 	 */
-	reportingyear: string
+	reportingYear: number
 	/**
-	 * Color Counts
+	 * Totalenrollment
 	 */
-	color_counts: {
-		[key: string]: number
-	}
+	totalEnrollment?: number | null
 	/**
 	 * Groups
 	 */
-	groups: Array<EquityGroupSummary>
+	groups: Array<EnrollmentGroupPublic>
+	/**
+	 * Availableyears
+	 */
+	availableYears: Array<number>
+}
+
+/**
+ * EntityAncestry
+ *
+ * An entity together with the entities it rolls up into.
+ */
+export type EntityAncestry = {
+	entity: EntityPublic
+	/**
+	 * Ancestors
+	 */
+	ancestors: Array<EntityPublic>
+}
+
+/**
+ * EntityLevel
+ *
+ * Reporting level of an entity in a research file.
+ */
+export type EntityLevel = 'state' | 'county' | 'district' | 'school'
+
+/**
+ * EntityList
+ */
+export type EntityList = {
+	/**
+	 * Data
+	 */
+	data: Array<EntityPublic>
+	/**
+	 * Count
+	 */
+	count: number
+}
+
+/**
+ * EntityPublic
+ *
+ * An entity as the API presents it.
+ */
+export type EntityPublic = {
+	/**
+	 * Cdscode
+	 */
+	cdsCode: string
+	/**
+	 * Displayname
+	 */
+	displayName: string
+	entityLevel: EntityLevel
+	/**
+	 * Countycode
+	 */
+	countyCode: string
+	/**
+	 * Districtcode
+	 */
+	districtCode: string
+	/**
+	 * Schoolcode
+	 */
+	schoolCode: string
+	/**
+	 * Countyname
+	 */
+	countyName?: string | null
+	/**
+	 * Districtname
+	 */
+	districtName?: string | null
+	/**
+	 * Schoolname
+	 */
+	schoolName?: string | null
+	/**
+	 * Zipcode
+	 */
+	zipCode?: string | null
+	/**
+	 * Ischarter
+	 */
+	isCharter?: boolean
+	charterFunding?: CharterFunding | null
+	/**
+	 * Parentcdscode
+	 */
+	parentCdsCode?: string | null
+	/**
+	 * Firsttestyear
+	 */
+	firstTestYear?: number | null
+	/**
+	 * Lasttestyear
+	 */
+	lastTestYear?: number | null
+}
+
+/**
+ * EntityResults
+ *
+ * An entity's results for one or more tests.
+ */
+export type EntityResults = {
+	entity: EntityPublic
+	/**
+	 * Results
+	 */
+	results: Array<ResultSummary>
 }
 
 /**
@@ -805,9 +539,171 @@ export type ForcePasswordResetRequest = {
 	 */
 	emails?: Array<string>
 	/**
-	 * Include All Active Users
+	 * Includeallactiveusers
 	 */
-	include_all_active_users?: boolean
+	includeAllActiveUsers?: boolean
+}
+
+/**
+ * GradePublic
+ */
+export type GradePublic = {
+	/**
+	 * Code
+	 */
+	code: string
+	/**
+	 * Label
+	 */
+	label: string
+	/**
+	 * Sortorder
+	 */
+	sortOrder: number
+	/**
+	 * Isaggregate
+	 */
+	isAggregate: boolean
+}
+
+/**
+ * GradeReport
+ */
+export type GradeReport = {
+	entity: EntityPublic
+	/**
+	 * Testyear
+	 */
+	testYear: number
+	/**
+	 * Testid
+	 */
+	testId: number
+	/**
+	 * Studentgroupid
+	 */
+	studentGroupId: number
+	/**
+	 * Grades
+	 */
+	grades: Array<GradeResult>
+}
+
+/**
+ * GradeResult
+ *
+ * One grade's result, for the by-grade report.
+ */
+export type GradeResult = {
+	/**
+	 * Grade
+	 */
+	grade: string
+	/**
+	 * Label
+	 */
+	label: string
+	/**
+	 * Sortorder
+	 */
+	sortOrder: number
+	/**
+	 * Studentstested
+	 */
+	studentsTested?: number | null
+	/**
+	 * Meanscalescore
+	 */
+	meanScaleScore?: string | null
+	/**
+	 * Metorabovepct
+	 */
+	metOrAbovePct?: string | null
+	/**
+	 * Suppressed
+	 */
+	suppressed?: boolean
+	/**
+	 * Levels
+	 */
+	levels: Array<LevelResult>
+}
+
+/**
+ * GrowthReport
+ *
+ * Growth in ELA and mathematics for one entity and year.
+ *
+ * Growth is published for information only: the State Board adopted it in
+ * July 2025 and it is not used for Local Control Funding Formula
+ * eligibility.  ``isInformational`` is always true and clients must say so.
+ */
+export type GrowthReport = {
+	entity: EntityPublic
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
+	/**
+	 * Studentgroupcode
+	 */
+	studentGroupCode: string
+	/**
+	 * Results
+	 */
+	results: Array<GrowthResultPublic>
+	/**
+	 * Availableyears
+	 */
+	availableYears: Array<number>
+	/**
+	 * Isinformational
+	 */
+	isInformational?: boolean
+}
+
+/**
+ * GrowthResultPublic
+ *
+ * One subject's growth figure for one entity.
+ */
+export type GrowthResultPublic = {
+	/**
+	 * Subject
+	 */
+	subject: string
+	/**
+	 * Denominator
+	 */
+	denominator?: number | null
+	/**
+	 * Growth
+	 */
+	growth?: string | null
+	/**
+	 * Estimatemethod
+	 */
+	estimateMethod?: string | null
+	/**
+	 * Estimatemethodname
+	 */
+	estimateMethodName?: string | null
+	/**
+	 * Performancecategory
+	 */
+	performanceCategory?: number | null
+	/**
+	 * Performancecategoryname
+	 */
+	performanceCategoryName?: string | null
+	/**
+	 * Numberimproved
+	 */
+	numberImproved?: number | null
+	/**
+	 * Percentimproved
+	 */
+	percentImproved?: string | null
 }
 
 /**
@@ -821,50 +717,463 @@ export type HttpValidationError = {
 }
 
 /**
- * IndicatorSummary
+ * IndicatorGroupReport
  *
- * New dashboard summary response models
- * Summary of a single indicator for the dashboard.
+ * One indicator, broken out by student group.
  */
-export type IndicatorSummary = {
+export type IndicatorGroupReport = {
+	entity: EntityPublic
 	/**
-	 * Indicator
+	 * Reportingyear
 	 */
-	indicator: string
+	reportingYear: number
+	/**
+	 * Indicatorcode
+	 */
+	indicatorCode: string
+	/**
+	 * Indicatorname
+	 */
+	indicatorName: string
+	allStudents?: IndicatorResult | null
+	/**
+	 * Groups
+	 */
+	groups: Array<IndicatorResult>
+}
+
+/**
+ * IndicatorProjection
+ *
+ * A provisional figure for a year the state has not published.
+ *
+ * It travels attached to the last published result rather than standing on
+ * its own, because there is no Dashboard for the year it covers: the state
+ * has not released one.  ``basis`` says how it was worked out and belongs
+ * next to it wherever it is shown.
+ */
+export type IndicatorProjection = {
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
 	/**
 	 * Currstatus
 	 */
-	currstatus?: number | null
-	/**
-	 * Priorstatus
-	 */
-	priorstatus?: number | null
+	currStatus?: string | null
 	/**
 	 * Change
 	 */
-	change?: number | null
+	change?: string | null
 	/**
 	 * Statuslevel
 	 */
-	statuslevel?: number | null
+	statusLevel?: number | null
 	/**
 	 * Changelevel
 	 */
-	changelevel?: number | null
+	changeLevel?: number | null
 	/**
 	 * Color
 	 */
 	color?: number | null
 	/**
-	 * Currdenom
+	 * Colorname
 	 */
-	currdenom?: number | null
+	colorName?: string | null
+	/**
+	 * Basis
+	 */
+	basis?: string | null
 }
 
 /**
- * ItemCreate
+ * IndicatorPublic
  *
- * Properties to receive on item creation
+ * One of the seven state indicators.
+ */
+export type IndicatorPublic = {
+	/**
+	 * Code
+	 */
+	code: string
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Shortname
+	 */
+	shortName: string
+	/**
+	 * Lowerisbetter
+	 */
+	lowerIsBetter: boolean
+	/**
+	 * Unit
+	 */
+	unit: string
+	/**
+	 * Sortorder
+	 */
+	sortOrder: number
+	/**
+	 * Isinformational
+	 */
+	isInformational?: boolean
+}
+
+/**
+ * IndicatorReport
+ *
+ * Every indicator for one entity and year.
+ */
+export type IndicatorReport = {
+	entity: EntityPublic
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
+	/**
+	 * Studentgroupcode
+	 */
+	studentGroupCode: string
+	/**
+	 * Results
+	 */
+	results: Array<IndicatorResult>
+	/**
+	 * Availableyears
+	 */
+	availableYears: Array<number>
+	/**
+	 * Includesprojections
+	 */
+	includesProjections?: boolean
+	/**
+	 * Projectionyear
+	 */
+	projectionYear?: number | null
+}
+
+/**
+ * IndicatorResult
+ *
+ * One indicator's result for one entity.
+ */
+export type IndicatorResult = {
+	/**
+	 * Indicatorcode
+	 */
+	indicatorCode: string
+	/**
+	 * Indicatorname
+	 */
+	indicatorName: string
+	/**
+	 * Studentgroupcode
+	 */
+	studentGroupCode: string
+	/**
+	 * Variant
+	 */
+	variant: string
+	/**
+	 * Currnumerator
+	 */
+	currNumerator?: number | null
+	/**
+	 * Currdenominator
+	 */
+	currDenominator?: number | null
+	/**
+	 * Currstatus
+	 */
+	currStatus?: string | null
+	/**
+	 * Priorstatus
+	 */
+	priorStatus?: string | null
+	/**
+	 * Change
+	 */
+	change?: string | null
+	/**
+	 * Statuslevel
+	 */
+	statusLevel?: number | null
+	/**
+	 * Statuslabel
+	 */
+	statusLabel?: string | null
+	/**
+	 * Changelevel
+	 */
+	changeLevel?: number | null
+	/**
+	 * Changelabel
+	 */
+	changeLabel?: string | null
+	/**
+	 * Color
+	 */
+	color?: number | null
+	/**
+	 * Colorname
+	 */
+	colorName?: string | null
+	/**
+	 * Box
+	 */
+	box?: number | null
+	/**
+	 * Accountabilitymet
+	 */
+	accountabilityMet?: boolean
+	/**
+	 * Smalldenominator
+	 */
+	smallDenominator?: boolean
+	/**
+	 * Dassflag
+	 */
+	dassFlag?: boolean
+	/**
+	 * Isprojected
+	 */
+	isProjected?: boolean
+	/**
+	 * Projectionbasis
+	 */
+	projectionBasis?: string | null
+	projection?: IndicatorProjection | null
+}
+
+/**
+ * IndicatorTrendPoint
+ *
+ * One year of an indicator's history.
+ */
+export type IndicatorTrendPoint = {
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
+	/**
+	 * Currstatus
+	 */
+	currStatus?: string | null
+	/**
+	 * Change
+	 */
+	change?: string | null
+	/**
+	 * Statuslevel
+	 */
+	statusLevel?: number | null
+	/**
+	 * Changelevel
+	 */
+	changeLevel?: number | null
+	/**
+	 * Color
+	 */
+	color?: number | null
+	/**
+	 * Colorname
+	 */
+	colorName?: string | null
+	/**
+	 * Isprojected
+	 */
+	isProjected?: boolean
+}
+
+/**
+ * IndicatorTrendReport
+ *
+ * One indicator over time for one entity.
+ */
+export type IndicatorTrendReport = {
+	entity: EntityPublic
+	/**
+	 * Indicatorcode
+	 */
+	indicatorCode: string
+	/**
+	 * Indicatorname
+	 */
+	indicatorName: string
+	/**
+	 * Studentgroupcode
+	 */
+	studentGroupCode: string
+	/**
+	 * Points
+	 */
+	points: Array<IndicatorTrendPoint>
+	/**
+	 * Missingyears
+	 */
+	missingYears: Array<number>
+}
+
+/**
+ * IngestFilePublic
+ *
+ * The outcome of one file within a run.
+ */
+export type IngestFilePublic = {
+	/**
+	 * Sourcekey
+	 */
+	sourceKey: string
+	/**
+	 * Program
+	 */
+	program?: string | null
+	/**
+	 * Testtype
+	 */
+	testType?: string | null
+	/**
+	 * Testyear
+	 */
+	testYear?: number | null
+	status: IngestStatus
+	/**
+	 * Resultrows
+	 */
+	resultRows: number
+	/**
+	 * Subscorerows
+	 */
+	subscoreRows: number
+	/**
+	 * Durationseconds
+	 */
+	durationSeconds?: number | null
+	/**
+	 * Error
+	 */
+	error?: string | null
+	/**
+	 * Loadedat
+	 */
+	loadedAt?: string | null
+}
+
+/**
+ * IngestRequest
+ *
+ * What to import.
+ */
+export type IngestRequest = {
+	/**
+	 * Sourceuri
+	 */
+	sourceUri?: string | null
+	/**
+	 * Force
+	 */
+	force?: boolean
+	/**
+	 * Only
+	 */
+	only?: Array<string> | null
+	/**
+	 * Years
+	 */
+	years?: Array<number> | null
+}
+
+/**
+ * IngestRunDetail
+ *
+ * A run together with every file it touched.
+ */
+export type IngestRunDetail = {
+	run: IngestRunPublic
+	/**
+	 * Files
+	 */
+	files: Array<IngestFilePublic>
+}
+
+/**
+ * IngestRunList
+ *
+ * A page of import runs.
+ */
+export type IngestRunList = {
+	/**
+	 * Data
+	 */
+	data: Array<IngestRunPublic>
+	/**
+	 * Count
+	 */
+	count: number
+}
+
+/**
+ * IngestRunPublic
+ *
+ * One import run.
+ */
+export type IngestRunPublic = {
+	/**
+	 * Id
+	 */
+	id: string
+	/**
+	 * Sourceuri
+	 */
+	sourceUri: string
+	status: IngestStatus
+	/**
+	 * Startedat
+	 */
+	startedAt: string
+	/**
+	 * Finishedat
+	 */
+	finishedAt?: string | null
+	/**
+	 * Filesseen
+	 */
+	filesSeen: number
+	/**
+	 * Filesloaded
+	 */
+	filesLoaded: number
+	/**
+	 * Filesskipped
+	 */
+	filesSkipped: number
+	/**
+	 * Resultrows
+	 */
+	resultRows: number
+	/**
+	 * Subscorerows
+	 */
+	subscoreRows: number
+	/**
+	 * Error
+	 */
+	error?: string | null
+}
+
+/**
+ * IngestStatus
+ *
+ * Lifecycle of an ingest run or of one file within it.
+ */
+export type IngestStatus = 'running' | 'succeeded' | 'failed' | 'skipped'
+
+/**
+ * ItemCreate
  */
 export type ItemCreate = {
 	/**
@@ -879,8 +1188,6 @@ export type ItemCreate = {
 
 /**
  * ItemPublic
- *
- * Properties to return via API, id is always required
  */
 export type ItemPublic = {
 	/**
@@ -896,19 +1203,17 @@ export type ItemPublic = {
 	 */
 	id: string
 	/**
-	 * Owner Id
+	 * Ownerid
 	 */
-	owner_id: string
+	ownerId: string
 	/**
-	 * Created At
+	 * Createdat
 	 */
-	created_at?: string | null
+	createdAt?: string | null
 }
 
 /**
  * ItemUpdate
- *
- * Properties to receive on item update
  */
 export type ItemUpdate = {
 	/**
@@ -936,16 +1241,295 @@ export type ItemsPublic = {
 }
 
 /**
+ * LevelPublic
+ *
+ * One achievement level of a scheme.
+ */
+export type LevelPublic = {
+	/**
+	 * Levelnumber
+	 */
+	levelNumber: number
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Shortname
+	 */
+	shortName: string
+	/**
+	 * Description
+	 */
+	description?: string | null
+}
+
+/**
+ * LevelResult
+ *
+ * A labelled slice of a distribution.
+ */
+export type LevelResult = {
+	/**
+	 * Levelnumber
+	 */
+	levelNumber: number
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Shortname
+	 */
+	shortName: string
+	/**
+	 * Count
+	 */
+	count?: number | null
+	/**
+	 * Pct
+	 */
+	pct?: string | null
+}
+
+/**
+ * LevelSchemePublic
+ */
+export type LevelSchemePublic = {
+	/**
+	 * Code
+	 */
+	code: string
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Levelcount
+	 */
+	levelCount: number
+	/**
+	 * Proficientfromlevel
+	 */
+	proficientFromLevel?: number | null
+	/**
+	 * Description
+	 */
+	description?: string | null
+	/**
+	 * Levels
+	 */
+	levels: Array<LevelPublic>
+}
+
+/**
+ * LocalIndicatorCatalog
+ *
+ * Everything needed to populate the local indicator filters.
+ */
+export type LocalIndicatorCatalog = {
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
+	/**
+	 * Years
+	 */
+	years: Array<number>
+	/**
+	 * Priorities
+	 */
+	priorities: Array<PriorityPublic>
+	/**
+	 * Performancevalues
+	 */
+	performanceValues: Array<string>
+}
+
+/**
+ * LocalIndicatorDetail
+ *
+ * One priority in full, including everything the LEA wrote.
+ */
+export type LocalIndicatorDetail = {
+	/**
+	 * Prioritynumber
+	 */
+	priorityNumber: number
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Shortname
+	 */
+	shortName: string
+	/**
+	 * Description
+	 */
+	description?: string | null
+	/**
+	 * Countyofficeonly
+	 */
+	countyOfficeOnly?: boolean
+	/**
+	 * Performance
+	 */
+	performance?: string | null
+	/**
+	 * Meetingdate
+	 */
+	meetingDate?: string | null
+	/**
+	 * Additionalinfo
+	 */
+	additionalInfo?: string | null
+	/**
+	 * Ratings
+	 */
+	ratings?: {
+		[key: string]: number
+	}
+	/**
+	 * Narratives
+	 */
+	narratives?: Array<{
+		[key: string]: string
+	}>
+}
+
+/**
+ * LocalIndicatorReport
+ *
+ * Every priority for one LEA and year.
+ */
+export type LocalIndicatorReport = {
+	entity: EntityPublic
+	reportedBy: EntityPublic
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
+	/**
+	 * Priorities
+	 */
+	priorities: Array<LocalIndicatorSummary>
+	/**
+	 * Availableyears
+	 */
+	availableYears: Array<number>
+}
+
+/**
+ * LocalIndicatorSummary
+ *
+ * One priority's headline result for one LEA.
+ */
+export type LocalIndicatorSummary = {
+	/**
+	 * Prioritynumber
+	 */
+	priorityNumber: number
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Shortname
+	 */
+	shortName: string
+	/**
+	 * Countyofficeonly
+	 */
+	countyOfficeOnly?: boolean
+	/**
+	 * Performance
+	 */
+	performance?: string | null
+	/**
+	 * Meetingdate
+	 */
+	meetingDate?: string | null
+	/**
+	 * Responsecount
+	 */
+	responseCount?: number
+	/**
+	 * Hasnarrative
+	 */
+	hasNarrative?: boolean
+}
+
+/**
+ * LocalIndicatorTrendPoint
+ */
+export type LocalIndicatorTrendPoint = {
+	/**
+	 * Reportingyear
+	 */
+	reportingYear: number
+	/**
+	 * Performance
+	 */
+	performance?: string | null
+	/**
+	 * Meetingdate
+	 */
+	meetingDate?: string | null
+}
+
+/**
+ * LocalIndicatorTrendReport
+ *
+ * One priority across every year the LEA has reported.
+ */
+export type LocalIndicatorTrendReport = {
+	entity: EntityPublic
+	reportedBy: EntityPublic
+	/**
+	 * Prioritynumber
+	 */
+	priorityNumber: number
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Points
+	 */
+	points: Array<LocalIndicatorTrendPoint>
+}
+
+/**
  * Message
  *
- * Generic message
+ * A message for an API response.
  */
 export type Message = {
 	/**
 	 * Message
 	 */
 	message: string
+	/**
+	 * Success
+	 */
+	success?: boolean
+	/**
+	 * Status
+	 */
+	status?: string | null
+	/**
+	 * Code
+	 */
+	code?: string | number | null
 }
+
+/**
+ * MetOrAboveSource
+ *
+ * Where the "met or above" figure on a result row came from.
+ */
+export type MetOrAboveSource = 'published' | 'derived'
 
 /**
  * NewPassword
@@ -956,9 +1540,74 @@ export type NewPassword = {
 	 */
 	token: string
 	/**
-	 * New Password
+	 * Newpassword
 	 */
-	new_password: string
+	newPassword: string
+}
+
+/**
+ * OverviewReport
+ *
+ * The equivalent of the state's "Test Results" landing report.
+ */
+export type OverviewReport = {
+	entity: EntityPublic
+	/**
+	 * Testyear
+	 */
+	testYear: number
+	/**
+	 * Studentgroupid
+	 */
+	studentGroupId: number
+	/**
+	 * Grade
+	 */
+	grade: string
+	/**
+	 * Schooltype
+	 */
+	schoolType: string
+	/**
+	 * Results
+	 */
+	results: Array<ResultSummary>
+	/**
+	 * Comparisons
+	 */
+	comparisons: Array<EntityResults>
+}
+
+/**
+ * PriorityPublic
+ *
+ * One of the seven LCFF priorities reported as a local indicator.
+ */
+export type PriorityPublic = {
+	/**
+	 * Prioritynumber
+	 */
+	priorityNumber: number
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Shortname
+	 */
+	shortName: string
+	/**
+	 * Description
+	 */
+	description?: string | null
+	/**
+	 * Countyofficeonly
+	 */
+	countyOfficeOnly?: boolean
+	/**
+	 * Sortorder
+	 */
+	sortOrder?: number
 }
 
 /**
@@ -984,31 +1633,123 @@ export type PrivateUserCreate = {
 }
 
 /**
- * SchoolPublic
+ * Program
  *
- * Properties to return via API, id is always required
+ * The two assessment programs reported by the state's public site.
+ */
+export type Program = 'CAASPP' | 'ELPAC'
+
+/**
+ * ResultSummary
+ *
+ * One test's overall result for the requested cell.
+ *
+ * ``suppressed`` means the state withheld the figures because too few
+ * students were tested.  Values can also be absent without suppression: the
+ * mean scale score is not reported for the "all grades" aggregate, because
+ * scale scores are not comparable between grades.
+ */
+export type ResultSummary = {
+	/**
+	 * Testid
+	 */
+	testId: number
+	/**
+	 * Testcode
+	 */
+	testCode: string
+	/**
+	 * Testname
+	 */
+	testName: string
+	/**
+	 * Shortname
+	 */
+	shortName: string
+	program: Program
+	/**
+	 * Subject
+	 */
+	subject: string
+	/**
+	 * Grade
+	 */
+	grade: string
+	/**
+	 * Studentsenrolled
+	 */
+	studentsEnrolled?: number | null
+	/**
+	 * Studentstested
+	 */
+	studentsTested?: number | null
+	/**
+	 * Studentstestedwithscores
+	 */
+	studentsTestedWithScores?: number | null
+	/**
+	 * Participationrate
+	 */
+	participationRate?: string | null
+	/**
+	 * Meanscalescore
+	 */
+	meanScaleScore?: string | null
+	/**
+	 * Metorabovecount
+	 */
+	metOrAboveCount?: number | null
+	/**
+	 * Metorabovepct
+	 */
+	metOrAbovePct?: string | null
+	metOrAboveSource?: MetOrAboveSource | null
+	/**
+	 * Overalltotal
+	 */
+	overallTotal?: number | null
+	/**
+	 * Suppressed
+	 */
+	suppressed?: boolean
+	/**
+	 * Levelschemecode
+	 */
+	levelSchemeCode: string
+	/**
+	 * Levels
+	 */
+	levels: Array<LevelResult>
+	/**
+	 * Derivedfromchildren
+	 */
+	derivedFromChildren?: boolean
+}
+
+/**
+ * SchoolPublic
  */
 export type SchoolPublic = {
 	/**
-	 * Cds Code
+	 * Cdscode
 	 */
-	cds_code: string
+	cdsCode: string
 	/**
-	 * Nces Dist
+	 * Ncesdist
 	 */
-	nces_dist: string
+	ncesDist: string
 	/**
-	 * Nces School
+	 * Ncesschool
 	 */
-	nces_school: string
+	ncesSchool: string
 	/**
-	 * School Code
+	 * Schoolcode
 	 */
-	school_code: string
+	schoolCode: string
 	/**
-	 * Status Type
+	 * Statustype
 	 */
-	status_type?: string | null
+	statusType?: string | null
 	/**
 	 * County
 	 */
@@ -1026,9 +1767,9 @@ export type SchoolPublic = {
 	 */
 	street?: string | null
 	/**
-	 * Street Abr
+	 * Streetabr
 	 */
-	street_abr?: string | null
+	streetAbr?: string | null
 	/**
 	 * City
 	 */
@@ -1042,25 +1783,25 @@ export type SchoolPublic = {
 	 */
 	state?: string | null
 	/**
-	 * Mail Street
+	 * Mailstreet
 	 */
-	mail_street?: string | null
+	mailStreet?: string | null
 	/**
-	 * Mail Street Abr
+	 * Mailstreetabr
 	 */
-	mail_street_abr?: string | null
+	mailStreetAbr?: string | null
 	/**
-	 * Mail City
+	 * Mailcity
 	 */
-	mail_city?: string | null
+	mailCity?: string | null
 	/**
-	 * Mail Zip
+	 * Mailzip
 	 */
-	mail_zip?: string | null
+	mailZip?: string | null
 	/**
-	 * Mail State
+	 * Mailstate
 	 */
-	mail_state?: string | null
+	mailState?: string | null
 	/**
 	 * Phone
 	 */
@@ -1070,73 +1811,73 @@ export type SchoolPublic = {
 	 */
 	ext?: string | null
 	/**
-	 * Fax Number
+	 * Faxnumber
 	 */
-	fax_number?: string | null
+	faxNumber?: string | null
 	/**
 	 * Website
 	 */
 	website?: string | null
 	/**
-	 * Open Date
+	 * Opendate
 	 */
-	open_date?: string | null
+	openDate?: string | null
 	/**
-	 * Closed Date
+	 * Closeddate
 	 */
-	closed_date?: string | null
+	closedDate?: string | null
 	/**
 	 * Charter
 	 */
 	charter?: string | null
 	/**
-	 * Charter Num
+	 * Charternum
 	 */
-	charter_num?: string | null
+	charterNum?: string | null
 	/**
-	 * Funding Type
+	 * Fundingtype
 	 */
-	funding_type?: string | null
+	fundingType?: string | null
 	/**
 	 * Doc
 	 */
 	doc?: string | null
 	/**
-	 * Doc Type
+	 * Doctype
 	 */
-	doc_type?: string | null
+	docType?: string | null
 	/**
 	 * Soc
 	 */
 	soc?: string | null
 	/**
-	 * Soc Type
+	 * Soctype
 	 */
-	soc_type?: string | null
+	socType?: string | null
 	/**
-	 * Edops Code
+	 * Edopscode
 	 */
-	edops_code?: string | null
+	edopsCode?: string | null
 	/**
-	 * Edops Name
+	 * Edopsname
 	 */
-	edops_name?: string | null
+	edopsName?: string | null
 	/**
-	 * Eil Code
+	 * Eilcode
 	 */
-	eil_code?: string | null
+	eilCode?: string | null
 	/**
-	 * Eil Name
+	 * Eilname
 	 */
-	eil_name?: string | null
+	eilName?: string | null
 	/**
-	 * Gs Offered
+	 * Gsoffered
 	 */
-	gs_offered?: string | null
+	gsOffered?: string | null
 	/**
-	 * Gs Served
+	 * Gsserved
 	 */
-	gs_served?: string | null
+	gsServed?: string | null
 	/**
 	 * Virtual
 	 */
@@ -1146,13 +1887,13 @@ export type SchoolPublic = {
 	 */
 	magnet?: string | null
 	/**
-	 * Year Round Yn
+	 * Yearroundyn
 	 */
-	year_round_yn?: string | null
+	yearRoundYn?: string | null
 	/**
-	 * Federal Dfc District Id
+	 * Federaldfcdistrictid
 	 */
-	federal_dfc_district_id?: string | null
+	federalDfcDistrictId?: string | null
 	/**
 	 * Latitude
 	 */
@@ -1162,17 +1903,17 @@ export type SchoolPublic = {
 	 */
 	longitude?: number | null
 	/**
-	 * Adm Fname
+	 * Admfname
 	 */
-	adm_fname?: string | null
+	admFname?: string | null
 	/**
-	 * Adm Lname
+	 * Admlname
 	 */
-	adm_lname?: string | null
+	admLname?: string | null
 	/**
-	 * Last Up Date
+	 * Lastupdate
 	 */
-	last_up_date?: string | null
+	lastUpDate?: string | null
 	/**
 	 * Multilingual
 	 */
@@ -1185,8 +1926,6 @@ export type SchoolPublic = {
 
 /**
  * SchoolSummary
- *
- * Properties for a refined school view.
  */
 export type SchoolSummary = {
 	/**
@@ -1206,14 +1945,21 @@ export type SchoolSummary = {
 	 */
 	county?: string | null
 	/**
-	 * Cds Code
+	 * Cdscode
 	 */
-	cds_code?: string | null
+	cdsCode?: string | null
 	/**
-	 * School Code
+	 * Schoolcode
 	 */
-	school_code?: string | null
+	schoolCode?: string | null
 }
+
+/**
+ * SchoolType
+ *
+ * The state's charter filter on aggregate reports.
+ */
+export type SchoolType = 'all' | 'charter' | 'non-charter'
 
 /**
  * SchoolsPublic
@@ -1244,9 +1990,228 @@ export type SchoolsSummary = {
 }
 
 /**
+ * StudentGroupCodePublic
+ *
+ * A Dashboard student group.
+ *
+ * These are the state's short codes, which are not the numeric CAASPP and
+ * ELPAC group ids used by the assessment reports.
+ */
+export type StudentGroupCodePublic = {
+	/**
+	 * Code
+	 */
+	code: string
+	/**
+	 * Name
+	 */
+	name: string
+}
+
+/**
+ * StudentGroupPublic
+ */
+export type StudentGroupPublic = {
+	program: Program
+	/**
+	 * Studentgroupid
+	 */
+	studentGroupId: number
+	/**
+	 * Code
+	 */
+	code: string
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Category
+	 */
+	category: string
+	/**
+	 * Sortorder
+	 */
+	sortOrder: number
+}
+
+/**
+ * StudentGroupReport
+ */
+export type StudentGroupReport = {
+	entity: EntityPublic
+	/**
+	 * Testyear
+	 */
+	testYear: number
+	/**
+	 * Testid
+	 */
+	testId: number
+	/**
+	 * Grade
+	 */
+	grade: string
+	allStudents?: StudentGroupResult | null
+	/**
+	 * Groups
+	 */
+	groups: Array<StudentGroupResult>
+}
+
+/**
+ * StudentGroupResult
+ *
+ * One student group's result, for the student group comparison report.
+ */
+export type StudentGroupResult = {
+	/**
+	 * Studentgroupid
+	 */
+	studentGroupId: number
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Category
+	 */
+	category: string
+	/**
+	 * Sortorder
+	 */
+	sortOrder: number
+	/**
+	 * Studentsenrolled
+	 */
+	studentsEnrolled?: number | null
+	/**
+	 * Studentstested
+	 */
+	studentsTested?: number | null
+	/**
+	 * Meanscalescore
+	 */
+	meanScaleScore?: string | null
+	/**
+	 * Metorabovepct
+	 */
+	metOrAbovePct?: string | null
+	/**
+	 * Suppressed
+	 */
+	suppressed?: boolean
+	/**
+	 * Levels
+	 */
+	levels: Array<LevelResult>
+}
+
+/**
+ * SubscoreKind
+ *
+ * Kind of reported subscore.
+ *
+ * ``AREA`` and ``COMPOSITE_AREA`` are Smarter Balanced claim reporting
+ * categories; ``DOMAIN`` is used by CAST, CSA and ELPAC; ``COMPOSITE`` is an
+ * ELPAC/CSA composite that carries its own mean scale score.
+ */
+export type SubscoreKind = 'area' | 'composite_area' | 'domain' | 'composite'
+
+/**
+ * SubscorePublic
+ *
+ * An area, domain or composite a test reports in a given year.
+ */
+export type SubscorePublic = {
+	/**
+	 * Code
+	 */
+	code: string
+	kind: SubscoreKind
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Reportsmeanscalescore
+	 */
+	reportsMeanScaleScore: boolean
+	bandScheme: LevelSchemePublic
+	/**
+	 * Sortorder
+	 */
+	sortOrder: number
+}
+
+/**
+ * SubscoreReport
+ */
+export type SubscoreReport = {
+	entity: EntityPublic
+	/**
+	 * Testyear
+	 */
+	testYear: number
+	/**
+	 * Testid
+	 */
+	testId: number
+	/**
+	 * Studentgroupid
+	 */
+	studentGroupId: number
+	/**
+	 * Grade
+	 */
+	grade: string
+	/**
+	 * Subscores
+	 */
+	subscores: Array<SubscoreResult>
+}
+
+/**
+ * SubscoreResult
+ *
+ * One area, domain or composite for the requested cell.
+ */
+export type SubscoreResult = {
+	/**
+	 * Code
+	 */
+	code: string
+	kind: SubscoreKind
+	/**
+	 * Name
+	 */
+	name: string
+	/**
+	 * Sortorder
+	 */
+	sortOrder: number
+	/**
+	 * Meanscalescore
+	 */
+	meanScaleScore?: string | null
+	/**
+	 * Total
+	 */
+	total?: number | null
+	/**
+	 * Bandschemecode
+	 */
+	bandSchemeCode: string
+	/**
+	 * Bands
+	 */
+	bands: Array<LevelResult>
+}
+
+/**
  * Token
  *
- * A JSON payload containing the access token.
+ * A JSON payload containing the access token. The names follow the JWT spec (RFC 7519).
  */
 export type Token = {
 	/**
@@ -1260,17 +2225,76 @@ export type Token = {
 }
 
 /**
+ * TrendPoint
+ *
+ * One year of a change-over-time series.
+ */
+export type TrendPoint = {
+	/**
+	 * Testyear
+	 */
+	testYear: number
+	/**
+	 * Studentstested
+	 */
+	studentsTested?: number | null
+	/**
+	 * Meanscalescore
+	 */
+	meanScaleScore?: string | null
+	/**
+	 * Metorabovepct
+	 */
+	metOrAbovePct?: string | null
+	/**
+	 * Suppressed
+	 */
+	suppressed?: boolean
+	/**
+	 * Levels
+	 */
+	levels: Array<LevelResult>
+}
+
+/**
+ * TrendReport
+ */
+export type TrendReport = {
+	entity: EntityPublic
+	/**
+	 * Testid
+	 */
+	testId: number
+	/**
+	 * Studentgroupid
+	 */
+	studentGroupId: number
+	/**
+	 * Grade
+	 */
+	grade: string
+	/**
+	 * Points
+	 */
+	points: Array<TrendPoint>
+	/**
+	 * Scalebreaknote
+	 */
+	scaleBreakNote?: string | null
+}
+
+/**
  * UpdatePassword
  */
 export type UpdatePassword = {
 	/**
-	 * Current Password
+	 * Currentpassword
 	 */
-	current_password: string
+	currentPassword: string
 	/**
-	 * New Password
+	 * Newpassword
 	 */
-	new_password: string
+	newPassword: string
 }
 
 /**
@@ -1282,17 +2306,17 @@ export type UserCreate = {
 	 */
 	email: string
 	/**
-	 * Is Active
+	 * Isactive
 	 */
-	is_active?: boolean
+	isActive?: boolean
 	/**
-	 * Is Superuser
+	 * Issuperuser
 	 */
-	is_superuser?: boolean
+	isSuperuser?: boolean
 	/**
-	 * Full Name
+	 * Fullname
 	 */
-	full_name?: string | null
+	fullName?: string | null
 	/**
 	 * Password
 	 */
@@ -1301,14 +2325,12 @@ export type UserCreate = {
 
 /**
  * UserPreferencesUpdate
- *
- * Request model for updating user preferences.
  */
 export type UserPreferencesUpdate = {
 	/**
-	 * Last Viewed Cds
+	 * Lastviewedcds
 	 */
-	last_viewed_cds?: string | null
+	lastViewedCds?: string | null
 }
 
 /**
@@ -1320,29 +2342,29 @@ export type UserPublic = {
 	 */
 	email: string
 	/**
-	 * Is Active
+	 * Isactive
 	 */
-	is_active?: boolean
+	isActive?: boolean
 	/**
-	 * Is Superuser
+	 * Issuperuser
 	 */
-	is_superuser?: boolean
+	isSuperuser?: boolean
 	/**
-	 * Full Name
+	 * Fullname
 	 */
-	full_name?: string | null
+	fullName?: string | null
 	/**
 	 * Id
 	 */
 	id: string
 	/**
-	 * Created At
+	 * Createdat
 	 */
-	created_at?: string | null
+	createdAt?: string | null
 	/**
-	 * Force Password Reset
+	 * Forcepasswordreset
 	 */
-	force_password_reset?: boolean
+	forcePasswordReset?: boolean
 }
 
 /**
@@ -1358,9 +2380,9 @@ export type UserRegister = {
 	 */
 	password: string
 	/**
-	 * Full Name
+	 * Fullname
 	 */
-	full_name?: string | null
+	fullName?: string | null
 }
 
 /**
@@ -1372,25 +2394,25 @@ export type UserUpdate = {
 	 */
 	email?: string | null
 	/**
-	 * Is Active
+	 * Isactive
 	 */
-	is_active?: boolean
+	isActive?: boolean
 	/**
-	 * Is Superuser
+	 * Issuperuser
 	 */
-	is_superuser?: boolean
+	isSuperuser?: boolean
 	/**
-	 * Full Name
+	 * Fullname
 	 */
-	full_name?: string | null
+	fullName?: string | null
 	/**
 	 * Password
 	 */
 	password?: string | null
 	/**
-	 * Force Password Reset
+	 * Forcepasswordreset
 	 */
-	force_password_reset?: boolean | null
+	forcePasswordReset?: boolean | null
 }
 
 /**
@@ -1398,13 +2420,17 @@ export type UserUpdate = {
  */
 export type UserUpdateMe = {
 	/**
-	 * Full Name
+	 * Fullname
 	 */
-	full_name?: string | null
+	fullName?: string | null
 	/**
 	 * Email
 	 */
 	email?: string | null
+	/**
+	 * Lastviewedcds
+	 */
+	lastViewedCds?: string | null
 }
 
 /**
@@ -1750,6 +2776,50 @@ export type UsersUpdatePasswordMeResponses = {
 
 export type UsersUpdatePasswordMeResponse =
 	UsersUpdatePasswordMeResponses[keyof UsersUpdatePasswordMeResponses]
+
+export type UsersGetUserPreferencesData = {
+	body?: never
+	path?: never
+	query?: never
+	url: '/api/v1/users/me/preferences'
+}
+
+export type UsersGetUserPreferencesResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: UserPreferencesUpdate
+}
+
+export type UsersGetUserPreferencesResponse =
+	UsersGetUserPreferencesResponses[keyof UsersGetUserPreferencesResponses]
+
+export type UsersUpdateUserPreferencesData = {
+	body: UserPreferencesUpdate
+	path?: never
+	query?: never
+	url: '/api/v1/users/me/preferences'
+}
+
+export type UsersUpdateUserPreferencesErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type UsersUpdateUserPreferencesError =
+	UsersUpdateUserPreferencesErrors[keyof UsersUpdateUserPreferencesErrors]
+
+export type UsersUpdateUserPreferencesResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: UserPublic
+}
+
+export type UsersUpdateUserPreferencesResponse =
+	UsersUpdateUserPreferencesResponses[keyof UsersUpdateUserPreferencesResponses]
 
 export type UsersRegisterUserData = {
 	body: UserRegister
@@ -2303,356 +3373,1075 @@ export type SchoolsReadSchoolsSummaryResponses = {
 export type SchoolsReadSchoolsSummaryResponse =
 	SchoolsReadSchoolsSummaryResponses[keyof SchoolsReadSchoolsSummaryResponses]
 
-export type AcademicIndicatorsReadAcademicIndicatorsData = {
+export type ReferenceReadCatalogData = {
 	body?: never
 	path?: never
 	query?: {
 		/**
-		 * Skip
+		 * Year
+		 *
+		 * Administration year; defaults to the most recent.
 		 */
-		skip?: number
+		year?: number | null
+	}
+	url: '/api/v1/reference/catalog'
+}
+
+export type ReferenceReadCatalogErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type ReferenceReadCatalogError = ReferenceReadCatalogErrors[keyof ReferenceReadCatalogErrors]
+
+export type ReferenceReadCatalogResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: Catalog
+}
+
+export type ReferenceReadCatalogResponse =
+	ReferenceReadCatalogResponses[keyof ReferenceReadCatalogResponses]
+
+export type EntitiesSearchEntitiesData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
+		 * Q
+		 *
+		 * Name or CDS code fragment.
+		 */
+		q?: string | null
+		/**
+		 * Level
+		 */
+		level?: EntityLevel | null
+		/**
+		 * Countycode
+		 */
+		countyCode?: string | null
+		/**
+		 * Districtcode
+		 */
+		districtCode?: string | null
+		/**
+		 * Charter
+		 */
+		charter?: boolean | null
 		/**
 		 * Limit
 		 */
 		limit?: number
 		/**
-		 * Cds
-		 *
-		 * Filter by CDS code
+		 * Offset
 		 */
-		cds?: string | null
-		/**
-		 * Studentgroup
-		 *
-		 * Filter by student group
-		 */
-		studentgroup?: string | null
-		/**
-		 * Reportingyear
-		 *
-		 * Filter by reporting year
-		 */
-		reportingyear?: string | null
+		offset?: number
 	}
-	url: '/api/v1/academic-indicators/'
+	url: '/api/v1/entities/search'
 }
 
-export type AcademicIndicatorsReadAcademicIndicatorsErrors = {
+export type EntitiesSearchEntitiesErrors = {
 	/**
 	 * Validation Error
 	 */
 	422: HttpValidationError
 }
 
-export type AcademicIndicatorsReadAcademicIndicatorsError =
-	AcademicIndicatorsReadAcademicIndicatorsErrors[keyof AcademicIndicatorsReadAcademicIndicatorsErrors]
+export type EntitiesSearchEntitiesError =
+	EntitiesSearchEntitiesErrors[keyof EntitiesSearchEntitiesErrors]
 
-export type AcademicIndicatorsReadAcademicIndicatorsResponses = {
+export type EntitiesSearchEntitiesResponses = {
 	/**
 	 * Successful Response
 	 */
-	200: AcademicIndicatorsPublic
+	200: EntityList
 }
 
-export type AcademicIndicatorsReadAcademicIndicatorsResponse =
-	AcademicIndicatorsReadAcademicIndicatorsResponses[keyof AcademicIndicatorsReadAcademicIndicatorsResponses]
+export type EntitiesSearchEntitiesResponse =
+	EntitiesSearchEntitiesResponses[keyof EntitiesSearchEntitiesResponses]
 
-export type AcademicIndicatorsCreateAcademicIndicatorData = {
-	body: AcademicIndicatorCreate
-	path?: never
-	query?: never
-	url: '/api/v1/academic-indicators/'
-}
-
-export type AcademicIndicatorsCreateAcademicIndicatorErrors = {
-	/**
-	 * Validation Error
-	 */
-	422: HttpValidationError
-}
-
-export type AcademicIndicatorsCreateAcademicIndicatorError =
-	AcademicIndicatorsCreateAcademicIndicatorErrors[keyof AcademicIndicatorsCreateAcademicIndicatorErrors]
-
-export type AcademicIndicatorsCreateAcademicIndicatorResponses = {
-	/**
-	 * Successful Response
-	 */
-	200: AcademicIndicatorPublic
-}
-
-export type AcademicIndicatorsCreateAcademicIndicatorResponse =
-	AcademicIndicatorsCreateAcademicIndicatorResponses[keyof AcademicIndicatorsCreateAcademicIndicatorResponses]
-
-export type AcademicIndicatorsGetDashboardDataData = {
+export type EntitiesReadEntityData = {
 	body?: never
-	path?: never
-	query: {
+	path: {
+		/**
+		 * Cds Code
+		 */
+		cds_code: string
+	}
+	query?: never
+	url: '/api/v1/entities/{cds_code}'
+}
+
+export type EntitiesReadEntityErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type EntitiesReadEntityError = EntitiesReadEntityErrors[keyof EntitiesReadEntityErrors]
+
+export type EntitiesReadEntityResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: EntityAncestry
+}
+
+export type EntitiesReadEntityResponse =
+	EntitiesReadEntityResponses[keyof EntitiesReadEntityResponses]
+
+export type EntitiesReadChildrenData = {
+	body?: never
+	path: {
+		/**
+		 * Cds Code
+		 */
+		cds_code: string
+	}
+	query?: {
 		/**
 		 * Q
-		 *
-		 * CDS code to query
 		 */
-		q: string
+		q?: string | null
+		/**
+		 * Charter
+		 */
+		charter?: boolean | null
+		/**
+		 * Limit
+		 */
+		limit?: number
+		/**
+		 * Offset
+		 */
+		offset?: number
 	}
-	url: '/api/v1/academic-indicators/dashboard'
+	url: '/api/v1/entities/{cds_code}/children'
 }
 
-export type AcademicIndicatorsGetDashboardDataErrors = {
+export type EntitiesReadChildrenErrors = {
 	/**
 	 * Validation Error
 	 */
 	422: HttpValidationError
 }
 
-export type AcademicIndicatorsGetDashboardDataError =
-	AcademicIndicatorsGetDashboardDataErrors[keyof AcademicIndicatorsGetDashboardDataErrors]
+export type EntitiesReadChildrenError = EntitiesReadChildrenErrors[keyof EntitiesReadChildrenErrors]
 
-export type AcademicIndicatorsGetDashboardDataResponses = {
+export type EntitiesReadChildrenResponses = {
 	/**
 	 * Successful Response
 	 */
-	200: DashboardAggregation
+	200: EntityList
 }
 
-export type AcademicIndicatorsGetDashboardDataResponse =
-	AcademicIndicatorsGetDashboardDataResponses[keyof AcademicIndicatorsGetDashboardDataResponses]
+export type EntitiesReadChildrenResponse =
+	EntitiesReadChildrenResponses[keyof EntitiesReadChildrenResponses]
 
-export type AcademicIndicatorsGetDashboardSummaryData = {
+export type ReportsReadOverviewData = {
 	body?: never
 	path?: never
-	query: {
+	query?: {
 		/**
 		 * Cds
 		 *
-		 * 14-char CDS code or '00000000000000' for statewide
+		 * 14-character CDS code.
 		 */
-		cds: string
+		cds?: string
 		/**
-		 * Reportingyear
-		 *
-		 * Reporting year
+		 * Year
 		 */
-		reportingyear?: string
+		year?: number | null
 		/**
 		 * Studentgroup
-		 *
-		 * Student group code
 		 */
-		studentgroup?: string
+		studentGroup?: number
+		/**
+		 * Grade
+		 */
+		grade?: string
+		/**
+		 * Tests
+		 *
+		 * Comma-separated test ids; defaults to all.
+		 */
+		tests?: string | null
+		schoolType?: SchoolType
+		/**
+		 * Compare
+		 *
+		 * Include the district, county and state alongside.
+		 */
+		compare?: boolean
 	}
-	url: '/api/v1/academic-indicators/dashboard/summary'
+	url: '/api/v1/reports/overview'
 }
 
-export type AcademicIndicatorsGetDashboardSummaryErrors = {
+export type ReportsReadOverviewErrors = {
 	/**
 	 * Validation Error
 	 */
 	422: HttpValidationError
 }
 
-export type AcademicIndicatorsGetDashboardSummaryError =
-	AcademicIndicatorsGetDashboardSummaryErrors[keyof AcademicIndicatorsGetDashboardSummaryErrors]
+export type ReportsReadOverviewError = ReportsReadOverviewErrors[keyof ReportsReadOverviewErrors]
 
-export type AcademicIndicatorsGetDashboardSummaryResponses = {
+export type ReportsReadOverviewResponses = {
 	/**
 	 * Successful Response
 	 */
-	200: DashboardSummaryResponse
+	200: OverviewReport
 }
 
-export type AcademicIndicatorsGetDashboardSummaryResponse =
-	AcademicIndicatorsGetDashboardSummaryResponses[keyof AcademicIndicatorsGetDashboardSummaryResponses]
+export type ReportsReadOverviewResponse =
+	ReportsReadOverviewResponses[keyof ReportsReadOverviewResponses]
 
-export type AcademicIndicatorsGetEquityReportData = {
+export type ReportsReadSubscoresData = {
 	body?: never
 	path?: never
 	query: {
 		/**
+		 * Testid
+		 */
+		testId: number
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: number
+		/**
+		 * Grade
+		 */
+		grade?: string
+	}
+	url: '/api/v1/reports/subscores'
+}
+
+export type ReportsReadSubscoresErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type ReportsReadSubscoresError = ReportsReadSubscoresErrors[keyof ReportsReadSubscoresErrors]
+
+export type ReportsReadSubscoresResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: SubscoreReport
+}
+
+export type ReportsReadSubscoresResponse =
+	ReportsReadSubscoresResponses[keyof ReportsReadSubscoresResponses]
+
+export type ReportsReadTrendData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Testid
+		 */
+		testId: number
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: number
+		/**
+		 * Grade
+		 */
+		grade?: string
+		/**
+		 * Fromyear
+		 */
+		fromYear?: number | null
+		/**
+		 * Toyear
+		 */
+		toYear?: number | null
+	}
+	url: '/api/v1/reports/trend'
+}
+
+export type ReportsReadTrendErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type ReportsReadTrendError = ReportsReadTrendErrors[keyof ReportsReadTrendErrors]
+
+export type ReportsReadTrendResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: TrendReport
+}
+
+export type ReportsReadTrendResponse = ReportsReadTrendResponses[keyof ReportsReadTrendResponses]
+
+export type ReportsReadStudentGroupsData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Testid
+		 */
+		testId: number
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Grade
+		 */
+		grade?: string
+		/**
+		 * Category
+		 */
+		category?: Array<string> | null
+	}
+	url: '/api/v1/reports/student-groups'
+}
+
+export type ReportsReadStudentGroupsErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type ReportsReadStudentGroupsError =
+	ReportsReadStudentGroupsErrors[keyof ReportsReadStudentGroupsErrors]
+
+export type ReportsReadStudentGroupsResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: StudentGroupReport
+}
+
+export type ReportsReadStudentGroupsResponse =
+	ReportsReadStudentGroupsResponses[keyof ReportsReadStudentGroupsResponses]
+
+export type ReportsReadGradesData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Testid
+		 */
+		testId: number
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: number
+	}
+	url: '/api/v1/reports/grades'
+}
+
+export type ReportsReadGradesErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type ReportsReadGradesError = ReportsReadGradesErrors[keyof ReportsReadGradesErrors]
+
+export type ReportsReadGradesResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: GradeReport
+}
+
+export type ReportsReadGradesResponse = ReportsReadGradesResponses[keyof ReportsReadGradesResponses]
+
+export type ReportsReadChildResultsData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Testid
+		 */
+		testId: number
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: number
+		/**
+		 * Grade
+		 */
+		grade?: string
+		schoolType?: SchoolType
+		/**
+		 * Orderby
+		 */
+		orderBy?: string
+		/**
+		 * Descending
+		 */
+		descending?: boolean
+		/**
+		 * Limit
+		 */
+		limit?: number
+		/**
+		 * Offset
+		 */
+		offset?: number
+	}
+	url: '/api/v1/reports/children'
+}
+
+export type ReportsReadChildResultsErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type ReportsReadChildResultsError =
+	ReportsReadChildResultsErrors[keyof ReportsReadChildResultsErrors]
+
+export type ReportsReadChildResultsResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: ChildEntityReport
+}
+
+export type ReportsReadChildResultsResponse =
+	ReportsReadChildResultsResponses[keyof ReportsReadChildResultsResponses]
+
+export type ReportsReadComparisonData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Cdscodes
+		 *
+		 * Comma-separated CDS codes, at most 10.
+		 */
+		cdsCodes: string
+		/**
+		 * Testid
+		 */
+		testId?: number | null
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: number
+		/**
+		 * Grade
+		 */
+		grade?: string
+	}
+	url: '/api/v1/reports/compare'
+}
+
+export type ReportsReadComparisonErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type ReportsReadComparisonError =
+	ReportsReadComparisonErrors[keyof ReportsReadComparisonErrors]
+
+export type ReportsReadComparisonResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: CompareReport
+}
+
+export type ReportsReadComparisonResponse =
+	ReportsReadComparisonResponses[keyof ReportsReadComparisonResponses]
+
+export type DashboardReadCatalogData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
+		 * Year
+		 */
+		year?: number | null
+	}
+	url: '/api/v1/dashboard/catalog'
+}
+
+export type DashboardReadCatalogErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type DashboardReadCatalogError = DashboardReadCatalogErrors[keyof DashboardReadCatalogErrors]
+
+export type DashboardReadCatalogResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: DashboardCatalog
+}
+
+export type DashboardReadCatalogResponse =
+	DashboardReadCatalogResponses[keyof DashboardReadCatalogResponses]
+
+export type DashboardReadIndicatorsData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
 		 * Cds
 		 *
-		 * 14-char CDS code
+		 * 14-character CDS code.
 		 */
-		cds: string
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: string
+		/**
+		 * Includeprojected
+		 */
+		includeProjected?: boolean
+	}
+	url: '/api/v1/dashboard/indicators'
+}
+
+export type DashboardReadIndicatorsErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type DashboardReadIndicatorsError =
+	DashboardReadIndicatorsErrors[keyof DashboardReadIndicatorsErrors]
+
+export type DashboardReadIndicatorsResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: IndicatorReport
+}
+
+export type DashboardReadIndicatorsResponse =
+	DashboardReadIndicatorsResponses[keyof DashboardReadIndicatorsResponses]
+
+export type DashboardReadIndicatorData = {
+	body?: never
+	path?: never
+	query: {
 		/**
 		 * Indicator
 		 *
-		 * Indicator code (ELA, MATH, etc.)
+		 * Indicator code, e.g. CHRO.
 		 */
 		indicator: string
 		/**
-		 * Reportingyear
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+	}
+	url: '/api/v1/dashboard/indicator'
+}
+
+export type DashboardReadIndicatorErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type DashboardReadIndicatorError =
+	DashboardReadIndicatorErrors[keyof DashboardReadIndicatorErrors]
+
+export type DashboardReadIndicatorResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: IndicatorGroupReport
+}
+
+export type DashboardReadIndicatorResponse =
+	DashboardReadIndicatorResponses[keyof DashboardReadIndicatorResponses]
+
+export type DashboardReadTrendData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Indicator
 		 *
-		 * Reporting year
+		 * Indicator code, e.g. CHRO.
 		 */
-		reportingyear?: string
+		indicator: string
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: string
+		/**
+		 * Fromyear
+		 */
+		fromYear?: number | null
+		/**
+		 * Toyear
+		 */
+		toYear?: number | null
 	}
-	url: '/api/v1/academic-indicators/dashboard/equity'
+	url: '/api/v1/dashboard/trend'
 }
 
-export type AcademicIndicatorsGetEquityReportErrors = {
+export type DashboardReadTrendErrors = {
 	/**
 	 * Validation Error
 	 */
 	422: HttpValidationError
 }
 
-export type AcademicIndicatorsGetEquityReportError =
-	AcademicIndicatorsGetEquityReportErrors[keyof AcademicIndicatorsGetEquityReportErrors]
+export type DashboardReadTrendError = DashboardReadTrendErrors[keyof DashboardReadTrendErrors]
 
-export type AcademicIndicatorsGetEquityReportResponses = {
+export type DashboardReadTrendResponses = {
 	/**
 	 * Successful Response
 	 */
-	200: EquityReportResponse
+	200: IndicatorTrendReport
 }
 
-export type AcademicIndicatorsGetEquityReportResponse =
-	AcademicIndicatorsGetEquityReportResponses[keyof AcademicIndicatorsGetEquityReportResponses]
+export type DashboardReadTrendResponse =
+	DashboardReadTrendResponses[keyof DashboardReadTrendResponses]
 
-export type AcademicIndicatorsUpdateUserPreferencesData = {
-	body: UserPreferencesUpdate
-	path?: never
-	query?: never
-	url: '/api/v1/academic-indicators/users/me/preferences'
-}
-
-export type AcademicIndicatorsUpdateUserPreferencesErrors = {
-	/**
-	 * Validation Error
-	 */
-	422: HttpValidationError
-}
-
-export type AcademicIndicatorsUpdateUserPreferencesError =
-	AcademicIndicatorsUpdateUserPreferencesErrors[keyof AcademicIndicatorsUpdateUserPreferencesErrors]
-
-export type AcademicIndicatorsUpdateUserPreferencesResponses = {
-	/**
-	 * Successful Response
-	 */
-	200: UserPublic
-}
-
-export type AcademicIndicatorsUpdateUserPreferencesResponse =
-	AcademicIndicatorsUpdateUserPreferencesResponses[keyof AcademicIndicatorsUpdateUserPreferencesResponses]
-
-export type AcademicIndicatorsGetLastViewedCdsData = {
+export type DashboardReadChildrenData = {
 	body?: never
 	path?: never
-	query?: never
-	url: '/api/v1/academic-indicators/users/me/preferences/last-viewed-cds'
+	query: {
+		/**
+		 * Indicator
+		 *
+		 * Indicator code, e.g. CHRO.
+		 */
+		indicator: string
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: string
+		/**
+		 * Orderby
+		 */
+		orderBy?: string
+		/**
+		 * Descending
+		 */
+		descending?: boolean
+		/**
+		 * Limit
+		 */
+		limit?: number
+		/**
+		 * Offset
+		 */
+		offset?: number
+	}
+	url: '/api/v1/dashboard/children'
 }
 
-export type AcademicIndicatorsGetLastViewedCdsResponses = {
+export type DashboardReadChildrenErrors = {
 	/**
-	 * Response Academic-Indicators-Get Last Viewed Cds
-	 *
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type DashboardReadChildrenError =
+	DashboardReadChildrenErrors[keyof DashboardReadChildrenErrors]
+
+export type DashboardReadChildrenResponses = {
+	/**
 	 * Successful Response
 	 */
-	200: {
-		[key: string]: string | null
-	}
+	200: ChildIndicatorReport
 }
 
-export type AcademicIndicatorsGetLastViewedCdsResponse =
-	AcademicIndicatorsGetLastViewedCdsResponses[keyof AcademicIndicatorsGetLastViewedCdsResponses]
+export type DashboardReadChildrenResponse =
+	DashboardReadChildrenResponses[keyof DashboardReadChildrenResponses]
 
-export type AcademicIndicatorsDeleteAcademicIndicatorData = {
+export type DashboardReadGrowthData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+		/**
+		 * Studentgroup
+		 */
+		studentGroup?: string
+	}
+	url: '/api/v1/dashboard/growth'
+}
+
+export type DashboardReadGrowthErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type DashboardReadGrowthError = DashboardReadGrowthErrors[keyof DashboardReadGrowthErrors]
+
+export type DashboardReadGrowthResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: GrowthReport
+}
+
+export type DashboardReadGrowthResponse =
+	DashboardReadGrowthResponses[keyof DashboardReadGrowthResponses]
+
+export type DashboardReadEnrollmentData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+	}
+	url: '/api/v1/dashboard/enrollment'
+}
+
+export type DashboardReadEnrollmentErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type DashboardReadEnrollmentError =
+	DashboardReadEnrollmentErrors[keyof DashboardReadEnrollmentErrors]
+
+export type DashboardReadEnrollmentResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: EnrollmentReport
+}
+
+export type DashboardReadEnrollmentResponse =
+	DashboardReadEnrollmentResponses[keyof DashboardReadEnrollmentResponses]
+
+export type LocalIndicatorsReadCatalogData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
+		 * Year
+		 */
+		year?: number | null
+	}
+	url: '/api/v1/local-indicators/catalog'
+}
+
+export type LocalIndicatorsReadCatalogErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type LocalIndicatorsReadCatalogError =
+	LocalIndicatorsReadCatalogErrors[keyof LocalIndicatorsReadCatalogErrors]
+
+export type LocalIndicatorsReadCatalogResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: LocalIndicatorCatalog
+}
+
+export type LocalIndicatorsReadCatalogResponse =
+	LocalIndicatorsReadCatalogResponses[keyof LocalIndicatorsReadCatalogResponses]
+
+export type LocalIndicatorsReadLocalIndicatorsData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
+		 * Cds
+		 *
+		 * 14-character CDS code.
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+	}
+	url: '/api/v1/local-indicators/'
+}
+
+export type LocalIndicatorsReadLocalIndicatorsErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type LocalIndicatorsReadLocalIndicatorsError =
+	LocalIndicatorsReadLocalIndicatorsErrors[keyof LocalIndicatorsReadLocalIndicatorsErrors]
+
+export type LocalIndicatorsReadLocalIndicatorsResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: LocalIndicatorReport
+}
+
+export type LocalIndicatorsReadLocalIndicatorsResponse =
+	LocalIndicatorsReadLocalIndicatorsResponses[keyof LocalIndicatorsReadLocalIndicatorsResponses]
+
+export type LocalIndicatorsReadPriorityData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Priority
+		 *
+		 * LCFF priority number, e.g. 3.
+		 */
+		priority: number
+		/**
+		 * Cds
+		 */
+		cds?: string
+		/**
+		 * Year
+		 */
+		year?: number | null
+	}
+	url: '/api/v1/local-indicators/priority'
+}
+
+export type LocalIndicatorsReadPriorityErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type LocalIndicatorsReadPriorityError =
+	LocalIndicatorsReadPriorityErrors[keyof LocalIndicatorsReadPriorityErrors]
+
+export type LocalIndicatorsReadPriorityResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: LocalIndicatorDetail
+}
+
+export type LocalIndicatorsReadPriorityResponse =
+	LocalIndicatorsReadPriorityResponses[keyof LocalIndicatorsReadPriorityResponses]
+
+export type LocalIndicatorsReadTrendData = {
+	body?: never
+	path?: never
+	query: {
+		/**
+		 * Priority
+		 *
+		 * LCFF priority number, e.g. 3.
+		 */
+		priority: number
+		/**
+		 * Cds
+		 */
+		cds?: string
+	}
+	url: '/api/v1/local-indicators/trend'
+}
+
+export type LocalIndicatorsReadTrendErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type LocalIndicatorsReadTrendError =
+	LocalIndicatorsReadTrendErrors[keyof LocalIndicatorsReadTrendErrors]
+
+export type LocalIndicatorsReadTrendResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: LocalIndicatorTrendReport
+}
+
+export type LocalIndicatorsReadTrendResponse =
+	LocalIndicatorsReadTrendResponses[keyof LocalIndicatorsReadTrendResponses]
+
+export type IngestListRunsData = {
+	body?: never
+	path?: never
+	query?: {
+		/**
+		 * Limit
+		 */
+		limit?: number
+	}
+	url: '/api/v1/ingest/runs'
+}
+
+export type IngestListRunsErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type IngestListRunsError = IngestListRunsErrors[keyof IngestListRunsErrors]
+
+export type IngestListRunsResponses = {
+	/**
+	 * Successful Response
+	 */
+	200: IngestRunList
+}
+
+export type IngestListRunsResponse = IngestListRunsResponses[keyof IngestListRunsResponses]
+
+export type IngestStartIngestData = {
+	body: IngestRequest
+	path?: never
+	query?: never
+	url: '/api/v1/ingest/runs'
+}
+
+export type IngestStartIngestErrors = {
+	/**
+	 * Validation Error
+	 */
+	422: HttpValidationError
+}
+
+export type IngestStartIngestError = IngestStartIngestErrors[keyof IngestStartIngestErrors]
+
+export type IngestStartIngestResponses = {
+	/**
+	 * Successful Response
+	 */
+	202: IngestRunPublic
+}
+
+export type IngestStartIngestResponse = IngestStartIngestResponses[keyof IngestStartIngestResponses]
+
+export type IngestReadRunData = {
 	body?: never
 	path: {
 		/**
-		 * Id
+		 * Run Id
 		 */
-		id: string
+		run_id: string
 	}
 	query?: never
-	url: '/api/v1/academic-indicators/{id}'
+	url: '/api/v1/ingest/runs/{run_id}'
 }
 
-export type AcademicIndicatorsDeleteAcademicIndicatorErrors = {
+export type IngestReadRunErrors = {
 	/**
 	 * Validation Error
 	 */
 	422: HttpValidationError
 }
 
-export type AcademicIndicatorsDeleteAcademicIndicatorError =
-	AcademicIndicatorsDeleteAcademicIndicatorErrors[keyof AcademicIndicatorsDeleteAcademicIndicatorErrors]
+export type IngestReadRunError = IngestReadRunErrors[keyof IngestReadRunErrors]
 
-export type AcademicIndicatorsDeleteAcademicIndicatorResponses = {
+export type IngestReadRunResponses = {
 	/**
 	 * Successful Response
 	 */
-	200: Message
+	200: IngestRunDetail
 }
 
-export type AcademicIndicatorsDeleteAcademicIndicatorResponse =
-	AcademicIndicatorsDeleteAcademicIndicatorResponses[keyof AcademicIndicatorsDeleteAcademicIndicatorResponses]
-
-export type AcademicIndicatorsReadAcademicIndicatorData = {
-	body?: never
-	path: {
-		/**
-		 * Id
-		 */
-		id: string
-	}
-	query?: never
-	url: '/api/v1/academic-indicators/{id}'
-}
-
-export type AcademicIndicatorsReadAcademicIndicatorErrors = {
-	/**
-	 * Validation Error
-	 */
-	422: HttpValidationError
-}
-
-export type AcademicIndicatorsReadAcademicIndicatorError =
-	AcademicIndicatorsReadAcademicIndicatorErrors[keyof AcademicIndicatorsReadAcademicIndicatorErrors]
-
-export type AcademicIndicatorsReadAcademicIndicatorResponses = {
-	/**
-	 * Successful Response
-	 */
-	200: AcademicIndicatorPublic
-}
-
-export type AcademicIndicatorsReadAcademicIndicatorResponse =
-	AcademicIndicatorsReadAcademicIndicatorResponses[keyof AcademicIndicatorsReadAcademicIndicatorResponses]
-
-export type AcademicIndicatorsUpdateAcademicIndicatorData = {
-	body: AcademicIndicatorUpdate
-	path: {
-		/**
-		 * Id
-		 */
-		id: string
-	}
-	query?: never
-	url: '/api/v1/academic-indicators/{id}'
-}
-
-export type AcademicIndicatorsUpdateAcademicIndicatorErrors = {
-	/**
-	 * Validation Error
-	 */
-	422: HttpValidationError
-}
-
-export type AcademicIndicatorsUpdateAcademicIndicatorError =
-	AcademicIndicatorsUpdateAcademicIndicatorErrors[keyof AcademicIndicatorsUpdateAcademicIndicatorErrors]
-
-export type AcademicIndicatorsUpdateAcademicIndicatorResponses = {
-	/**
-	 * Successful Response
-	 */
-	200: AcademicIndicatorPublic
-}
-
-export type AcademicIndicatorsUpdateAcademicIndicatorResponse =
-	AcademicIndicatorsUpdateAcademicIndicatorResponses[keyof AcademicIndicatorsUpdateAcademicIndicatorResponses]
+export type IngestReadRunResponse = IngestReadRunResponses[keyof IngestReadRunResponses]
 
 export type PrivateCreateUserData = {
 	body: PrivateUserCreate

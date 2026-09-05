@@ -14,19 +14,19 @@ from tests.utils.utils import get_superuser_token_headers
 
 
 @pytest.fixture(scope="session", autouse=True)
-def db() -> Generator[Session, None, None]:
+def db() -> Generator[Session]:
     with Session(engine) as session:
         init_db(session)
         yield session
         statement = delete(Item)
-        session.execute(statement)
+        session.exec(statement)
         statement = delete(User)
-        session.execute(statement)
+        session.exec(statement)
         session.commit()
 
 
 @pytest.fixture(scope="module")
-def client() -> Generator[TestClient, None, None]:
+def client() -> Generator[TestClient]:
     with TestClient(app) as c:
         yield c
 
