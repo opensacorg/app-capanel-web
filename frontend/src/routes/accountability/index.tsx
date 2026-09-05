@@ -11,6 +11,14 @@
  *
  * The selection lives in the URL, so any view of this report is a link.
  *
+ * On layout. The page is a header, a row of indicators, and one indicator
+ * examined — read top to bottom, that is the order the question is actually
+ * asked in. The entity, the year and the student group all sit in the header
+ * rather than in a filter card, because they are what the heading means, not
+ * a separate control panel. Choosing the entity itself has left the page
+ * entirely: it lives in the navigation bar, where it is reachable from every
+ * report rather than repeated on each one.
+ *
  * On loading. The catalogue endpoint is slow and everything else on the page
  * used to wait behind it, so a cold visit spent a quarter of a minute looking
  * at three grey rectangles. Two things changed. The catalogue now arrives as
@@ -21,6 +29,8 @@
  * because the long case is a dataset being read for the first time, not a
  * fault. What is never assumed is a measured value: those stay skeletons.
  */
+import { AnalyticsUpIcon, Download04Icon, GitCompareIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMemo } from 'react'
@@ -31,19 +41,19 @@ import { GrowthPanel } from '@/components/accountability/GrowthPanel'
 import { IndicatorCard } from '@/components/accountability/IndicatorCard'
 import { IndicatorTrend } from '@/components/accountability/IndicatorTrend'
 import {
+	INDICATOR_GRID,
 	IndicatorGridPlaceholder,
+	InformationalGridPlaceholder,
 	StudentGroupTablePlaceholder,
 } from '@/components/accountability/Placeholders'
 import { StudentGroupBreakdown } from '@/components/accountability/StudentGroupBreakdown'
 import NavbarD52 from '@/components/common/navbar/navbar-D52'
 import { SlowLoadNotice } from '@/components/common/status/SlowLoadNotice'
 import { LocalMeasures } from '@/components/local-indicators/LocalMeasures'
-import { EntityPicker } from '@/components/results/EntityPicker'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
 	Select,
 	SelectContent,
@@ -53,7 +63,8 @@ import {
 } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import type { EntityPublic } from '@/lib/client'
+import ScrollReset from '@/lib/hooks/ScrollReset'
+import { useSlowLoad } from '@/lib/hooks/useSlowLoad'
 import {
 	type AccountabilitySelection,
 	ALL_STUDENTS,
@@ -65,8 +76,6 @@ import {
 } from '@/lib/services/accountability'
 import { assumedCatalog, assumedIndicator } from '@/lib/services/accountabilityShape'
 import { entityQuery } from '@/lib/services/assessments'
-import ScrollReset from '@/lib/hooks/ScrollReset'
-import { useSlowLoad } from '@/lib/hooks/useSlowLoad'
 
 /**
  * The router parses search values as JSON, so a CDS code that looks like a
@@ -84,6 +93,17 @@ export const Route = createFileRoute('/accountability/')({
 	validateSearch: searchSchema,
 	component: AccountabilityPage,
 })
+
+/**
+ * The examined-indicator panel's height, fixed rather than fitted.
+ *
+ * Both tabs have to occupy the same box or switching between them would jump
+ * the page, and the taller of the two is the trend chart. So the chart sets
+ * the height and the student group table — which is arbitrarily long, and
+ * would otherwise push the panel past its neighbour in the split — scrolls
+ * inside it.
+ */
+const PANEL_BODY = 'h-[22rem] overflow-y-auto'
 
 function AccountabilityPage() {
 	const search = Route.useSearch()
@@ -191,10 +211,6 @@ function AccountabilityPage() {
 		void navigate({ search: (previous) => ({ ...previous, ...next }) })
 	}
 
-	function chooseEntity(next: EntityPublic) {
-		update({ cds: next.cdsCode })
-	}
-
 	/**
 	 * Only the statewide code names itself without a lookup. Anything else has
 	 * to be fetched, so its heading is a skeleton rather than a guess — a wrong
@@ -216,9 +232,9 @@ function AccountabilityPage() {
 	 */
 	if (catalog.isError && indicators.isError) {
 		return (
-			<>
+			<div>
 				<NavbarD52 />
-				<main className='mx-auto w-full max-w-6xl px-4 py-8'>
+				<div className='container max-w-7xl mx-auto px-4 py-8'>
 					<Alert variant='destructive'>
 						<AlertTitle>No accountability data</AlertTitle>
 						<AlertDescription>
@@ -226,120 +242,98 @@ function AccountabilityPage() {
 							to load the state's Dashboard files.
 						</AlertDescription>
 					</Alert>
-				</main>
-			</>
+				</div>
+			</div>
 		)
 	}
 
 	return (
-		<>
+		<div>
 			<ScrollReset />
 			<NavbarD52 />
-			<main className='mx-auto w-full max-w-6xl space-y-8 px-4 py-8'>
-				<header className='space-y-3'>
-					<div className='space-y-1'>
-						{displayName ? (
-							<h1 className='text-2xl font-semibold tracking-tight'>{displayName}</h1>
-						) : (
-							<Skeleton className='h-8 w-80 max-w-full rounded-md' />
-						)}
-						{ancestorLine ? (
-							<p className='text-sm text-muted-foreground'>{ancestorLine}</p>
-						) : (
-							<Skeleton className='h-4 w-56 max-w-full rounded-md' />
-						)}
-					</div>
-					{/* Needs no data at all, so it is usable while everything else
-					    loads — a reader who landed on the wrong school can leave. */}
-					<div className='flex flex-wrap items-center gap-2'>
-						<EntityPicker entity={entity} onSelect={chooseEntity} />
-						{search.cds !== STATEWIDE_CDS ? (
-							<Button variant='ghost' size='sm' onClick={() => update({ cds: STATEWIDE_CDS })}>
-								Back to statewide
-							</Button>
-						) : null}
-						{entity?.isCharter ? <Badge variant='outline'>Charter school</Badge> : null}
-					</div>
-				</header>
-
-				<SlowLoadNotice stage={loadStage} subject='this accountability report' />
-
-				{catalog.error ? (
-					<Alert variant='destructive'>
-						<AlertTitle>The filters may be out of date</AlertTitle>
-						<AlertDescription>
-							{catalog.error.message} The years and student groups below are the ones this browser
-							last saw.
-						</AlertDescription>
-					</Alert>
-				) : null}
-
-				<Card>
-					<CardContent className='grid gap-4 pt-6 sm:grid-cols-2'>
-						<div className='space-y-1.5'>
-							<Label htmlFor='accountability-year'>Year</Label>
-							<Select
-								items={yearItems}
-								value={String(year)}
-								onValueChange={(value) => update({ year: Number(value) })}
-							>
-								<SelectTrigger id='accountability-year' className='w-full'>
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									{yearItems.map((item) => (
-										<SelectItem key={item.value} value={item.value}>
-											{item.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
+			<div className='container max-w-7xl mx-auto px-4 py-8'>
+				<div className='flex flex-col gap-8'>
+					{/* Page Header */}
+					<div>
+						<div className='flex flex-wrap items-center gap-3 mb-2'>
+							{displayName ? (
+								<h1 className='text-3xl font-bold'>{displayName}</h1>
+							) : (
+								<Skeleton className='h-9 w-80 max-w-full rounded-md' />
+							)}
+							{entity?.isCharter ? <Badge variant='outline'>Charter school</Badge> : null}
 						</div>
-						<div className='space-y-1.5'>
-							<Label htmlFor='accountability-group'>Student group</Label>
-							<Select
-								items={groupItems}
-								value={search.studentGroup}
-								onValueChange={(value) => value && update({ studentGroup: value })}
-							>
-								<SelectTrigger id='accountability-group' className='w-full'>
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									{groupItems.map((item) => (
-										<SelectItem key={item.value} value={item.value}>
-											{item.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
+						{/* The filters read as part of the sentence naming the entity,
+						    because that is what they are: the rest of what the heading
+						    above means. */}
+						<div className='flex flex-wrap items-center justify-between gap-y-2'>
+							{ancestorLine ? (
+								<p className='text-muted-foreground text-lg'>{ancestorLine}</p>
+							) : (
+								<Skeleton className='h-6 w-56 max-w-full rounded-md' />
+							)}
+							<div className='flex flex-wrap items-center gap-2'>
+								<Select
+									items={yearItems}
+									value={String(year)}
+									onValueChange={(value) => update({ year: Number(value) })}
+								>
+									<SelectTrigger id='accountability-year' aria-label='Year' className='w-36'>
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										{yearItems.map((item) => (
+											<SelectItem key={item.value} value={item.value}>
+												{item.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<Select
+									items={groupItems}
+									value={search.studentGroup}
+									onValueChange={(value) => value && update({ studentGroup: value })}
+								>
+									<SelectTrigger
+										id='accountability-group'
+										aria-label='Student group'
+										className='w-56'
+									>
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										{groupItems.map((item) => (
+											<SelectItem key={item.value} value={item.value}>
+												{item.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							</div>
 						</div>
-					</CardContent>
-				</Card>
+					</div>
 
-				{indicators.data?.projectionYear ? (
-					<Alert>
-						<AlertTitle>
-							Where {formatSchoolYear(indicators.data.projectionYear)} is heading
-						</AlertTitle>
-						<AlertDescription>
-							The state has not released that Dashboard yet, so it has no year of its own here.
-							Where this application can estimate it, the projected change sits beside the published
-							one as a second, grey figure. It was worked out from the underlying data using the
-							state's published cut points and may differ from what the state eventually publishes.
-						</AlertDescription>
-					</Alert>
-				) : null}
+					<SlowLoadNotice stage={loadStage} subject='this accountability report' />
 
-				{indicators.isPending ? (
-					<IndicatorGridPlaceholder indicators={reference.indicators} />
-				) : indicators.isError ? (
-					<Alert variant='destructive'>
-						<AlertDescription>{indicators.error.message}</AlertDescription>
-					</Alert>
-				) : indicators.data.results.length > 0 ? (
-					<>
-						<section className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+					{catalog.error ? (
+						<Alert variant='destructive'>
+							<AlertTitle>The filters may be out of date</AlertTitle>
+							<AlertDescription>
+								{catalog.error.message} The years and student groups above are the ones this browser
+								last saw.
+							</AlertDescription>
+						</Alert>
+					) : null}
+
+					{/* Indicator Cards */}
+					{indicators.isPending ? (
+						<IndicatorGridPlaceholder indicators={reference.indicators} />
+					) : indicators.isError ? (
+						<Alert variant='destructive'>
+							<AlertDescription>{indicators.error.message}</AlertDescription>
+						</Alert>
+					) : indicators.data.results.length > 0 ? (
+						<section className={INDICATOR_GRID}>
 							{accountabilityResults.map((result) => (
 								<IndicatorCard
 									key={`${result.indicatorCode}-${result.studentGroupCode}`}
@@ -351,100 +345,147 @@ function AccountabilityPage() {
 								/>
 							))}
 						</section>
+					) : (
+						<Alert>
+							<AlertTitle>Nothing reported</AlertTitle>
+							<AlertDescription>
+								The state reports no indicators for this entity, year and student group.
+							</AlertDescription>
+						</Alert>
+					)}
 
-						{informationalResults.length > 0 ? (
-							<section className='space-y-3'>
-								<h2 className='text-sm font-medium text-muted-foreground'>
-									Also published, for information
-								</h2>
-								<p className='text-sm text-muted-foreground'>
-									Reported alongside the indicators above but not part of the accountability system,
-									so these carry no performance colour.
-								</p>
-								<div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-									{informationalResults.map((result) => (
-										<IndicatorCard
-											key={`${result.indicatorCode}-${result.studentGroupCode}`}
-											result={result}
-											unit={metaFor(result.indicatorCode)?.unit ?? 'percent'}
-											lowerIsBetter={metaFor(result.indicatorCode)?.lowerIsBetter ?? false}
-											selected={result.indicatorCode === selectedIndicator}
-											onSelect={(code) => update({ indicator: code })}
-										/>
-									))}
+					{/* The selected indicator, examined — and the actions that would
+					    act on it. */}
+					<div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6'>
+						<Card className='border'>
+							{selectedIndicator && indicatorMeta ? (
+								<Tabs defaultValue='trend'>
+									<CardHeader>
+										<div className='flex flex-wrap items-center justify-between gap-3'>
+											<h2 className='text-lg font-semibold'>{indicatorMeta.name}</h2>
+											<TabsList>
+												<TabsTrigger value='groups'>Student groups</TabsTrigger>
+												<TabsTrigger value='trend'>Over time</TabsTrigger>
+											</TabsList>
+										</div>
+									</CardHeader>
+									<CardContent>
+										<TabsContent value='groups' className={PANEL_BODY}>
+											{groups.isPending ? (
+												<StudentGroupTablePlaceholder groups={reference.studentGroups} />
+											) : groups.isError ? (
+												<p className='text-sm text-destructive'>{groups.error.message}</p>
+											) : (
+												<StudentGroupBreakdown
+													report={groups.data}
+													unit={indicatorMeta.unit}
+													lowerIsBetter={indicatorMeta.lowerIsBetter}
+													groupNames={groupNames}
+												/>
+											)}
+										</TabsContent>
+										<TabsContent value='trend' className={PANEL_BODY}>
+											<IndicatorTrend
+												selection={selection}
+												indicator={selectedIndicator}
+												unit={indicatorMeta.unit}
+											/>
+										</TabsContent>
+									</CardContent>
+								</Tabs>
+							) : (
+								<>
+									<CardHeader>
+										<h2 className='text-lg font-semibold'>No indicator selected</h2>
+									</CardHeader>
+									<CardContent>
+										<p className={`${PANEL_BODY} text-sm text-muted-foreground`}>
+											Choose an indicator above to see its student groups and its history.
+										</p>
+									</CardContent>
+								</>
+							)}
+						</Card>
+
+						{/* Quick Actions — deliberately inert. The buttons name the
+						    things this panel is expected to grow (projections for the
+						    selected indicator, comparison, export) so the space is
+						    reserved at the right size, but none of them do anything
+						    yet and all of them say so. */}
+						<Card className='bg-muted/50'>
+							<CardHeader>
+								<h2 className='text-lg font-semibold'>Quick Actions</h2>
+							</CardHeader>
+							<CardContent>
+								<div className='flex flex-col gap-3'>
+									<Button className='w-full' disabled title='Not available yet'>
+										<HugeiconsIcon icon={AnalyticsUpIcon} className='mr-2' />
+										Add a projection
+									</Button>
+									<Button variant='outline' className='w-full' disabled title='Not available yet'>
+										<HugeiconsIcon icon={GitCompareIcon} className='mr-2' />
+										Compare schools
+									</Button>
+									<Button variant='outline' className='w-full' disabled title='Not available yet'>
+										<HugeiconsIcon icon={Download04Icon} className='mr-2' />
+										Export this report
+									</Button>
+									<p className='text-xs text-muted-foreground'>Coming soon.</p>
 								</div>
-							</section>
-						) : null}
-					</>
-				) : (
-					<Alert>
-						<AlertTitle>Nothing reported</AlertTitle>
-						<AlertDescription>
-							The state reports no indicators for this entity, year and student group.
-						</AlertDescription>
-					</Alert>
-				)}
+							</CardContent>
+						</Card>
+					</div>
 
-				{selectedIndicator && indicatorMeta ? (
-					<Card>
-						<CardHeader>
-							<CardTitle className='text-base'>{indicatorMeta.name}</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<Tabs defaultValue='groups'>
-								<TabsList>
-									<TabsTrigger value='groups'>Student groups</TabsTrigger>
-									<TabsTrigger value='trend'>Over time</TabsTrigger>
-								</TabsList>
-								<TabsContent value='groups' className='pt-4'>
-									{groups.isPending ? (
-										<StudentGroupTablePlaceholder groups={reference.studentGroups} />
-									) : groups.isError ? (
-										<p className='text-sm text-destructive'>{groups.error.message}</p>
-									) : (
-										<StudentGroupBreakdown
-											report={groups.data}
-											unit={indicatorMeta.unit}
-											lowerIsBetter={indicatorMeta.lowerIsBetter}
-											groupNames={groupNames}
-										/>
-									)}
-								</TabsContent>
-								<TabsContent value='trend' className='pt-4'>
-									<IndicatorTrend
-										selection={selection}
-										indicator={selectedIndicator}
-										unit={indicatorMeta.unit}
+					{indicators.isPending ? (
+						<InformationalGridPlaceholder indicators={reference.indicators} />
+					) : informationalResults.length > 0 ? (
+						<section className='space-y-3'>
+							<h2 className='text-sm font-medium text-muted-foreground'>
+								Also published, for information
+							</h2>
+							<p className='text-sm text-muted-foreground'>
+								Reported alongside the indicators above but not part of the accountability system,
+								so these carry no performance colour.
+							</p>
+							<div className={INDICATOR_GRID}>
+								{informationalResults.map((result) => (
+									<IndicatorCard
+										key={`${result.indicatorCode}-${result.studentGroupCode}`}
+										result={result}
+										unit={metaFor(result.indicatorCode)?.unit ?? 'percent'}
+										lowerIsBetter={metaFor(result.indicatorCode)?.lowerIsBetter ?? false}
+										selected={result.indicatorCode === selectedIndicator}
+										onSelect={(code) => update({ indicator: code })}
 									/>
-								</TabsContent>
-							</Tabs>
-						</CardContent>
-					</Card>
-				) : null}
+								))}
+							</div>
+						</section>
+					) : null}
 
-				<CompositionPanel cds={selection.cds} year={selection.year} />
+					<CompositionPanel cds={selection.cds} year={selection.year} />
 
-				<GrowthPanel
-					cds={selection.cds}
-					year={selection.year}
-					studentGroup={selection.studentGroup}
-				/>
+					<GrowthPanel
+						cds={selection.cds}
+						year={selection.year}
+						studentGroup={selection.studentGroup}
+					/>
 
-				<LocalMeasures cds={selection.cds} year={selection.year} />
+					<LocalMeasures cds={selection.cds} year={selection.year} />
 
-				{/* Needs nothing loaded, and is the part of the page most likely to
-				    answer the question a reader arrived with, so it is never held
-				    back behind a request. */}
-				<footer className='border-t pt-6 text-xs text-muted-foreground'>
-					<p>
-						Source: California Department of Education, California School Dashboard downloadable
-						data files. Figures are reproduced as published. A group shown as{' '}
-						<strong>Not rated</strong> either sits outside the accountability system (English
-						learners only, reclassified, English only, and the assessment-type groups are reported
-						for information), has fewer than 30 students, or has only one year of data.
-					</p>
-				</footer>
-			</main>
-		</>
+					{/* Needs nothing loaded, and is the part of the page most likely to
+					    answer the question a reader arrived with, so it is never held
+					    back behind a request. */}
+					<footer className='border-t pt-6 text-xs text-muted-foreground'>
+						<p>
+							Source: California Department of Education, California School Dashboard downloadable
+							data files. Figures are reproduced as published. A group shown as{' '}
+							<strong>Not rated</strong> either sits outside the accountability system (English
+							learners only, reclassified, English only, and the assessment-type groups are reported
+							for information), has fewer than 30 students, or has only one year of data.
+						</p>
+					</footer>
+				</div>
+			</div>
+		</div>
 	)
 }

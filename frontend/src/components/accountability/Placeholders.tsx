@@ -26,8 +26,18 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import type { IndicatorPublic, StudentGroupCodePublic } from '@/lib/client'
-import { assumedCatalog } from '@/lib/services/accountabilityShape'
 import { useAfterFirstPaint } from '@/lib/hooks/useAfterFirstPaint'
+import { assumedCatalog } from '@/lib/services/accountabilityShape'
+
+/**
+ * The indicator grid's own responsive shape, shared with the loaded page.
+ *
+ * The placeholder and the real grid must break at exactly the same widths, or
+ * the report would reflow the moment its figures arrive — which is the one
+ * thing this whole module exists to prevent.
+ */
+export const INDICATOR_GRID =
+	'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
 
 /**
  * One indicator card, named but unmeasured.
@@ -60,40 +70,52 @@ export function IndicatorCardPlaceholder({ name }: { name?: string }) {
 /**
  * The indicator grid, in the state's own order.
  *
- * Informational measures are separated here exactly as they are in the loaded
- * page, because the catalogue already says which are which — putting them in
- * one grid now and splitting them later would move the page under the reader.
+ * Only the accountability indicators: the informational ones are reported far
+ * lower down the loaded page, so drawing them here would put them somewhere
+ * they are about to leave.
  */
 export function IndicatorGridPlaceholder({ indicators }: { indicators: Array<IndicatorPublic> }) {
-	const ordered = [...indicators].sort((a, b) => a.sortOrder - b.sortOrder)
-	const accountability = ordered.filter((indicator) => !indicator.isInformational)
-	const informational = ordered.filter((indicator) => indicator.isInformational)
+	const accountability = [...indicators]
+		.sort((a, b) => a.sortOrder - b.sortOrder)
+		.filter((indicator) => !indicator.isInformational)
 
 	return (
-		<>
-			<section className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-				{accountability.map((indicator) => (
+		<section className={INDICATOR_GRID}>
+			{accountability.map((indicator) => (
+				<IndicatorCardPlaceholder key={indicator.code} name={indicator.name} />
+			))}
+		</section>
+	)
+}
+
+/**
+ * The measures published alongside the seven without counting towards them,
+ * in the position and with the explanation the loaded page gives them.
+ */
+export function InformationalGridPlaceholder({
+	indicators,
+}: {
+	indicators: Array<IndicatorPublic>
+}) {
+	const informational = [...indicators]
+		.sort((a, b) => a.sortOrder - b.sortOrder)
+		.filter((indicator) => indicator.isInformational)
+
+	if (informational.length === 0) return null
+
+	return (
+		<section className='space-y-3'>
+			<h2 className='text-sm font-medium text-muted-foreground'>Also published, for information</h2>
+			<p className='text-sm text-muted-foreground'>
+				Reported alongside the indicators above but not part of the accountability system, so these
+				carry no performance colour.
+			</p>
+			<div className={INDICATOR_GRID}>
+				{informational.map((indicator) => (
 					<IndicatorCardPlaceholder key={indicator.code} name={indicator.name} />
 				))}
-			</section>
-
-			{informational.length > 0 ? (
-				<section className='space-y-3'>
-					<h2 className='text-sm font-medium text-muted-foreground'>
-						Also published, for information
-					</h2>
-					<p className='text-sm text-muted-foreground'>
-						Reported alongside the indicators above but not part of the accountability system, so
-						these carry no performance colour.
-					</p>
-					<div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-						{informational.map((indicator) => (
-							<IndicatorCardPlaceholder key={indicator.code} name={indicator.name} />
-						))}
-					</div>
-				</section>
-			) : null}
-		</>
+			</div>
+		</section>
 	)
 }
 

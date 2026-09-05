@@ -40,6 +40,15 @@ export function IndicatorCard({
 	const change = describeChange(result.change, lowerIsBetter)
 	const missingColor = explainMissingColor(result)
 
+	/**
+	 * Where there is no prior year, the missing colour and the missing change
+	 * are the same fact told twice — the state needs two years for either. So
+	 * that explanation hangs off the "No prior year" pill instead of taking a
+	 * line of its own, and only the explanations that say something the pill
+	 * does not stay on the card.
+	 */
+	const changeReason = change.direction === 'none' ? missingColor : null
+
 	const projection = result.projection
 	const projected = projection ? describeChange(projection.change, lowerIsBetter) : undefined
 
@@ -74,14 +83,37 @@ export function IndicatorCard({
 				</p>
 
 				<div className='flex flex-wrap items-center gap-1.5 text-xs'>
-					<span
-						className={cn(
-							'rounded-full px-2 py-0.5 font-medium tabular-nums',
-							CHANGE_TONES[change.direction],
-						)}
-					>
-						{change.label}
-					</span>
+					{changeReason ? (
+						// The pill already says there is no change to report; why the
+						// state drew no conclusion from that is the second sentence, and
+						// it belongs behind the first rather than under the card.
+						<Tooltip>
+							<TooltipTrigger
+								render={
+									<span
+										className={cn(
+											'cursor-help rounded-full px-2 py-0.5 font-medium tabular-nums',
+											CHANGE_TONES[change.direction],
+										)}
+									/>
+								}
+							>
+								{change.label}
+							</TooltipTrigger>
+							<TooltipContent className='max-w-72 items-start text-left'>
+								<span>{changeReason}</span>
+							</TooltipContent>
+						</Tooltip>
+					) : (
+						<span
+							className={cn(
+								'rounded-full px-2 py-0.5 font-medium tabular-nums',
+								CHANGE_TONES[change.direction],
+							)}
+						>
+							{change.label}
+						</span>
+					)}
 					{projection && projected ? (
 						<Tooltip>
 							{/* Dashed and grey rather than red or green: this figure is
@@ -114,7 +146,9 @@ export function IndicatorCard({
 					</p>
 				) : null}
 
-				{missingColor ? <p className='text-xs text-muted-foreground'>{missingColor}</p> : null}
+				{missingColor && !changeReason ? (
+					<p className='text-xs text-muted-foreground'>{missingColor}</p>
+				) : null}
 			</CardContent>
 		</Card>
 	)
