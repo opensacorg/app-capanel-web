@@ -9,6 +9,9 @@
  * rising suspension rate is not good news — and that distinction has to
  * survive a glance.
  */
+import { HelpCircleIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -49,6 +52,14 @@ export function IndicatorCard({
 	 */
 	const changeReason = change.direction === 'none' ? missingColor : null
 
+	/** English Learner Progress is the one the state reports this way. */
+	const groupNote =
+		result.studentGroupCode === 'ALL'
+			? null
+			: `Reported for ${
+					result.studentGroupCode === 'EL' ? 'English learners' : result.studentGroupCode
+				} only`
+
 	const projection = result.projection
 	const projected = projection ? describeChange(projection.change, lowerIsBetter) : undefined
 
@@ -70,7 +81,27 @@ export function IndicatorCard({
 			/>
 			<CardContent className='space-y-3 pt-4'>
 				<div className='flex items-start justify-between gap-2'>
-					<h3 className='text-sm font-medium leading-tight'>{result.indicatorName}</h3>
+					<h3 className='text-sm font-medium leading-tight'>
+						{result.indicatorName}
+						{groupNote ? (
+							// Which students an indicator covers qualifies its title, so
+							// the mark sits against the title rather than a line below
+							// the figure it does not describe.
+							<Tooltip>
+								<TooltipTrigger
+									render={
+										<span className='ml-1 inline-flex translate-y-0.5 cursor-help align-baseline text-muted-foreground' />
+									}
+								>
+									<HugeiconsIcon icon={HelpCircleIcon} className='h-3.5 w-3.5' />
+									<span className='sr-only'>{groupNote}</span>
+								</TooltipTrigger>
+								<TooltipContent className='max-w-72 items-start text-left'>
+									<span>{groupNote}</span>
+								</TooltipContent>
+							</Tooltip>
+						) : null}
+					</h3>
 					{result.isProjected ? (
 						<Badge variant='outline' className='shrink-0 border-dashed'>
 							Projected
@@ -138,13 +169,6 @@ export function IndicatorCard({
 						</Tooltip>
 					) : null}
 				</div>
-
-				{result.studentGroupCode !== 'ALL' ? (
-					<p className='text-xs text-muted-foreground'>
-						Reported for{' '}
-						{result.studentGroupCode === 'EL' ? 'English learners' : result.studentGroupCode} only
-					</p>
-				) : null}
 
 				{missingColor && !changeReason ? (
 					<p className='text-xs text-muted-foreground'>{missingColor}</p>
