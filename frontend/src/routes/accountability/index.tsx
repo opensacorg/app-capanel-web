@@ -218,8 +218,17 @@ function AccountabilityPage() {
 	 */
 	const displayName =
 		entity?.displayName ?? (search.cds === STATEWIDE_CDS ? 'State of California' : null)
+	/**
+	 * The state is every entity's last ancestor, so naming it in the line
+	 * distinguishes nothing. What it stood for — that there is a level above
+	 * this one to go back to — the button beside the line says better, and
+	 * only where there is somewhere to go.
+	 */
 	const ancestorLine =
-		ancestry.data?.ancestors.map((item) => item.displayName).join(' · ') ||
+		ancestry.data?.ancestors
+			.filter((item) => item.cdsCode !== STATEWIDE_CDS)
+			.map((item) => item.displayName)
+			.join(' · ') ||
 		(ancestry.data || search.cds === STATEWIDE_CDS ? 'Statewide accountability' : null)
 
 	/**
@@ -267,11 +276,13 @@ function AccountabilityPage() {
 						    because that is what they are: the rest of what the heading
 						    above means. */}
 						<div className='flex flex-wrap items-center justify-between gap-y-2'>
-							{ancestorLine ? (
-								<p className='text-muted-foreground text-lg'>{ancestorLine}</p>
-							) : (
-								<Skeleton className='h-6 w-56 max-w-full rounded-md' />
-							)}
+							<div className='flex flex-wrap items-center gap-2'>
+								{ancestorLine ? (
+									<p className='text-muted-foreground text-lg'>{ancestorLine}</p>
+								) : (
+									<Skeleton className='h-6 w-56 max-w-full rounded-md' />
+								)}
+							</div>
 							<div className='flex flex-wrap items-center gap-2'>
 								<Select
 									items={yearItems}
