@@ -200,7 +200,8 @@ function AccountabilityPage() {
 	 * to be fetched, so its heading is a skeleton rather than a guess — a wrong
 	 * school name is worse than no school name.
 	 */
-	const displayName = entity?.displayName ?? (search.cds === STATEWIDE_CDS ? 'California' : null)
+	const displayName =
+		entity?.displayName ?? (search.cds === STATEWIDE_CDS ? 'State of California' : null)
 	const ancestorLine =
 		ancestry.data?.ancestors.map((item) => item.displayName).join(' · ') ||
 		(ancestry.data || search.cds === STATEWIDE_CDS ? 'Statewide accountability' : null)
