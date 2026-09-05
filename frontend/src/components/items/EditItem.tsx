@@ -26,7 +26,7 @@ import {
 	zItemUpdate,
 } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
-import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
+import useCustomToast from '@/lib/hooks/useCustomToast'
 
 const formSchema = zItemUpdate.extend({
 	title: z.string().min(1, { error: 'Title is required' }).max(255),

@@ -15,7 +15,7 @@
  */
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
-import { COLD_AFTER_MS, type LoadStage, useElapsedSeconds } from '@/routes/-hooks/hooks/useSlowLoad'
+import { COLD_AFTER_MS, type LoadStage, useElapsedSeconds } from '@/lib/hooks/useSlowLoad'
 
 export function SlowLoadNotice({
 	stage,

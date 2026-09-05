@@ -10,7 +10,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils.ts'
-import useAuth from '@/routes/-hooks/hooks/useAuth.ts'
+import useAuth from '@/lib/hooks/useAuth.ts'
 
 export default function MobileButton() {
 	const { user: currentUser, logout } = useAuth()

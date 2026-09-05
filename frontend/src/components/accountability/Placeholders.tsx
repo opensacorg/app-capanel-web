@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/table'
 import type { IndicatorPublic, StudentGroupCodePublic } from '@/lib/client'
 import { assumedCatalog } from '@/lib/services/accountabilityShape'
-import { useAfterFirstPaint } from '@/routes/-hooks/hooks/useAfterFirstPaint'
+import { useAfterFirstPaint } from '@/lib/hooks/useAfterFirstPaint'
 
 /**
  * One indicator card, named but unmeasured.

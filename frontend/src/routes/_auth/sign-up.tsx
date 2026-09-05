@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { zUserRegister } from '@/lib/client'
 import { email, password, passwordConfirmation, passwordsMatch } from '@/lib/forms'
-import useAuth, { isLoggedIn } from '@/routes/-hooks/hooks/useAuth'
+import useAuth, { isLoggedIn } from '@/lib/hooks/useAuth'
 
 const signupSchema = zUserRegister
 	.extend({

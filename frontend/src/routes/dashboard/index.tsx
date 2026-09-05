@@ -40,7 +40,7 @@ import {
 	type ReportSelection,
 	STATEWIDE_CDS,
 } from '@/lib/services/assessments'
-import ScrollReset from '@/routes/-hooks/hooks/ScrollReset'
+import ScrollReset from '@/lib/hooks/ScrollReset'
 
 /**
  * The router parses search values as JSON, so a CDS code or a grade that looks

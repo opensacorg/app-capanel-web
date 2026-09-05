@@ -11,8 +11,8 @@ import { Spinner } from '@/components/ui/spinner'
 import { loginResetPasswordMutation } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
 import { password, passwordConfirmation, passwordsMatch } from '@/lib/forms'
-import { isLoggedIn } from '@/routes/-hooks/hooks/useAuth'
-import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
+import { isLoggedIn } from '@/lib/hooks/useAuth'
+import useCustomToast from '@/lib/hooks/useCustomToast'
 
 const searchSchema = z.object({
 	token: z.coerce.string().catch(''),

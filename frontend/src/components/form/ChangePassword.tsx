@@ -14,7 +14,7 @@ import {
 } from '@/lib/client'
 import { handleError } from '@/lib/client-utils.ts'
 import { password, passwordConfirmation, passwordsMatch } from '@/lib/forms'
-import useCustomToast from '@/routes/-hooks/hooks/useCustomToast.ts'
+import useCustomToast from '@/lib/hooks/useCustomToast.ts'
 
 const formSchema = zUpdatePassword
 	.extend({

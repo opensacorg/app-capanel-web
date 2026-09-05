@@ -9,7 +9,7 @@ import PendingItems from '@/components/common/pending/PendingItems'
 import AddItem from '@/components/items/AddItem'
 import { createItemColumns } from '@/components/items/columns'
 import { itemsReadItemsOptions } from '@/lib/client'
-import useAuth from '@/routes/-hooks/hooks/useAuth'
+import useAuth from '@/lib/hooks/useAuth'
 
 export const Route = createFileRoute('/user/items')({
 	component: Items,

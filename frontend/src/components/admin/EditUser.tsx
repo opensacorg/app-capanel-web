@@ -29,7 +29,7 @@ import {
 } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
 import { email, password, passwordsMatch } from '@/lib/forms'
-import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
+import useCustomToast from '@/lib/hooks/useCustomToast'
 
 const formSchema = zUserUpdate
 	.extend({

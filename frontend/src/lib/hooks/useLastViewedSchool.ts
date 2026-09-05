@@ -5,8 +5,8 @@ import {
 	usersGetUserPreferencesOptions,
 	usersGetUserPreferencesQueryKey,
 	usersUpdateUserPreferencesMutation,
-} from '../../../lib/client'
-import { STATEWIDE_CDS } from '../../../lib/constants/indicators'
+} from '../client'
+import { STATEWIDE_CDS } from '../constants/indicators.ts'
 
 const LOCAL_STORAGE_KEY = 'lastViewedSchool'
 

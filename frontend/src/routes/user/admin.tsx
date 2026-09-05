@@ -7,7 +7,7 @@ import { DataTable } from '@/components/common/DataTable'
 import PendingUsers from '@/components/common/pending/PendingUsers'
 import AddUser from '@/components/form/AddUser'
 import { type UserPublic, usersReadUsersOptions, UsersService } from '@/lib/client'
-import useAuth from '@/routes/-hooks/hooks/useAuth'
+import useAuth from '@/lib/hooks/useAuth'
 
 export const Route = createFileRoute('/user/admin')({
 	component: Admin,

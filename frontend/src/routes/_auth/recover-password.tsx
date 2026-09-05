@@ -11,8 +11,8 @@ import { Spinner } from '@/components/ui/spinner'
 import { loginRecoverPasswordMutation } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
 import { email } from '@/lib/forms'
-import { isLoggedIn } from '@/routes/-hooks/hooks/useAuth'
-import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
+import { isLoggedIn } from '@/lib/hooks/useAuth'
+import useCustomToast from '@/lib/hooks/useCustomToast'
 
 const recoverSchema = z.object({ email })
 

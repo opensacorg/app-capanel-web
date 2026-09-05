@@ -12,7 +12,7 @@
  */
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useAfterFirstPaint } from '@/routes/-hooks/hooks/useAfterFirstPaint'
+import { useAfterFirstPaint } from '@/lib/hooks/useAfterFirstPaint'
 
 export function LocalMeasuresPlaceholder({ count = 8 }: { count?: number }) {
 	// Bottom of a long report: the cards are never on screen at first paint, so

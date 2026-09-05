@@ -17,7 +17,7 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
 import { itemsDeleteItemMutation, itemsReadItemsQueryKey } from '@/lib/client'
 import { handleError } from '@/lib/client-utils'
-import useCustomToast from '@/routes/-hooks/hooks/useCustomToast'
+import useCustomToast from '@/lib/hooks/useCustomToast'
 
 interface DeleteItemProps {
 	id: string

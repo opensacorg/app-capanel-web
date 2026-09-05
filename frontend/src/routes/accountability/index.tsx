@@ -65,8 +65,8 @@ import {
 } from '@/lib/services/accountability'
 import { assumedCatalog, assumedIndicator } from '@/lib/services/accountabilityShape'
 import { entityQuery } from '@/lib/services/assessments'
-import ScrollReset from '@/routes/-hooks/hooks/ScrollReset'
-import { useSlowLoad } from '@/routes/-hooks/hooks/useSlowLoad'
+import ScrollReset from '@/lib/hooks/ScrollReset'
+import { useSlowLoad } from '@/lib/hooks/useSlowLoad'
 
 /**
  * The router parses search values as JSON, so a CDS code that looks like a
