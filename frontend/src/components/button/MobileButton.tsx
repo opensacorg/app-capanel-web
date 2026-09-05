@@ -23,11 +23,11 @@ export default function MobileButton() {
 				<HugeiconsIcon icon={Menu01Icon} />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
-				<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/' />}>
-					Home
-				</DropdownMenuItem>
 				<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/dashboard' />}>
-					Dashboard
+					Statewide
+				</DropdownMenuItem>
+				<DropdownMenuItem className='text-base p-3 tracking-wide' render={<Link to='/accountability' />}>
+					Individual
 				</DropdownMenuItem>
 				{currentUser ? (
 					<>
