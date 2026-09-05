@@ -15,9 +15,9 @@ import {
 } from '@/lib/client'
 import { handleError } from '@/lib/client-utils.ts'
 import { email } from '@/lib/forms'
-import { cn } from '@/lib/utils.ts'
 import useAuth from '@/lib/hooks/useAuth.ts'
 import useCustomToast from '@/lib/hooks/useCustomToast.ts'
+import { cn } from '@/lib/utils.ts'
 
 const formSchema = zUserUpdateMe.extend({
 	// Deliberately tighter than the API's 255: this name has to fit the navbar.

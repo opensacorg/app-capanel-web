@@ -9,8 +9,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { cn } from '@/lib/utils.ts'
 import useAuth from '@/lib/hooks/useAuth.ts'
+import { cn } from '@/lib/utils.ts'
 
 export default function SettingsButton() {
 	const { user: currentUser, logout } = useAuth()

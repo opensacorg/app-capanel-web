@@ -20,8 +20,8 @@ import {
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import type { EntityPublic } from '@/lib/client'
-import { entitySearchQuery } from '@/lib/services/assessments'
 import { useDebounce } from '@/lib/hooks/useDebounce'
+import { entitySearchQuery } from '@/lib/services/assessments'
 
 const LEVEL_LABEL: Record<string, string> = {
 	state: 'State',

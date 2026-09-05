@@ -31,6 +31,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { EntityPublic, SchoolType } from '@/lib/client'
+import ScrollReset from '@/lib/hooks/ScrollReset'
 import {
 	ALL_GRADES,
 	ALL_STUDENTS_GROUP,
@@ -40,7 +41,6 @@ import {
 	type ReportSelection,
 	STATEWIDE_CDS,
 } from '@/lib/services/assessments'
-import ScrollReset from '@/lib/hooks/ScrollReset'
 
 /**
  * The router parses search values as JSON, so a CDS code or a grade that looks
