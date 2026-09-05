@@ -23,7 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useCensusDataById, useTotalEnrollment } from '@/lib/hooks/useCensusData'
 import NavbarD52 from "@/components/common/navbar/navbar-D52.tsx";
 
-export const Route = createFileRoute('/dashboard2/')({
+export const Route = createFileRoute('/dashboard3/')({
 	component: Dashboard2Page,
 })
 
@@ -433,7 +433,7 @@ function Dashboard2Page() {
 				</div>
 			</div>
 		</div>
-
+			
 		</div>
 	)
 }
