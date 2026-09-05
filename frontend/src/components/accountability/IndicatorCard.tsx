@@ -65,18 +65,15 @@ export function IndicatorCard({
 	return (
 		<Card
 			className={cn(
-				'relative overflow-hidden transition-colors',
+				'pt-2 pb-4  relative overflow-hidden transition-colors',
 				onSelect && 'cursor-pointer hover:border-foreground/30',
 				selected && 'border-foreground/60 ring-1 ring-foreground/20',
 			)}
 			onClick={onSelect ? () => onSelect(result.indicatorCode) : undefined}
 		>
-			<CardContent className='space-y-3 '>
-				{/* The gauge carries the state's rating, and names it in its alt
-				    text, so a reader who cannot see it loses nothing. */}
-				<IndicatorGauge color={result.color} />
-				<div className='flex items-start justify-between gap-2'>
-					<h3 className='text-sm font-medium leading-tight text-center w-full'>
+			<CardContent className='space-y-3 px-2 flex flex-col h-full'>
+				<div className='h-10 w-full flex items-center justify-center'>
+					<h3 className='text-[1rem] font-bold leading-tight text-center w-full'>
 						{result.indicatorName}
 						{groupNote ? (
 							// Which students an indicator covers qualifies its title, so
@@ -97,18 +94,23 @@ export function IndicatorCard({
 							</Tooltip>
 						) : null}
 					</h3>
+				</div>
+				<IndicatorGauge color={result.color} />
+				<div className='flex items-start justify-between gap-2'>
 					{result.isProjected ? (
 						<Badge variant='outline' className='shrink-0 border-dashed'>
 							Projected
 						</Badge>
 					) : null}
 				</div>
-				<div className='flex gap-4'>
-					<p className='text-2xl font-semibold tabular-nums'>
-						{formatStatus(result.currStatus, unit)}
-					</p>
-
-					<div className='flex flex-wrap items-center gap-1.5 text-xs'>
+				{/* The pill group is `w-max`: as a flex item it would otherwise take
+				    the width left over beside the figure and wrap inside it, which
+				    puts the pills' own centre somewhere other than the card's. Sized
+				    to its content, the two of them centre as one line — and where
+				    that line does not fit, the group wraps below the figure whole
+				    rather than splitting the pills across rows. */}
+				<div className='flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5'>
+					<div className='flex w-max shrink-0 items-center gap-1.5 text-xs'>
 						{changeReason ? (
 							// The pill already says there is no change to report; why the
 							// state drew no conclusion from that is the second sentence, and

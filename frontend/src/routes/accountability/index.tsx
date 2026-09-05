@@ -375,8 +375,8 @@ function AccountabilityPage() {
 										<div className='flex flex-wrap items-center justify-between gap-3'>
 											<h2 className='text-lg font-semibold'>{indicatorMeta.name}</h2>
 											<TabsList>
-												<TabsTrigger value='groups'>Student groups</TabsTrigger>
 												<TabsTrigger value='trend'>Over time</TabsTrigger>
+												<TabsTrigger value='groups'>Student groups</TabsTrigger>
 											</TabsList>
 										</div>
 									</CardHeader>
